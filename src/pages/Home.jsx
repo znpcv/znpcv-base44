@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
-  Lock, ShieldCheck, Globe, Zap, ArrowUp
+  Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
@@ -251,54 +251,99 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-black border-t border-zinc-800">
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-8 mb-8 pb-8 border-b border-zinc-800">
-            {[
-              { icon: Lock, key: 'sslEncrypted' },
-              { icon: ShieldCheck, key: 'dataProtection' },
-              { icon: Globe, key: 'worldwide' },
-            ].map((item) => (
-              <div key={item.key} className="flex items-center gap-2 text-white">
-                <item.icon className="w-5 h-5 text-emerald-500" />
-                <span className="text-sm">{t(item.key)}</span>
+      <footer className="bg-black">
+        {/* Main Footer */}
+        <div className="border-t border-zinc-800">
+          <div className="max-w-6xl mx-auto px-6 py-16">
+            <div className="grid md:grid-cols-12 gap-12">
+              {/* Brand Section */}
+              <div className="md:col-span-5">
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                  alt="ZNPCV" 
+                  className="h-14 w-auto invert mb-6"
+                />
+                <p className="text-zinc-400 text-sm font-sans leading-relaxed mb-6 max-w-sm">
+                  {t('footerDesc')}
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 rounded-lg">
+                    <Lock className="w-4 h-4 text-emerald-500" />
+                    <span className="text-xs text-white">SSL</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 rounded-lg">
+                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                    <span className="text-xs text-white">SECURE</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 rounded-lg">
+                    <Globe className="w-4 h-4 text-emerald-500" />
+                    <span className="text-xs text-white">24/7</span>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
 
-          {/* Footer Content */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
-            <div className="flex items-center gap-4">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
-                alt="ZNPCV" 
-                className="h-12 w-auto invert"
-              />
-              <p className="text-white text-sm font-sans max-w-md">
-                {t('footerDesc')}
+              {/* Quick Links */}
+              <div className="md:col-span-3">
+                <h4 className="text-white text-sm tracking-widest mb-6">QUICK LINKS</h4>
+                <ul className="space-y-4">
+                  <li>
+                    <button onClick={() => navigate(createPageUrl('Checklist'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2">
+                      <ChevronRight className="w-4 h-4" />
+                      {t('newAnalysis')}
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2">
+                      <ChevronRight className="w-4 h-4" />
+                      {t('dashboard')}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact */}
+              <div className="md:col-span-4">
+                <h4 className="text-white text-sm tracking-widest mb-6">{t('contact')}</h4>
+                <div className="space-y-4">
+                  <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-4 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-colors group">
+                    <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                      <span className="text-emerald-500">@</span>
+                    </div>
+                    <div>
+                      <div className="text-xs text-zinc-500 mb-1">EMAIL</div>
+                      <div className="text-white text-sm group-hover:text-emerald-400 transition-colors">support@znpcv.com</div>
+                    </div>
+                  </a>
+                  <button className="w-full flex items-center gap-3 p-4 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-colors group">
+                    <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                      <HelpCircle className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs text-zinc-500 mb-1">SUPPORT</div>
+                      <div className="text-white text-sm group-hover:text-blue-400 transition-colors">{t('faqHelp')}</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-zinc-800 bg-zinc-950">
+          <div className="max-w-6xl mx-auto px-6 py-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-6">
+                <p className="text-white text-sm">
+                  © {new Date().getFullYear()} ZNPCV
+                </p>
+                <span className="text-zinc-700">|</span>
+                <p className="text-zinc-500 text-sm">{t('allRights')}</p>
+              </div>
+              <p className="text-zinc-600 text-xs font-sans text-center md:text-right max-w-md">
+                {t('riskWarning')}
               </p>
             </div>
-            
-            <div className="flex items-center gap-6">
-              <a href="mailto:support@znpcv.com" className="text-white hover:text-emerald-400 text-sm transition-colors">
-                {t('contact')}: support@znpcv.com
-              </a>
-              <button className="text-white hover:text-emerald-400 text-sm transition-colors flex items-center gap-2">
-                <HelpCircle className="w-4 h-4" />
-                {t('faqHelp')}
-              </button>
-            </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="pt-6 border-t border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-white text-sm">
-              © {new Date().getFullYear()} ZNPCV. {t('allRights')}
-            </p>
-            <p className="text-zinc-400 text-xs font-sans">
-              {t('riskWarning')}
-            </p>
           </div>
         </div>
       </footer>

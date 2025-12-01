@@ -2,58 +2,149 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from "@/lib/utils";
 
+const FLAGS = {
+  EUR: '🇪🇺', USD: '🇺🇸', GBP: '🇬🇧', JPY: '🇯🇵', CHF: '🇨🇭', AUD: '🇦🇺', 
+  CAD: '🇨🇦', NZD: '🇳🇿', CNY: '🇨🇳', HKD: '🇭🇰', SGD: '🇸🇬', SEK: '🇸🇪',
+  BTC: '₿', ETH: 'Ξ', BNB: '⬡', XRP: '✕', SOL: '◎', ADA: '₳',
+  DOGE: '🐕', DOT: '●', MATIC: '⬡', LTC: 'Ł', AVAX: '🔺', LINK: '⬡',
+  XAU: '🥇', XAG: '🥈', XPT: '⚪', XPD: '⚫', WTI: '🛢️', BRENT: '🛢️', NGAS: '🔥',
+};
+
+const getFlag = (symbol) => {
+  const base = symbol.split('/')[0];
+  return FLAGS[base] || '📊';
+};
+
 const ASSET_CATEGORIES = {
   forex: {
     label: 'FOREX',
+    icon: '💱',
     color: 'bg-blue-500',
     pairs: [
-      'EUR/USD', 'GBP/USD', 'USD/JPY', 'USD/CHF', 'AUD/USD', 'USD/CAD', 'NZD/USD',
-      'EUR/GBP', 'EUR/JPY', 'GBP/JPY', 'EUR/AUD', 'GBP/AUD', 'EUR/CAD', 'GBP/CAD',
-      'AUD/JPY', 'NZD/JPY', 'CAD/JPY', 'CHF/JPY', 'EUR/CHF', 'GBP/CHF',
-      'AUD/CAD', 'AUD/CHF', 'AUD/NZD', 'EUR/NZD', 'GBP/NZD', 'NZD/CAD', 'NZD/CHF',
+      { symbol: 'EUR/USD', flags: '🇪🇺🇺🇸' },
+      { symbol: 'GBP/USD', flags: '🇬🇧🇺🇸' },
+      { symbol: 'USD/JPY', flags: '🇺🇸🇯🇵' },
+      { symbol: 'USD/CHF', flags: '🇺🇸🇨🇭' },
+      { symbol: 'AUD/USD', flags: '🇦🇺🇺🇸' },
+      { symbol: 'USD/CAD', flags: '🇺🇸🇨🇦' },
+      { symbol: 'NZD/USD', flags: '🇳🇿🇺🇸' },
+      { symbol: 'EUR/GBP', flags: '🇪🇺🇬🇧' },
+      { symbol: 'EUR/JPY', flags: '🇪🇺🇯🇵' },
+      { symbol: 'GBP/JPY', flags: '🇬🇧🇯🇵' },
+      { symbol: 'EUR/AUD', flags: '🇪🇺🇦🇺' },
+      { symbol: 'GBP/AUD', flags: '🇬🇧🇦🇺' },
+      { symbol: 'EUR/CAD', flags: '🇪🇺🇨🇦' },
+      { symbol: 'GBP/CAD', flags: '🇬🇧🇨🇦' },
+      { symbol: 'AUD/JPY', flags: '🇦🇺🇯🇵' },
+      { symbol: 'NZD/JPY', flags: '🇳🇿🇯🇵' },
+      { symbol: 'CAD/JPY', flags: '🇨🇦🇯🇵' },
+      { symbol: 'CHF/JPY', flags: '🇨🇭🇯🇵' },
+      { symbol: 'EUR/CHF', flags: '🇪🇺🇨🇭' },
+      { symbol: 'GBP/CHF', flags: '🇬🇧🇨🇭' },
+      { symbol: 'AUD/CAD', flags: '🇦🇺🇨🇦' },
+      { symbol: 'AUD/CHF', flags: '🇦🇺🇨🇭' },
+      { symbol: 'AUD/NZD', flags: '🇦🇺🇳🇿' },
+      { symbol: 'EUR/NZD', flags: '🇪🇺🇳🇿' },
     ]
   },
   crypto: {
-    label: 'KRYPTO',
+    label: 'CRYPTO',
+    icon: '₿',
     color: 'bg-orange-500',
     pairs: [
-      'BTC/USD', 'ETH/USD', 'BNB/USD', 'XRP/USD', 'SOL/USD', 'ADA/USD',
-      'DOGE/USD', 'DOT/USD', 'MATIC/USD', 'LTC/USD', 'AVAX/USD', 'LINK/USD',
-      'UNI/USD', 'ATOM/USD', 'XLM/USD', 'ALGO/USD', 'VET/USD', 'FTM/USD',
-      'BTC/EUR', 'ETH/EUR', 'ETH/BTC', 'BNB/BTC', 'XRP/BTC', 'SOL/BTC',
+      { symbol: 'BTC/USD', flags: '₿💵' },
+      { symbol: 'ETH/USD', flags: 'Ξ💵' },
+      { symbol: 'BNB/USD', flags: '⬡💵' },
+      { symbol: 'XRP/USD', flags: '✕💵' },
+      { symbol: 'SOL/USD', flags: '◎💵' },
+      { symbol: 'ADA/USD', flags: '₳💵' },
+      { symbol: 'DOGE/USD', flags: '🐕💵' },
+      { symbol: 'DOT/USD', flags: '●💵' },
+      { symbol: 'MATIC/USD', flags: '⬡💵' },
+      { symbol: 'LTC/USD', flags: 'Ł💵' },
+      { symbol: 'AVAX/USD', flags: '🔺💵' },
+      { symbol: 'LINK/USD', flags: '⬡💵' },
+      { symbol: 'ETH/BTC', flags: 'Ξ₿' },
+      { symbol: 'BNB/BTC', flags: '⬡₿' },
+      { symbol: 'XRP/BTC', flags: '✕₿' },
+      { symbol: 'SOL/BTC', flags: '◎₿' },
     ]
   },
   stocks: {
     label: 'STOCKS',
+    icon: '📈',
     color: 'bg-green-500',
     pairs: [
-      'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'TSLA', 'BRK.B',
-      'JPM', 'V', 'JNJ', 'WMT', 'MA', 'PG', 'HD', 'DIS', 'PYPL', 'NFLX',
-      'INTC', 'AMD', 'CRM', 'ADBE', 'ORCL', 'IBM', 'CSCO', 'QCOM',
-      'BA', 'GE', 'CAT', 'MMM', 'NKE', 'MCD', 'KO', 'PEP', 'SBUX',
+      { symbol: 'AAPL', flags: '🍎🇺🇸' },
+      { symbol: 'MSFT', flags: '🪟🇺🇸' },
+      { symbol: 'GOOGL', flags: '🔍🇺🇸' },
+      { symbol: 'AMZN', flags: '📦🇺🇸' },
+      { symbol: 'NVDA', flags: '🎮🇺🇸' },
+      { symbol: 'META', flags: '👤🇺🇸' },
+      { symbol: 'TSLA', flags: '🚗🇺🇸' },
+      { symbol: 'JPM', flags: '🏦🇺🇸' },
+      { symbol: 'V', flags: '💳🇺🇸' },
+      { symbol: 'WMT', flags: '🛒🇺🇸' },
+      { symbol: 'DIS', flags: '🏰🇺🇸' },
+      { symbol: 'NFLX', flags: '🎬🇺🇸' },
+      { symbol: 'AMD', flags: '💻🇺🇸' },
+      { symbol: 'NKE', flags: '👟🇺🇸' },
+      { symbol: 'MCD', flags: '🍔🇺🇸' },
+      { symbol: 'KO', flags: '🥤🇺🇸' },
+      { symbol: 'SBUX', flags: '☕🇺🇸' },
+      { symbol: 'BA', flags: '✈️🇺🇸' },
     ]
   },
   commodities: {
     label: 'COMMODITIES',
+    icon: '🥇',
     color: 'bg-yellow-500',
     pairs: [
-      'XAU/USD', 'XAG/USD', 'XPT/USD', 'XPD/USD',
-      'WTI/USD', 'BRENT/USD', 'NGAS/USD',
-      'COPPER', 'WHEAT', 'CORN', 'SOYBEAN', 'COFFEE', 'SUGAR', 'COTTON',
+      { symbol: 'XAU/USD', flags: '🥇💵' },
+      { symbol: 'XAG/USD', flags: '🥈💵' },
+      { symbol: 'XPT/USD', flags: '⚪💵' },
+      { symbol: 'XPD/USD', flags: '⚫💵' },
+      { symbol: 'WTI/USD', flags: '🛢️💵' },
+      { symbol: 'BRENT/USD', flags: '🛢️💵' },
+      { symbol: 'NGAS/USD', flags: '🔥💵' },
+      { symbol: 'COPPER', flags: '🔶' },
+      { symbol: 'WHEAT', flags: '🌾' },
+      { symbol: 'CORN', flags: '🌽' },
+      { symbol: 'COFFEE', flags: '☕' },
+      { symbol: 'SUGAR', flags: '🍬' },
     ]
   },
   indices: {
     label: 'INDICES',
+    icon: '📊',
     color: 'bg-purple-500',
     pairs: [
-      'US30', 'US500', 'US100', 'DE40', 'UK100', 'FR40', 'JP225',
-      'AU200', 'HK50', 'CN50', 'EU50', 'VIX',
+      { symbol: 'US30', flags: '🇺🇸📊' },
+      { symbol: 'US500', flags: '🇺🇸📈' },
+      { symbol: 'US100', flags: '🇺🇸💻' },
+      { symbol: 'DE40', flags: '🇩🇪📊' },
+      { symbol: 'UK100', flags: '🇬🇧📊' },
+      { symbol: 'FR40', flags: '🇫🇷📊' },
+      { symbol: 'JP225', flags: '🇯🇵📊' },
+      { symbol: 'AU200', flags: '🇦🇺📊' },
+      { symbol: 'HK50', flags: '🇭🇰📊' },
+      { symbol: 'EU50', flags: '🇪🇺📊' },
     ]
   }
 };
 
 export default function AssetSelector({ selectedPair, onSelect }) {
   const [activeCategory, setActiveCategory] = useState('forex');
+
+  const getSelectedPairData = () => {
+    for (const [key, cat] of Object.entries(ASSET_CATEGORIES)) {
+      const found = cat.pairs.find(p => p.symbol === selectedPair);
+      if (found) return { ...found, category: key, color: cat.color };
+    }
+    return null;
+  };
+
+  const selectedData = getSelectedPairData();
 
   return (
     <div className="space-y-6">
@@ -64,12 +155,13 @@ export default function AssetSelector({ selectedPair, onSelect }) {
             key={key}
             onClick={() => setActiveCategory(key)}
             className={cn(
-              "px-4 py-2 text-sm tracking-widest transition-all border",
+              "px-4 py-2 text-sm tracking-widest transition-all border rounded-lg flex items-center gap-2",
               activeCategory === key
                 ? `${cat.color} text-white border-transparent`
                 : "border-zinc-800 text-zinc-400 hover:border-zinc-600"
             )}
           >
+            <span>{cat.icon}</span>
             {cat.label}
           </button>
         ))}
@@ -80,31 +172,38 @@ export default function AssetSelector({ selectedPair, onSelect }) {
         key={activeCategory}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2"
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
       >
         {ASSET_CATEGORIES[activeCategory].pairs.map((pair) => (
           <button
-            key={pair}
-            onClick={() => onSelect(pair)}
+            key={pair.symbol}
+            onClick={() => onSelect(pair.symbol)}
             className={cn(
-              "py-3 px-2 border text-sm tracking-wider transition-all",
-              selectedPair === pair
+              "py-4 px-3 border rounded-xl text-center transition-all",
+              selectedPair === pair.symbol
                 ? "bg-white border-white text-black"
-                : "border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:text-white"
+                : "border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:text-white bg-zinc-900/30"
             )}
           >
-            {pair}
+            <div className="text-2xl mb-1">{pair.flags}</div>
+            <div className="text-sm tracking-wider font-bold">{pair.symbol}</div>
           </button>
         ))}
       </motion.div>
 
       {/* Selected Display */}
-      {selectedPair && (
-        <div className="flex items-center gap-3 p-4 border border-zinc-800 bg-zinc-900/50">
-          <div className={cn("w-3 h-3 rounded-full", ASSET_CATEGORIES[activeCategory].color)} />
-          <span className="text-zinc-400 tracking-wider">AUSGEWÄHLT:</span>
-          <span className="text-xl text-white tracking-wider">{selectedPair}</span>
-        </div>
+      {selectedPair && selectedData && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4 p-5 border border-emerald-500/50 bg-emerald-500/10 rounded-xl"
+        >
+          <div className="text-4xl">{selectedData.flags}</div>
+          <div>
+            <div className="text-xs text-emerald-400 tracking-widest mb-1">AUSGEWÄHLT</div>
+            <div className="text-2xl text-white tracking-wider font-bold">{selectedPair}</div>
+          </div>
+        </motion.div>
       )}
     </div>
   );
