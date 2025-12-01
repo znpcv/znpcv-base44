@@ -2,47 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Save, Trash2, AlertTriangle, TrendingUp, TrendingDown, Check, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
-import { de } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 
-// Forex Pairs
 const FOREX_PAIRS = [
-  { pair: 'EUR/USD', flag: '🇪🇺🇺🇸' },
-  { pair: 'GBP/USD', flag: '🇬🇧🇺🇸' },
-  { pair: 'USD/JPY', flag: '🇺🇸🇯🇵' },
-  { pair: 'USD/CHF', flag: '🇺🇸🇨🇭' },
-  { pair: 'AUD/USD', flag: '🇦🇺🇺🇸' },
-  { pair: 'USD/CAD', flag: '🇺🇸🇨🇦' },
-  { pair: 'NZD/USD', flag: '🇳🇿🇺🇸' },
-  { pair: 'EUR/GBP', flag: '🇪🇺🇬🇧' },
-  { pair: 'EUR/JPY', flag: '🇪🇺🇯🇵' },
-  { pair: 'GBP/JPY', flag: '🇬🇧🇯🇵' },
-  { pair: 'EUR/AUD', flag: '🇪🇺🇦🇺' },
-  { pair: 'GBP/AUD', flag: '🇬🇧🇦🇺' },
+  'EUR/USD', 'GBP/USD', 'USD/JPY', 'USD/CHF', 
+  'AUD/USD', 'USD/CAD', 'NZD/USD', 'EUR/GBP',
+  'EUR/JPY', 'GBP/JPY', 'EUR/AUD', 'GBP/AUD',
+];
+
+const TIMEFRAMES = [
+  { key: 'weekly', label: 'WEEKLY', desc: 'HAUPTTREND' },
+  { key: 'daily', label: 'DAILY', desc: 'MITTELFRISTIG' },
+  { key: 'h4', label: '4H', desc: 'EINSTIEG' },
+];
+
+const TIMEFRAME_CHECKS = [
+  { key: 'trend', label: 'TREND IDENTIFIZIERT', options: ['BULLISH', 'BEARISH', 'NEUTRAL'] },
+  { key: 'structure', label: 'MARKTSTRUKTUR KLAR' },
+  { key: 'key_levels', label: 'KEY LEVELS MARKIERT' },
+  { key: 'liquidity', label: 'LIQUIDITY ZONES ERKANNT' },
 ];
 
 const PATTERNS = [
-  { key: 'head_shoulders', label: 'Head & Shoulders', icon: '👤' },
-  { key: 'inv_head_shoulders', label: 'Inv. H&S', icon: '🙃' },
-  { key: 'double_top', label: 'Double Top', icon: '⛰️' },
-  { key: 'double_bottom', label: 'Double Bottom', icon: '🏔️' },
-  { key: 'triangle', label: 'Triangle', icon: '📐' },
-  { key: 'flag', label: 'Flag', icon: '🚩' },
-  { key: 'wedge', label: 'Wedge', icon: '◢' },
-  { key: 'channel', label: 'Channel', icon: '═' },
+  'HEAD & SHOULDERS', 'INV. HEAD & SHOULDERS', 
+  'DOUBLE TOP', 'DOUBLE BOTTOM',
+  'TRIANGLE', 'FLAG', 'WEDGE', 'CHANNEL'
+];
+
+const ENTRY_CHECKS = [
+  { key: 'sos_confirmed', label: 'SOS BESTÄTIGT (30M-1HR)' },
+  { key: 'engulfing_confirmed', label: 'ENGULFING CANDLE (30M-1HR)' },
+  { key: 'fvg_ob_confirmed', label: 'FVG / ORDER BLOCK ENTRY' },
+  { key: 'risk_reward', label: 'RISK/REWARD ≥ 1:2' },
+  { key: 'sl_placed', label: 'STOP LOSS PLATZIERT' },
+  { key: 'tp_placed', label: 'TAKE PROFIT DEFINIERT' },
 ];
 
 const STEPS = [
-  { key: 'pair', label: 'Pair', icon: '💱' },
-  { key: 'trend', label: 'Trend', icon: '📊' },
-  { key: 'aoi', label: 'AOI', icon: '🎯' },
-  { key: 'pattern', label: 'Pattern', icon: '📐' },
-  { key: 'entry', label: 'Entry', icon: '✅' },
+  { key: 'pair', label: 'PAIR' },
+  { key: 'weekly', label: 'WEEKLY' },
+  { key: 'daily', label: 'DAILY' },
+  { key: 'h4', label: '4H' },
+  { key: 'aoi', label: 'AOI' },
+  { key: 'pattern', label: 'PATTERN' },
+  { key: 'entry', label: 'ENTRY' },
 ];
 
 export default function ChecklistPage() {
@@ -57,13 +65,28 @@ export default function ChecklistPage() {
   const [checklist, setChecklist] = useState({
     pair: '',
     trade_date: format(new Date(), 'yyyy-MM-dd'),
+    // Weekly checks
     weekly_trend: '',
+    weekly_structure: false,
+    weekly_key_levels: false,
+    weekly_liquidity: false,
+    // Daily checks
     daily_trend: '',
+    daily_structure: false,
+    daily_key_levels: false,
+    daily_liquidity: false,
+    // 4H checks
     h4_trend: '',
+    h4_structure: false,
+    h4_key_levels: false,
+    h4_liquidity: false,
+    // AOI
     aoi_identified: false,
     aoi_position: '',
+    // Patterns
     patterns: [],
     pattern_confirmed: false,
+    // Entry
     sos_confirmed: false,
     engulfing_confirmed: false,
     fvg_ob_confirmed: false,
@@ -76,9 +99,7 @@ export default function ChecklistPage() {
   });
 
   useEffect(() => {
-    if (checklistId) {
-      loadChecklist();
-    }
+    if (checklistId) loadChecklist();
   }, [checklistId]);
 
   const loadChecklist = async () => {
@@ -89,33 +110,62 @@ export default function ChecklistPage() {
 
   const update = (key, value) => setChecklist(prev => ({ ...prev, [key]: value }));
 
-  const togglePattern = (key) => {
+  const togglePattern = (pattern) => {
     setChecklist(prev => ({
       ...prev,
-      patterns: prev.patterns?.includes(key) 
-        ? prev.patterns.filter(p => p !== key)
-        : [...(prev.patterns || []), key]
+      patterns: prev.patterns?.includes(pattern) 
+        ? prev.patterns.filter(p => p !== pattern)
+        : [...(prev.patterns || []), pattern]
     }));
   };
 
   const calculateProgress = () => {
-    let total = 15, completed = 0;
-    if (checklist.pair) completed++;
-    if (checklist.trade_date) completed++;
+    let total = 0, completed = 0;
+    
+    // Pair
+    total++; if (checklist.pair) completed++;
+    
+    // Weekly (4 checks)
+    total += 4;
     if (checklist.weekly_trend) completed++;
+    if (checklist.weekly_structure) completed++;
+    if (checklist.weekly_key_levels) completed++;
+    if (checklist.weekly_liquidity) completed++;
+    
+    // Daily (4 checks)
+    total += 4;
     if (checklist.daily_trend) completed++;
+    if (checklist.daily_structure) completed++;
+    if (checklist.daily_key_levels) completed++;
+    if (checklist.daily_liquidity) completed++;
+    
+    // 4H (4 checks)
+    total += 4;
     if (checklist.h4_trend) completed++;
+    if (checklist.h4_structure) completed++;
+    if (checklist.h4_key_levels) completed++;
+    if (checklist.h4_liquidity) completed++;
+    
+    // AOI (2 checks)
+    total += 2;
     if (checklist.aoi_identified) completed++;
     if (checklist.aoi_position) completed++;
+    
+    // Patterns (2 checks)
+    total += 2;
     if (checklist.patterns?.length > 0) completed++;
     if (checklist.pattern_confirmed) completed++;
+    
+    // Entry (6 checks)
+    total += 6;
     if (checklist.sos_confirmed) completed++;
     if (checklist.engulfing_confirmed) completed++;
     if (checklist.fvg_ob_confirmed) completed++;
     if (checklist.risk_reward) completed++;
     if (checklist.sl_placed) completed++;
     if (checklist.tp_placed) completed++;
-    return (completed / total) * 100;
+    
+    return Math.round((completed / total) * 100);
   };
 
   const handleSave = async () => {
@@ -138,329 +188,327 @@ export default function ChecklistPage() {
 
   const progress = calculateProgress();
   const isReady = progress === 100;
+
+  // Check if all timeframes have same trend
   const hasConfluence = checklist.weekly_trend && checklist.daily_trend && checklist.h4_trend &&
-                        checklist.weekly_trend === checklist.daily_trend && checklist.daily_trend === checklist.h4_trend;
+    checklist.weekly_trend === checklist.daily_trend && checklist.daily_trend === checklist.h4_trend;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0f1419] flex items-center justify-center">
-        <div className="animate-pulse text-emerald-500">Loading...</div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-2xl tracking-widest">LADEN...</div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-[#0f1419] text-white">
-      {/* Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
-      </div>
+  const renderTimeframeStep = (tf) => {
+    const prefix = tf.key;
+    return (
+      <motion.div key={tf.key} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl tracking-widest mb-2">{tf.label} ANALYSE</h2>
+          <p className="text-zinc-500 text-lg tracking-widest">{tf.desc}</p>
+        </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#0f1419]/95 backdrop-blur-xl border-b border-slate-800/50">
+        {/* Trend Selection */}
+        <div className="border border-zinc-800 p-6">
+          <h3 className="text-xl tracking-widest mb-4 text-zinc-400">TREND</h3>
+          <div className="grid grid-cols-3 gap-3">
+            {['BULLISH', 'BEARISH', 'NEUTRAL'].map((trend) => (
+              <button
+                key={trend}
+                onClick={() => update(`${prefix}_trend`, trend.toLowerCase())}
+                className={cn(
+                  "py-4 border text-lg tracking-wider transition-all",
+                  checklist[`${prefix}_trend`] === trend.toLowerCase()
+                    ? trend === 'BULLISH' ? 'bg-green-500 border-green-500 text-black'
+                    : trend === 'BEARISH' ? 'bg-red-500 border-red-500 text-white'
+                    : 'bg-yellow-500 border-yellow-500 text-black'
+                    : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'
+                )}
+              >
+                {trend}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Other Checks */}
+        <div className="space-y-3">
+          {[
+            { key: `${prefix}_structure`, label: 'MARKTSTRUKTUR KLAR' },
+            { key: `${prefix}_key_levels`, label: 'KEY LEVELS MARKIERT' },
+            { key: `${prefix}_liquidity`, label: 'LIQUIDITY ZONES ERKANNT' },
+          ].map((check) => (
+            <button
+              key={check.key}
+              onClick={() => update(check.key, !checklist[check.key])}
+              className={cn(
+                "w-full p-5 border flex items-center gap-4 transition-all text-left",
+                checklist[check.key] ? 'border-white bg-white text-black' : 'border-zinc-800 hover:border-zinc-600'
+              )}
+            >
+              <div className={cn(
+                "w-8 h-8 border-2 flex items-center justify-center",
+                checklist[check.key] ? 'border-black bg-black' : 'border-zinc-600'
+              )}>
+                {checklist[check.key] && <Check className="w-5 h-5 text-white" />}
+              </div>
+              <span className="text-xl tracking-wider">{check.label}</span>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      {/* White Header with Logo */}
+      <header className="bg-white sticky top-0 z-50">
         <div className="max-w-2xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <button onClick={() => navigate(createPageUrl('Home'))} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span className="text-sm hidden sm:inline">Zurück</span>
+          <div className="flex items-center justify-between">
+            <button onClick={() => navigate(createPageUrl('Home'))} className="text-black hover:opacity-70 transition-opacity">
+              <ArrowLeft className="w-6 h-6" />
             </button>
             
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/2f200c537_PNGZNPCVLOGOwei.png" 
               alt="ZNPCV" 
-              className="h-10 w-auto"
+              className="h-14 w-auto"
             />
 
-            <div className="text-right">
-              <div className="text-2xl font-black text-emerald-500">{Math.round(progress)}%</div>
-              <div className="text-xs text-slate-500">Complete</div>
+            <div className="text-right text-black">
+              <div className="text-3xl">{progress}%</div>
             </div>
           </div>
-
-          {/* Progress Bar */}
-          <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-
-          {/* Step Navigation */}
-          <div className="flex gap-1 mt-4">
-            {STEPS.map((step, index) => (
-              <button
-                key={step.key}
-                onClick={() => setCurrentStep(index)}
-                className={cn(
-                  "flex-1 py-2 px-1 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1",
-                  currentStep === index 
-                    ? 'bg-emerald-500 text-white' 
-                    : 'bg-slate-800/50 text-slate-500 hover:bg-slate-700/50'
-                )}
-              >
-                <span>{step.icon}</span>
-                <span className="hidden sm:inline">{step.label}</span>
-              </button>
-            ))}
-          </div>
+        </div>
+        
+        {/* Progress Bar */}
+        <div className="h-1 bg-zinc-200">
+          <motion.div
+            className="h-full bg-black"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.5 }}
+          />
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 relative z-10">
+      {/* Step Navigation */}
+      <div className="bg-zinc-950 border-b border-zinc-800 overflow-x-auto">
+        <div className="max-w-2xl mx-auto px-4 py-3 flex gap-1">
+          {STEPS.map((step, index) => (
+            <button
+              key={step.key}
+              onClick={() => setCurrentStep(index)}
+              className={cn(
+                "px-4 py-2 text-sm tracking-widest whitespace-nowrap transition-all",
+                currentStep === index 
+                  ? 'bg-white text-black' 
+                  : 'text-zinc-500 hover:text-white'
+              )}
+            >
+              {step.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <main className="max-w-2xl mx-auto px-4 py-8">
         <AnimatePresence mode="wait">
           {/* Step 0: Pair Selection */}
           {currentStep === 0 && (
             <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-black mb-2">Währungspaar wählen</h2>
-                <p className="text-slate-500 text-sm">Wähle das Forex-Paar für deine Analyse</p>
+                <h2 className="text-4xl tracking-widest mb-2">WÄHRUNGSPAAR</h2>
+                <p className="text-zinc-500 text-lg tracking-widest">WÄHLE DAS FOREX-PAAR</p>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
-                {FOREX_PAIRS.map((item) => (
-                  <motion.button
-                    key={item.pair}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => update('pair', item.pair)}
+                {FOREX_PAIRS.map((pair) => (
+                  <button
+                    key={pair}
+                    onClick={() => update('pair', pair)}
                     className={cn(
-                      "p-4 rounded-2xl border transition-all text-center",
-                      checklist.pair === item.pair
-                        ? "bg-emerald-500/20 border-emerald-500/50 shadow-lg shadow-emerald-500/10"
-                        : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                      "py-6 border text-xl tracking-wider transition-all",
+                      checklist.pair === pair
+                        ? "bg-white border-white text-black"
+                        : "border-zinc-800 hover:border-zinc-500"
                     )}
                   >
-                    <div className="text-2xl mb-1">{item.flag}</div>
-                    <div className={cn("font-bold text-sm", checklist.pair === item.pair ? "text-emerald-400" : "text-white")}>
-                      {item.pair}
-                    </div>
-                  </motion.button>
+                    {pair}
+                  </button>
                 ))}
               </div>
             </motion.div>
           )}
 
-          {/* Step 1: Trend Analysis */}
-          {currentStep === 1 && (
-            <motion.div key="trend" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-black mb-2">Trend Analyse</h2>
-                <p className="text-slate-500 text-sm">Weekly → Daily → 4H Confluence prüfen</p>
-              </div>
+          {/* Steps 1-3: Timeframe Analysis */}
+          {currentStep === 1 && renderTimeframeStep(TIMEFRAMES[0])}
+          {currentStep === 2 && renderTimeframeStep(TIMEFRAMES[1])}
+          {currentStep === 3 && renderTimeframeStep(TIMEFRAMES[2])}
 
-              {[
-                { key: 'weekly_trend', label: 'Weekly', desc: 'Haupttrend' },
-                { key: 'daily_trend', label: 'Daily', desc: 'Mittelfristig' },
-                { key: 'h4_trend', label: '4H', desc: 'Einstieg' },
-              ].map((tf) => (
-                <div key={tf.key} className="bg-slate-800/30 border border-slate-700/50 rounded-2xl p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <span className="font-bold text-white">{tf.label}</span>
-                      <span className="text-xs text-slate-500 ml-2">{tf.desc}</span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { value: 'bullish', label: 'Bullish', icon: TrendingUp, color: 'emerald' },
-                      { value: 'bearish', label: 'Bearish', icon: TrendingDown, color: 'red' },
-                      { value: 'neutral', label: 'Neutral', icon: null, color: 'amber' },
-                    ].map((trend) => (
-                      <button
-                        key={trend.value}
-                        onClick={() => update(tf.key, trend.value)}
-                        className={cn(
-                          "p-3 rounded-xl border transition-all flex items-center justify-center gap-2",
-                          checklist[tf.key] === trend.value
-                            ? trend.color === 'emerald' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400'
-                            : trend.color === 'red' ? 'bg-red-500/20 border-red-500/50 text-red-400'
-                            : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
-                            : 'bg-slate-800/50 border-slate-700 text-slate-500 hover:border-slate-600'
-                        )}
-                      >
-                        {trend.icon && <trend.icon className="w-4 h-4" />}
-                        <span className="text-sm font-medium">{trend.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              {/* Confluence Indicator */}
-              {checklist.weekly_trend && checklist.daily_trend && checklist.h4_trend && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  className={cn("p-4 rounded-2xl border text-center", hasConfluence ? "bg-emerald-500/10 border-emerald-500/30" : "bg-amber-500/10 border-amber-500/30")}>
-                  {hasConfluence ? (
-                    <span className="text-emerald-400 font-bold flex items-center justify-center gap-2">
-                      <Check className="w-5 h-5" /> CONFLUENCE - Alle Timeframes {checklist.weekly_trend}
-                    </span>
-                  ) : (
-                    <span className="text-amber-400 font-bold flex items-center justify-center gap-2">
-                      <AlertTriangle className="w-5 h-5" /> Mixed Signals - Keine Confluence
-                    </span>
-                  )}
-                </motion.div>
-              )}
-            </motion.div>
-          )}
-
-          {/* Step 2: AOI */}
-          {currentStep === 2 && (
+          {/* Step 4: AOI */}
+          {currentStep === 4 && (
             <motion.div key="aoi" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-black mb-2">Area of Interest</h2>
-                <p className="text-slate-500 text-sm">AOI identifizieren & Position bestimmen</p>
+                <h2 className="text-4xl tracking-widest mb-2">AREA OF INTEREST</h2>
+                <p className="text-zinc-500 text-lg tracking-widest">CONFLUENCE ZONE PRÜFEN</p>
               </div>
 
-              <motion.button
-                whileTap={{ scale: 0.98 }}
+              {/* Confluence Status */}
+              {checklist.weekly_trend && checklist.daily_trend && checklist.h4_trend && (
+                <div className={cn(
+                  "p-6 border text-center mb-6",
+                  hasConfluence ? "border-green-500 bg-green-500/10" : "border-yellow-500 bg-yellow-500/10"
+                )}>
+                  <div className={cn("text-2xl tracking-widest", hasConfluence ? "text-green-500" : "text-yellow-500")}>
+                    {hasConfluence ? '✓ CONFLUENCE BESTÄTIGT' : '⚠ KEINE CONFLUENCE'}
+                  </div>
+                  <div className="text-zinc-400 mt-2 tracking-wider">
+                    W: {checklist.weekly_trend?.toUpperCase()} | D: {checklist.daily_trend?.toUpperCase()} | 4H: {checklist.h4_trend?.toUpperCase()}
+                  </div>
+                </div>
+              )}
+
+              <button
                 onClick={() => update('aoi_identified', !checklist.aoi_identified)}
                 className={cn(
-                  "w-full p-6 rounded-2xl border transition-all flex items-center gap-4",
-                  checklist.aoi_identified ? "bg-emerald-500/10 border-emerald-500/30" : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                  "w-full p-6 border flex items-center gap-4 transition-all",
+                  checklist.aoi_identified ? 'border-white bg-white text-black' : 'border-zinc-800 hover:border-zinc-600'
                 )}
               >
-                <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center text-lg", checklist.aoi_identified ? "bg-emerald-500" : "bg-slate-700")}>
-                  {checklist.aoi_identified ? <Check className="w-5 h-5 text-white" /> : '🎯'}
+                <div className={cn(
+                  "w-8 h-8 border-2 flex items-center justify-center",
+                  checklist.aoi_identified ? 'border-black bg-black' : 'border-zinc-600'
+                )}>
+                  {checklist.aoi_identified && <Check className="w-5 h-5 text-white" />}
                 </div>
-                <div className="text-left">
-                  <div className={cn("font-bold", checklist.aoi_identified ? "text-emerald-400" : "text-white")}>AOI identifiziert</div>
-                  <div className="text-xs text-slate-500">W-Daily & 4hr Confluence Zone</div>
-                </div>
-              </motion.button>
+                <span className="text-xl tracking-wider">AOI IDENTIFIZIERT</span>
+              </button>
 
               {checklist.aoi_identified && (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mt-6">
                   <button
                     onClick={() => update('aoi_position', 'above')}
                     className={cn(
-                      "p-6 rounded-2xl border transition-all text-center",
-                      checklist.aoi_position === 'above' ? "bg-red-500/10 border-red-500/50" : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                      "py-8 border text-center transition-all",
+                      checklist.aoi_position === 'above' ? "bg-red-500 border-red-500 text-white" : "border-zinc-800 hover:border-zinc-500"
                     )}
                   >
-                    <TrendingDown className={cn("w-10 h-10 mx-auto mb-2", checklist.aoi_position === 'above' ? "text-red-500" : "text-slate-500")} />
-                    <div className={cn("font-bold", checklist.aoi_position === 'above' ? "text-red-400" : "text-white")}>ÜBER AOI</div>
-                    <div className="text-xs text-slate-500 mt-1">Short Setup</div>
+                    <div className="text-3xl mb-2">↓</div>
+                    <div className="text-xl tracking-wider">ÜBER AOI</div>
+                    <div className="text-sm text-zinc-400 mt-1">SHORT SETUP</div>
                   </button>
                   <button
                     onClick={() => update('aoi_position', 'below')}
                     className={cn(
-                      "p-6 rounded-2xl border transition-all text-center",
-                      checklist.aoi_position === 'below' ? "bg-emerald-500/10 border-emerald-500/50" : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                      "py-8 border text-center transition-all",
+                      checklist.aoi_position === 'below' ? "bg-green-500 border-green-500 text-black" : "border-zinc-800 hover:border-zinc-500"
                     )}
                   >
-                    <TrendingUp className={cn("w-10 h-10 mx-auto mb-2", checklist.aoi_position === 'below' ? "text-emerald-500" : "text-slate-500")} />
-                    <div className={cn("font-bold", checklist.aoi_position === 'below' ? "text-emerald-400" : "text-white")}>UNTER AOI</div>
-                    <div className="text-xs text-slate-500 mt-1">Long Setup</div>
+                    <div className="text-3xl mb-2">↑</div>
+                    <div className="text-xl tracking-wider">UNTER AOI</div>
+                    <div className="text-sm text-zinc-400 mt-1">LONG SETUP</div>
                   </button>
-                </motion.div>
+                </div>
               )}
             </motion.div>
           )}
 
-          {/* Step 3: Patterns */}
-          {currentStep === 3 && (
+          {/* Step 5: Patterns */}
+          {currentStep === 5 && (
             <motion.div key="pattern" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-black mb-2">Chart Patterns</h2>
-                <p className="text-slate-500 text-sm">Erkannte Patterns auswählen</p>
+                <h2 className="text-4xl tracking-widest mb-2">CHART PATTERNS</h2>
+                <p className="text-zinc-500 text-lg tracking-widest">ERKANNTE PATTERNS AUSWÄHLEN</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 {PATTERNS.map((pattern) => (
-                  <motion.button
-                    key={pattern.key}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => togglePattern(pattern.key)}
+                  <button
+                    key={pattern}
+                    onClick={() => togglePattern(pattern)}
                     className={cn(
-                      "p-4 rounded-2xl border transition-all flex items-center gap-3",
-                      checklist.patterns?.includes(pattern.key) ? "bg-emerald-500/10 border-emerald-500/50" : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                      "py-5 border text-lg tracking-wider transition-all",
+                      checklist.patterns?.includes(pattern)
+                        ? "bg-white border-white text-black"
+                        : "border-zinc-800 hover:border-zinc-500"
                     )}
                   >
-                    <span className="text-2xl">{pattern.icon}</span>
-                    <span className={cn("font-medium text-sm", checklist.patterns?.includes(pattern.key) ? "text-emerald-400" : "text-white")}>
-                      {pattern.label}
-                    </span>
-                  </motion.button>
+                    {pattern}
+                  </button>
                 ))}
               </div>
 
               {checklist.patterns?.length > 0 && (
-                <motion.button
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <button
                   onClick={() => update('pattern_confirmed', !checklist.pattern_confirmed)}
                   className={cn(
-                    "w-full p-4 rounded-2xl border transition-all flex items-center gap-3",
-                    checklist.pattern_confirmed ? "bg-emerald-500/10 border-emerald-500/30" : "bg-slate-800/30 border-slate-700/50"
+                    "w-full p-5 border flex items-center gap-4 transition-all mt-6",
+                    checklist.pattern_confirmed ? 'border-white bg-white text-black' : 'border-zinc-800 hover:border-zinc-600'
                   )}
                 >
-                  <div className={cn("w-6 h-6 rounded-lg flex items-center justify-center", checklist.pattern_confirmed ? "bg-emerald-500" : "bg-slate-700")}>
-                    {checklist.pattern_confirmed && <Check className="w-4 h-4 text-white" />}
+                  <div className={cn(
+                    "w-8 h-8 border-2 flex items-center justify-center",
+                    checklist.pattern_confirmed ? 'border-black bg-black' : 'border-zinc-600'
+                  )}>
+                    {checklist.pattern_confirmed && <Check className="w-5 h-5 text-white" />}
                   </div>
-                  <span className={cn("font-medium", checklist.pattern_confirmed ? "text-emerald-400" : "text-white")}>Pattern bestätigt & valide</span>
-                </motion.button>
+                  <span className="text-xl tracking-wider">PATTERN BESTÄTIGT & VALIDE</span>
+                </button>
               )}
             </motion.div>
           )}
 
-          {/* Step 4: Entry */}
-          {currentStep === 4 && (
+          {/* Step 6: Entry */}
+          {currentStep === 6 && (
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-black mb-2">Entry Checklist</h2>
-                <p className="text-slate-500 text-sm">Finale Bestätigungen vor dem Trade</p>
+                <h2 className="text-4xl tracking-widest mb-2">ENTRY CHECKLIST</h2>
+                <p className="text-zinc-500 text-lg tracking-widest">FINALE BESTÄTIGUNGEN</p>
               </div>
 
               <div className="space-y-3">
-                {[
-                  { key: 'sos_confirmed', label: 'SOS bestätigt', desc: 'Sign of Strength (30m-1hr)' },
-                  { key: 'engulfing_confirmed', label: 'Engulfing Candle', desc: 'Engulfing Pattern (30m-1hr)' },
-                  { key: 'fvg_ob_confirmed', label: 'FVG / Order Block', desc: 'Fair Value Gap oder OB Entry' },
-                  { key: 'risk_reward', label: 'Risk/Reward ≥ 1:2', desc: 'Minimum RR Ratio erfüllt' },
-                  { key: 'sl_placed', label: 'Stop Loss platziert', desc: 'SL auf strukturellem Level' },
-                  { key: 'tp_placed', label: 'Take Profit definiert', desc: 'TP Ziele festgelegt' },
-                ].map((item, index) => (
-                  <motion.button
-                    key={item.key}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    onClick={() => update(item.key, !checklist[item.key])}
+                {ENTRY_CHECKS.map((check) => (
+                  <button
+                    key={check.key}
+                    onClick={() => update(check.key, !checklist[check.key])}
                     className={cn(
-                      "w-full p-4 rounded-2xl border transition-all flex items-center gap-4",
-                      checklist[item.key] ? "bg-emerald-500/10 border-emerald-500/30" : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                      "w-full p-5 border flex items-center gap-4 transition-all text-left",
+                      checklist[check.key] ? 'border-white bg-white text-black' : 'border-zinc-800 hover:border-zinc-600'
                     )}
                   >
-                    <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center transition-all", checklist[item.key] ? "bg-emerald-500" : "bg-slate-700")}>
-                      {checklist[item.key] && <Check className="w-4 h-4 text-white" />}
+                    <div className={cn(
+                      "w-8 h-8 border-2 flex items-center justify-center flex-shrink-0",
+                      checklist[check.key] ? 'border-black bg-black' : 'border-zinc-600'
+                    )}>
+                      {checklist[check.key] && <Check className="w-5 h-5 text-white" />}
                     </div>
-                    <div className="text-left flex-1">
-                      <div className={cn("font-medium", checklist[item.key] ? "text-slate-400 line-through" : "text-white")}>{item.label}</div>
-                      <div className="text-xs text-slate-500">{item.desc}</div>
-                    </div>
-                  </motion.button>
+                    <span className="text-xl tracking-wider">{check.label}</span>
+                  </button>
                 ))}
               </div>
 
               {/* Notes */}
-              <div>
-                <label className="block text-xs text-slate-500 uppercase tracking-wider mb-2">Notizen</label>
+              <div className="mt-8">
+                <label className="block text-zinc-500 tracking-widest mb-2">NOTIZEN</label>
                 <Textarea
                   value={checklist.notes}
                   onChange={(e) => update('notes', e.target.value)}
-                  placeholder="Trade Notizen..."
-                  className="bg-slate-800/30 border-slate-700/50 text-white placeholder:text-slate-600 min-h-[80px] rounded-xl focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                  placeholder="TRADE NOTIZEN..."
+                  className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 min-h-[100px] rounded-none tracking-wider focus:border-white"
                 />
               </div>
 
               {isReady && (
-                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                  className="p-6 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl text-center">
-                  <div className="text-3xl mb-2">🚀</div>
-                  <span className="text-white font-black text-xl tracking-wider">READY TO TRADE</span>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }} 
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-8 bg-white text-black text-center"
+                >
+                  <div className="text-4xl tracking-widest">✓ READY TO TRADE</div>
                 </motion.div>
               )}
             </motion.div>
@@ -468,26 +516,44 @@ export default function ChecklistPage() {
         </AnimatePresence>
 
         {/* Navigation */}
-        <div className="mt-8 flex gap-3">
+        <div className="mt-12 flex gap-3">
           {currentStep > 0 && (
-            <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" className="border-slate-700 text-slate-400 hover:bg-slate-800">
-              <ChevronLeft className="w-4 h-4 mr-1" /> Zurück
+            <Button 
+              onClick={() => setCurrentStep(prev => prev - 1)} 
+              variant="outline" 
+              className="border-zinc-800 text-white hover:bg-zinc-900 rounded-none tracking-widest"
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" /> ZURÜCK
             </Button>
           )}
+          
           {currentStep < STEPS.length - 1 ? (
-            <Button onClick={() => setCurrentStep(prev => prev + 1)} className="flex-1 bg-slate-700 hover:bg-slate-600">
-              Weiter <ChevronRight className="w-4 h-4 ml-1" />
+            <Button 
+              onClick={() => setCurrentStep(prev => prev + 1)} 
+              className="flex-1 bg-zinc-800 hover:bg-zinc-700 rounded-none tracking-widest text-lg py-6"
+            >
+              WEITER <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
             <div className="flex-1 flex gap-3">
               {checklistId && (
-                <Button onClick={handleDelete} variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
-                  <Trash2 className="w-4 h-4" />
+                <Button 
+                  onClick={handleDelete} 
+                  variant="outline" 
+                  className="border-red-500 text-red-500 hover:bg-red-500/10 rounded-none"
+                >
+                  <Trash2 className="w-5 h-5" />
                 </Button>
               )}
-              <Button onClick={handleSave} disabled={saving || !checklist.pair}
-                className={cn("flex-1", isReady ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700" : "bg-slate-700 hover:bg-slate-600")}>
-                <Save className="w-4 h-4 mr-2" /> {saving ? 'Speichern...' : 'Speichern'}
+              <Button 
+                onClick={handleSave} 
+                disabled={saving || !checklist.pair}
+                className={cn(
+                  "flex-1 rounded-none tracking-widest text-lg py-6",
+                  isReady ? "bg-white hover:bg-zinc-100 text-black" : "bg-zinc-800 hover:bg-zinc-700"
+                )}
+              >
+                <Save className="w-5 h-5 mr-2" /> {saving ? 'SPEICHERN...' : 'SPEICHERN'}
               </Button>
             </div>
           )}
