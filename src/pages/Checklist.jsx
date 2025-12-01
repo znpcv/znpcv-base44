@@ -348,23 +348,23 @@ export default function ChecklistPage() {
               
               <ChecklistItem checked={checklist.w_at_aoi} onChange={() => update('w_at_aoi', !checklist.w_at_aoi)} 
                 label="AT AOI / REJECTED" score={10} 
-                description="Preis am AOI und zeigt Ablehnung (entweder oder beides)" />
+                description="Preis ist am AOI ODER Preis lehnt AOI ab" />
               
               <ChecklistItem checked={checklist.w_ema_touch} onChange={() => update('w_ema_touch', !checklist.w_ema_touch)} 
                 label="TOUCHING / REJECTING EMA" score={5} 
-                description="Preis berührt ODER wird vom EMA abgelehnt" />
+                description="Kerzen berühren ODER lehnen den EMA ab" />
               
               <ChecklistItem checked={checklist.w_candlestick} onChange={() => update('w_candlestick', !checklist.w_candlestick)} 
                 label="CANDLESTICK REJECTION" score={10} 
-                description="Ablehnungskerze sichtbar (Pinbar, Doji, Hammer, etc.)" />
+                description="Kerze zeigt klare Ablehnung (Pinbar, Doji, Hammer)" />
               
               <ChecklistItem checked={checklist.w_psp_rejection} onChange={() => update('w_psp_rejection', !checklist.w_psp_rejection)} 
                 label="REJECTION FROM PSP" score={10} 
-                description="Ablehnung von Previous Structure Point" />
+                description="Ablehnung vom Previous Structure Point" />
               
               <ChecklistItem checked={checklist.w_round_level} onChange={() => update('w_round_level', !checklist.w_round_level)} 
                 label="ROUND PSYCH LEVEL" score={5} 
-                description="Preis an runder psychologischer Zahl (z.B. 1.1000)" />
+                description="Preis ist an ODER lehnt runde Zahl ab (z.B. 1.1000)" />
               
               <PatternSelector 
                 value={checklist.w_pattern} 
@@ -392,23 +392,23 @@ export default function ChecklistPage() {
               
               <ChecklistItem checked={checklist.d_at_aoi} onChange={() => update('d_at_aoi', !checklist.d_at_aoi)} 
                 label="AT AOI / REJECTED" score={10} 
-                description="Preis am AOI und zeigt Ablehnung (entweder oder beides)" />
+                description="Preis ist am AOI ODER Preis lehnt AOI ab" />
               
               <ChecklistItem checked={checklist.d_ema_touch} onChange={() => update('d_ema_touch', !checklist.d_ema_touch)} 
                 label="TOUCHING / REJECTING EMA" score={5} 
-                description="Preis berührt ODER wird vom EMA abgelehnt" />
+                description="Kerzen berühren ODER lehnen den EMA ab" />
               
               <ChecklistItem checked={checklist.d_candlestick} onChange={() => update('d_candlestick', !checklist.d_candlestick)} 
                 label="CANDLESTICK REJECTION" score={10} 
-                description="Ablehnungskerze sichtbar (Pinbar, Doji, Hammer, etc.)" />
+                description="Kerze zeigt klare Ablehnung (Pinbar, Doji, Hammer)" />
               
               <ChecklistItem checked={checklist.d_psp_rejection} onChange={() => update('d_psp_rejection', !checklist.d_psp_rejection)} 
                 label="REJECTION FROM PSP" score={10} 
-                description="Ablehnung von Previous Structure Point" />
+                description="Ablehnung vom Previous Structure Point" />
               
               <ChecklistItem checked={checklist.d_round_level} onChange={() => update('d_round_level', !checklist.d_round_level)} 
                 label="ROUND PSYCH LEVEL" score={5} 
-                description="Preis an runder psychologischer Zahl (z.B. 1.1000)" />
+                description="Preis ist an ODER lehnt runde Zahl ab (z.B. 1.1000)" />
               
               <PatternSelector 
                 value={checklist.d_pattern} 
@@ -482,8 +482,8 @@ export default function ChecklistPage() {
               </div>
               
               <ChecklistItem checked={checklist.entry_sos} onChange={() => update('entry_sos', !checklist.entry_sos)} 
-                label="SOS - SIGN OF STRENGTH" score={10} 
-                description="Marktstrukturwechsel (30min-1hr, whichever looks cleaner)" />
+                label="MSS - MARKET STRUCTURE SHIFT" score={10} 
+                description="Shift of Structure / Marktstruktur hat gewechselt (30min-1hr)" />
               
               <ChecklistItem checked={checklist.entry_engulfing} onChange={() => update('entry_engulfing', !checklist.entry_engulfing)} 
                 label="ENGULFING CANDLESTICK" score={10} 
