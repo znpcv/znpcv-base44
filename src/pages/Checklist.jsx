@@ -187,18 +187,25 @@ export default function ChecklistPage() {
             <div className="flex items-center gap-3">
               <LanguageToggle />
               <div className={cn(
-                "text-2xl font-bold px-4 py-1 rounded-full",
-                isReady ? "bg-white text-black" : "text-white"
+                "flex items-center gap-2 px-4 py-2 rounded-full font-bold",
+                progress >= 85 ? "bg-emerald-500 text-black" : progress >= 50 ? "bg-yellow-500 text-black" : "bg-zinc-800 text-white"
               )}>
-                {progress}%
+                <div className={cn(
+                  "w-2 h-2 rounded-full animate-pulse",
+                  progress >= 85 ? "bg-black" : progress >= 50 ? "bg-black" : "bg-zinc-500"
+                )} />
+                <span className="text-xl">{progress}%</span>
               </div>
             </div>
           </div>
         </div>
         {/* Progress Bar */}
-        <div className="h-1 bg-zinc-900">
+        <div className="h-1.5 bg-zinc-900">
           <motion.div 
-            className={cn("h-full", isReady ? "bg-white" : "bg-zinc-600")} 
+            className={cn(
+              "h-full",
+              progress >= 85 ? "bg-emerald-500" : progress >= 50 ? "bg-yellow-500" : "bg-zinc-600"
+            )} 
             initial={{ width: 0 }} 
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.5 }}
@@ -564,7 +571,7 @@ function TrendButton({ selected, onClick, type, label }) {
     <button onClick={onClick} className={cn(
       "py-5 border rounded-xl text-lg tracking-wider transition-all font-bold",
       selected
-        ? type === 'bullish' ? 'bg-white border-white text-black' : 'bg-zinc-600 border-zinc-600 text-white'
+        ? type === 'bullish' ? 'bg-emerald-500 border-emerald-500 text-black' : 'bg-red-500 border-red-500 text-white'
         : 'border-zinc-800/50 text-zinc-500 hover:border-zinc-600 bg-zinc-950'
     )}>
       {type === 'bullish' ? '↑' : '↓'} {label}

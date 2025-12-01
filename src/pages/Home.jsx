@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
   Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
-  Activity, Award
+  Activity, Award, AlertTriangle, HelpCircle
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
@@ -71,7 +71,7 @@ export default function HomePage() {
     <div className={`min-h-screen bg-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className="bg-black border-b border-zinc-800/50">
-        <div className="max-w-6xl mx-auto px-6 py-5">
+        <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-emerald-400">
@@ -84,13 +84,13 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity invert"
+                className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity invert"
               />
             </button>
             
             <div className="flex items-center gap-4">
               <LanguageToggle />
-              <div className="text-right text-white">
+              <div className="text-right text-white hidden sm:block">
                 <div className="text-xs text-zinc-500">{t('localTime')}</div>
                 <div className="text-lg font-mono font-bold">
                   {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
@@ -103,25 +103,25 @@ export default function HomePage() {
 
       {/* Market Sessions Bar */}
       <div className="bg-zinc-950 border-b border-zinc-800/50">
-        <div className="max-w-6xl mx-auto px-6 py-3">
+        <div className="max-w-6xl mx-auto px-6 py-2.5">
           <div className="flex items-center justify-between gap-4 overflow-x-auto">
             <div className="flex items-center gap-2 text-zinc-400 text-sm whitespace-nowrap">
               <Globe className="w-4 h-4" />
-              <span>{t('marketSessions')}</span>
+              <span className="hidden sm:inline">{t('marketSessions')}</span>
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 sm:gap-6">
               {SESSIONS.map((session) => {
                 const isOpen = isSessionOpen(session);
                 return (
-                  <div key={session.name} className="flex items-center gap-3 whitespace-nowrap">
-                    <span className="text-lg">{session.emoji}</span>
+                  <div key={session.name} className="flex items-center gap-2 whitespace-nowrap">
+                    <span className="text-base">{session.emoji}</span>
                     <div>
-                      <div className="text-xs text-zinc-500">{session.name}</div>
-                      <div className={`text-sm font-mono font-bold ${isOpen ? 'text-white' : 'text-zinc-600'}`}>
+                      <div className="text-[10px] text-zinc-600">{session.name}</div>
+                      <div className={`text-xs font-mono font-bold ${isOpen ? 'text-emerald-400' : 'text-zinc-600'}`}>
                         {times[session.name] || '--:--:--'}
                       </div>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-700'}`} />
+                    <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-700'}`} />
                   </div>
                 );
               })}
@@ -131,70 +131,138 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-6 py-20">
+      <main className="max-w-6xl mx-auto px-6 py-12 md:py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-white text-sm mb-8">
-            <Zap className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-xs mb-6">
+            <Zap className="w-3.5 h-3.5" />
             <span className="tracking-widest">THE ULTIMATE TRADING TOOL</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl lg:text-8xl tracking-wider mb-6 font-light">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
             ZNPCV
           </h1>
-          <h2 className="text-2xl md:text-3xl tracking-widest text-zinc-400 mb-6">
+          <h2 className="text-xl md:text-2xl tracking-widest text-zinc-400 mb-4">
             {t('ultimateChecklist')}
           </h2>
-          <p className="text-zinc-500 text-lg max-w-2xl mx-auto leading-relaxed font-sans">
+          <p className="text-zinc-500 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-sans">
             {t('heroSubtitle')}
           </p>
         </motion.div>
 
-        {/* Main Actions */}
+        {/* Main Actions - PROMINENT */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-6 mb-20"
+          className="grid md:grid-cols-2 gap-4 mb-16"
         >
+          {/* New Analysis - PRIMARY */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className="group p-10 bg-white text-black rounded-2xl hover:bg-zinc-100 transition-all text-left relative overflow-hidden"
+            className="group p-8 bg-white text-black rounded-2xl hover:bg-zinc-100 transition-all text-left relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <ClipboardCheck className="w-12 h-12 mb-6" />
-            <h2 className="text-3xl tracking-wider mb-3">{t('newAnalysis')}</h2>
-            <p className="text-zinc-600 text-sm leading-relaxed mb-6 font-sans">
+            <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500 text-white text-xs rounded-full">
+              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+              START
+            </div>
+            <ClipboardCheck className="w-10 h-10 mb-4" />
+            <h2 className="text-2xl tracking-wider mb-2">{t('newAnalysis')}</h2>
+            <p className="text-zinc-500 text-sm leading-relaxed mb-4 font-sans">
               {t('newAnalysisDesc')}
             </p>
             <div className="flex items-center gap-2 text-black text-sm font-bold tracking-widest">
               <span>{t('startNow')}</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
 
+          {/* Dashboard */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className="group p-10 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 hover:bg-zinc-800/50 transition-all text-left relative overflow-hidden"
+            className="group p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-600 transition-all text-left relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <BarChart3 className="w-12 h-12 text-white mb-6" />
-            <h2 className="text-3xl tracking-wider mb-3">{t('dashboard')}</h2>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-sans">
+            <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full">
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+              LIVE
+            </div>
+            <BarChart3 className="w-10 h-10 text-white mb-4" />
+            <h2 className="text-2xl tracking-wider mb-2">{t('dashboard')}</h2>
+            <p className="text-zinc-500 text-sm leading-relaxed mb-4 font-sans">
               {t('dashboardDesc')}
             </p>
             <div className="flex items-center gap-2 text-white text-sm font-bold tracking-widest">
               <span>{t('openDashboard')}</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
         </motion.div>
 
+        {/* ZNPCV Principles - NEW SECTION */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-16"
+        >
+          <div className="text-center mb-8">
+            <h3 className="text-xl tracking-widest mb-2">ZNPCV PRINZIPIEN</h3>
+            <p className="text-zinc-600 text-sm">Die goldenen Regeln für A+++ Trades</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
+                </div>
+                <div>
+                  <h4 className="text-white tracking-wider mb-1">{t('notBuyingResistance')}</h4>
+                  <p className="text-zinc-500 text-sm font-sans">{t('notBuyingResistanceDesc')}</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
+                </div>
+                <div>
+                  <h4 className="text-white tracking-wider mb-1">{t('notSellingSupport')}</h4>
+                  <p className="text-zinc-500 text-sm font-sans">{t('notSellingSupportDesc')}</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <h4 className="text-white tracking-wider mb-1">NUR A+++ TRADES</h4>
+                  <p className="text-zinc-500 text-sm font-sans">Minimum 85% Checkliste erfüllt</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-5 h-5 text-blue-400" />
+                </div>
+                <div>
+                  <h4 className="text-white tracking-wider mb-1">{t('confluence')}</h4>
+                  <p className="text-zinc-500 text-sm font-sans">W-D-4H müssen übereinstimmen</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Trading Quote */}
-        <div className="mb-20">
+        <div className="mb-16">
           <TradingQuote />
         </div>
 
@@ -202,31 +270,31 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-20"
+          transition={{ delay: 0.4 }}
+          className="mb-16"
         >
-          <div className="text-center mb-12">
-            <h3 className="text-2xl tracking-widest mb-2">ZNPCV STANDARD</h3>
-            <p className="text-zinc-500">Only A+++ Trades • 85%+ Completion</p>
+          <div className="text-center mb-8">
+            <h3 className="text-xl tracking-widest mb-2">FEATURES</h3>
+            <p className="text-zinc-600 text-sm">Professionelle Trading-Werkzeuge</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-4">
             {[
               { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
               { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
-              { icon: TrendingUp, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc' },
+              { icon: Activity, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc' },
             ].map((item, index) => (
               <motion.div 
                 key={item.titleKey} 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-                className="p-8 bg-zinc-950 border border-zinc-800/50 rounded-2xl hover:border-zinc-700 transition-all group"
+                transition={{ delay: 0.5 + index * 0.1 }}
+                className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl hover:border-zinc-700 transition-all group"
               >
-                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <item.icon className="w-7 h-7 text-black" />
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <item.icon className="w-6 h-6 text-black" />
                 </div>
-                <h3 className="text-xl tracking-wider mb-3">{t(item.titleKey)}</h3>
+                <h3 className="text-lg tracking-wider mb-2">{t(item.titleKey)}</h3>
                 <p className="text-sm text-zinc-500 leading-relaxed font-sans">{t(item.descKey)}</p>
               </motion.div>
             ))}
@@ -237,18 +305,18 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="grid grid-cols-3 gap-6 mb-20"
+          transition={{ delay: 0.6 }}
+          className="grid grid-cols-3 gap-3 md:gap-4"
         >
           {[
             { value: '85%+', label: 'ZNPCV Standard', icon: Award },
             { value: '7', label: 'Step Checklist', icon: CheckCircle2 },
             { value: '4', label: 'Chart Patterns', icon: Activity },
-          ].map((stat, index) => (
-            <div key={stat.label} className="text-center p-8 border border-zinc-800/50 rounded-2xl bg-zinc-950">
-              <stat.icon className="w-8 h-8 mx-auto mb-4 text-white" />
-              <div className="text-4xl font-light mb-2">{stat.value}</div>
-              <div className="text-xs text-zinc-500 tracking-widest">{stat.label}</div>
+          ].map((stat) => (
+            <div key={stat.label} className="text-center p-5 md:p-6 border border-zinc-800/50 rounded-2xl bg-zinc-950">
+              <stat.icon className="w-6 h-6 mx-auto mb-3 text-white" />
+              <div className="text-2xl md:text-3xl font-light mb-1">{stat.value}</div>
+              <div className="text-[10px] md:text-xs text-zinc-600 tracking-widest">{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -256,41 +324,41 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="bg-zinc-950 border-t border-zinc-800/50">
-        <div className="max-w-6xl mx-auto px-6 py-16">
-          <div className="grid md:grid-cols-12 gap-12 mb-12">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="grid md:grid-cols-12 gap-8 md:gap-12 mb-10">
             {/* Brand */}
             <div className="md:col-span-5">
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-16 w-auto invert mb-6"
+                className="h-14 w-auto invert mb-5"
               />
-              <p className="text-zinc-500 text-sm font-sans leading-relaxed max-w-sm mb-8">
+              <p className="text-zinc-500 text-sm font-sans leading-relaxed max-w-sm mb-6">
                 {t('footerDesc')}
               </p>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                  <Lock className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs text-white tracking-wider">SSL</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                  <Lock className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-xs text-white">SSL</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs text-white tracking-wider">SECURE</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-xs text-white">SECURE</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                  <Globe className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs text-white tracking-wider">24/7</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                  <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-xs text-white">24/7</span>
                 </div>
               </div>
             </div>
 
             {/* Links */}
             <div className="md:col-span-3">
-              <h4 className="text-white text-sm tracking-widest mb-6">NAVIGATION</h4>
-              <ul className="space-y-4">
+              <h4 className="text-white text-sm tracking-widest mb-5">NAVIGATION</h4>
+              <ul className="space-y-3">
                 <li>
                   <button onClick={() => navigate(createPageUrl('Checklist'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2 group">
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -308,32 +376,32 @@ export default function HomePage() {
 
             {/* Contact & Support */}
             <div className="md:col-span-4">
-              <h4 className="text-white text-sm tracking-widest mb-6">{t('contact')}</h4>
+              <h4 className="text-white text-sm tracking-widest mb-5">{t('contact')}</h4>
               <div className="space-y-3">
-                <a href="mailto:support@znpcv.com" className="flex items-center gap-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                  <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                    <span className="text-emerald-400 text-lg">@</span>
+                <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                  <div className="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                    <span className="text-emerald-400">@</span>
                   </div>
-                  <div>
-                    <div className="text-xs text-zinc-500 mb-0.5 tracking-wider">EMAIL</div>
+                  <div className="flex-1">
+                    <div className="text-[10px] text-zinc-600 tracking-wider">EMAIL</div>
                     <div className="text-white text-sm group-hover:text-emerald-400 transition-colors">support@znpcv.com</div>
                   </div>
-                  <div className="ml-auto flex items-center gap-1.5">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-emerald-400 text-xs">LIVE</span>
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                    <span className="text-emerald-400 text-[10px]">LIVE</span>
                   </div>
                 </a>
-                <button className="w-full flex items-center gap-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                    <span className="text-blue-400 text-lg">?</span>
+                <button className="w-full flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                  <div className="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                    <HelpCircle className="w-4 h-4 text-blue-400" />
                   </div>
-                  <div className="text-left">
-                    <div className="text-xs text-zinc-500 mb-0.5 tracking-wider">SUPPORT</div>
+                  <div className="flex-1 text-left">
+                    <div className="text-[10px] text-zinc-600 tracking-wider">SUPPORT</div>
                     <div className="text-white text-sm group-hover:text-blue-400 transition-colors">{t('faqHelp')}</div>
                   </div>
-                  <div className="ml-auto flex items-center gap-1.5">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-blue-400 text-xs">24/7</span>
+                  <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                    <span className="text-blue-400 text-[10px]">24/7</span>
                   </div>
                 </button>
               </div>
@@ -341,8 +409,8 @@ export default function HomePage() {
           </div>
 
           {/* Bottom */}
-          <div className="pt-8 border-t border-zinc-800/50 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+          <div className="pt-6 border-t border-zinc-800/50 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <p className="text-white text-sm">© {new Date().getFullYear()} ZNPCV</p>
               <span className="text-zinc-800">|</span>
               <p className="text-zinc-600 text-sm">{t('allRights')}</p>
@@ -362,7 +430,7 @@ export default function HomePage() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 w-12 h-12 bg-white text-black flex items-center justify-center shadow-lg hover:bg-zinc-200 transition-colors z-50 rounded-full"
+            className="fixed bottom-6 right-6 w-11 h-11 bg-white text-black flex items-center justify-center shadow-lg hover:bg-zinc-200 transition-colors z-50 rounded-full"
           >
             <ArrowUp className="w-5 h-5" />
           </motion.button>
