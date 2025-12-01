@@ -46,13 +46,11 @@ export default function HomePage() {
                 animate={{ opacity: 1, x: 0 }}
                 className="flex items-center gap-3"
               >
-                <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-black tracking-wider">ZNPCV</h1>
-                  <p className="text-xs text-slate-500 tracking-widest">TRADING CHECKLIST</p>
-                </div>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/2f200c537_PNGZNPCVLOGOwei.png" 
+                  alt="ZNPCV" 
+                  className="h-12 w-auto"
+                />
               </motion.div>
 
               <motion.div

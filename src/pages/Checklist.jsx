@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Save, Trash2, AlertTriangle, TrendingUp, TrendingDown, Check, Zap, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, AlertTriangle, TrendingUp, TrendingDown, Check, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createPageUrl } from "@/utils";
@@ -165,12 +165,11 @@ export default function ChecklistPage() {
               <span className="text-sm hidden sm:inline">Zurück</span>
             </button>
             
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-bold tracking-wider">ZNPCV</span>
-            </div>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/2f200c537_PNGZNPCVLOGOwei.png" 
+              alt="ZNPCV" 
+              className="h-10 w-auto"
+            />
 
             <div className="text-right">
               <div className="text-2xl font-black text-emerald-500">{Math.round(progress)}%</div>
