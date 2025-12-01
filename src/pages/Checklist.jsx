@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, XOctagon, Calculator, TrendingUp, TrendingDown, Shield, Target, DollarSign, Percent } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, XOctagon, Calculator, TrendingUp, TrendingDown, Shield, Target, DollarSign, Percent, Info, Layers } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -116,7 +116,7 @@ export default function ChecklistPage() {
 
   const progress = weeklyScore + dailyScore + h4Score + entryScore;
 
-  // Risk calculations
+  // Risk calculations with Lot Size
   const calculateRisk = () => {
     const entry = parseFloat(checklist.entry_price) || 0;
     const sl = parseFloat(checklist.stop_loss) || 0;
@@ -124,25 +124,69 @@ export default function ChecklistPage() {
     const account = parseFloat(checklist.account_size) || 0;
     const riskPct = parseFloat(checklist.risk_percent) || 1;
     
-    if (!entry || !sl || !tp) return null;
+    if (!entry || !sl) return null;
     
     const isLong = checklist.direction === 'long';
     const slDistance = isLong ? entry - sl : sl - entry;
-    const tpDistance = isLong ? tp - entry : entry - tp;
+    const tpDistance = tp ? (isLong ? tp - entry : entry - tp) : 0;
     
-    if (slDistance <= 0 || tpDistance <= 0) return null;
+    if (slDistance <= 0) return null;
     
-    const rr = tpDistance / slDistance;
+    // Calculate pips based on pair type
+    const pair = checklist.pair?.toUpperCase() || '';
+    const isJPY = pair.includes('JPY');
+    const isGold = pair.includes('XAU') || pair.includes('GOLD');
+    const isCrypto = pair.includes('BTC') || pair.includes('ETH');
+    
+    let pipMultiplier = 10000; // Standard forex
+    let pipValue = 10; // $10 per pip for 1 standard lot
+    
+    if (isJPY) {
+      pipMultiplier = 100;
+      pipValue = 1000 / entry; // Approximate for JPY pairs
+    } else if (isGold) {
+      pipMultiplier = 10;
+      pipValue = 10; // $10 per pip for gold
+    } else if (isCrypto) {
+      pipMultiplier = 1;
+      pipValue = 1;
+    }
+    
+    const slPips = Math.abs(entry - sl) * pipMultiplier;
+    const tpPips = tp ? Math.abs(tp - entry) * pipMultiplier : 0;
+    
+    // Risk amount in account currency
     const riskAmount = account * (riskPct / 100);
-    const slPips = Math.abs(entry - sl) * 10000;
-    const tpPips = Math.abs(tp - entry) * 10000;
+    
+    // Lot size calculation
+    // Formula: Lot Size = Risk Amount / (SL in Pips × Pip Value)
+    const lotSize = riskAmount / (slPips * pipValue);
+    
+    // Round to appropriate decimal places
+    const standardLots = lotSize;
+    const miniLots = lotSize * 10;
+    const microLots = lotSize * 100;
+    
+    // R:R calculation
+    const rr = tpDistance > 0 ? tpDistance / slDistance : 0;
+    
+    // Position value
+    const positionValue = standardLots * 100000 * entry;
     
     return {
       rr: rr.toFixed(2),
       riskAmount: riskAmount.toFixed(2),
       slPips: slPips.toFixed(1),
       tpPips: tpPips.toFixed(1),
-      potentialProfit: (riskAmount * rr).toFixed(2)
+      potentialProfit: (riskAmount * rr).toFixed(2),
+      standardLots: standardLots.toFixed(2),
+      miniLots: miniLots.toFixed(2),
+      microLots: microLots.toFixed(0),
+      positionValue: positionValue.toFixed(0),
+      pipValue: pipValue.toFixed(2),
+      isJPY,
+      isGold,
+      isCrypto
     };
   };
 
@@ -548,99 +592,190 @@ export default function ChecklistPage() {
           {/* STEP 5: Risk Management */}
           {currentStep === 5 && (
             <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="06" title="RISK MANAGEMENT" subtitle="SL, TP & Position Sizing" />
+              <StepHeader number="06" title="RISK MANAGEMENT" subtitle="Position Sizing & Lot Size Calculator" />
               
-              {/* Account & Risk */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="flex items-center gap-2 text-zinc-500 text-sm tracking-widest mb-2">
-                    <DollarSign className="w-4 h-4" />
-                    ACCOUNT SIZE
-                  </label>
-                  <Input type="number" value={checklist.account_size} onChange={(e) => update('account_size', e.target.value)}
-                    placeholder="10000" className="bg-zinc-900 border-zinc-800 text-white text-lg h-12 rounded-xl focus:border-white" />
-                </div>
-                <div>
-                  <label className="flex items-center gap-2 text-zinc-500 text-sm tracking-widest mb-2">
-                    <Percent className="w-4 h-4" />
-                    RISIKO %
-                  </label>
-                  <Input type="number" value={checklist.risk_percent} onChange={(e) => update('risk_percent', e.target.value)}
-                    placeholder="1" className="bg-zinc-900 border-zinc-800 text-white text-lg h-12 rounded-xl focus:border-white" />
-                </div>
-              </div>
-              
-              {/* Trade Levels */}
-              <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-950 space-y-4">
-                <h4 className="text-white font-bold tracking-widest text-sm">TRADE LEVELS</h4>
-                
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-zinc-600 text-xs tracking-widest mb-1.5 block">ENTRY PREIS</label>
-                    <Input type="number" step="0.00001" value={checklist.entry_price} onChange={(e) => update('entry_price', e.target.value)}
-                      placeholder="1.08500" className="bg-zinc-900 border-zinc-800 text-white h-11 rounded-lg text-center focus:border-white" />
-                  </div>
-                  <div>
-                    <label className="text-red-400 text-xs tracking-widest mb-1.5 block">STOP LOSS</label>
-                    <Input type="number" step="0.00001" value={checklist.stop_loss} onChange={(e) => update('stop_loss', e.target.value)}
-                      placeholder="1.08200" className="bg-red-500/10 border-red-500/30 text-white h-11 rounded-lg text-center focus:border-red-500" />
-                  </div>
-                  <div>
-                    <label className="text-emerald-400 text-xs tracking-widest mb-1.5 block">TAKE PROFIT</label>
-                    <Input type="number" step="0.00001" value={checklist.take_profit} onChange={(e) => update('take_profit', e.target.value)}
-                      placeholder="1.09200" className="bg-emerald-500/10 border-emerald-500/30 text-white h-11 rounded-lg text-center focus:border-emerald-500" />
+              {/* Info Box */}
+              <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                <div className="flex items-start gap-2">
+                  <Info className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div className="text-xs text-blue-300 font-sans">
+                    Berechne deine exakte Lot Size basierend auf deinem Risiko. Gib Entry & Stop Loss ein, um die empfohlene Position zu sehen.
                   </div>
                 </div>
               </div>
 
-              {/* Risk Calculator Results */}
+              {/* Account & Risk */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
+                    <DollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    ACCOUNT SIZE ($)
+                  </label>
+                  <Input type="number" value={checklist.account_size} onChange={(e) => update('account_size', e.target.value)}
+                    placeholder="10000" className="bg-zinc-900 border-zinc-800 text-white text-base sm:text-lg h-11 sm:h-12 rounded-xl focus:border-white" />
+                </div>
+                <div>
+                  <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
+                    <Percent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    RISIKO %
+                  </label>
+                  <Input type="number" step="0.1" value={checklist.risk_percent} onChange={(e) => update('risk_percent', e.target.value)}
+                    placeholder="1" className="bg-zinc-900 border-zinc-800 text-white text-base sm:text-lg h-11 sm:h-12 rounded-xl focus:border-white" />
+                </div>
+              </div>
+              
+              {/* Trade Levels */}
+              <div className="border border-zinc-800 rounded-2xl p-4 sm:p-5 bg-zinc-950 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-white font-bold tracking-widest text-xs sm:text-sm">TRADE LEVELS</h4>
+                  {checklist.pair && (
+                    <div className="px-2 py-1 bg-zinc-800 rounded-md text-xs text-white font-bold">
+                      {checklist.pair}
+                    </div>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  <div>
+                    <label className="text-zinc-600 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">ENTRY</label>
+                    <Input type="number" step="0.00001" value={checklist.entry_price} onChange={(e) => update('entry_price', e.target.value)}
+                      placeholder="1.08500" className="bg-zinc-900 border-zinc-800 text-white h-10 sm:h-11 rounded-lg text-center text-sm focus:border-white" />
+                  </div>
+                  <div>
+                    <label className="text-red-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">STOP LOSS</label>
+                    <Input type="number" step="0.00001" value={checklist.stop_loss} onChange={(e) => update('stop_loss', e.target.value)}
+                      placeholder="1.08200" className="bg-red-500/10 border-red-500/30 text-white h-10 sm:h-11 rounded-lg text-center text-sm focus:border-red-500" />
+                  </div>
+                  <div>
+                    <label className="text-emerald-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">TAKE PROFIT</label>
+                    <Input type="number" step="0.00001" value={checklist.take_profit} onChange={(e) => update('take_profit', e.target.value)}
+                      placeholder="1.09200" className="bg-emerald-500/10 border-emerald-500/30 text-white h-10 sm:h-11 rounded-lg text-center text-sm focus:border-emerald-500" />
+                  </div>
+                </div>
+              </div>
+
+              {/* LOT SIZE CALCULATOR - Main Feature */}
               {riskCalc && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  className="border border-zinc-800 bg-zinc-900 rounded-2xl p-5 space-y-4">
+                  className="border-2 border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-4 sm:p-5 space-y-4">
                   <div className="flex items-center gap-3">
-                    <Calculator className="w-5 h-5 text-white" />
-                    <span className="font-bold tracking-widest text-sm text-white">RISK CALCULATOR</span>
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                      <Layers className="w-5 h-5 text-black" />
+                    </div>
+                    <div>
+                      <span className="font-bold tracking-widest text-sm text-white block">LOT SIZE CALCULATOR</span>
+                      <span className="text-zinc-500 text-xs">Empfohlene Position für dein Risiko</span>
+                    </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className="text-center p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-xs text-zinc-500 mb-1">R:R RATIO</div>
-                      <div className={cn("text-2xl font-bold", 
-                        parseFloat(riskCalc.rr) >= 3 ? "text-emerald-400" : 
-                        parseFloat(riskCalc.rr) >= 2 ? "text-emerald-500" : 
+                  {/* Main Lot Size Display */}
+                  <div className="bg-white rounded-xl p-4 sm:p-5 text-center">
+                    <div className="text-xs text-zinc-500 mb-1 tracking-widest">EMPFOHLENE LOT SIZE</div>
+                    <div className="text-4xl sm:text-5xl font-bold text-black mb-2">{riskCalc.standardLots}</div>
+                    <div className="text-sm text-zinc-600 font-sans">Standard Lots</div>
+                  </div>
+                  
+                  {/* Alternative Lot Sizes */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="text-center p-3 bg-zinc-900 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-1">MINI LOTS</div>
+                      <div className="text-lg sm:text-xl font-bold text-white">{riskCalc.miniLots}</div>
+                      <div className="text-[10px] text-zinc-600">0.1 Lot = 1 Mini</div>
+                    </div>
+                    <div className="text-center p-3 bg-zinc-900 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-1">MICRO LOTS</div>
+                      <div className="text-lg sm:text-xl font-bold text-white">{riskCalc.microLots}</div>
+                      <div className="text-[10px] text-zinc-600">0.01 Lot = 1 Micro</div>
+                    </div>
+                    <div className="text-center p-3 bg-zinc-900 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-1">UNITS</div>
+                      <div className="text-lg sm:text-xl font-bold text-white">{(parseFloat(riskCalc.standardLots) * 100000).toLocaleString()}</div>
+                      <div className="text-[10px] text-zinc-600">Einheiten</div>
+                    </div>
+                  </div>
+                  
+                  {/* Risk Details */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-0.5">RISIKO $</div>
+                      <div className="text-base sm:text-lg font-bold text-red-400">${riskCalc.riskAmount}</div>
+                    </div>
+                    <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-0.5">SL PIPS</div>
+                      <div className="text-base sm:text-lg font-bold text-zinc-300">{riskCalc.slPips}</div>
+                    </div>
+                    <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-0.5">TP PIPS</div>
+                      <div className="text-base sm:text-lg font-bold text-emerald-400">{riskCalc.tpPips || '—'}</div>
+                    </div>
+                    <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
+                      <div className="text-[10px] text-zinc-500 mb-0.5">R:R</div>
+                      <div className={cn("text-base sm:text-lg font-bold", 
+                        parseFloat(riskCalc.rr) >= 2 ? "text-emerald-400" : 
                         parseFloat(riskCalc.rr) >= 1 ? "text-yellow-500" : "text-red-500")}>
-                        1:{riskCalc.rr}
+                        {parseFloat(riskCalc.rr) > 0 ? `1:${riskCalc.rr}` : '—'}
                       </div>
                     </div>
-                    <div className="text-center p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-xs text-zinc-500 mb-1">RISIKO $</div>
-                      <div className="text-2xl font-bold text-red-400">${riskCalc.riskAmount}</div>
-                    </div>
-                    <div className="text-center p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-xs text-zinc-500 mb-1">SL PIPS</div>
-                      <div className="text-2xl font-bold text-zinc-300">{riskCalc.slPips}</div>
-                    </div>
-                    <div className="text-center p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-xs text-zinc-500 mb-1">POTENTIAL $</div>
-                      <div className="text-2xl font-bold text-emerald-400">${riskCalc.potentialProfit}</div>
-                    </div>
                   </div>
                   
-                  {parseFloat(riskCalc.rr) < 2 && (
+                  {/* Potential Profit */}
+                  {parseFloat(riskCalc.rr) > 0 && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-emerald-400" />
+                        <span className="text-emerald-400 text-sm font-bold">POTENZIELLER GEWINN</span>
+                      </div>
+                      <span className="text-emerald-400 text-xl font-bold">${riskCalc.potentialProfit}</span>
+                    </div>
+                  )}
+                  
+                  {/* Warnings */}
+                  {parseFloat(riskCalc.rr) > 0 && parseFloat(riskCalc.rr) < 2 && (
                     <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-yellow-500" />
-                      <span className="text-yellow-400 text-sm">ZNPCV empfiehlt mindestens 1:2 R:R</span>
+                      <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                      <span className="text-yellow-400 text-xs sm:text-sm">ZNPCV empfiehlt mindestens 1:2 R:R Verhältnis</span>
                     </div>
                   )}
                   
                   {parseFloat(riskCalc.rr) >= 2 && (
                     <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center gap-2">
-                      <Check className="w-4 h-4 text-emerald-500" />
-                      <span className="text-emerald-400 text-sm">Gutes Risk:Reward Verhältnis!</span>
+                      <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <span className="text-emerald-400 text-xs sm:text-sm">Gutes Risk:Reward Verhältnis!</span>
                     </div>
                   )}
                 </motion.div>
               )}
+
+              {/* Show placeholder when no calculation */}
+              {!riskCalc && checklist.account_size && (
+                <div className="border border-zinc-800 bg-zinc-950 rounded-2xl p-6 text-center">
+                  <Calculator className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
+                  <div className="text-zinc-500 text-sm font-sans">
+                    Gib Entry Preis und Stop Loss ein,<br />um deine Lot Size zu berechnen
+                  </div>
+                </div>
+              )}
+
+              {/* Quick Risk Buttons */}
+              <div className="border border-zinc-800 rounded-xl p-3 sm:p-4 bg-zinc-950">
+                <label className="text-zinc-500 text-[10px] sm:text-xs tracking-widest mb-2 block">SCHNELLE RISIKO-AUSWAHL</label>
+                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+                  {['0.5', '1', '1.5', '2', '3'].map((risk) => (
+                    <button
+                      key={risk}
+                      onClick={() => update('risk_percent', risk)}
+                      className={cn(
+                        "p-2 sm:p-2.5 rounded-lg text-center transition-all border text-xs sm:text-sm font-bold",
+                        checklist.risk_percent === risk
+                          ? "bg-white text-black border-white"
+                          : "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900"
+                      )}
+                    >
+                      {risk}%
+                    </button>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           )}
 
