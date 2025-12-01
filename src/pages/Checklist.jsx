@@ -150,14 +150,14 @@ export default function ChecklistPage() {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-slate-950 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-white sticky top-0 z-50">
+      <header className="bg-black border-b border-zinc-800 sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <button onClick={() => navigate(createPageUrl('Home'))} className="text-black hover:opacity-70">
+              <button onClick={() => navigate(createPageUrl('Home'))} className="text-white hover:text-zinc-300">
                 <Home className="w-6 h-6" />
               </button>
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-black hover:opacity-70">
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-white hover:text-zinc-300">
                 <ArrowLeft className="w-6 h-6" />
               </button>
             </div>
@@ -166,23 +166,23 @@ export default function ChecklistPage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-10 w-auto cursor-pointer hover:opacity-80"
+                className="h-10 w-auto cursor-pointer hover:opacity-80 invert"
               />
             </button>
 
             <div className="flex items-center gap-3">
               <LanguageToggle />
-              <div className={cn("text-2xl font-bold", isReady ? "text-emerald-600" : "text-black")}>{progress}%</div>
+              <div className={cn("text-2xl font-bold", isReady ? "text-emerald-400" : "text-white")}>{progress}%</div>
             </div>
           </div>
         </div>
-        <div className="h-1 bg-zinc-200">
-          <motion.div className={cn("h-full", isReady ? "bg-emerald-500" : "bg-black")} initial={{ width: 0 }} animate={{ width: `${progress}%` }} />
+        <div className="h-1 bg-zinc-800">
+          <motion.div className={cn("h-full", isReady ? "bg-emerald-500" : "bg-white")} initial={{ width: 0 }} animate={{ width: `${progress}%` }} />
         </div>
       </header>
 
       {/* Steps */}
-      <div className="bg-slate-900 border-b border-slate-800 overflow-x-auto">
+      <div className="bg-zinc-900 border-b border-zinc-800 overflow-x-auto">
         <div className="max-w-3xl mx-auto px-4 py-3 flex gap-1">
           {STEPS.map((step, index) => (
             <button
@@ -190,7 +190,7 @@ export default function ChecklistPage() {
               onClick={() => setCurrentStep(index)}
               className={cn(
                 "px-4 py-2 text-sm tracking-widest whitespace-nowrap transition-all rounded",
-                currentStep === index ? 'bg-white text-black' : 'text-zinc-500 hover:text-white'
+                currentStep === index ? 'bg-white text-black' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
               )}
             >
               {stepLabels[step]}

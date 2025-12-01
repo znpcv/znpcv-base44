@@ -70,11 +70,11 @@ export default function HomePage() {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-white">
+      <header className="bg-black border-b border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-emerald-600">
+              <div className="flex items-center gap-2 text-emerald-400">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                 <span className="text-sm font-medium">{onlineUsers} {t('online')}</span>
               </div>
@@ -84,14 +84,14 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity invert"
               />
             </button>
             
             <div className="flex items-center gap-4">
               <LanguageToggle />
-              <div className="text-right text-black">
-                <div className="text-xs text-slate-500">{t('localTime')}</div>
+              <div className="text-right text-white">
+                <div className="text-xs text-zinc-400">{t('localTime')}</div>
                 <div className="text-lg font-mono font-bold">
                   {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                 </div>
@@ -102,10 +102,10 @@ export default function HomePage() {
       </header>
 
       {/* Market Sessions Bar */}
-      <div className="bg-slate-900/80 border-y border-slate-800">
+      <div className="bg-zinc-900 border-b border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between gap-4 overflow-x-auto">
-            <div className="flex items-center gap-2 text-slate-400 text-sm whitespace-nowrap">
+            <div className="flex items-center gap-2 text-zinc-300 text-sm whitespace-nowrap">
               <Globe className="w-4 h-4" />
               <span>{t('marketSessions')}</span>
             </div>
@@ -116,12 +116,12 @@ export default function HomePage() {
                   <div key={session.name} className="flex items-center gap-3 whitespace-nowrap">
                     <span className="text-lg">{session.emoji}</span>
                     <div>
-                      <div className="text-xs text-slate-500">{session.name}</div>
-                      <div className={`text-sm font-mono font-bold ${isOpen ? 'text-emerald-400' : 'text-slate-500'}`}>
+                      <div className="text-xs text-zinc-400">{session.name}</div>
+                      <div className={`text-sm font-mono font-bold ${isOpen ? 'text-emerald-400' : 'text-zinc-500'}`}>
                         {times[session.name] || '--:--:--'}
                       </div>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-600'}`} />
+                    <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-600'}`} />
                   </div>
                 );
               })}

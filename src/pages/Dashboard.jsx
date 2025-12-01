@@ -100,15 +100,15 @@ export default function DashboardPage() {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-white">
+      <header className="bg-black border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
             <button onClick={() => navigate(createPageUrl('Home'))}>
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className="h-14 w-auto cursor-pointer hover:opacity-80" />
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className="h-14 w-auto cursor-pointer hover:opacity-80 invert" />
             </button>
             <div className="flex items-center gap-4">
               <LanguageToggle />
-              <Button onClick={() => navigate(createPageUrl('Checklist'))} className="bg-black hover:bg-zinc-800 text-white px-6 py-3 rounded-xl tracking-widest">
+              <Button onClick={() => navigate(createPageUrl('Checklist'))} className="bg-white hover:bg-zinc-200 text-black px-6 py-3 rounded-xl tracking-widest">
                 <Plus className="w-5 h-5 mr-2" />
                 {t('newAnalysis').split(' ')[0]}
               </Button>
