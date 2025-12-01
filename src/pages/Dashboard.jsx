@@ -21,7 +21,7 @@ const SESSIONS = [
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const { t, language } = useLanguage();
+  const { t, language, isRTL } = useLanguage();
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [times, setTimes] = useState({});
 
@@ -98,7 +98,7 @@ export default function DashboardPage() {
   const locale = language === 'de' ? de : enUS;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white">
+    <div className={`min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-5">

@@ -11,12 +11,13 @@ import { cn } from "@/lib/utils";
 import AssetSelector from '@/components/AssetSelector';
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
+import ConflTooltip from '@/components/ConflTooltip';
 
 const STEPS = ['pair', 'trend', 'aoi', 'structure', 'patterns', 'entry', 'final'];
 
 export default function ChecklistPage() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const [searchParams] = useSearchParams();
   const checklistId = searchParams.get('id');
   
@@ -147,7 +148,7 @@ export default function ChecklistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
+    <div className={`min-h-screen bg-gradient-to-b from-slate-950 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className="bg-white sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-4 py-4">
@@ -527,12 +528,18 @@ function ConfluenceBox({ trendsAlign, trend, t, checklist }) {
       className={cn("p-6 border rounded-xl text-center", trendsAlign ? "border-emerald-500 bg-emerald-500/10" : "border-yellow-500 bg-yellow-500/10")}>
       {trendsAlign ? (
         <>
-          <div className="text-emerald-400 text-2xl tracking-widest mb-2">✓ {t('confluence')}</div>
+          <div className="text-emerald-400 text-2xl tracking-widest mb-2 flex items-center justify-center">
+            ✓ {t('confluence')}
+            <ConflTooltip />
+          </div>
           <div className="text-zinc-400 font-sans">{t('allTimeframes')} {trend?.toUpperCase()}</div>
         </>
       ) : (
         <>
-          <div className="text-yellow-400 text-2xl tracking-widest mb-2">⚠ {t('noConfluence')}</div>
+          <div className="text-yellow-400 text-2xl tracking-widest mb-2 flex items-center justify-center">
+            ⚠ {t('noConfluence')}
+            <ConflTooltip />
+          </div>
           <div className="text-zinc-400 font-sans">W: {checklist.weekly_trend?.toUpperCase()} | D: {checklist.daily_trend?.toUpperCase()} | 4H: {checklist.h4_trend?.toUpperCase()}</div>
         </>
       )}

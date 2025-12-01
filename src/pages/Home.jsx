@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
+import { HelpCircle } from 'lucide-react';
 import TradingQuote from '@/components/TradingQuote';
 
 const SESSIONS = [
@@ -17,7 +18,7 @@ const SESSIONS = [
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(247);
@@ -67,7 +68,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white">
+    <div className={`min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className="bg-white">
         <div className="max-w-6xl mx-auto px-6 py-5">
@@ -256,8 +257,7 @@ export default function HomePage() {
           <div className="flex flex-wrap items-center justify-center gap-8 mb-8 pb-8 border-b border-slate-800">
             {[
               { icon: Lock, key: 'sslEncrypted' },
-              { icon: ShieldCheck, key: 'gdprCompliant' },
-              { icon: Shield, key: 'dataProtection' },
+              { icon: ShieldCheck, key: 'dataProtection' },
               { icon: Globe, key: 'worldwide' },
             ].map((item) => (
               <div key={item.key} className="flex items-center gap-2 text-slate-400">
@@ -268,37 +268,31 @@ export default function HomePage() {
           </div>
 
           {/* Footer Content */}
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+            <div className="flex items-center gap-4">
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-12 w-auto mb-4 invert"
+                className="h-10 w-auto invert"
               />
-              <p className="text-slate-500 text-sm leading-relaxed font-sans">
+              <p className="text-slate-500 text-sm font-sans max-w-md">
                 {t('footerDesc')}
               </p>
             </div>
-            <div>
-              <h4 className="text-sm tracking-widest mb-4 text-white">{t('legal')}</h4>
-              <ul className="space-y-2 text-sm text-slate-500 font-sans">
-                <li className="hover:text-slate-300 cursor-pointer">{t('imprint')}</li>
-                <li className="hover:text-slate-300 cursor-pointer">{t('privacyPolicy')}</li>
-                <li className="hover:text-slate-300 cursor-pointer">{t('terms')}</li>
-                <li className="hover:text-slate-300 cursor-pointer">{t('cookies')}</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-sm tracking-widest mb-4 text-white">{t('contact')}</h4>
-              <ul className="space-y-2 text-sm text-slate-500 font-sans">
-                <li>support@znpcv.com</li>
-                <li className="hover:text-slate-300 cursor-pointer">{t('faqHelp')}</li>
-              </ul>
+            
+            <div className="flex items-center gap-6">
+              <a href="mailto:support@znpcv.com" className="text-slate-400 hover:text-white text-sm transition-colors">
+                {t('contact')}: support@znpcv.com
+              </a>
+              <button className="text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2">
+                <HelpCircle className="w-4 h-4" />
+                {t('faqHelp')}
+              </button>
             </div>
           </div>
 
           {/* Copyright */}
-          <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-slate-600 text-sm">
               © {new Date().getFullYear()} ZNPCV. {t('allRights')}
             </p>
