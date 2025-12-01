@@ -126,11 +126,13 @@ export default function DashboardPage() {
       <header className="bg-white">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/2f200c537_PNGZNPCVLOGOwei.png" 
-              alt="ZNPCV" 
-              className="h-16 w-auto"
-            />
+            <button onClick={() => navigate(createPageUrl('Home'))}>
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                alt="ZNPCV" 
+                className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </button>
             <Button
               onClick={() => navigate(createPageUrl('Checklist'))}
               className="bg-black hover:bg-zinc-800 text-white px-6 py-3 rounded-none tracking-widest"

@@ -70,11 +70,13 @@ export default function HomePage() {
               </div>
             </div>
             
-            <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
-              alt="ZNPCV" 
-              className="h-20 w-auto"
-            />
+            <button onClick={() => navigate(createPageUrl('Home'))}>
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                alt="ZNPCV" 
+                className="h-20 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </button>
             
             <div className="text-right text-black">
               <div className="text-xs text-slate-500">LOKALZEIT</div>
