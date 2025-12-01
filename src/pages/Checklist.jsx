@@ -84,7 +84,7 @@ export default function ChecklistPage() {
     // Step 1: Pair
     total++; if (checklist.pair) completed++;
     
-    // Step 2: Trends (3 items)
+    // Step 2: Trends (3 items) - alle müssen ausgefüllt sein, aber nicht übereinstimmen!
     total += 3;
     if (checklist.weekly_trend) completed++;
     if (checklist.daily_trend) completed++;
@@ -122,18 +122,15 @@ export default function ChecklistPage() {
     // Bonus points for extra confirmations (can go above 100%)
     let bonus = 0;
     
-    // Bonus for confluence (all trends align)
-    if (trendsAlign) bonus += 10;
-    
-    // Bonus for Daily & 4H sync
-    if (isDailyH4Sync && !trendsAlign) bonus += 5;
-    
     // Bonus for engulfing matching direction
-    if (checklist.aoi_position === 'long' && checklist.engulfing_color === 'blue') bonus += 5;
-    if (checklist.aoi_position === 'short' && checklist.engulfing_color === 'red') bonus += 5;
+    if (checklist.aoi_position === 'long' && checklist.engulfing_color === 'blue') bonus += 10;
+    if (checklist.aoi_position === 'short' && checklist.engulfing_color === 'red') bonus += 10;
     
     // Bonus for pattern confirmed
     if (checklist.pattern_confirmed) bonus += 5;
+    
+    // Bonus: Weekly & Daily same direction (higher timeframe alignment)
+    if (checklist.weekly_trend && checklist.daily_trend && checklist.weekly_trend === checklist.daily_trend) bonus += 5;
     
     return basePercent + bonus;
   };
@@ -309,10 +306,8 @@ export default function ChecklistPage() {
               ))}
 
               {checklist.weekly_trend && checklist.daily_trend && checklist.h4_trend && (
-                <ConfluenceBox trendsAlign={trendsAlign} trend={checklist.weekly_trend} t={t} checklist={checklist} />
+                <TrendSummaryBox checklist={checklist} t={t} />
               )}
-
-              {isDailyH4Sync && <SyncIndicator t={t} />}
             </motion.div>
           )}
 
@@ -713,39 +708,49 @@ function EngulfingButton({ selected, onClick, type, labels }) {
   );
 }
 
-function ConfluenceBox({ trendsAlign, trend, t, checklist }) {
+function TrendSummaryBox({ checklist, t }) {
+  const weeklyDailyAlign = checklist.weekly_trend === checklist.daily_trend;
+  
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-      className={cn("p-8 border-2 rounded-2xl text-center", trendsAlign ? "border-white bg-white text-black" : "border-zinc-700 bg-zinc-950")}>
-      {trendsAlign ? (
-        <>
-          <div className="text-3xl tracking-widest mb-2 flex items-center justify-center gap-2">
-            ✓ {t('confluence')}
-            <ConflTooltip />
-          </div>
-          <div className="text-zinc-600 font-sans">{t('allTimeframes')} {trend?.toUpperCase()}</div>
-        </>
-      ) : (
-        <>
-          <div className="text-2xl tracking-widest mb-2 flex items-center justify-center gap-2 text-zinc-400">
-            ⚠ {t('noConfluence')}
-            <ConflTooltip />
-          </div>
-          <div className="text-zinc-600 font-sans">W: {checklist.weekly_trend?.toUpperCase()} | D: {checklist.daily_trend?.toUpperCase()} | 4H: {checklist.h4_trend?.toUpperCase()}</div>
-        </>
-      )}
-    </motion.div>
-  );
-}
-
-function SyncIndicator({ t }) {
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-5 border border-zinc-700 bg-zinc-950 rounded-2xl flex items-center gap-4">
-      <Zap className="w-8 h-8 text-white" />
-      <div>
-        <div className="text-white font-bold tracking-wider">{t('dailyH4Sync')}</div>
-        <div className="text-sm text-zinc-500 font-sans">{t('higherProbability')}</div>
+      className="p-6 border border-zinc-800/50 rounded-2xl bg-zinc-950">
+      <div className="text-center mb-4">
+        <div className="text-lg tracking-widest text-white mb-2">TREND ÜBERSICHT</div>
+        <div className="text-zinc-500 text-sm font-sans">4H kann gegen W/D laufen um zum AOI zu kommen</div>
       </div>
+      
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className={cn("p-3 rounded-xl text-center", 
+          checklist.weekly_trend === 'bullish' ? 'bg-emerald-500/20 border border-emerald-500/50' : 'bg-red-500/20 border border-red-500/50'
+        )}>
+          <div className="text-xs text-zinc-500 mb-1">WEEKLY</div>
+          <div className={cn("font-bold", checklist.weekly_trend === 'bullish' ? 'text-emerald-400' : 'text-red-400')}>
+            {checklist.weekly_trend === 'bullish' ? '↑ BULLISH' : '↓ BEARISH'}
+          </div>
+        </div>
+        <div className={cn("p-3 rounded-xl text-center", 
+          checklist.daily_trend === 'bullish' ? 'bg-emerald-500/20 border border-emerald-500/50' : 'bg-red-500/20 border border-red-500/50'
+        )}>
+          <div className="text-xs text-zinc-500 mb-1">DAILY</div>
+          <div className={cn("font-bold", checklist.daily_trend === 'bullish' ? 'text-emerald-400' : 'text-red-400')}>
+            {checklist.daily_trend === 'bullish' ? '↑ BULLISH' : '↓ BEARISH'}
+          </div>
+        </div>
+        <div className={cn("p-3 rounded-xl text-center", 
+          checklist.h4_trend === 'bullish' ? 'bg-emerald-500/20 border border-emerald-500/50' : 'bg-red-500/20 border border-red-500/50'
+        )}>
+          <div className="text-xs text-zinc-500 mb-1">4H</div>
+          <div className={cn("font-bold", checklist.h4_trend === 'bullish' ? 'text-emerald-400' : 'text-red-400')}>
+            {checklist.h4_trend === 'bullish' ? '↑ BULLISH' : '↓ BEARISH'}
+          </div>
+        </div>
+      </div>
+      
+      {weeklyDailyAlign && (
+        <div className="p-3 bg-white/10 rounded-xl text-center">
+          <span className="text-white text-sm">✓ W & D stimmen überein → +5% Bonus</span>
+        </div>
+      )}
     </motion.div>
   );
 }
