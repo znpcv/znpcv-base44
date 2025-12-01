@@ -166,6 +166,13 @@ const translations = {
     quote3: '"Wir kaufen nicht beim Widerstand, wir verkaufen nicht bei Unterstützung."',
     quote4: '"Geduld ist der Schlüssel zum Erfolg im Trading."',
     quote5: '"Risikomanagement ist wichtiger als Gewinnmaximierung."',
+    
+    // Warning
+    warningTitle: 'WARNUNG - KEIN A+++ TRADE',
+    warningDesc: 'Deine Checkliste ist unter 85%. Nach ZNPCV Standard solltest du nur A+++ Trades eingehen. Überprüfe alle Kriterien erneut oder überspringe diesen Trade.',
+    warningButton: 'TRADE NICHT EINGEHEN',
+    proceedAnyway: 'Trotzdem fortfahren',
+    aPlusTradeOnly: 'NUR A+++ TRADES',
   },
   en: {
     // Header
@@ -332,6 +339,13 @@ const translations = {
     quote3: '"We don\'t buy at resistance, we don\'t sell at support."',
     quote4: '"Patience is the key to success in trading."',
     quote5: '"Risk management is more important than profit maximization."',
+    
+    // Warning
+    warningTitle: 'WARNING - NOT AN A+++ TRADE',
+    warningDesc: 'Your checklist is below 85%. According to ZNPCV standards, you should only enter A+++ trades. Review all criteria again or skip this trade.',
+    warningButton: 'DO NOT ENTER TRADE',
+    proceedAnyway: 'Proceed anyway',
+    aPlusTradeOnly: 'A+++ TRADES ONLY',
   },
   fa: {
     // Header
@@ -498,6 +512,13 @@ const translations = {
     quote3: '"ما در مقاومت نمی‌خریم، در حمایت نمی‌فروشیم."',
     quote4: '"صبر کلید موفقیت در معامله‌گری است."',
     quote5: '"مدیریت ریسک مهم‌تر از حداکثر کردن سود است."',
+    
+    // Warning
+    warningTitle: 'هشدار - معامله A+++ نیست',
+    warningDesc: 'چک‌لیست شما زیر ۸۵٪ است. طبق استاندارد ZNPCV فقط باید وارد معاملات A+++ شوید. همه معیارها را دوباره بررسی کنید یا این معامله را رد کنید.',
+    warningButton: 'وارد معامله نشوید',
+    proceedAnyway: 'به هر حال ادامه دهید',
+    aPlusTradeOnly: 'فقط معاملات A+++',
   }
 };
 

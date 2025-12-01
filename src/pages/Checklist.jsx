@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, Zap } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, Zap, XOctagon, ShieldAlert } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { createPageUrl } from "@/utils";
@@ -25,6 +25,7 @@ export default function ChecklistPage() {
   const [saving, setSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(!!checklistId);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   const [checklist, setChecklist] = useState({
     pair: '',
@@ -102,15 +103,22 @@ export default function ChecklistPage() {
     return Math.round((completed / total) * 100);
   };
 
-  const handleSave = async () => {
-    setSaving(true);
+  const handleSave = async (force = false) => {
     const progress = calculateProgress();
+    
+    // Show warning if below 85% and not forcing
+    if (progress < 85 && !force && currentStep === STEPS.length - 1) {
+      setShowWarning(true);
+      return;
+    }
+    
+    setSaving(true);
     const direction = suggestedDirection || '';
     const data = { 
       ...checklist, 
       direction, 
       completion_percentage: progress, 
-      status: progress === 100 ? 'ready_to_trade' : 'in_progress',
+      status: progress >= 85 ? 'ready_to_trade' : 'in_progress',
       daily_4h_sync: isDailyH4Sync
     };
     
@@ -394,6 +402,16 @@ export default function ChecklistPage() {
                 </motion.div>
               )}
 
+              {/* Warning for below 85% */}
+              {progress < 85 && progress > 0 && (
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                  className="p-6 bg-red-500/10 border-2 border-red-500 text-center rounded-xl">
+                  <ShieldAlert className="w-12 h-12 text-red-500 mx-auto mb-3" />
+                  <div className="text-2xl tracking-widest mb-2 text-red-500">{t('aPlusTradeOnly')}</div>
+                  <div className="text-sm text-zinc-400 font-sans">{progress}% - {t('warningDesc').split('.')[0]}.</div>
+                </motion.div>
+              )}
+
               <TradingQuote variant="minimal" />
             </motion.div>
           )}
@@ -418,7 +436,7 @@ export default function ChecklistPage() {
                   <Trash2 className="w-5 h-5" />
                 </Button>
               )}
-              <Button onClick={handleSave} disabled={saving || !checklist.pair}
+              <Button onClick={() => handleSave(false)} disabled={saving || !checklist.pair}
                 className={cn("flex-1 rounded-xl tracking-widest text-lg py-6",
                   isReady ? "bg-emerald-500 hover:bg-emerald-600 text-black" : "bg-slate-800 hover:bg-slate-700")}>
                 <Save className="w-5 h-5 mr-2" /> {saving ? t('saving') : t('save')}
@@ -427,6 +445,51 @@ export default function ChecklistPage() {
           )}
         </div>
       </main>
+
+      {/* Warning Modal */}
+      <AnimatePresence>
+        {showWarning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-zinc-900 border-2 border-red-500 rounded-2xl p-8 max-w-md w-full text-center"
+            >
+              <XOctagon className="w-20 h-20 text-red-500 mx-auto mb-4" />
+              <h2 className="text-3xl tracking-widest text-red-500 mb-4">{t('warningTitle')}</h2>
+              <p className="text-zinc-300 font-sans mb-6 leading-relaxed">{t('warningDesc')}</p>
+              
+              <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 mb-6">
+                <div className="text-5xl font-bold text-red-500 mb-1">{progress}%</div>
+                <div className="text-sm text-zinc-400">ZNPCV Standard: 85%+</div>
+              </div>
+
+              <div className="space-y-3">
+                <Button 
+                  onClick={() => { setShowWarning(false); navigate(createPageUrl('Dashboard')); }}
+                  className="w-full bg-red-500 hover:bg-red-600 text-white rounded-xl py-4 text-lg tracking-widest"
+                >
+                  <XOctagon className="w-5 h-5 mr-2" />
+                  {t('warningButton')}
+                </Button>
+                <Button 
+                  onClick={() => { setShowWarning(false); handleSave(true); }}
+                  variant="outline"
+                  className="w-full border-zinc-700 text-zinc-400 hover:bg-zinc-800 rounded-xl py-3"
+                >
+                  {t('proceedAnyway')}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Scroll to Top */}
       <AnimatePresence>
