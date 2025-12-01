@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
-  Users, Clock, Lock, ShieldCheck, Globe, Zap
+  Users, Clock, Lock, ShieldCheck, Globe, Zap, ArrowUp
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 
@@ -18,6 +18,7 @@ export default function HomePage() {
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(247);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const updateTimes = () => {
@@ -42,11 +43,17 @@ export default function HomePage() {
       setOnlineUsers(prev => prev + Math.floor(Math.random() * 5) - 2);
     }, 5000);
     
+    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+    window.addEventListener('scroll', handleScroll);
+    
     return () => {
       clearInterval(interval);
       clearInterval(userInterval);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const isSessionOpen = (session) => {
     const now = new Date();
@@ -300,6 +307,21 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-6 w-12 h-12 bg-emerald-500 text-black flex items-center justify-center shadow-lg hover:bg-emerald-400 transition-colors z-50 rounded-full"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
