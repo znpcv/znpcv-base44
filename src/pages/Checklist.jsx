@@ -13,7 +13,7 @@ import AssetSelector from '@/components/AssetSelector';
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 
-const STEPS = ['pair', 'weekly_daily', 'h4', 'entry', 'risk', 'final'];
+const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
 export default function ChecklistPage() {
   const navigate = useNavigate();
@@ -32,13 +32,21 @@ export default function ChecklistPage() {
     trade_date: format(new Date(), 'yyyy-MM-dd'),
     direction: '',
     
-    // Weekly/Daily Checklist (max 50%)
-    wd_at_aoi: false,           // 10%
-    wd_ema_touch: false,        // 5%
-    wd_candlestick: false,      // 10%
-    wd_psp_rejection: false,    // 10%
-    wd_round_level: false,      // 5%
-    wd_pattern: '',             // 10%
+    // Weekly Checklist (max 50%)
+    w_at_aoi: false,           // 10%
+    w_ema_touch: false,        // 5%
+    w_candlestick: false,      // 10%
+    w_psp_rejection: false,    // 10%
+    w_round_level: false,      // 5%
+    w_pattern: '',             // 10%
+    
+    // Daily Checklist (max 50%)
+    d_at_aoi: false,           // 10%
+    d_ema_touch: false,        // 5%
+    d_candlestick: false,      // 10%
+    d_psp_rejection: false,    // 10%
+    d_round_level: false,      // 5%
+    d_pattern: '',             // 10%
     
     // 4H Checklist (max 30%)
     h4_ema_touch: false,        // 5%
@@ -86,9 +94,13 @@ export default function ChecklistPage() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   // Calculate scores
-  const wdScore = (checklist.wd_at_aoi ? 10 : 0) + (checklist.wd_ema_touch ? 5 : 0) + 
-    (checklist.wd_candlestick ? 10 : 0) + (checklist.wd_psp_rejection ? 10 : 0) + 
-    (checklist.wd_round_level ? 5 : 0) + (checklist.wd_pattern && checklist.wd_pattern !== 'none' ? 10 : 0);
+  const weeklyScore = (checklist.w_at_aoi ? 10 : 0) + (checklist.w_ema_touch ? 5 : 0) + 
+    (checklist.w_candlestick ? 10 : 0) + (checklist.w_psp_rejection ? 10 : 0) + 
+    (checklist.w_round_level ? 5 : 0) + (checklist.w_pattern && checklist.w_pattern !== 'none' ? 10 : 0);
+  
+  const dailyScore = (checklist.d_at_aoi ? 10 : 0) + (checklist.d_ema_touch ? 5 : 0) + 
+    (checklist.d_candlestick ? 10 : 0) + (checklist.d_psp_rejection ? 10 : 0) + 
+    (checklist.d_round_level ? 5 : 0) + (checklist.d_pattern && checklist.d_pattern !== 'none' ? 10 : 0);
   
   const h4Score = (checklist.h4_ema_touch ? 5 : 0) + (checklist.h4_candlestick ? 10 : 0) + 
     (checklist.h4_psp_rejection ? 5 : 0) + (checklist.h4_pattern && checklist.h4_pattern !== 'none' ? 10 : 0);
@@ -96,7 +108,7 @@ export default function ChecklistPage() {
   const entryScore = (checklist.entry_sos ? 10 : 0) + (checklist.entry_engulfing ? 10 : 0) + 
     (checklist.entry_pattern && checklist.entry_pattern !== 'none' ? 5 : 0);
 
-  const progress = wdScore + h4Score + entryScore;
+  const progress = weeklyScore + dailyScore + h4Score + entryScore;
 
   // Risk calculations
   const calculateRisk = () => {
@@ -168,7 +180,8 @@ export default function ChecklistPage() {
 
   const stepLabels = {
     pair: 'ASSET',
-    weekly_daily: 'W / D',
+    weekly: 'WEEKLY',
+    daily: 'DAILY',
     h4: '4H',
     entry: 'ENTRY',
     risk: 'RISK',
@@ -238,12 +251,13 @@ export default function ChecklistPage() {
       {/* Score Overview Bar */}
       <div className="bg-zinc-900/50 border-b border-zinc-800/30">
         <div className="max-w-3xl mx-auto px-4 py-2 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-4">
-            <span className="text-zinc-500">W/D: <span className={wdScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{wdScore}/50</span></span>
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-zinc-500">W: <span className={weeklyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{weeklyScore}/50</span></span>
+            <span className="text-zinc-500">D: <span className={dailyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{dailyScore}/50</span></span>
             <span className="text-zinc-500">4H: <span className={h4Score > 0 ? "text-white font-bold" : "text-zinc-600"}>{h4Score}/30</span></span>
-            <span className="text-zinc-500">Entry: <span className={entryScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{entryScore}/25</span></span>
+            <span className="text-zinc-500">E: <span className={entryScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{entryScore}/25</span></span>
           </div>
-          <span className="text-zinc-400">MAX: 105%</span>
+          <span className="text-zinc-400">MAX: 155%</span>
         </div>
       </div>
 
@@ -318,70 +332,98 @@ export default function ChecklistPage() {
             </motion.div>
           )}
 
-          {/* STEP 1: Weekly/Daily */}
+          {/* STEP 1: Weekly */}
           {currentStep === 1 && (
-            <motion.div key="weekly_daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="02" title="WEEKLY / DAILY ANALYSE" subtitle="Higher Timeframe Confirmations (max 50%)" />
+            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
+              <StepHeader number="02" title="WEEKLY ANALYSE" subtitle="Weekly Timeframe Confirmations (max 50%)" />
               
-              {/* Info Box */}
-              <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl">
-                <div className="text-xs text-zinc-500 tracking-widest mb-2">REJECTION CONFIRMATIONS REIHENFOLGE</div>
-                <div className="flex items-center gap-2 text-white font-bold tracking-wider text-sm flex-wrap">
-                  <span className="px-2 py-1 bg-zinc-800 rounded">AOI</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="px-2 py-1 bg-zinc-800 rounded">EMA</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="px-2 py-1 bg-zinc-800 rounded">PSP</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="px-2 py-1 bg-zinc-800 rounded">Candlestick</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="px-2 py-1 bg-zinc-800 rounded">RPN</span>
-                </div>
-              </div>
-
               {/* Current Score */}
               <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-sm">W/D SCORE</span>
+                <span className="text-zinc-500 text-sm">WEEKLY SCORE</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", wdScore >= 35 ? "text-emerald-500" : wdScore >= 20 ? "text-yellow-500" : "text-white")}>{wdScore}</span>
+                  <span className={cn("text-2xl font-bold", weeklyScore >= 35 ? "text-emerald-500" : weeklyScore >= 20 ? "text-yellow-500" : "text-white")}>{weeklyScore}</span>
                   <span className="text-zinc-600">/50%</span>
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.wd_at_aoi} onChange={() => update('wd_at_aoi', !checklist.wd_at_aoi)} 
+              <ChecklistItem checked={checklist.w_at_aoi} onChange={() => update('w_at_aoi', !checklist.w_at_aoi)} 
                 label="AT AOI / REJECTED" score={10} 
-                description="Preis befindet sich am Area of Interest und zeigt Ablehnung" />
+                description="Preis am AOI und zeigt Ablehnung (entweder oder beides)" />
               
-              <ChecklistItem checked={checklist.wd_ema_touch} onChange={() => update('wd_ema_touch', !checklist.wd_ema_touch)} 
-                label="EMA BERÜHRT / ABGELEHNT" score={5} 
-                description="Preis berührt den EMA und wird abgelehnt (Touching/Rejecting)" />
+              <ChecklistItem checked={checklist.w_ema_touch} onChange={() => update('w_ema_touch', !checklist.w_ema_touch)} 
+                label="TOUCHING / REJECTING EMA" score={5} 
+                description="Preis berührt ODER wird vom EMA abgelehnt" />
               
-              <ChecklistItem checked={checklist.wd_candlestick} onChange={() => update('wd_candlestick', !checklist.wd_candlestick)} 
+              <ChecklistItem checked={checklist.w_candlestick} onChange={() => update('w_candlestick', !checklist.w_candlestick)} 
                 label="CANDLESTICK REJECTION" score={10} 
-                description="Klare Ablehnungskerze sichtbar (Pinbar, Doji, Hammer, etc.)" />
+                description="Ablehnungskerze sichtbar (Pinbar, Doji, Hammer, etc.)" />
               
-              <ChecklistItem checked={checklist.wd_psp_rejection} onChange={() => update('wd_psp_rejection', !checklist.wd_psp_rejection)} 
-                label="PSP REJECTION" score={10} 
-                description="Rejection from Previous Structure Point (früheres Hoch/Tief)" />
+              <ChecklistItem checked={checklist.w_psp_rejection} onChange={() => update('w_psp_rejection', !checklist.w_psp_rejection)} 
+                label="REJECTION FROM PSP" score={10} 
+                description="Ablehnung von Previous Structure Point" />
               
-              <ChecklistItem checked={checklist.wd_round_level} onChange={() => update('wd_round_level', !checklist.wd_round_level)} 
-                label="ROUND PSYCH LEVEL (RPN)" score={5} 
-                description="Preis an runder psychologischer Zahl (z.B. 1.1000, 1.0500)" />
+              <ChecklistItem checked={checklist.w_round_level} onChange={() => update('w_round_level', !checklist.w_round_level)} 
+                label="ROUND PSYCH LEVEL" score={5} 
+                description="Preis an runder psychologischer Zahl (z.B. 1.1000)" />
               
               <PatternSelector 
-                value={checklist.wd_pattern} 
-                onChange={(v) => update('wd_pattern', v)} 
+                value={checklist.w_pattern} 
+                onChange={(v) => update('w_pattern', v)} 
                 score={10}
-                label="CHART PATTERN (W/D)"
-                description="Double Top/Bottom, Head & Shoulders, Inverse H&S"
+                label="PATTERN (WEEKLY)"
+                description="Double Top/Bottom, Normal/Inverted H&S"
               />
             </motion.div>
           )}
 
-          {/* STEP 2: 4H */}
+          {/* STEP 2: Daily */}
           {currentStep === 2 && (
+            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
+              <StepHeader number="03" title="DAILY ANALYSE" subtitle="Daily Timeframe Confirmations (max 50%)" />
+              
+              {/* Current Score */}
+              <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
+                <span className="text-zinc-500 text-sm">DAILY SCORE</span>
+                <div className="flex items-center gap-2">
+                  <span className={cn("text-2xl font-bold", dailyScore >= 35 ? "text-emerald-500" : dailyScore >= 20 ? "text-yellow-500" : "text-white")}>{dailyScore}</span>
+                  <span className="text-zinc-600">/50%</span>
+                </div>
+              </div>
+              
+              <ChecklistItem checked={checklist.d_at_aoi} onChange={() => update('d_at_aoi', !checklist.d_at_aoi)} 
+                label="AT AOI / REJECTED" score={10} 
+                description="Preis am AOI und zeigt Ablehnung (entweder oder beides)" />
+              
+              <ChecklistItem checked={checklist.d_ema_touch} onChange={() => update('d_ema_touch', !checklist.d_ema_touch)} 
+                label="TOUCHING / REJECTING EMA" score={5} 
+                description="Preis berührt ODER wird vom EMA abgelehnt" />
+              
+              <ChecklistItem checked={checklist.d_candlestick} onChange={() => update('d_candlestick', !checklist.d_candlestick)} 
+                label="CANDLESTICK REJECTION" score={10} 
+                description="Ablehnungskerze sichtbar (Pinbar, Doji, Hammer, etc.)" />
+              
+              <ChecklistItem checked={checklist.d_psp_rejection} onChange={() => update('d_psp_rejection', !checklist.d_psp_rejection)} 
+                label="REJECTION FROM PSP" score={10} 
+                description="Ablehnung von Previous Structure Point" />
+              
+              <ChecklistItem checked={checklist.d_round_level} onChange={() => update('d_round_level', !checklist.d_round_level)} 
+                label="ROUND PSYCH LEVEL" score={5} 
+                description="Preis an runder psychologischer Zahl (z.B. 1.1000)" />
+              
+              <PatternSelector 
+                value={checklist.d_pattern} 
+                onChange={(v) => update('d_pattern', v)} 
+                score={10}
+                label="PATTERN (DAILY)"
+                description="Double Top/Bottom, Normal/Inverted H&S"
+              />
+            </motion.div>
+          )}
+
+          {/* STEP 3: 4H */}
+          {currentStep === 3 && (
             <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="03" title="4H ANALYSE" subtitle="Lower Timeframe Confirmation (max 30%)" />
+              <StepHeader number="04" title="4H ANALYSE" subtitle="Lower Timeframe Confirmation (max 30%)" />
               
               {/* Current Score */}
               <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
@@ -414,10 +456,10 @@ export default function ChecklistPage() {
             </motion.div>
           )}
 
-          {/* STEP 3: Entry */}
-          {currentStep === 3 && (
+          {/* STEP 4: Entry */}
+          {currentStep === 4 && (
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="04" title="ENTRY CHECKLIST" subtitle="Entry Confirmations (max 25%)" />
+              <StepHeader number="05" title="ENTRY CHECKLIST" subtitle="Entry Confirmations (max 25%)" />
               
               {/* Timeframe Info */}
               <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
@@ -441,7 +483,7 @@ export default function ChecklistPage() {
               
               <ChecklistItem checked={checklist.entry_sos} onChange={() => update('entry_sos', !checklist.entry_sos)} 
                 label="SOS - SIGN OF STRENGTH" score={10} 
-                description="Marktstrukturwechsel bestätigt (MSS/SOS usually on 30min)" />
+                description="Marktstrukturwechsel (30min-1hr, whichever looks cleaner)" />
               
               <ChecklistItem checked={checklist.entry_engulfing} onChange={() => update('entry_engulfing', !checklist.entry_engulfing)} 
                 label="ENGULFING CANDLESTICK" score={10} 
@@ -451,8 +493,8 @@ export default function ChecklistPage() {
                 value={checklist.entry_pattern} 
                 onChange={(v) => update('entry_pattern', v)} 
                 score={5}
-                label="ENTRY PATTERN"
-                description="Pattern auf Entry Timeframe"
+                label="PATTERN (IF THERE IS ONE)"
+                description="Falls ein Pattern auf Entry TF sichtbar ist"
               />
               
               {/* Entry Type */}
@@ -480,10 +522,10 @@ export default function ChecklistPage() {
             </motion.div>
           )}
 
-          {/* STEP 4: Risk Management */}
-          {currentStep === 4 && (
+          {/* STEP 5: Risk Management */}
+          {currentStep === 5 && (
             <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="05" title="RISK MANAGEMENT" subtitle="SL, TP & Position Sizing" />
+              <StepHeader number="06" title="RISK MANAGEMENT" subtitle="SL, TP & Position Sizing" />
               
               {/* Account & Risk */}
               <div className="grid grid-cols-2 gap-4">
@@ -579,10 +621,10 @@ export default function ChecklistPage() {
             </motion.div>
           )}
 
-          {/* STEP 5: Final */}
-          {currentStep === 5 && (
+          {/* STEP 6: Final */}
+          {currentStep === 6 && (
             <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="06" title="FINAL CHECK" subtitle="Letzte Bestätigung vor dem Trade" />
+              <StepHeader number="07" title="FINAL CHECK" subtitle="Letzte Bestätigung vor dem Trade" />
 
               {/* Final Rule Confirmation */}
               <div className="border-2 border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-5">
@@ -650,7 +692,8 @@ export default function ChecklistPage() {
                     value={checklist.direction === 'long' ? '↑ LONG' : checklist.direction === 'short' ? '↓ SHORT' : '-'} 
                     color={checklist.direction === 'long' ? 'emerald' : checklist.direction === 'short' ? 'red' : null} />
                   <div className="border-t border-zinc-800 my-3" />
-                  <SummaryRow label="W/D SCORE" value={`${wdScore}/50%`} color={wdScore >= 35 ? 'emerald' : wdScore >= 20 ? 'yellow' : null} />
+                  <SummaryRow label="WEEKLY" value={`${weeklyScore}/50%`} color={weeklyScore >= 35 ? 'emerald' : weeklyScore >= 20 ? 'yellow' : null} />
+                  <SummaryRow label="DAILY" value={`${dailyScore}/50%`} color={dailyScore >= 35 ? 'emerald' : dailyScore >= 20 ? 'yellow' : null} />
                   <SummaryRow label="4H SCORE" value={`${h4Score}/30%`} color={h4Score >= 20 ? 'emerald' : h4Score >= 10 ? 'yellow' : null} />
                   <SummaryRow label="ENTRY SCORE" value={`${entryScore}/25%`} color={entryScore >= 20 ? 'emerald' : entryScore >= 10 ? 'yellow' : null} />
                   {riskCalc && (
@@ -692,10 +735,14 @@ export default function ChecklistPage() {
               {/* Score Breakdown */}
               <div className="p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
                 <div className="text-xs text-zinc-600 tracking-widest mb-3 text-center">PUNKTE BREAKDOWN</div>
-                <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                <div className="grid grid-cols-4 gap-2 text-center text-sm">
                   <div className="p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-xs">W/D</div>
-                    <div className="text-white font-bold">{wdScore}/50</div>
+                    <div className="text-zinc-500 text-xs">WEEKLY</div>
+                    <div className="text-white font-bold">{weeklyScore}/50</div>
+                  </div>
+                  <div className="p-2 bg-zinc-900 rounded-lg">
+                    <div className="text-zinc-500 text-xs">DAILY</div>
+                    <div className="text-white font-bold">{dailyScore}/50</div>
                   </div>
                   <div className="p-2 bg-zinc-900 rounded-lg">
                     <div className="text-zinc-500 text-xs">4H</div>
@@ -707,7 +754,7 @@ export default function ChecklistPage() {
                   </div>
                 </div>
                 <div className="mt-2 p-2 bg-white text-black rounded-lg text-center font-bold">
-                  GESAMT: {progress}/105%
+                  GESAMT: {progress}/155%
                 </div>
               </div>
 
