@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
   Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
-  Activity, Award, AlertTriangle, HelpCircle
+  Activity, Award, HelpCircle
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
@@ -145,12 +145,13 @@ export default function HomePage() {
           <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
             ZNPCV
           </h1>
-          <h2 className="text-xl md:text-2xl tracking-widest text-zinc-400 mb-4">
+          <h2 className="text-xl md:text-2xl tracking-widest text-zinc-400 mb-6">
             {t('ultimateChecklist')}
           </h2>
-          <p className="text-zinc-500 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-sans">
-            {t('heroSubtitle')}
+          <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic">
+            "Disziplin schlägt Talent. Jeden. Einzelnen. Tag."
           </p>
+          <p className="text-zinc-600 text-sm mt-3 tracking-widest">— ZNPCV PHILOSOPHY</p>
         </motion.div>
 
         {/* Main Actions - PROMINENT */}
@@ -199,66 +200,6 @@ export default function HomePage() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
-        </motion.div>
-
-        {/* ZNPCV Principles - NEW SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-16"
-        >
-          <div className="text-center mb-8">
-            <h3 className="text-xl tracking-widest mb-2">ZNPCV PRINZIPIEN</h3>
-            <p className="text-zinc-600 text-sm">Die goldenen Regeln für A+++ Trades</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                </div>
-                <div>
-                  <h4 className="text-white tracking-wider mb-1">{t('notBuyingResistance')}</h4>
-                  <p className="text-zinc-500 text-sm font-sans">{t('notBuyingResistanceDesc')}</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <AlertTriangle className="w-5 h-5 text-red-400" />
-                </div>
-                <div>
-                  <h4 className="text-white tracking-wider mb-1">{t('notSellingSupport')}</h4>
-                  <p className="text-zinc-500 text-sm font-sans">{t('notSellingSupportDesc')}</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                </div>
-                <div>
-                  <h4 className="text-white tracking-wider mb-1">NUR A+++ TRADES</h4>
-                  <p className="text-zinc-500 text-sm font-sans">Minimum 85% Checkliste erfüllt</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-5 h-5 text-blue-400" />
-                </div>
-                <div>
-                  <h4 className="text-white tracking-wider mb-1">{t('confluence')}</h4>
-                  <p className="text-zinc-500 text-sm font-sans">W-D-4H müssen übereinstimmen</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </motion.div>
 
         {/* Trading Quote */}

@@ -134,6 +134,17 @@ export default function ChecklistPage() {
   };
 
   const progress = calculateProgress();
+  
+  // Grade calculation based on ZNPCV standard
+  const getGrade = (p) => {
+    if (p >= 120) return { grade: 'A+++', color: 'bg-emerald-500', textColor: 'text-emerald-500' };
+    if (p >= 110) return { grade: 'A++', color: 'bg-emerald-400', textColor: 'text-emerald-400' };
+    if (p >= 100) return { grade: 'A+', color: 'bg-blue-500', textColor: 'text-blue-500' };
+    if (p >= 85) return { grade: 'OK', color: 'bg-yellow-500', textColor: 'text-yellow-500' };
+    return { grade: 'NO TRADE', color: 'bg-red-500', textColor: 'text-red-500' };
+  };
+  
+  const gradeInfo = getGrade(progress);
   const isReady = progress >= 85;
 
   const stepLabels = {
@@ -188,13 +199,11 @@ export default function ChecklistPage() {
               <LanguageToggle />
               <div className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-full font-bold",
-                progress >= 85 ? "bg-emerald-500 text-black" : progress >= 50 ? "bg-yellow-500 text-black" : "bg-zinc-800 text-white"
+                gradeInfo.color, "text-black"
               )}>
-                <div className={cn(
-                  "w-2 h-2 rounded-full animate-pulse",
-                  progress >= 85 ? "bg-black" : progress >= 50 ? "bg-black" : "bg-zinc-500"
-                )} />
-                <span className="text-xl">{progress}%</span>
+                <div className="w-2 h-2 rounded-full animate-pulse bg-black" />
+                <span className="text-lg">{progress}%</span>
+                <span className="text-xs font-bold">{gradeInfo.grade}</span>
               </div>
             </div>
           </div>
@@ -202,12 +211,9 @@ export default function ChecklistPage() {
         {/* Progress Bar */}
         <div className="h-1.5 bg-zinc-900">
           <motion.div 
-            className={cn(
-              "h-full",
-              progress >= 85 ? "bg-emerald-500" : progress >= 50 ? "bg-yellow-500" : "bg-zinc-600"
-            )} 
+            className={cn("h-full", gradeInfo.color)} 
             initial={{ width: 0 }} 
-            animate={{ width: `${progress}%` }}
+            animate={{ width: `${Math.min(progress, 100)}%` }}
             transition={{ duration: 0.5 }}
           />
         </div>
@@ -421,23 +427,55 @@ export default function ChecklistPage() {
                 />
               </div>
 
-              {isReady && (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  className="p-10 bg-white text-black text-center rounded-2xl">
-                  <div className="text-5xl tracking-widest mb-2">✓</div>
-                  <div className="text-3xl tracking-widest mb-2">{t('readyToTrade')}</div>
-                  <div className="text-lg font-sans text-zinc-600">{t('allConfirmed')}</div>
-                </motion.div>
-              )}
+              {/* Grade Display */}
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                className={cn(
+                  "p-10 text-center rounded-2xl border-2",
+                  progress >= 120 ? "bg-emerald-500 border-emerald-500 text-black" :
+                  progress >= 110 ? "bg-emerald-400 border-emerald-400 text-black" :
+                  progress >= 100 ? "bg-blue-500 border-blue-500 text-white" :
+                  progress >= 85 ? "bg-yellow-500 border-yellow-500 text-black" :
+                  "bg-red-500/10 border-red-500 text-white"
+                )}>
+                <div className="text-6xl font-bold mb-2">{gradeInfo.grade}</div>
+                <div className="text-4xl tracking-widest mb-2">{progress}%</div>
+                {progress >= 85 ? (
+                  <div className="text-lg font-sans opacity-80">{t('readyToTrade')}</div>
+                ) : (
+                  <div className="text-lg font-sans">
+                    <span className="font-bold">ZNPCV empfiehlt NICHT zu traden!</span>
+                    <br />
+                    <span className="text-sm opacity-80">Minimum 85% erforderlich</span>
+                  </div>
+                )}
+              </motion.div>
 
-              {progress < 85 && progress > 0 && (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  className="p-8 bg-zinc-950 border-2 border-zinc-700 text-center rounded-2xl">
-                  <ShieldAlert className="w-16 h-16 text-white mx-auto mb-4" />
-                  <div className="text-3xl tracking-widest mb-2">{t('aPlusTradeOnly')}</div>
-                  <div className="text-zinc-500 font-sans">{progress}% - ZNPCV Standard: 85%+</div>
-                </motion.div>
-              )}
+              {/* Grade Scale Info */}
+              <div className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl">
+                <h4 className="text-center text-sm tracking-widest text-zinc-500 mb-4">ZNPCV BEWERTUNGSSKALA</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-500/10">
+                    <span className="text-emerald-400 font-bold">A+++</span>
+                    <span className="text-zinc-500 text-sm">120%+</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-400/10">
+                    <span className="text-emerald-300 font-bold">A++</span>
+                    <span className="text-zinc-500 text-sm">110-119%</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-blue-500/10">
+                    <span className="text-blue-400 font-bold">A+</span>
+                    <span className="text-zinc-500 text-sm">100-109%</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-yellow-500/10">
+                    <span className="text-yellow-400 font-bold">OK</span>
+                    <span className="text-zinc-500 text-sm">85-99%</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-red-500/10">
+                    <span className="text-red-400 font-bold">NO TRADE</span>
+                    <span className="text-zinc-500 text-sm">&lt;85%</span>
+                  </div>
+                </div>
+              </div>
 
               <TradingQuote variant="minimal" />
             </motion.div>
@@ -492,9 +530,10 @@ export default function ChecklistPage() {
               <h2 className="text-3xl tracking-widest mb-4">{t('warningTitle')}</h2>
               <p className="text-zinc-400 font-sans mb-8 leading-relaxed">{t('warningDesc')}</p>
               
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-8">
-                <div className="text-6xl font-light mb-2">{progress}%</div>
-                <div className="text-sm text-zinc-500 tracking-widest">ZNPCV STANDARD: 85%+</div>
+              <div className={cn("rounded-xl p-6 mb-8", gradeInfo.color)}>
+                <div className="text-6xl font-bold text-black mb-1">{progress}%</div>
+                <div className="text-2xl font-bold text-black mb-2">{gradeInfo.grade}</div>
+                <div className="text-sm text-black/60 tracking-widest">ZNPCV STANDARD: 85%+</div>
               </div>
 
               <div className="space-y-4">
