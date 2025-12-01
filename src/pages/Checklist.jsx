@@ -32,26 +32,29 @@ export default function ChecklistPage() {
     trade_date: format(new Date(), 'yyyy-MM-dd'),
     direction: '',
     
-    // Weekly Checklist (max 50%)
+    // Weekly Checklist (max 60%)
     w_at_aoi: false,           // 10%
     w_ema_touch: false,        // 5%
     w_candlestick: false,      // 10%
     w_psp_rejection: false,    // 10%
     w_round_level: false,      // 5%
+    w_swing: false,            // 10%
     w_pattern: '',             // 10%
     
-    // Daily Checklist (max 50%)
+    // Daily Checklist (max 60%)
     d_at_aoi: false,           // 10%
     d_ema_touch: false,        // 5%
     d_candlestick: false,      // 10%
     d_psp_rejection: false,    // 10%
     d_round_level: false,      // 5%
+    d_swing: false,            // 10%
     d_pattern: '',             // 10%
     
-    // 4H Checklist (max 30%)
+    // 4H Checklist (max 35%)
     h4_ema_touch: false,        // 5%
     h4_candlestick: false,      // 10%
     h4_psp_rejection: false,    // 5%
+    h4_swing: false,            // 5%
     h4_pattern: '',             // 10%
     
     // Entry Checklist (max 25%)
@@ -96,14 +99,17 @@ export default function ChecklistPage() {
   // Calculate scores
   const weeklyScore = (checklist.w_at_aoi ? 10 : 0) + (checklist.w_ema_touch ? 5 : 0) + 
     (checklist.w_candlestick ? 10 : 0) + (checklist.w_psp_rejection ? 10 : 0) + 
-    (checklist.w_round_level ? 5 : 0) + (checklist.w_pattern && checklist.w_pattern !== 'none' ? 10 : 0);
+    (checklist.w_round_level ? 5 : 0) + (checklist.w_swing ? 10 : 0) + 
+    (checklist.w_pattern && checklist.w_pattern !== 'none' ? 10 : 0);
   
   const dailyScore = (checklist.d_at_aoi ? 10 : 0) + (checklist.d_ema_touch ? 5 : 0) + 
     (checklist.d_candlestick ? 10 : 0) + (checklist.d_psp_rejection ? 10 : 0) + 
-    (checklist.d_round_level ? 5 : 0) + (checklist.d_pattern && checklist.d_pattern !== 'none' ? 10 : 0);
+    (checklist.d_round_level ? 5 : 0) + (checklist.d_swing ? 10 : 0) + 
+    (checklist.d_pattern && checklist.d_pattern !== 'none' ? 10 : 0);
   
   const h4Score = (checklist.h4_ema_touch ? 5 : 0) + (checklist.h4_candlestick ? 10 : 0) + 
-    (checklist.h4_psp_rejection ? 5 : 0) + (checklist.h4_pattern && checklist.h4_pattern !== 'none' ? 10 : 0);
+    (checklist.h4_psp_rejection ? 5 : 0) + (checklist.h4_swing ? 5 : 0) + 
+    (checklist.h4_pattern && checklist.h4_pattern !== 'none' ? 10 : 0);
   
   const entryScore = (checklist.entry_sos ? 10 : 0) + (checklist.entry_engulfing ? 10 : 0) + 
     (checklist.entry_pattern && checklist.entry_pattern !== 'none' ? 5 : 0);
@@ -203,28 +209,23 @@ export default function ChecklistPage() {
     <div className={`min-h-screen bg-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className="bg-black border-b border-zinc-800/50 sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto px-4 py-3">
+        <div className="max-w-3xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button onClick={() => navigate(createPageUrl('Home'))} className="p-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-zinc-900">
-                <Home className="w-5 h-5" />
+            <div className="flex items-center gap-1 sm:gap-2">
+              <button onClick={() => navigate(createPageUrl('Home'))} className="p-1.5 sm:p-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-zinc-900">
+                <Home className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="p-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-zinc-900">
-                <ArrowLeft className="w-5 h-5" />
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="p-1.5 sm:p-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-zinc-900">
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
             
             <button onClick={() => navigate(createPageUrl('Home'))}>
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className="h-8 w-auto cursor-pointer hover:opacity-80 invert" />
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className="h-6 sm:h-8 w-auto cursor-pointer hover:opacity-80 invert" />
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <LanguageToggle />
-              <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold", gradeInfo.color, 
-                progress >= 85 ? "text-black" : "text-white")}>
-                <span>{progress}%</span>
-                <span className="text-xs opacity-80">{gradeInfo.grade}</span>
-              </div>
             </div>
           </div>
         </div>
@@ -236,32 +237,42 @@ export default function ChecklistPage() {
       </header>
 
       {/* Steps Navigation */}
-      <div className="bg-zinc-950 border-b border-zinc-800/50 overflow-x-auto">
-        <div className="max-w-3xl mx-auto px-4 py-2 flex gap-1">
+      <div className="bg-zinc-950 border-b border-zinc-800/50 overflow-x-auto scrollbar-hide">
+        <div className="max-w-3xl mx-auto px-2 sm:px-4 py-1.5 sm:py-2 flex gap-0.5 sm:gap-1">
           {STEPS.map((step, index) => (
             <button key={step} onClick={() => setCurrentStep(index)}
-              className={cn("px-3 py-1.5 text-xs tracking-widest whitespace-nowrap transition-all rounded-lg flex-1",
+              className={cn("px-1.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs tracking-wider sm:tracking-widest whitespace-nowrap transition-all rounded-md sm:rounded-lg flex-1 min-w-0",
                 currentStep === index ? 'bg-white text-black font-bold' : 'text-zinc-600 hover:text-white hover:bg-zinc-900')}>
-              {index + 1}. {stepLabels[step]}
+              <span className="hidden sm:inline">{index + 1}. </span>{stepLabels[step]}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Score Overview Bar */}
+      {/* Score Overview Bar with Progress */}
       <div className="bg-zinc-900/50 border-b border-zinc-800/30">
-        <div className="max-w-3xl mx-auto px-4 py-2 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-zinc-500">W: <span className={weeklyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{weeklyScore}/50</span></span>
-            <span className="text-zinc-500">D: <span className={dailyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{dailyScore}/50</span></span>
-            <span className="text-zinc-500">4H: <span className={h4Score > 0 ? "text-white font-bold" : "text-zinc-600"}>{h4Score}/30</span></span>
+        <div className="max-w-3xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5">
+          {/* Score Badge - Prominent */}
+          <div className="flex items-center justify-between mb-2">
+            <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold", gradeInfo.color, 
+              progress >= 85 ? "text-black" : "text-white")}>
+              <span className="text-base sm:text-lg">{progress}%</span>
+              <span className="text-xs opacity-80">{gradeInfo.grade}</span>
+            </div>
+            <span className="text-zinc-500 text-xs">MAX: 180%</span>
+          </div>
+          
+          {/* Score Details */}
+          <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs flex-wrap">
+            <span className="text-zinc-500">W: <span className={weeklyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{weeklyScore}/60</span></span>
+            <span className="text-zinc-500">D: <span className={dailyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{dailyScore}/60</span></span>
+            <span className="text-zinc-500">4H: <span className={h4Score > 0 ? "text-white font-bold" : "text-zinc-600"}>{h4Score}/35</span></span>
             <span className="text-zinc-500">E: <span className={entryScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{entryScore}/25</span></span>
           </div>
-          <span className="text-zinc-400">MAX: 155%</span>
         </div>
       </div>
 
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <AnimatePresence mode="wait">
           
           {/* STEP 0: Asset & Direction */}
@@ -334,15 +345,15 @@ export default function ChecklistPage() {
 
           {/* STEP 1: Weekly */}
           {currentStep === 1 && (
-            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="02" title="WEEKLY ANALYSE" subtitle="Weekly Timeframe Confirmations (max 50%)" />
+            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+              <StepHeader number="02" title="WEEKLY ANALYSE" subtitle="Weekly Timeframe Confirmations (max 60%)" />
               
               {/* Current Score */}
-              <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-sm">WEEKLY SCORE</span>
+              <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
+                <span className="text-zinc-500 text-xs sm:text-sm">WEEKLY SCORE</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", weeklyScore >= 35 ? "text-emerald-500" : weeklyScore >= 20 ? "text-yellow-500" : "text-white")}>{weeklyScore}</span>
-                  <span className="text-zinc-600">/50%</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-emerald-500" : weeklyScore >= 25 ? "text-yellow-500" : "text-white")}>{weeklyScore}</span>
+                  <span className="text-zinc-600 text-sm">/60%</span>
                 </div>
               </div>
               
@@ -366,6 +377,10 @@ export default function ChecklistPage() {
                 label="ROUND PSYCH LEVEL" score={5} 
                 description="Preis ist an ODER lehnt runde Zahl ab (z.B. 1.1000)" />
               
+              <ChecklistItem checked={checklist.w_swing} onChange={() => update('w_swing', !checklist.w_swing)} 
+                label="SWING HIGH / SWING LOW" score={10} 
+                description="Preis ist bei Swing High ODER Swing Low angekommen" />
+              
               <PatternSelector 
                 value={checklist.w_pattern} 
                 onChange={(v) => update('w_pattern', v)} 
@@ -378,15 +393,15 @@ export default function ChecklistPage() {
 
           {/* STEP 2: Daily */}
           {currentStep === 2 && (
-            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="03" title="DAILY ANALYSE" subtitle="Daily Timeframe Confirmations (max 50%)" />
+            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+              <StepHeader number="03" title="DAILY ANALYSE" subtitle="Daily Timeframe Confirmations (max 60%)" />
               
               {/* Current Score */}
-              <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-sm">DAILY SCORE</span>
+              <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
+                <span className="text-zinc-500 text-xs sm:text-sm">DAILY SCORE</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", dailyScore >= 35 ? "text-emerald-500" : dailyScore >= 20 ? "text-yellow-500" : "text-white")}>{dailyScore}</span>
-                  <span className="text-zinc-600">/50%</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-emerald-500" : dailyScore >= 25 ? "text-yellow-500" : "text-white")}>{dailyScore}</span>
+                  <span className="text-zinc-600 text-sm">/60%</span>
                 </div>
               </div>
               
@@ -410,6 +425,10 @@ export default function ChecklistPage() {
                 label="ROUND PSYCH LEVEL" score={5} 
                 description="Preis ist an ODER lehnt runde Zahl ab (z.B. 1.1000)" />
               
+              <ChecklistItem checked={checklist.d_swing} onChange={() => update('d_swing', !checklist.d_swing)} 
+                label="SWING HIGH / SWING LOW" score={10} 
+                description="Preis ist bei Swing High ODER Swing Low angekommen" />
+              
               <PatternSelector 
                 value={checklist.d_pattern} 
                 onChange={(v) => update('d_pattern', v)} 
@@ -422,29 +441,33 @@ export default function ChecklistPage() {
 
           {/* STEP 3: 4H */}
           {currentStep === 3 && (
-            <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
-              <StepHeader number="04" title="4H ANALYSE" subtitle="Lower Timeframe Confirmation (max 30%)" />
+            <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+              <StepHeader number="04" title="4H ANALYSE" subtitle="Lower Timeframe Confirmation (max 35%)" />
               
               {/* Current Score */}
-              <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-sm">4H SCORE</span>
+              <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
+                <span className="text-zinc-500 text-xs sm:text-sm">4H SCORE</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", h4Score >= 20 ? "text-emerald-500" : h4Score >= 10 ? "text-yellow-500" : "text-white")}>{h4Score}</span>
-                  <span className="text-zinc-600">/30%</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : "text-white")}>{h4Score}</span>
+                  <span className="text-zinc-600 text-sm">/35%</span>
                 </div>
               </div>
               
               <ChecklistItem checked={checklist.h4_ema_touch} onChange={() => update('h4_ema_touch', !checklist.h4_ema_touch)} 
-                label="EMA BERÜHRT" score={5} 
-                description="Preis berührt den EMA auf dem 4H Chart (Touching EMA)" />
+                label="TOUCHING / REJECTING EMA" score={5} 
+                description="Preis berührt ODER lehnt den EMA auf 4H ab" />
               
               <ChecklistItem checked={checklist.h4_candlestick} onChange={() => update('h4_candlestick', !checklist.h4_candlestick)} 
                 label="CANDLESTICK REJECTION" score={10} 
                 description="Klare Ablehnungskerze auf dem 4H Timeframe sichtbar" />
               
               <ChecklistItem checked={checklist.h4_psp_rejection} onChange={() => update('h4_psp_rejection', !checklist.h4_psp_rejection)} 
-                label="PSP REJECTION" score={5} 
+                label="REJECTION FROM PSP" score={5} 
                 description="Rejection from Previous Structure Point auf 4H" />
+              
+              <ChecklistItem checked={checklist.h4_swing} onChange={() => update('h4_swing', !checklist.h4_swing)} 
+                label="SWING HIGH / SWING LOW" score={5} 
+                description="Preis ist bei Swing High ODER Swing Low angekommen" />
               
               <PatternSelector 
                 value={checklist.h4_pattern} 
@@ -458,7 +481,7 @@ export default function ChecklistPage() {
 
           {/* STEP 4: Entry */}
           {currentStep === 4 && (
-            <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
+            <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="05" title="ENTRY CHECKLIST" subtitle="Entry Confirmations (max 25%)" />
               
               {/* Timeframe Info */}
@@ -524,7 +547,7 @@ export default function ChecklistPage() {
 
           {/* STEP 5: Risk Management */}
           {currentStep === 5 && (
-            <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
+            <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="06" title="RISK MANAGEMENT" subtitle="SL, TP & Position Sizing" />
               
               {/* Account & Risk */}
@@ -623,7 +646,7 @@ export default function ChecklistPage() {
 
           {/* STEP 6: Final */}
           {currentStep === 6 && (
-            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
+            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="07" title="FINAL CHECK" subtitle="Letzte Bestätigung vor dem Trade" />
 
               {/* Final Rule Confirmation */}
@@ -692,9 +715,9 @@ export default function ChecklistPage() {
                     value={checklist.direction === 'long' ? '↑ LONG' : checklist.direction === 'short' ? '↓ SHORT' : '-'} 
                     color={checklist.direction === 'long' ? 'emerald' : checklist.direction === 'short' ? 'red' : null} />
                   <div className="border-t border-zinc-800 my-3" />
-                  <SummaryRow label="WEEKLY" value={`${weeklyScore}/50%`} color={weeklyScore >= 35 ? 'emerald' : weeklyScore >= 20 ? 'yellow' : null} />
-                  <SummaryRow label="DAILY" value={`${dailyScore}/50%`} color={dailyScore >= 35 ? 'emerald' : dailyScore >= 20 ? 'yellow' : null} />
-                  <SummaryRow label="4H SCORE" value={`${h4Score}/30%`} color={h4Score >= 20 ? 'emerald' : h4Score >= 10 ? 'yellow' : null} />
+                  <SummaryRow label="WEEKLY" value={`${weeklyScore}/60%`} color={weeklyScore >= 40 ? 'emerald' : weeklyScore >= 25 ? 'yellow' : null} />
+                  <SummaryRow label="DAILY" value={`${dailyScore}/60%`} color={dailyScore >= 40 ? 'emerald' : dailyScore >= 25 ? 'yellow' : null} />
+                  <SummaryRow label="4H SCORE" value={`${h4Score}/35%`} color={h4Score >= 25 ? 'emerald' : h4Score >= 15 ? 'yellow' : null} />
                   <SummaryRow label="ENTRY SCORE" value={`${entryScore}/25%`} color={entryScore >= 20 ? 'emerald' : entryScore >= 10 ? 'yellow' : null} />
                   {riskCalc && (
                     <>
@@ -733,28 +756,28 @@ export default function ChecklistPage() {
               </motion.div>
 
               {/* Score Breakdown */}
-              <div className="p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <div className="text-xs text-zinc-600 tracking-widest mb-3 text-center">PUNKTE BREAKDOWN</div>
-                <div className="grid grid-cols-4 gap-2 text-center text-sm">
-                  <div className="p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-xs">WEEKLY</div>
-                    <div className="text-white font-bold">{weeklyScore}/50</div>
+              <div className="p-3 sm:p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
+                <div className="text-[10px] sm:text-xs text-zinc-600 tracking-widest mb-2 sm:mb-3 text-center">PUNKTE BREAKDOWN</div>
+                <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs sm:text-sm">
+                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
+                    <div className="text-zinc-500 text-[10px] sm:text-xs">WEEKLY</div>
+                    <div className="text-white font-bold">{weeklyScore}/60</div>
                   </div>
-                  <div className="p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-xs">DAILY</div>
-                    <div className="text-white font-bold">{dailyScore}/50</div>
+                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
+                    <div className="text-zinc-500 text-[10px] sm:text-xs">DAILY</div>
+                    <div className="text-white font-bold">{dailyScore}/60</div>
                   </div>
-                  <div className="p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-xs">4H</div>
-                    <div className="text-white font-bold">{h4Score}/30</div>
+                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
+                    <div className="text-zinc-500 text-[10px] sm:text-xs">4H</div>
+                    <div className="text-white font-bold">{h4Score}/35</div>
                   </div>
-                  <div className="p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-xs">ENTRY</div>
+                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
+                    <div className="text-zinc-500 text-[10px] sm:text-xs">ENTRY</div>
                     <div className="text-white font-bold">{entryScore}/25</div>
                   </div>
                 </div>
-                <div className="mt-2 p-2 bg-white text-black rounded-lg text-center font-bold">
-                  GESAMT: {progress}/155%
+                <div className="mt-2 p-1.5 sm:p-2 bg-white text-black rounded-lg text-center font-bold text-sm sm:text-base">
+                  GESAMT: {progress}/180%
                 </div>
               </div>
 
@@ -846,10 +869,10 @@ export default function ChecklistPage() {
 // Sub-components
 function StepHeader({ number, title, subtitle }) {
   return (
-    <div className="text-center mb-8">
-      <div className="text-5xl font-light text-zinc-800 mb-1">{number}</div>
-      <h2 className="text-2xl md:text-3xl tracking-widest mb-1 text-white">{title}</h2>
-      <p className="text-zinc-600 text-sm tracking-wider">{subtitle}</p>
+    <div className="text-center mb-4 sm:mb-6">
+      <div className="text-3xl sm:text-5xl font-light text-zinc-800 mb-1">{number}</div>
+      <h2 className="text-xl sm:text-2xl md:text-3xl tracking-widest mb-1 text-white">{title}</h2>
+      <p className="text-zinc-600 text-xs sm:text-sm tracking-wider">{subtitle}</p>
     </div>
   );
 }
@@ -857,22 +880,22 @@ function StepHeader({ number, title, subtitle }) {
 function ChecklistItem({ checked, onChange, label, score, description }) {
   return (
     <button onClick={onChange} className={cn(
-      "w-full p-4 flex items-center gap-4 transition-all text-left rounded-xl border-2",
+      "w-full p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 transition-all text-left rounded-xl border-2",
       checked 
         ? "bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/10" 
         : "border-zinc-800 hover:border-zinc-700 bg-zinc-950 hover:bg-zinc-900"
     )}>
       <div className={cn(
-        "w-7 h-7 border-2 flex items-center justify-center flex-shrink-0 rounded-lg transition-all",
+        "w-6 h-6 sm:w-7 sm:h-7 border-2 flex items-center justify-center flex-shrink-0 rounded-lg transition-all",
         checked ? "border-white bg-white" : "border-zinc-700"
       )}>
-        {checked && <Check className="w-4 h-4 text-emerald-500" />}
+        {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" />}
       </div>
       <div className="flex-1 min-w-0">
-        <span className={cn("text-sm tracking-wider block font-bold", checked ? "text-white" : "text-white")}>{label}</span>
-        {description && <span className={cn("text-xs font-sans block mt-0.5 truncate", checked ? "text-emerald-100" : "text-zinc-600")}>{description}</span>}
+        <span className={cn("text-xs sm:text-sm tracking-wider block font-bold", checked ? "text-white" : "text-white")}>{label}</span>
+        {description && <span className={cn("text-[10px] sm:text-xs font-sans block mt-0.5 line-clamp-1", checked ? "text-emerald-100" : "text-zinc-600")}>{description}</span>}
       </div>
-      <div className={cn("px-2.5 py-1 rounded-full text-xs font-bold flex-shrink-0", 
+      <div className={cn("px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex-shrink-0", 
         checked ? "bg-white text-emerald-600" : "bg-zinc-800 text-zinc-500")}>
         +{score}%
       </div>
@@ -882,35 +905,35 @@ function ChecklistItem({ checked, onChange, label, score, description }) {
 
 function PatternSelector({ value, onChange, score, label, description }) {
   const patterns = [
-    { key: 'double_top', label: 'DOUBLE TOP', icon: '📉' },
-    { key: 'double_bottom', label: 'DOUBLE BTM', icon: '📈' },
-    { key: 'head_shoulders', label: 'H&S', icon: '🔻' },
-    { key: 'inv_head_shoulders', label: 'INV H&S', icon: '🔺' },
-    { key: 'none', label: 'KEIN', icon: '✕' },
+    { key: 'double_top', label: 'DBL TOP', icon: 'M' },
+    { key: 'double_bottom', label: 'DBL BTM', icon: 'W' },
+    { key: 'head_shoulders', label: 'H&S', icon: '⋀' },
+    { key: 'inv_head_shoulders', label: 'INV H&S', icon: '⋁' },
+    { key: 'none', label: 'KEIN', icon: '—' },
   ];
 
   return (
-    <div className="border border-zinc-800 rounded-xl p-4 bg-zinc-950">
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <label className="text-zinc-400 text-xs tracking-widest block">{label}</label>
-          {description && <span className="text-zinc-600 text-xs">{description}</span>}
+    <div className="border border-zinc-800 rounded-xl p-3 sm:p-4 bg-zinc-950">
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <div className="min-w-0 flex-1">
+          <label className="text-zinc-400 text-[10px] sm:text-xs tracking-widest block">{label}</label>
+          {description && <span className="text-zinc-600 text-[10px] sm:text-xs hidden sm:block">{description}</span>}
         </div>
         {value && value !== 'none' && (
-          <div className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white">+{score}%</div>
+          <div className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-emerald-500 text-white flex-shrink-0">+{score}%</div>
         )}
       </div>
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
         {patterns.map((pattern) => (
           <button key={pattern.key} onClick={() => onChange(pattern.key)}
-            className={cn("p-2 border rounded-lg text-center transition-all",
+            className={cn("p-1.5 sm:p-2 border rounded-lg text-center transition-all",
               value === pattern.key
                 ? pattern.key === 'none' 
                   ? "bg-zinc-700 border-zinc-600 text-white" 
                   : "bg-emerald-500 border-emerald-400 text-white"
                 : "border-zinc-800 text-zinc-600 hover:border-zinc-700 bg-zinc-900 hover:text-white")}>
-            <div className="text-lg mb-0.5">{pattern.icon}</div>
-            <div className="text-[9px] tracking-wider font-bold leading-tight">{pattern.label}</div>
+            <div className="text-base sm:text-lg font-bold mb-0.5">{pattern.icon}</div>
+            <div className="text-[7px] sm:text-[9px] tracking-wider font-bold leading-tight">{pattern.label}</div>
           </button>
         ))}
       </div>
