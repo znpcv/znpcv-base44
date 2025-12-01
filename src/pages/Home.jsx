@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
-  Users, Clock, Lock, ShieldCheck, Globe, Zap, ArrowUp
+  Lock, ShieldCheck, Globe, Zap, ArrowUp
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
+import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
+import TradingQuote from '@/components/TradingQuote';
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -15,6 +17,7 @@ const SESSIONS = [
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(247);
@@ -38,11 +41,10 @@ export default function HomePage() {
     updateTimes();
     const interval = setInterval(updateTimes, 1000);
     
-    // Simulate online users fluctuation
     const userInterval = setInterval(() => {
-      setOnlineUsers(prev => prev + Math.floor(Math.random() * 5) - 2);
+      setOnlineUsers(prev => Math.max(200, prev + Math.floor(Math.random() * 5) - 2));
     }, 5000);
-    
+
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
     
@@ -66,14 +68,14 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white">
-      {/* Header with Logo */}
+      {/* Header */}
       <header className="bg-white">
-        <div className="max-w-6xl mx-auto px-6 py-6">
+        <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-emerald-600">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-sm font-medium">{onlineUsers} ONLINE</span>
+                <span className="text-sm font-medium">{onlineUsers} {t('online')}</span>
               </div>
             </div>
             
@@ -81,27 +83,30 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-20 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </button>
             
-            <div className="text-right text-black">
-              <div className="text-xs text-slate-500">LOKALZEIT</div>
-              <div className="text-lg font-mono font-bold">
-                {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            <div className="flex items-center gap-4">
+              <LanguageToggle />
+              <div className="text-right text-black">
+                <div className="text-xs text-slate-500">{t('localTime')}</div>
+                <div className="text-lg font-mono font-bold">
+                  {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Live Market Sessions Bar */}
+      {/* Market Sessions Bar */}
       <div className="bg-slate-900/80 border-y border-slate-800">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between gap-4 overflow-x-auto">
             <div className="flex items-center gap-2 text-slate-400 text-sm whitespace-nowrap">
               <Globe className="w-4 h-4" />
-              <span>MARKET SESSIONS</span>
+              <span>{t('marketSessions')}</span>
             </div>
             <div className="flex items-center gap-6">
               {SESSIONS.map((session) => {
@@ -137,13 +142,13 @@ export default function HomePage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
-            ZNPCV <span className="text-emerald-400">ULTIMATE</span> CHECKLIST
+            ZNPCV <span className="text-emerald-400">{t('ultimateChecklist')}</span>
           </h1>
           <p className="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-2">
-            Die ultimative Trading-Checkliste die es je gegeben hat.
+            {t('heroSubtitle')}
           </p>
           <p className="text-slate-500 text-base max-w-2xl mx-auto">
-            Professionelle Multi-Timeframe Analyse • Strukturierte Entscheidungsfindung • Maximale Disziplin
+            {t('heroDesc')}
           </p>
         </motion.div>
 
@@ -152,7 +157,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-6 mb-16"
+          className="grid md:grid-cols-2 gap-6 mb-12"
         >
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
@@ -161,12 +166,12 @@ export default function HomePage() {
             <div className="w-16 h-16 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-500/30 transition-all">
               <ClipboardCheck className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl tracking-wider mb-2">NEUE ANALYSE STARTEN</h2>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              Starte deine professionelle Multi-Timeframe Analyse mit der ultimativen ZNPCV Checkliste
+            <h2 className="text-2xl tracking-wider mb-2">{t('newAnalysis')}</h2>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4 font-sans">
+              {t('newAnalysisDesc')}
             </p>
             <div className="flex items-center gap-2 text-emerald-400 text-sm font-medium">
-              <span>Jetzt starten</span>
+              <span>{t('startNow')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
@@ -178,46 +183,47 @@ export default function HomePage() {
             <div className="w-16 h-16 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-all">
               <BarChart3 className="w-8 h-8 text-blue-400" />
             </div>
-            <h2 className="text-2xl tracking-wider mb-2">TRADING DASHBOARD</h2>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              Übersicht deiner Analysen, Performance-Tracking und detaillierte Statistiken
+            <h2 className="text-2xl tracking-wider mb-2">{t('dashboard')}</h2>
+            <p className="text-slate-400 text-sm leading-relaxed mb-4 font-sans">
+              {t('dashboardDesc')}
             </p>
             <div className="flex items-center gap-2 text-blue-400 text-sm font-medium">
-              <span>Dashboard öffnen</span>
+              <span>{t('openDashboard')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
         </motion.div>
+
+        {/* Trading Quote */}
+        <TradingQuote />
 
         {/* Asset Categories */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-16"
+          className="grid grid-cols-2 md:grid-cols-5 gap-3 my-12"
         >
           {[
-            { label: 'FOREX', count: '27+', color: 'blue' },
-            { label: 'KRYPTO', count: '24+', color: 'orange' },
-            { label: 'STOCKS', count: '35+', color: 'green' },
-            { label: 'COMMODITIES', count: '14+', color: 'yellow' },
-            { label: 'INDICES', count: '12+', color: 'purple' },
+            { key: 'forex', count: '27+', color: '#3b82f6' },
+            { key: 'crypto', count: '24+', color: '#f97316' },
+            { key: 'stocks', count: '35+', color: '#22c55e' },
+            { key: 'commodities', count: '14+', color: '#eab308' },
+            { key: 'indices', count: '12+', color: '#a855f7' },
           ].map((item, index) => (
             <motion.div
-              key={item.label}
+              key={item.key}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 + index * 0.05 }}
-              className={`p-4 bg-${item.color}-500/5 border border-${item.color}-500/20 rounded-xl text-center hover:border-${item.color}-500/40 transition-all`}
+              className="p-4 rounded-xl text-center border transition-all hover:scale-105"
               style={{
-                background: `rgba(${item.color === 'blue' ? '59,130,246' : item.color === 'orange' ? '249,115,22' : item.color === 'green' ? '34,197,94' : item.color === 'yellow' ? '234,179,8' : '168,85,247'}, 0.05)`,
-                borderColor: `rgba(${item.color === 'blue' ? '59,130,246' : item.color === 'orange' ? '249,115,22' : item.color === 'green' ? '34,197,94' : item.color === 'yellow' ? '234,179,8' : '168,85,247'}, 0.2)`
+                background: `rgba(${item.color === '#3b82f6' ? '59,130,246' : item.color === '#f97316' ? '249,115,22' : item.color === '#22c55e' ? '34,197,94' : item.color === '#eab308' ? '234,179,8' : '168,85,247'}, 0.05)`,
+                borderColor: `rgba(${item.color === '#3b82f6' ? '59,130,246' : item.color === '#f97316' ? '249,115,22' : item.color === '#22c55e' ? '34,197,94' : item.color === '#eab308' ? '234,179,8' : '168,85,247'}, 0.2)`
               }}
             >
-              <div className={`text-2xl md:text-3xl mb-1`} style={{
-                color: item.color === 'blue' ? '#60a5fa' : item.color === 'orange' ? '#fb923c' : item.color === 'green' ? '#4ade80' : item.color === 'yellow' ? '#facc15' : '#c084fc'
-              }}>{item.count}</div>
-              <div className="text-xs text-slate-500 tracking-widest">{item.label}</div>
+              <div className="text-2xl md:text-3xl mb-1" style={{ color: item.color }}>{item.count}</div>
+              <div className="text-xs text-slate-500 tracking-widest">{t(item.key).toUpperCase()}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -227,43 +233,38 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="grid md:grid-cols-3 gap-6 mb-16"
+          className="grid md:grid-cols-3 gap-6"
         >
           {[
-            { icon: Target, title: 'PRÄZISE ANALYSE', desc: 'W-D-4H Confluence System für maximale Genauigkeit', color: 'text-emerald-400' },
-            { icon: Shield, title: 'RISIKO MANAGEMENT', desc: 'Integrierte R:R Bewertung und SL/TP Planung', color: 'text-blue-400' },
-            { icon: TrendingUp, title: 'PERFORMANCE TRACKING', desc: 'Detaillierte Statistiken und Erfolgsquoten', color: 'text-purple-400' },
+            { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc', color: 'text-emerald-400' },
+            { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc', color: 'text-blue-400' },
+            { icon: TrendingUp, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc', color: 'text-purple-400' },
           ].map((item) => (
-            <div key={item.title} className="p-6 bg-slate-800/20 border border-slate-700/30 rounded-xl hover:border-slate-600/50 transition-all">
+            <div key={item.titleKey} className="p-6 bg-slate-800/20 border border-slate-700/30 rounded-xl hover:border-slate-600/50 transition-all">
               <item.icon className={`w-10 h-10 ${item.color} mb-4`} />
-              <h3 className="text-lg tracking-wider mb-2">{item.title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+              <h3 className="text-lg tracking-wider mb-2">{t(item.titleKey)}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed font-sans">{t(item.descKey)}</p>
             </div>
           ))}
         </motion.div>
       </main>
 
-      {/* Professional Footer */}
+      {/* Footer */}
       <footer className="bg-slate-950 border-t border-slate-800">
         <div className="max-w-6xl mx-auto px-6 py-12">
           {/* Trust Badges */}
           <div className="flex flex-wrap items-center justify-center gap-8 mb-8 pb-8 border-b border-slate-800">
-            <div className="flex items-center gap-2 text-slate-400">
-              <Lock className="w-5 h-5 text-emerald-500" />
-              <span className="text-sm">SSL VERSCHLÜSSELT</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-400">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              <span className="text-sm">DSGVO KONFORM</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-400">
-              <Shield className="w-5 h-5 text-emerald-500" />
-              <span className="text-sm">DATENSCHUTZ</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-400">
-              <Globe className="w-5 h-5 text-emerald-500" />
-              <span className="text-sm">WELTWEIT VERFÜGBAR</span>
-            </div>
+            {[
+              { icon: Lock, key: 'sslEncrypted' },
+              { icon: ShieldCheck, key: 'gdprCompliant' },
+              { icon: Shield, key: 'dataProtection' },
+              { icon: Globe, key: 'worldwide' },
+            ].map((item) => (
+              <div key={item.key} className="flex items-center gap-2 text-slate-400">
+                <item.icon className="w-5 h-5 text-emerald-500" />
+                <span className="text-sm">{t(item.key)}</span>
+              </div>
+            ))}
           </div>
 
           {/* Footer Content */}
@@ -274,24 +275,24 @@ export default function HomePage() {
                 alt="ZNPCV" 
                 className="h-12 w-auto mb-4 invert"
               />
-              <p className="text-slate-500 text-sm leading-relaxed">
-                Die ultimative Trading-Checkliste für professionelle Trader. Entwickelt für maximale Disziplin und konsistente Ergebnisse.
+              <p className="text-slate-500 text-sm leading-relaxed font-sans">
+                {t('footerDesc')}
               </p>
             </div>
             <div>
-              <h4 className="text-sm tracking-widest mb-4 text-white">RECHTLICHES</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li className="hover:text-slate-300 cursor-pointer">Impressum</li>
-                <li className="hover:text-slate-300 cursor-pointer">Datenschutzerklärung</li>
-                <li className="hover:text-slate-300 cursor-pointer">Nutzungsbedingungen</li>
-                <li className="hover:text-slate-300 cursor-pointer">Cookie-Richtlinie</li>
+              <h4 className="text-sm tracking-widest mb-4 text-white">{t('legal')}</h4>
+              <ul className="space-y-2 text-sm text-slate-500 font-sans">
+                <li className="hover:text-slate-300 cursor-pointer">{t('imprint')}</li>
+                <li className="hover:text-slate-300 cursor-pointer">{t('privacyPolicy')}</li>
+                <li className="hover:text-slate-300 cursor-pointer">{t('terms')}</li>
+                <li className="hover:text-slate-300 cursor-pointer">{t('cookies')}</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-sm tracking-widest mb-4 text-white">KONTAKT</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
+              <h4 className="text-sm tracking-widest mb-4 text-white">{t('contact')}</h4>
+              <ul className="space-y-2 text-sm text-slate-500 font-sans">
                 <li>support@znpcv.com</li>
-                <li className="hover:text-slate-300 cursor-pointer">FAQ & Hilfe</li>
+                <li className="hover:text-slate-300 cursor-pointer">{t('faqHelp')}</li>
               </ul>
             </div>
           </div>
@@ -299,16 +300,16 @@ export default function HomePage() {
           {/* Copyright */}
           <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-slate-600 text-sm">
-              © {new Date().getFullYear()} ZNPCV. Alle Rechte vorbehalten.
+              © {new Date().getFullYear()} ZNPCV. {t('allRights')}
             </p>
-            <p className="text-slate-700 text-xs">
-              Trading birgt Risiken. Vergangene Ergebnisse sind keine Garantie für zukünftige Gewinne.
+            <p className="text-slate-700 text-xs font-sans">
+              {t('riskWarning')}
             </p>
           </div>
         </div>
       </footer>
 
-      {/* Scroll to Top Button */}
+      {/* Scroll to Top */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.button
