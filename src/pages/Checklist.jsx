@@ -905,12 +905,50 @@ function ChecklistItem({ checked, onChange, label, score, description }) {
 
 function PatternSelector({ value, onChange, score, label, description }) {
   const patterns = [
-    { key: 'double_top', label: 'DBL TOP', icon: 'M' },
-    { key: 'double_bottom', label: 'DBL BTM', icon: 'W' },
-    { key: 'head_shoulders', label: 'H&S', icon: '⋀' },
-    { key: 'inv_head_shoulders', label: 'INV H&S', icon: '⋁' },
-    { key: 'none', label: 'KEIN', icon: '—' },
+    { key: 'double_top', label: 'DBL TOP', icon: 'double_top' },
+    { key: 'double_bottom', label: 'DBL BTM', icon: 'double_bottom' },
+    { key: 'head_shoulders', label: 'H&S', icon: 'hs' },
+    { key: 'inv_head_shoulders', label: 'INV H&S', icon: 'inv_hs' },
+    { key: 'none', label: 'KEIN', icon: 'none' },
   ];
+
+  const PatternIcon = ({ type, className }) => {
+    const baseClass = cn("w-full h-full", className);
+    
+    if (type === 'double_top') {
+      return (
+        <svg viewBox="0 0 24 16" className={baseClass}>
+          <path d="M2 14 L6 4 L10 10 L14 4 L18 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+    if (type === 'double_bottom') {
+      return (
+        <svg viewBox="0 0 24 16" className={baseClass}>
+          <path d="M2 2 L6 12 L10 6 L14 12 L18 2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+    if (type === 'hs') {
+      return (
+        <svg viewBox="0 0 24 16" className={baseClass}>
+          <path d="M2 12 L5 8 L8 10 L12 2 L16 10 L19 8 L22 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+    if (type === 'inv_hs') {
+      return (
+        <svg viewBox="0 0 24 16" className={baseClass}>
+          <path d="M2 4 L5 8 L8 6 L12 14 L16 6 L19 8 L22 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+    return (
+      <svg viewBox="0 0 24 16" className={baseClass}>
+        <line x1="4" y1="8" x2="20" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    );
+  };
 
   return (
     <div className="border border-zinc-800 rounded-xl p-3 sm:p-4 bg-zinc-950">
@@ -926,14 +964,16 @@ function PatternSelector({ value, onChange, score, label, description }) {
       <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
         {patterns.map((pattern) => (
           <button key={pattern.key} onClick={() => onChange(pattern.key)}
-            className={cn("p-1.5 sm:p-2 border rounded-lg text-center transition-all",
+            className={cn("p-2 sm:p-3 border rounded-lg text-center transition-all flex flex-col items-center justify-center gap-1",
               value === pattern.key
                 ? pattern.key === 'none' 
                   ? "bg-zinc-700 border-zinc-600 text-white" 
                   : "bg-emerald-500 border-emerald-400 text-white"
-                : "border-zinc-800 text-zinc-600 hover:border-zinc-700 bg-zinc-900 hover:text-white")}>
-            <div className="text-base sm:text-lg font-bold mb-0.5">{pattern.icon}</div>
-            <div className="text-[7px] sm:text-[9px] tracking-wider font-bold leading-tight">{pattern.label}</div>
+                : "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white")}>
+            <div className="w-6 h-4 sm:w-8 sm:h-5">
+              <PatternIcon type={pattern.icon} />
+            </div>
+            <div className="text-[7px] sm:text-[8px] tracking-wider font-bold leading-tight">{pattern.label}</div>
           </button>
         ))}
       </div>

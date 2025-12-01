@@ -11,6 +11,7 @@ import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 
 const SESSIONS = [
+  { name: 'SYDNEY', timezone: 'Australia/Sydney', emoji: '🇦🇺', openHour: 7, closeHour: 16 },
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
   { name: 'LONDON', timezone: 'Europe/London', emoji: '🇬🇧', openHour: 8, closeHour: 17 },
   { name: 'NEW YORK', timezone: 'America/New_York', emoji: '🇺🇸', openHour: 9, closeHour: 17 },
@@ -266,62 +267,69 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-zinc-950 border-t border-zinc-800/50">
         <div className="max-w-6xl mx-auto px-6 py-12">
+          
+          {/* Main Footer Content */}
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 mb-10">
-            {/* Brand */}
-            <div className="md:col-span-5">
+            
+            {/* Brand & Description */}
+            <div className="md:col-span-4">
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-14 w-auto invert mb-5"
+                className="h-12 w-auto invert mb-4"
               />
-              <p className="text-zinc-500 text-sm font-sans leading-relaxed max-w-sm mb-6">
+              <p className="text-zinc-500 text-sm font-sans leading-relaxed mb-5">
                 {t('footerDesc')}
               </p>
               <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-xs text-white">SSL</span>
+                  <Lock className="w-3 h-3 text-emerald-400" />
+                  <span className="text-[10px] text-white">SSL</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-xs text-white">SECURE</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  <span className="text-[10px] text-white">SECURE</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-xs text-white">24/7</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
+                  <Globe className="w-3 h-3 text-emerald-400" />
+                  <span className="text-[10px] text-white">24/7</span>
                 </div>
               </div>
             </div>
 
-            {/* Links */}
+            {/* Navigation */}
             <div className="md:col-span-3">
-              <h4 className="text-white text-sm tracking-widest mb-5">NAVIGATION</h4>
-              <ul className="space-y-3">
-                <li>
-                  <button onClick={() => navigate(createPageUrl('Checklist'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2 group">
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    {t('newAnalysis')}
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2 group">
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    {t('dashboard')}
-                  </button>
-                </li>
-              </ul>
+              <h4 className="text-white text-xs tracking-widest mb-4 flex items-center gap-2">
+                <div className="w-1 h-4 bg-white rounded-full" />
+                NAVIGATION
+              </h4>
+              <div className="space-y-2">
+                <button onClick={() => navigate(createPageUrl('Checklist'))} 
+                  className="w-full flex items-center gap-3 p-2.5 bg-zinc-900/50 border border-zinc-800/50 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all group">
+                  <ClipboardCheck className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                  <span className="text-zinc-400 group-hover:text-white text-sm transition-colors">{t('newAnalysis')}</span>
+                  <ChevronRight className="w-3 h-3 text-zinc-600 ml-auto group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button onClick={() => navigate(createPageUrl('Dashboard'))} 
+                  className="w-full flex items-center gap-3 p-2.5 bg-zinc-900/50 border border-zinc-800/50 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all group">
+                  <BarChart3 className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                  <span className="text-zinc-400 group-hover:text-white text-sm transition-colors">{t('dashboard')}</span>
+                  <ChevronRight className="w-3 h-3 text-zinc-600 ml-auto group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
 
-            {/* Contact & Support */}
-            <div className="md:col-span-4">
-              <h4 className="text-white text-sm tracking-widest mb-5">{t('contact')}</h4>
-              <div className="space-y-3">
+            {/* Contact */}
+            <div className="md:col-span-5">
+              <h4 className="text-white text-xs tracking-widest mb-4 flex items-center gap-2">
+                <div className="w-1 h-4 bg-white rounded-full" />
+                {t('contact')}
+              </h4>
+              <div className="space-y-2">
                 <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                  <div className="w-9 h-9 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <span className="text-emerald-400">@</span>
+                  <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                    <span className="text-emerald-400 text-sm">@</span>
                   </div>
                   <div className="flex-1">
                     <div className="text-[10px] text-zinc-600 tracking-wider">EMAIL</div>
@@ -333,7 +341,7 @@ export default function HomePage() {
                   </div>
                 </a>
                 <button className="w-full flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                  <div className="w-9 h-9 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
                     <HelpCircle className="w-4 h-4 text-blue-400" />
                   </div>
                   <div className="flex-1 text-left">
@@ -349,16 +357,24 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom */}
-          <div className="pt-6 border-t border-zinc-800/50 flex flex-col md:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <p className="text-white text-sm">© {new Date().getFullYear()} ZNPCV</p>
-              <span className="text-zinc-800">|</span>
-              <p className="text-zinc-600 text-sm">{t('allRights')}</p>
+          {/* Bottom Bar */}
+          <div className="pt-6 border-t border-zinc-800/50">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                  alt="ZNPCV" 
+                  className="h-6 w-auto invert opacity-50"
+                />
+                <div className="h-4 w-px bg-zinc-800" />
+                <p className="text-zinc-500 text-xs">© {new Date().getFullYear()} ZNPCV</p>
+                <div className="h-4 w-px bg-zinc-800 hidden sm:block" />
+                <p className="text-zinc-600 text-xs hidden sm:block">{t('allRights')}</p>
+              </div>
+              <p className="text-zinc-700 text-[10px] font-sans text-center md:text-right max-w-sm leading-relaxed">
+                {t('riskWarning')}
+              </p>
             </div>
-            <p className="text-zinc-700 text-xs font-sans text-center md:text-right max-w-md">
-              {t('riskWarning')}
-            </p>
           </div>
         </div>
       </footer>
