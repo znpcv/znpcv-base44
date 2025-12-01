@@ -266,112 +266,120 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="bg-zinc-950 border-t border-zinc-800/50">
-        <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="max-w-6xl mx-auto px-6 py-16">
           
-          {/* Main Footer Content */}
-          <div className="grid md:grid-cols-12 gap-8 md:gap-12 mb-10">
-            
-            {/* Brand & Description */}
-            <div className="md:col-span-4">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
-                alt="ZNPCV" 
-                className="h-12 w-auto invert mb-4"
-              />
-              <p className="text-zinc-500 text-sm font-sans leading-relaxed mb-5">
-                {t('footerDesc')}
-              </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  <Lock className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] text-white">SSL</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] text-white">SECURE</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
-                  <Globe className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] text-white">24/7</span>
-                </div>
-              </div>
-            </div>
+          {/* Logo Section - Centered & Prominent */}
+          <div className="text-center mb-12">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d5df8f88e_schwa.png" 
+              alt="ZNPCV" 
+              className="h-24 md:h-32 w-auto mx-auto mb-6"
+            />
+            <p className="text-zinc-500 text-sm font-sans leading-relaxed max-w-md mx-auto">
+              {t('footerDesc')}
+            </p>
+          </div>
 
+          {/* Main Footer Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            
             {/* Navigation */}
-            <div className="md:col-span-3">
-              <h4 className="text-white text-xs tracking-widest mb-4 flex items-center gap-2">
-                <div className="w-1 h-4 bg-white rounded-full" />
+            <div>
+              <h4 className="text-white text-xs tracking-widest mb-4 pb-2 border-b border-zinc-800">
                 NAVIGATION
               </h4>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <button onClick={() => navigate(createPageUrl('Checklist'))} 
-                  className="w-full flex items-center gap-3 p-2.5 bg-zinc-900/50 border border-zinc-800/50 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all group">
-                  <ClipboardCheck className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-all group text-left">
+                  <ClipboardCheck className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                   <span className="text-zinc-400 group-hover:text-white text-sm transition-colors">{t('newAnalysis')}</span>
-                  <ChevronRight className="w-3 h-3 text-zinc-600 ml-auto group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight className="w-4 h-4 text-zinc-700 ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </button>
                 <button onClick={() => navigate(createPageUrl('Dashboard'))} 
-                  className="w-full flex items-center gap-3 p-2.5 bg-zinc-900/50 border border-zinc-800/50 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all group">
-                  <BarChart3 className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-900 transition-all group text-left">
+                  <BarChart3 className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                   <span className="text-zinc-400 group-hover:text-white text-sm transition-colors">{t('dashboard')}</span>
-                  <ChevronRight className="w-3 h-3 text-zinc-600 ml-auto group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight className="w-4 h-4 text-zinc-700 ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </button>
               </div>
             </div>
 
             {/* Contact */}
-            <div className="md:col-span-5">
-              <h4 className="text-white text-xs tracking-widest mb-4 flex items-center gap-2">
-                <div className="w-1 h-4 bg-white rounded-full" />
+            <div>
+              <h4 className="text-white text-xs tracking-widest mb-4 pb-2 border-b border-zinc-800">
                 {t('contact')}
               </h4>
-              <div className="space-y-2">
-                <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                  <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <span className="text-emerald-400 text-sm">@</span>
+              <div className="space-y-3">
+                <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl hover:border-zinc-700 transition-colors group">
+                  <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center group-hover:bg-white transition-colors">
+                    <span className="text-zinc-400 group-hover:text-black transition-colors">@</span>
                   </div>
                   <div className="flex-1">
                     <div className="text-[10px] text-zinc-600 tracking-wider">EMAIL</div>
-                    <div className="text-white text-sm group-hover:text-emerald-400 transition-colors">support@znpcv.com</div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-emerald-400 text-[10px]">LIVE</span>
+                    <div className="text-white text-sm">support@znpcv.com</div>
                   </div>
                 </a>
-                <button className="w-full flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <HelpCircle className="w-4 h-4 text-blue-400" />
+                <button className="w-full flex items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl hover:border-zinc-700 transition-colors group">
+                  <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center group-hover:bg-white transition-colors">
+                    <HelpCircle className="w-4 h-4 text-zinc-400 group-hover:text-black transition-colors" />
                   </div>
                   <div className="flex-1 text-left">
                     <div className="text-[10px] text-zinc-600 tracking-wider">SUPPORT</div>
-                    <div className="text-white text-sm group-hover:text-blue-400 transition-colors">{t('faqHelp')}</div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-blue-400 text-[10px]">24/7</span>
+                    <div className="text-white text-sm">{t('faqHelp')}</div>
                   </div>
                 </button>
+              </div>
+            </div>
+
+            {/* Trust Badges */}
+            <div>
+              <h4 className="text-white text-xs tracking-widest mb-4 pb-2 border-b border-zinc-800">
+                SICHERHEIT
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+                  <Lock className="w-4 h-4 text-emerald-500" />
+                  <div>
+                    <div className="text-white text-xs font-bold">SSL</div>
+                    <div className="text-zinc-600 text-[10px]">Verschlüsselt</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  <div>
+                    <div className="text-white text-xs font-bold">SECURE</div>
+                    <div className="text-zinc-600 text-[10px]">Geschützt</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+                  <Globe className="w-4 h-4 text-emerald-500" />
+                  <div>
+                    <div className="text-white text-xs font-bold">24/7</div>
+                    <div className="text-zinc-600 text-[10px]">Verfügbar</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-xl">
+                  <Zap className="w-4 h-4 text-emerald-500" />
+                  <div>
+                    <div className="text-white text-xs font-bold">FAST</div>
+                    <div className="text-zinc-600 text-[10px]">Schnell</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="pt-6 border-t border-zinc-800/50">
+          <div className="pt-8 border-t border-zinc-800/50">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
-                  alt="ZNPCV" 
-                  className="h-6 w-auto invert opacity-50"
-                />
-                <div className="h-4 w-px bg-zinc-800" />
-                <p className="text-zinc-500 text-xs">© {new Date().getFullYear()} ZNPCV</p>
-                <div className="h-4 w-px bg-zinc-800 hidden sm:block" />
+              <div className="flex items-center gap-3">
+                <span className="text-white text-sm font-bold tracking-widest">ZNPCV</span>
+                <span className="text-zinc-700">|</span>
+                <p className="text-zinc-600 text-xs">© {new Date().getFullYear()}</p>
+                <span className="text-zinc-800 hidden sm:block">•</span>
                 <p className="text-zinc-600 text-xs hidden sm:block">{t('allRights')}</p>
               </div>
-              <p className="text-zinc-700 text-[10px] font-sans text-center md:text-right max-w-sm leading-relaxed">
+              <p className="text-zinc-700 text-[10px] font-sans text-center md:text-right max-w-md leading-relaxed">
                 {t('riskWarning')}
               </p>
             </div>
