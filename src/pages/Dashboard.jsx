@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Plus, TrendingUp, TrendingDown, Calendar, ChevronRight, 
   Target, CheckCircle, Clock, XCircle, BarChart3, PieChart,
-  ArrowUpRight, ArrowDownRight, Minus
+  ArrowUpRight, ArrowDownRight, Minus, Globe
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
@@ -15,9 +15,43 @@ import { de } from 'date-fns/locale';
 import { cn } from "@/lib/utils";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell } from 'recharts';
 
+const SESSIONS = [
+  { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
+  { name: 'LONDON', timezone: 'Europe/London', emoji: '🇬🇧', openHour: 8, closeHour: 17 },
+  { name: 'NEW YORK', timezone: 'America/New_York', emoji: '🇺🇸', openHour: 9, closeHour: 17 },
+];
+
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [calendarMonth, setCalendarMonth] = useState(new Date());
+  const [times, setTimes] = useState({});
+
+  React.useEffect(() => {
+    const updateTimes = () => {
+      const now = new Date();
+      const newTimes = {};
+      SESSIONS.forEach(session => {
+        newTimes[session.name] = now.toLocaleTimeString('de-DE', {
+          timeZone: session.timezone,
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+      });
+      setTimes(newTimes);
+    };
+    updateTimes();
+    const interval = setInterval(updateTimes, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const isSessionOpen = (session) => {
+    const now = new Date();
+    const localTime = new Date(now.toLocaleString('en-US', { timeZone: session.timezone }));
+    const hour = localTime.getHours();
+    const day = localTime.getDay();
+    if (day === 0 || day === 6) return false;
+    return hour >= session.openHour && hour < session.closeHour;
+  };
 
   const { data: checklists = [], isLoading } = useQuery({
     queryKey: ['checklists'],
@@ -345,11 +379,51 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Avg Completion */}
+            {/* Market Sessions */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
+              className="border border-zinc-800 p-6 bg-zinc-900/30"
+            >
+              <h3 className="text-lg tracking-widest mb-4 flex items-center gap-2">
+                <Globe className="w-5 h-5 text-cyan-500" />
+                MARKET SESSIONS
+              </h3>
+              <div className="space-y-3">
+                {SESSIONS.map((session) => {
+                  const isOpen = isSessionOpen(session);
+                  return (
+                    <div
+                      key={session.name}
+                      className={cn(
+                        "flex items-center justify-between p-3 border transition-all",
+                        isOpen ? "border-green-500/50 bg-green-500/10" : "border-zinc-800"
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">{session.emoji}</span>
+                        <div>
+                          <div className="text-sm tracking-wider">{session.name}</div>
+                          <div className={cn("text-xs", isOpen ? "text-green-500" : "text-zinc-500")}>
+                            {isOpen ? '● OPEN' : '○ CLOSED'}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={cn("text-2xl font-mono", isOpen ? "text-green-500" : "text-zinc-500")}>
+                        {times[session.name] || '--:--'}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+
+            {/* Avg Completion */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45 }}
               className="border border-zinc-800 p-6 bg-zinc-900/30 text-center"
             >
               <div className="text-6xl text-white mb-2">{stats.avgCompletion}%</div>
