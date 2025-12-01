@@ -80,27 +80,62 @@ export default function ChecklistPage() {
 
   const calculateProgress = () => {
     let total = 0, completed = 0;
+    
+    // Step 1: Pair
     total++; if (checklist.pair) completed++;
+    
+    // Step 2: Trends (3 items)
     total += 3;
     if (checklist.weekly_trend) completed++;
     if (checklist.daily_trend) completed++;
     if (checklist.h4_trend) completed++;
-    total += 2;
+    
+    // Step 3: AOI (3 items - identified, price in aoi, direction)
+    total += 3;
     if (checklist.aoi_identified) completed++;
     if (checklist.price_in_aoi) completed++;
+    if (checklist.aoi_position) completed++;
+    
+    // Step 4: Structure (2 items)
     total += 2;
     if (checklist.pss_rejected) completed++;
     if (checklist.ema_respected) completed++;
+    
+    // Step 5: Patterns (2 items)
     total += 2;
     if (checklist.pattern_type) completed++;
     if (checklist.pattern_confirmed) completed++;
+    
+    // Step 6: Entry (2 items)
     total += 2;
     if (checklist.mss_confirmed) completed++;
     if (checklist.engulfing_confirmed) completed++;
-    total += 2;
-    if (checklist.not_buying_resistance) completed++;
-    if (checklist.not_selling_support) completed++;
-    return Math.round((completed / total) * 100);
+    
+    // Step 7: Final Rule - ONLY ONE based on direction
+    total += 1;
+    if (checklist.aoi_position === 'long' && checklist.not_buying_resistance) completed++;
+    if (checklist.aoi_position === 'short' && checklist.not_selling_support) completed++;
+    
+    // Base percentage (max 100%)
+    const basePercent = Math.round((completed / total) * 100);
+    
+    // Bonus points for extra confirmations (can go above 100%)
+    let bonus = 0;
+    
+    // Bonus for confluence (all trends align)
+    if (trendsAlign) bonus += 10;
+    
+    // Bonus for Daily & 4H sync
+    if (isDailyH4Sync && !trendsAlign) bonus += 5;
+    
+    // Bonus for engulfing matching direction
+    if (checklist.aoi_position === 'long' && checklist.engulfing_color === 'blue') bonus += 5;
+    if (checklist.aoi_position === 'short' && checklist.engulfing_color === 'red') bonus += 5;
+    
+    // Bonus for pattern confirmed
+    if (checklist.pattern_confirmed) bonus += 5;
+    
+    return basePercent + bonus;
   };
 
   const handleSave = async (force = false) => {
@@ -290,13 +325,23 @@ export default function ChecklistPage() {
 
               {checklist.aoi_identified && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-                  <CheckItem checked={checklist.price_in_aoi} onChange={() => update('price_in_aoi', !checklist.price_in_aoi)} label={t('priceInAoi')} description={t('priceInAoiDesc')} />
+                  <CheckItem checked={checklist.price_in_aoi} onChange={() => update('price_in_aoi', !checklist.price_in_aoi)} label="IST DER PREIS IM AOI?" description="Der Preis muss sich im oder nahe am AOI befinden" />
 
                   <div className="border border-zinc-800/50 rounded-2xl p-6 bg-zinc-950">
-                    <label className="text-zinc-500 text-sm tracking-widest mb-4 block">{t('pricePosition')}</label>
+                    <label className="text-zinc-500 text-sm tracking-widest mb-4 block">WAS WILLST DU MACHEN?</label>
                     <div className="grid grid-cols-2 gap-4">
-                      <DirectionButton selected={checklist.aoi_position === 'above'} onClick={() => update('aoi_position', 'above')} type="short" labels={{ main: t('aboveAoi'), sub: t('shortSetup') }} />
-                      <DirectionButton selected={checklist.aoi_position === 'below'} onClick={() => update('aoi_position', 'below')} type="long" labels={{ main: t('belowAoi'), sub: t('longSetup') }} />
+                      <DirectionButton 
+                        selected={checklist.aoi_position === 'long'} 
+                        onClick={() => update('aoi_position', 'long')} 
+                        type="long" 
+                        labels={{ main: 'KAUFEN (LONG)', sub: 'Im AOI oder ÜBER AOI' }} 
+                      />
+                      <DirectionButton 
+                        selected={checklist.aoi_position === 'short'} 
+                        onClick={() => update('aoi_position', 'short')} 
+                        type="short" 
+                        labels={{ main: 'VERKAUFEN (SHORT)', sub: 'Im AOI oder UNTER AOI' }} 
+                      />
                     </div>
                   </div>
                 </motion.div>
@@ -397,10 +442,30 @@ export default function ChecklistPage() {
                   <span className="text-white font-bold tracking-widest">{t('importantRules')}</span>
                 </div>
                 
-                <CheckItem checked={checklist.not_buying_resistance} onChange={() => update('not_buying_resistance', !checklist.not_buying_resistance)} label={t('notBuyingResistance')} description={t('notBuyingResistanceDesc')} color="white" />
-                <div className="mt-4">
-                  <CheckItem checked={checklist.not_selling_support} onChange={() => update('not_selling_support', !checklist.not_selling_support)} label={t('notSellingSupport')} description={t('notSellingSupportDesc')} color="white" />
-                </div>
+                {/* Show only relevant rule based on trade direction */}
+                {checklist.aoi_position === 'long' && (
+                  <CheckItem 
+                    checked={checklist.not_buying_resistance} 
+                    onChange={() => update('not_buying_resistance', !checklist.not_buying_resistance)} 
+                    label={t('notBuyingResistance')} 
+                    description={t('notBuyingResistanceDesc')} 
+                  />
+                )}
+                
+                {checklist.aoi_position === 'short' && (
+                  <CheckItem 
+                    checked={checklist.not_selling_support} 
+                    onChange={() => update('not_selling_support', !checklist.not_selling_support)} 
+                    label={t('notSellingSupport')} 
+                    description={t('notSellingSupportDesc')} 
+                  />
+                )}
+
+                {!checklist.aoi_position && (
+                  <div className="text-zinc-500 text-center py-4 font-sans">
+                    Wähle zuerst im AOI-Schritt ob du KAUFEN oder VERKAUFEN willst
+                  </div>
+                )}
               </div>
 
               {/* Summary */}
