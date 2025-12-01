@@ -106,7 +106,6 @@ export default function ChecklistPage() {
   const handleSave = async (force = false) => {
     const progress = calculateProgress();
     
-    // Show warning if below 85% and not forcing
     if (progress < 85 && !force && currentStep === STEPS.length - 1) {
       setShowWarning(true);
       return;
@@ -135,7 +134,7 @@ export default function ChecklistPage() {
   };
 
   const progress = calculateProgress();
-  const isReady = progress === 100;
+  const isReady = progress >= 85;
 
   const stepLabels = {
     pair: t('selectAsset'),
@@ -150,22 +149,29 @@ export default function ChecklistPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-2xl tracking-widest">{t('loading')}</div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <div className="w-16 h-16 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="text-white text-xl tracking-widest">{t('loading')}</div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-slate-950 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen bg-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-black border-b border-zinc-800 sticky top-0 z-50">
+      <header className="bg-black border-b border-zinc-800/50 sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <button onClick={() => navigate(createPageUrl('Home'))} className="text-white hover:text-zinc-300">
+              <button onClick={() => navigate(createPageUrl('Home'))} className="text-zinc-500 hover:text-white transition-colors">
                 <Home className="w-6 h-6" />
               </button>
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-white hover:text-zinc-300">
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-zinc-500 hover:text-white transition-colors">
                 <ArrowLeft className="w-6 h-6" />
               </button>
             </div>
@@ -180,39 +186,52 @@ export default function ChecklistPage() {
 
             <div className="flex items-center gap-3">
               <LanguageToggle />
-              <div className={cn("text-2xl font-bold", isReady ? "text-emerald-400" : "text-white")}>{progress}%</div>
+              <div className={cn(
+                "text-2xl font-bold px-4 py-1 rounded-full",
+                isReady ? "bg-white text-black" : "text-white"
+              )}>
+                {progress}%
+              </div>
             </div>
           </div>
         </div>
-        <div className="h-1 bg-zinc-800">
-          <motion.div className={cn("h-full", isReady ? "bg-emerald-500" : "bg-white")} initial={{ width: 0 }} animate={{ width: `${progress}%` }} />
+        {/* Progress Bar */}
+        <div className="h-1 bg-zinc-900">
+          <motion.div 
+            className={cn("h-full", isReady ? "bg-white" : "bg-zinc-600")} 
+            initial={{ width: 0 }} 
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.5 }}
+          />
         </div>
       </header>
 
-      {/* Steps */}
-      <div className="bg-zinc-900 border-b border-zinc-800 overflow-x-auto">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex gap-1">
+      {/* Steps Navigation */}
+      <div className="bg-zinc-950 border-b border-zinc-800/50 overflow-x-auto">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex gap-2">
           {STEPS.map((step, index) => (
             <button
               key={step}
               onClick={() => setCurrentStep(index)}
               className={cn(
-                "px-4 py-2 text-sm tracking-widest whitespace-nowrap transition-all rounded",
-                currentStep === index ? 'bg-white text-black' : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                "px-4 py-2 text-sm tracking-widest whitespace-nowrap transition-all rounded-xl",
+                currentStep === index 
+                  ? 'bg-white text-black' 
+                  : 'text-zinc-500 hover:text-white hover:bg-zinc-900'
               )}
             >
-              {stepLabels[step]}
+              {index + 1}. {stepLabels[step]}
             </button>
           ))}
         </div>
       </div>
 
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      <main className="max-w-3xl mx-auto px-4 py-10">
         <AnimatePresence mode="wait">
           {/* STEP 0: Asset */}
           {currentStep === 0 && (
-            <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('selectAsset')} subtitle={t('selectAssetDesc')} />
+            <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
+              <StepHeader number="01" title={t('selectAsset')} subtitle={t('selectAssetDesc')} />
               <AssetSelector selectedPair={checklist.pair} onSelect={(pair) => update('pair', pair)} />
             </motion.div>
           )}
@@ -220,18 +239,18 @@ export default function ChecklistPage() {
           {/* STEP 1: Trend */}
           {currentStep === 1 && (
             <motion.div key="trend" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('trendAnalysis')} subtitle={t('trendAnalysisDesc')} />
+              <StepHeader number="02" title={t('trendAnalysis')} subtitle={t('trendAnalysisDesc')} />
               
               {[
                 { key: 'weekly_trend', label: t('weekly'), desc: t('mainTrend') },
                 { key: 'daily_trend', label: t('daily'), desc: t('midTerm') },
                 { key: 'h4_trend', label: t('fourHour'), desc: t('shortTerm') },
               ].map((tf) => (
-                <div key={tf.key} className="border border-slate-800 rounded-xl p-6 bg-slate-900/50">
+                <div key={tf.key} className="border border-zinc-800/50 rounded-2xl p-6 bg-zinc-950">
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <span className="text-xl tracking-widest">{tf.label}</span>
-                      <span className="text-zinc-500 ml-2 text-sm">{tf.desc}</span>
+                      <span className="text-zinc-600 ml-3 text-sm">{tf.desc}</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -252,19 +271,19 @@ export default function ChecklistPage() {
           {/* STEP 2: AOI */}
           {currentStep === 2 && (
             <motion.div key="aoi" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('aoi')} subtitle={t('aoiDesc')} />
+              <StepHeader number="03" title={t('aoi')} subtitle={t('aoiDesc')} />
               
               <CheckItem checked={checklist.aoi_identified} onChange={() => update('aoi_identified', !checklist.aoi_identified)} label={t('aoiDrawn')} description={t('aoiDrawnDesc')} />
 
               {checklist.aoi_identified && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                   <CheckItem checked={checklist.price_in_aoi} onChange={() => update('price_in_aoi', !checklist.price_in_aoi)} label={t('priceInAoi')} description={t('priceInAoiDesc')} />
 
-                  <div className="border border-slate-800 rounded-xl p-6 bg-slate-900/50">
+                  <div className="border border-zinc-800/50 rounded-2xl p-6 bg-zinc-950">
                     <label className="text-zinc-500 text-sm tracking-widest mb-4 block">{t('pricePosition')}</label>
                     <div className="grid grid-cols-2 gap-4">
-                      <AOIButton selected={checklist.aoi_position === 'above'} onClick={() => update('aoi_position', 'above')} type="short" labels={{ main: t('aboveAoi'), sub: t('shortSetup') }} />
-                      <AOIButton selected={checklist.aoi_position === 'below'} onClick={() => update('aoi_position', 'below')} type="long" labels={{ main: t('belowAoi'), sub: t('longSetup') }} />
+                      <DirectionButton selected={checklist.aoi_position === 'above'} onClick={() => update('aoi_position', 'above')} type="short" labels={{ main: t('aboveAoi'), sub: t('shortSetup') }} />
+                      <DirectionButton selected={checklist.aoi_position === 'below'} onClick={() => update('aoi_position', 'below')} type="long" labels={{ main: t('belowAoi'), sub: t('longSetup') }} />
                     </div>
                   </div>
                 </motion.div>
@@ -275,7 +294,7 @@ export default function ChecklistPage() {
           {/* STEP 3: Structure */}
           {currentStep === 3 && (
             <motion.div key="structure" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('structureCheck')} subtitle={t('structureCheckDesc')} />
+              <StepHeader number="04" title={t('structureCheck')} subtitle={t('structureCheckDesc')} />
               
               <CheckItem checked={checklist.pss_rejected} onChange={() => update('pss_rejected', !checklist.pss_rejected)} label={t('pssRejected')} description={t('pssRejectedDesc')} />
               <CheckItem checked={checklist.ema_respected} onChange={() => update('ema_respected', !checklist.ema_respected)} label={t('emaRespected')} description={t('emaRespectedDesc')} />
@@ -289,27 +308,28 @@ export default function ChecklistPage() {
           {/* STEP 4: Patterns */}
           {currentStep === 4 && (
             <motion.div key="patterns" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('patterns')} subtitle={t('patternsDesc')} />
+              <StepHeader number="05" title={t('patterns')} subtitle={t('patternsDesc')} />
               
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {[
-                  { key: 'head_shoulders', label: t('headShoulders'), icon: '📉' },
-                  { key: 'inv_head_shoulders', label: t('invHeadShoulders'), icon: '📈' },
-                  { key: 'double_top', label: t('doubleTop'), icon: '🔻' },
-                  { key: 'double_bottom', label: t('doubleBottom'), icon: '🔺' },
+                  { key: 'head_shoulders', label: t('headShoulders'), icon: '📉', desc: 'Reversal' },
+                  { key: 'inv_head_shoulders', label: t('invHeadShoulders'), icon: '📈', desc: 'Reversal' },
+                  { key: 'double_top', label: t('doubleTop'), icon: '🔻', desc: 'Bearish' },
+                  { key: 'double_bottom', label: t('doubleBottom'), icon: '🔺', desc: 'Bullish' },
                 ].map((pattern) => (
                   <button
                     key={pattern.key}
                     onClick={() => update('pattern_type', pattern.key)}
                     className={cn(
-                      "py-6 border rounded-xl text-center transition-all",
+                      "p-6 border rounded-2xl text-center transition-all",
                       checklist.pattern_type === pattern.key
-                        ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
-                        : "border-slate-800 text-zinc-400 hover:border-slate-600 bg-slate-900/50"
+                        ? "bg-white border-white text-black"
+                        : "border-zinc-800/50 text-zinc-400 hover:border-zinc-600 bg-zinc-950"
                     )}
                   >
-                    <div className="text-3xl mb-2">{pattern.icon}</div>
-                    <div className="text-sm tracking-wider">{pattern.label}</div>
+                    <div className="text-4xl mb-3">{pattern.icon}</div>
+                    <div className="text-sm tracking-wider font-bold mb-1">{pattern.label}</div>
+                    <div className={cn("text-xs", checklist.pattern_type === pattern.key ? "text-zinc-600" : "text-zinc-600")}>{pattern.desc}</div>
                   </button>
                 ))}
               </div>
@@ -323,13 +343,13 @@ export default function ChecklistPage() {
           {/* STEP 5: Entry */}
           {currentStep === 5 && (
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('entryConfirmation')} subtitle={t('entryConfirmationDesc')} />
+              <StepHeader number="06" title={t('entryConfirmation')} subtitle={t('entryConfirmationDesc')} />
 
               <CheckItem checked={checklist.mss_confirmed} onChange={() => update('mss_confirmed', !checklist.mss_confirmed)} label={t('mssConfirmed')} description={t('mssConfirmedDesc')} />
 
-              <div className="border border-slate-800 rounded-xl p-6 bg-slate-900/50">
+              <div className="border border-zinc-800/50 rounded-2xl p-6 bg-zinc-950">
                 <label className="text-zinc-500 text-sm tracking-widest mb-2 block">{t('engulfingAfterPullback')}</label>
-                <p className="text-zinc-400 text-sm mb-4 font-sans">{t('engulfingQuestion')}</p>
+                <p className="text-zinc-600 text-sm mb-4 font-sans">{t('engulfingQuestion')}</p>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <EngulfingButton 
@@ -356,29 +376,29 @@ export default function ChecklistPage() {
           {/* STEP 6: Final */}
           {currentStep === 6 && (
             <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader title={t('finalCheck')} subtitle={t('finalCheckDesc')} />
+              <StepHeader number="07" title={t('finalCheck')} subtitle={t('finalCheckDesc')} />
 
-              <div className="border border-yellow-500/50 bg-yellow-500/5 rounded-xl p-6">
+              <div className="border-2 border-zinc-700 bg-zinc-950 rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <AlertTriangle className="w-6 h-6 text-yellow-500" />
-                  <span className="text-yellow-500 font-bold tracking-widest">{t('importantRules')}</span>
+                  <AlertTriangle className="w-6 h-6 text-white" />
+                  <span className="text-white font-bold tracking-widest">{t('importantRules')}</span>
                 </div>
                 
-                <CheckItem checked={checklist.not_buying_resistance} onChange={() => update('not_buying_resistance', !checklist.not_buying_resistance)} label={t('notBuyingResistance')} description={t('notBuyingResistanceDesc')} color="yellow" />
+                <CheckItem checked={checklist.not_buying_resistance} onChange={() => update('not_buying_resistance', !checklist.not_buying_resistance)} label={t('notBuyingResistance')} description={t('notBuyingResistanceDesc')} color="white" />
                 <div className="mt-4">
-                  <CheckItem checked={checklist.not_selling_support} onChange={() => update('not_selling_support', !checklist.not_selling_support)} label={t('notSellingSupport')} description={t('notSellingSupportDesc')} color="yellow" />
+                  <CheckItem checked={checklist.not_selling_support} onChange={() => update('not_selling_support', !checklist.not_selling_support)} label={t('notSellingSupport')} description={t('notSellingSupportDesc')} color="white" />
                 </div>
               </div>
 
               {/* Summary */}
-              <div className="border border-slate-800 rounded-xl p-6 bg-slate-900/50 space-y-4">
+              <div className="border border-zinc-800/50 rounded-2xl p-6 bg-zinc-950 space-y-4">
                 <h3 className="text-xl tracking-widest mb-4">{t('summary')}</h3>
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <SummaryItem label={t('pair')} value={checklist.pair || '-'} />
-                  <SummaryItem label={t('trend')} value={trendsAlign ? checklist.weekly_trend?.toUpperCase() : t('mixed')} color={trendsAlign ? 'text-emerald-400' : 'text-yellow-400'} />
+                  <SummaryItem label={t('trend')} value={trendsAlign ? checklist.weekly_trend?.toUpperCase() : t('mixed')} highlight={trendsAlign} />
                   <SummaryItem label={t('aoi')} value={checklist.price_in_aoi ? `✓ ${t('inAoi')}` : '✗'} />
-                  <SummaryItem label={t('entry')} value={checklist.engulfing_confirmed ? `${checklist.engulfing_color?.toUpperCase()} ENGULFING` : '-'} color={checklist.engulfing_color === 'blue' ? 'text-blue-400' : checklist.engulfing_color === 'red' ? 'text-red-400' : ''} />
+                  <SummaryItem label={t('entry')} value={checklist.engulfing_confirmed ? `${checklist.engulfing_color?.toUpperCase()} ENGULFING` : '-'} />
                 </div>
 
                 {isDailyH4Sync && <SyncIndicator t={t} />}
@@ -390,25 +410,25 @@ export default function ChecklistPage() {
                   value={checklist.notes}
                   onChange={(e) => update('notes', e.target.value)}
                   placeholder={t('notesPlaceholder')}
-                  className="bg-slate-900 border-slate-800 text-white placeholder:text-zinc-600 min-h-[100px] rounded-xl font-sans focus:border-emerald-500"
+                  className="bg-zinc-950 border-zinc-800/50 text-white placeholder:text-zinc-700 min-h-[100px] rounded-xl font-sans focus:border-white focus:ring-0"
                 />
               </div>
 
               {isReady && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  className="p-8 bg-emerald-500 text-black text-center rounded-xl">
-                  <div className="text-4xl tracking-widest mb-2">✓ {t('readyToTrade')}</div>
-                  <div className="text-lg font-sans">{t('allConfirmed')}</div>
+                  className="p-10 bg-white text-black text-center rounded-2xl">
+                  <div className="text-5xl tracking-widest mb-2">✓</div>
+                  <div className="text-3xl tracking-widest mb-2">{t('readyToTrade')}</div>
+                  <div className="text-lg font-sans text-zinc-600">{t('allConfirmed')}</div>
                 </motion.div>
               )}
 
-              {/* Warning for below 85% */}
               {progress < 85 && progress > 0 && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  className="p-6 bg-red-500/10 border-2 border-red-500 text-center rounded-xl">
-                  <ShieldAlert className="w-12 h-12 text-red-500 mx-auto mb-3" />
-                  <div className="text-2xl tracking-widest mb-2 text-red-500">{t('aPlusTradeOnly')}</div>
-                  <div className="text-sm text-zinc-400 font-sans">{progress}% - {t('warningDesc').split('.')[0]}.</div>
+                  className="p-8 bg-zinc-950 border-2 border-zinc-700 text-center rounded-2xl">
+                  <ShieldAlert className="w-16 h-16 text-white mx-auto mb-4" />
+                  <div className="text-3xl tracking-widest mb-2">{t('aPlusTradeOnly')}</div>
+                  <div className="text-zinc-500 font-sans">{progress}% - ZNPCV Standard: 85%+</div>
                 </motion.div>
               )}
 
@@ -418,27 +438,27 @@ export default function ChecklistPage() {
         </AnimatePresence>
 
         {/* Navigation */}
-        <div className="mt-12 flex gap-3">
+        <div className="mt-12 flex gap-4">
           {currentStep > 0 && (
-            <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" className="border-slate-700 text-white hover:bg-slate-800 rounded-xl tracking-widest">
+            <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" className="border-zinc-800 text-white hover:bg-zinc-900 rounded-xl tracking-widest px-6">
               <ChevronLeft className="w-4 h-4 mr-2" /> {t('back')}
             </Button>
           )}
           
           {currentStep < STEPS.length - 1 ? (
-            <Button onClick={() => setCurrentStep(prev => prev + 1)} className="flex-1 bg-slate-800 hover:bg-slate-700 rounded-xl tracking-widest text-lg py-6">
-              {t('next')} <ChevronRight className="w-4 h-4 ml-2" />
+            <Button onClick={() => setCurrentStep(prev => prev + 1)} className="flex-1 bg-white hover:bg-zinc-200 text-black rounded-xl tracking-widest text-lg py-6">
+              {t('next')} <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
           ) : (
             <div className="flex-1 flex gap-3">
               {checklistId && (
-                <Button onClick={handleDelete} variant="outline" className="border-red-500 text-red-500 hover:bg-red-500/10 rounded-xl">
+                <Button onClick={handleDelete} variant="outline" className="border-zinc-700 text-zinc-400 hover:bg-zinc-900 rounded-xl px-4">
                   <Trash2 className="w-5 h-5" />
                 </Button>
               )}
               <Button onClick={() => handleSave(false)} disabled={saving || !checklist.pair}
                 className={cn("flex-1 rounded-xl tracking-widest text-lg py-6",
-                  isReady ? "bg-emerald-500 hover:bg-emerald-600 text-black" : "bg-slate-800 hover:bg-slate-700")}>
+                  isReady ? "bg-white hover:bg-zinc-200 text-black" : "bg-zinc-800 hover:bg-zinc-700 text-white")}>
                 <Save className="w-5 h-5 mr-2" /> {saving ? t('saving') : t('save')}
               </Button>
             </div>
@@ -453,35 +473,34 @@ export default function ChecklistPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-zinc-900 border-2 border-red-500 rounded-2xl p-8 max-w-md w-full text-center"
+              className="bg-zinc-950 border-2 border-white rounded-2xl p-10 max-w-md w-full text-center"
             >
-              <XOctagon className="w-20 h-20 text-red-500 mx-auto mb-4" />
-              <h2 className="text-3xl tracking-widest text-red-500 mb-4">{t('warningTitle')}</h2>
-              <p className="text-zinc-300 font-sans mb-6 leading-relaxed">{t('warningDesc')}</p>
+              <XOctagon className="w-24 h-24 text-white mx-auto mb-6" />
+              <h2 className="text-3xl tracking-widest mb-4">{t('warningTitle')}</h2>
+              <p className="text-zinc-400 font-sans mb-8 leading-relaxed">{t('warningDesc')}</p>
               
-              <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 mb-6">
-                <div className="text-5xl font-bold text-red-500 mb-1">{progress}%</div>
-                <div className="text-sm text-zinc-400">ZNPCV Standard: 85%+</div>
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-8">
+                <div className="text-6xl font-light mb-2">{progress}%</div>
+                <div className="text-sm text-zinc-500 tracking-widest">ZNPCV STANDARD: 85%+</div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <Button 
                   onClick={() => { setShowWarning(false); navigate(createPageUrl('Dashboard')); }}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white rounded-xl py-4 text-lg tracking-widest"
+                  className="w-full bg-white hover:bg-zinc-200 text-black rounded-xl py-4 text-lg tracking-widest"
                 >
-                  <XOctagon className="w-5 h-5 mr-2" />
                   {t('warningButton')}
                 </Button>
                 <Button 
                   onClick={() => { setShowWarning(false); handleSave(true); }}
                   variant="outline"
-                  className="w-full border-zinc-700 text-zinc-400 hover:bg-zinc-800 rounded-xl py-3"
+                  className="w-full border-zinc-800 text-zinc-500 hover:bg-zinc-900 rounded-xl py-3"
                 >
                   {t('proceedAnyway')}
                 </Button>
@@ -510,33 +529,31 @@ export default function ChecklistPage() {
 }
 
 // Sub-components
-function StepHeader({ title, subtitle }) {
+function StepHeader({ number, title, subtitle }) {
   return (
-    <div className="text-center mb-8">
+    <div className="text-center mb-10">
+      <div className="text-6xl font-light text-zinc-800 mb-2">{number}</div>
       <h2 className="text-3xl md:text-4xl tracking-widest mb-2">{title}</h2>
-      <p className="text-zinc-500 text-lg tracking-widest">{subtitle}</p>
+      <p className="text-zinc-600 text-lg tracking-wider">{subtitle}</p>
     </div>
   );
 }
 
-function CheckItem({ checked, onChange, label, description, color = 'emerald' }) {
-  const colors = {
-    emerald: { border: 'border-emerald-500', bg: 'bg-emerald-500/10', check: 'border-emerald-500 bg-emerald-500' },
-    yellow: { border: 'border-yellow-500', bg: 'bg-yellow-500/10', check: 'border-yellow-500 bg-yellow-500' },
-  };
-  const c = colors[color];
-  
+function CheckItem({ checked, onChange, label, description, color = 'white' }) {
   return (
     <button onClick={onChange} className={cn(
-      "w-full p-5 border rounded-xl flex items-center gap-4 transition-all text-left",
-      checked ? `${c.border} ${c.bg}` : 'border-slate-800 hover:border-slate-600 bg-slate-900/50'
+      "w-full p-5 border rounded-2xl flex items-center gap-4 transition-all text-left",
+      checked ? 'bg-white border-white text-black' : 'border-zinc-800/50 hover:border-zinc-600 bg-zinc-950'
     )}>
-      <div className={cn("w-8 h-8 border-2 flex items-center justify-center flex-shrink-0 rounded", checked ? c.check : 'border-zinc-600')}>
-        {checked && <Check className="w-5 h-5 text-black" />}
+      <div className={cn(
+        "w-8 h-8 border-2 flex items-center justify-center flex-shrink-0 rounded-lg transition-all",
+        checked ? 'border-black bg-black' : 'border-zinc-700'
+      )}>
+        {checked && <Check className="w-5 h-5 text-white" />}
       </div>
       <div>
-        <span className="text-lg tracking-wider block">{label}</span>
-        {description && <span className="text-sm text-zinc-500 font-sans">{description}</span>}
+        <span className={cn("text-lg tracking-wider block", checked ? "text-black" : "text-white")}>{label}</span>
+        {description && <span className={cn("text-sm font-sans", checked ? "text-zinc-600" : "text-zinc-600")}>{description}</span>}
       </div>
     </button>
   );
@@ -545,27 +562,27 @@ function CheckItem({ checked, onChange, label, description, color = 'emerald' })
 function TrendButton({ selected, onClick, type, label }) {
   return (
     <button onClick={onClick} className={cn(
-      "py-4 border rounded-xl text-lg tracking-wider transition-all",
+      "py-5 border rounded-xl text-lg tracking-wider transition-all font-bold",
       selected
-        ? type === 'bullish' ? 'bg-emerald-500 border-emerald-500 text-black' : 'bg-red-500 border-red-500 text-white'
-        : 'border-slate-700 text-zinc-400 hover:border-slate-500'
+        ? type === 'bullish' ? 'bg-white border-white text-black' : 'bg-zinc-600 border-zinc-600 text-white'
+        : 'border-zinc-800/50 text-zinc-500 hover:border-zinc-600 bg-zinc-950'
     )}>
       {type === 'bullish' ? '↑' : '↓'} {label}
     </button>
   );
 }
 
-function AOIButton({ selected, onClick, type, labels }) {
+function DirectionButton({ selected, onClick, type, labels }) {
   return (
     <button onClick={onClick} className={cn(
-      "py-6 border rounded-xl text-center transition-all",
+      "py-8 border rounded-2xl text-center transition-all",
       selected
-        ? type === 'long' ? "bg-emerald-500 border-emerald-500 text-black" : "bg-red-500 border-red-500 text-white"
-        : "border-slate-800 hover:border-slate-500 bg-slate-900/50"
+        ? type === 'long' ? "bg-white border-white text-black" : "bg-zinc-600 border-zinc-600 text-white"
+        : "border-zinc-800/50 hover:border-zinc-600 bg-zinc-950"
     )}>
-      <div className="text-3xl mb-2">{type === 'long' ? '↑' : '↓'}</div>
-      <div className="text-lg tracking-wider">{labels.main}</div>
-      <div className="text-sm text-zinc-400 mt-1">{labels.sub}</div>
+      <div className="text-4xl mb-2">{type === 'long' ? '↑' : '↓'}</div>
+      <div className="text-lg tracking-wider font-bold">{labels.main}</div>
+      <div className={cn("text-sm mt-1", selected ? (type === 'long' ? "text-zinc-600" : "text-zinc-300") : "text-zinc-600")}>{labels.sub}</div>
     </button>
   );
 }
@@ -573,14 +590,14 @@ function AOIButton({ selected, onClick, type, labels }) {
 function EngulfingButton({ selected, onClick, type, labels }) {
   return (
     <button onClick={onClick} className={cn(
-      "py-6 border rounded-xl text-center transition-all",
+      "py-8 border rounded-2xl text-center transition-all",
       selected
-        ? type === 'blue' ? "bg-blue-500 border-blue-500 text-white" : "bg-red-500 border-red-500 text-white"
-        : "border-slate-800 hover:border-slate-500 bg-slate-900/50"
+        ? type === 'blue' ? "bg-white border-white text-black" : "bg-zinc-600 border-zinc-600 text-white"
+        : "border-zinc-800/50 hover:border-zinc-600 bg-zinc-950"
     )}>
-      <div className="text-2xl mb-2">{type === 'blue' ? '🟦' : '🟥'}</div>
-      <div className="text-lg tracking-wider">{labels.main}</div>
-      <div className="text-sm text-zinc-400 mt-1">{labels.sub}</div>
+      <div className="text-3xl mb-2">{type === 'blue' ? '🟦' : '🟥'}</div>
+      <div className="text-lg tracking-wider font-bold">{labels.main}</div>
+      <div className={cn("text-sm mt-1", selected ? (type === 'blue' ? "text-zinc-600" : "text-zinc-300") : "text-zinc-600")}>{labels.sub}</div>
     </button>
   );
 }
@@ -588,22 +605,22 @@ function EngulfingButton({ selected, onClick, type, labels }) {
 function ConfluenceBox({ trendsAlign, trend, t, checklist }) {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-      className={cn("p-6 border rounded-xl text-center", trendsAlign ? "border-emerald-500 bg-emerald-500/10" : "border-yellow-500 bg-yellow-500/10")}>
+      className={cn("p-8 border-2 rounded-2xl text-center", trendsAlign ? "border-white bg-white text-black" : "border-zinc-700 bg-zinc-950")}>
       {trendsAlign ? (
         <>
-          <div className="text-emerald-400 text-2xl tracking-widest mb-2 flex items-center justify-center">
+          <div className="text-3xl tracking-widest mb-2 flex items-center justify-center gap-2">
             ✓ {t('confluence')}
             <ConflTooltip />
           </div>
-          <div className="text-zinc-400 font-sans">{t('allTimeframes')} {trend?.toUpperCase()}</div>
+          <div className="text-zinc-600 font-sans">{t('allTimeframes')} {trend?.toUpperCase()}</div>
         </>
       ) : (
         <>
-          <div className="text-yellow-400 text-2xl tracking-widest mb-2 flex items-center justify-center">
+          <div className="text-2xl tracking-widest mb-2 flex items-center justify-center gap-2 text-zinc-400">
             ⚠ {t('noConfluence')}
             <ConflTooltip />
           </div>
-          <div className="text-zinc-400 font-sans">W: {checklist.weekly_trend?.toUpperCase()} | D: {checklist.daily_trend?.toUpperCase()} | 4H: {checklist.h4_trend?.toUpperCase()}</div>
+          <div className="text-zinc-600 font-sans">W: {checklist.weekly_trend?.toUpperCase()} | D: {checklist.daily_trend?.toUpperCase()} | 4H: {checklist.h4_trend?.toUpperCase()}</div>
         </>
       )}
     </motion.div>
@@ -612,11 +629,11 @@ function ConfluenceBox({ trendsAlign, trend, t, checklist }) {
 
 function SyncIndicator({ t }) {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 border border-blue-500 bg-blue-500/10 rounded-xl flex items-center gap-3">
-      <Zap className="w-6 h-6 text-blue-400" />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-5 border border-zinc-700 bg-zinc-950 rounded-2xl flex items-center gap-4">
+      <Zap className="w-8 h-8 text-white" />
       <div>
-        <div className="text-blue-400 font-bold tracking-wider">{t('dailyH4Sync')}</div>
-        <div className="text-sm text-zinc-400 font-sans">{t('higherProbability')}</div>
+        <div className="text-white font-bold tracking-wider">{t('dailyH4Sync')}</div>
+        <div className="text-sm text-zinc-500 font-sans">{t('higherProbability')}</div>
       </div>
     </motion.div>
   );
@@ -624,17 +641,17 @@ function SyncIndicator({ t }) {
 
 function SuccessBox({ text }) {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 border border-emerald-500 bg-emerald-500/10 rounded-xl">
-      <div className="text-emerald-400 font-bold tracking-wider text-center">✓ {text}</div>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-5 border-2 border-white bg-white rounded-2xl">
+      <div className="text-black font-bold tracking-wider text-center text-lg">✓ {text}</div>
     </motion.div>
   );
 }
 
-function SummaryItem({ label, value, color = 'text-white' }) {
+function SummaryItem({ label, value, highlight = false }) {
   return (
-    <div className="p-3 bg-slate-800/50 rounded-lg">
-      <span className="text-zinc-500">{label}:</span>
-      <span className={cn("ml-2", color)}>{value}</span>
+    <div className={cn("p-4 rounded-xl", highlight ? "bg-white text-black" : "bg-zinc-900")}>
+      <span className={cn("text-sm", highlight ? "text-zinc-600" : "text-zinc-600")}>{label}:</span>
+      <span className={cn("ml-2 font-bold", highlight ? "text-black" : "text-white")}>{value}</span>
     </div>
   );
 }

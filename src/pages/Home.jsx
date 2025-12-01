@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
-  Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight
+  Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
+  Activity, Award
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
-import { HelpCircle } from 'lucide-react';
 import TradingQuote from '@/components/TradingQuote';
 
 const SESSIONS = [
@@ -68,9 +68,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen bg-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-black border-b border-zinc-800">
+      <header className="bg-black border-b border-zinc-800/50">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -84,14 +84,14 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity invert"
+                className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity invert"
               />
             </button>
             
             <div className="flex items-center gap-4">
               <LanguageToggle />
               <div className="text-right text-white">
-                <div className="text-xs text-zinc-400">{t('localTime')}</div>
+                <div className="text-xs text-zinc-500">{t('localTime')}</div>
                 <div className="text-lg font-mono font-bold">
                   {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                 </div>
@@ -102,10 +102,10 @@ export default function HomePage() {
       </header>
 
       {/* Market Sessions Bar */}
-      <div className="bg-zinc-900 border-b border-zinc-800">
+      <div className="bg-zinc-950 border-b border-zinc-800/50">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between gap-4 overflow-x-auto">
-            <div className="flex items-center gap-2 text-zinc-300 text-sm whitespace-nowrap">
+            <div className="flex items-center gap-2 text-zinc-400 text-sm whitespace-nowrap">
               <Globe className="w-4 h-4" />
               <span>{t('marketSessions')}</span>
             </div>
@@ -116,12 +116,12 @@ export default function HomePage() {
                   <div key={session.name} className="flex items-center gap-3 whitespace-nowrap">
                     <span className="text-lg">{session.emoji}</span>
                     <div>
-                      <div className="text-xs text-zinc-400">{session.name}</div>
-                      <div className={`text-sm font-mono font-bold ${isOpen ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                      <div className="text-xs text-zinc-500">{session.name}</div>
+                      <div className={`text-sm font-mono font-bold ${isOpen ? 'text-white' : 'text-zinc-600'}`}>
                         {times[session.name] || '--:--:--'}
                       </div>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-600'}`} />
+                    <div className={`w-2 h-2 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-700'}`} />
                   </div>
                 );
               })}
@@ -131,25 +131,25 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-6 py-16">
+      <main className="max-w-6xl mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm mb-6">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-white text-sm mb-8">
             <Zap className="w-4 h-4" />
-            <span>THE ULTIMATE TRADING TOOL</span>
+            <span className="tracking-widest">THE ULTIMATE TRADING TOOL</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
-            ZNPCV <span className="text-emerald-400">{t('ultimateChecklist')}</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl tracking-wider mb-6 font-light">
+            ZNPCV
           </h1>
-          <p className="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-2">
+          <h2 className="text-2xl md:text-3xl tracking-widest text-zinc-400 mb-6">
+            {t('ultimateChecklist')}
+          </h2>
+          <p className="text-zinc-500 text-lg max-w-2xl mx-auto leading-relaxed font-sans">
             {t('heroSubtitle')}
-          </p>
-          <p className="text-slate-500 text-base max-w-2xl mx-auto">
-            {t('heroDesc')}
           </p>
         </motion.div>
 
@@ -158,192 +158,176 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-6 mb-12"
+          className="grid md:grid-cols-2 gap-6 mb-20"
         >
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className="group p-8 bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border border-emerald-500/30 rounded-2xl hover:border-emerald-400/50 hover:from-emerald-500/20 transition-all text-left"
+            className="group p-10 bg-white text-black rounded-2xl hover:bg-zinc-100 transition-all text-left relative overflow-hidden"
           >
-            <div className="w-16 h-16 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-500/30 transition-all">
-              <ClipboardCheck className="w-8 h-8 text-emerald-400" />
-            </div>
-            <h2 className="text-2xl tracking-wider mb-2">{t('newAnalysis')}</h2>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4 font-sans">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <ClipboardCheck className="w-12 h-12 mb-6" />
+            <h2 className="text-3xl tracking-wider mb-3">{t('newAnalysis')}</h2>
+            <p className="text-zinc-600 text-sm leading-relaxed mb-6 font-sans">
               {t('newAnalysisDesc')}
             </p>
-            <div className="flex items-center gap-2 text-emerald-400 text-sm font-medium">
+            <div className="flex items-center gap-2 text-black text-sm font-bold tracking-widest">
               <span>{t('startNow')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
 
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className="group p-8 bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/30 rounded-2xl hover:border-blue-400/50 hover:from-blue-500/20 transition-all text-left"
+            className="group p-10 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-700 hover:bg-zinc-800/50 transition-all text-left relative overflow-hidden"
           >
-            <div className="w-16 h-16 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-all">
-              <BarChart3 className="w-8 h-8 text-blue-400" />
-            </div>
-            <h2 className="text-2xl tracking-wider mb-2">{t('dashboard')}</h2>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4 font-sans">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <BarChart3 className="w-12 h-12 text-white mb-6" />
+            <h2 className="text-3xl tracking-wider mb-3">{t('dashboard')}</h2>
+            <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-sans">
               {t('dashboardDesc')}
             </p>
-            <div className="flex items-center gap-2 text-blue-400 text-sm font-medium">
+            <div className="flex items-center gap-2 text-white text-sm font-bold tracking-widest">
               <span>{t('openDashboard')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
             </div>
           </button>
         </motion.div>
 
         {/* Trading Quote */}
-        <TradingQuote />
-
-        {/* Asset Categories */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="grid grid-cols-2 md:grid-cols-5 gap-3 my-12"
-        >
-          {[
-            { key: 'forex', count: '27+', color: '#3b82f6' },
-            { key: 'crypto', count: '24+', color: '#f97316' },
-            { key: 'stocks', count: '35+', color: '#22c55e' },
-            { key: 'commodities', count: '14+', color: '#eab308' },
-            { key: 'indices', count: '12+', color: '#a855f7' },
-          ].map((item, index) => (
-            <motion.div
-              key={item.key}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 + index * 0.05 }}
-              className="p-4 rounded-xl text-center border transition-all hover:scale-105"
-              style={{
-                background: `rgba(${item.color === '#3b82f6' ? '59,130,246' : item.color === '#f97316' ? '249,115,22' : item.color === '#22c55e' ? '34,197,94' : item.color === '#eab308' ? '234,179,8' : '168,85,247'}, 0.05)`,
-                borderColor: `rgba(${item.color === '#3b82f6' ? '59,130,246' : item.color === '#f97316' ? '249,115,22' : item.color === '#22c55e' ? '34,197,94' : item.color === '#eab308' ? '234,179,8' : '168,85,247'}, 0.2)`
-              }}
-            >
-              <div className="text-2xl md:text-3xl mb-1" style={{ color: item.color }}>{item.count}</div>
-              <div className="text-xs text-slate-500 tracking-widest">{t(item.key).toUpperCase()}</div>
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="mb-20">
+          <TradingQuote />
+        </div>
 
         {/* Features */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="grid md:grid-cols-3 gap-6"
+          transition={{ delay: 0.3 }}
+          className="mb-20"
+        >
+          <div className="text-center mb-12">
+            <h3 className="text-2xl tracking-widest mb-2">ZNPCV STANDARD</h3>
+            <p className="text-zinc-500">Only A+++ Trades • 85%+ Completion</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
+              { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
+              { icon: TrendingUp, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc' },
+            ].map((item, index) => (
+              <motion.div 
+                key={item.titleKey} 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + index * 0.1 }}
+                className="p-8 bg-zinc-950 border border-zinc-800/50 rounded-2xl hover:border-zinc-700 transition-all group"
+              >
+                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <item.icon className="w-7 h-7 text-black" />
+                </div>
+                <h3 className="text-xl tracking-wider mb-3">{t(item.titleKey)}</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed font-sans">{t(item.descKey)}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="grid grid-cols-3 gap-6 mb-20"
         >
           {[
-            { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc', color: 'text-emerald-400' },
-            { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc', color: 'text-blue-400' },
-            { icon: TrendingUp, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc', color: 'text-purple-400' },
-          ].map((item) => (
-            <div key={item.titleKey} className="p-6 bg-slate-800/20 border border-slate-700/30 rounded-xl hover:border-slate-600/50 transition-all">
-              <item.icon className={`w-10 h-10 ${item.color} mb-4`} />
-              <h3 className="text-lg tracking-wider mb-2">{t(item.titleKey)}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed font-sans">{t(item.descKey)}</p>
+            { value: '85%+', label: 'ZNPCV Standard', icon: Award },
+            { value: '7', label: 'Step Checklist', icon: CheckCircle2 },
+            { value: '4', label: 'Chart Patterns', icon: Activity },
+          ].map((stat, index) => (
+            <div key={stat.label} className="text-center p-8 border border-zinc-800/50 rounded-2xl bg-zinc-950">
+              <stat.icon className="w-8 h-8 mx-auto mb-4 text-white" />
+              <div className="text-4xl font-light mb-2">{stat.value}</div>
+              <div className="text-xs text-zinc-500 tracking-widest">{stat.label}</div>
             </div>
           ))}
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-black">
-        {/* Main Footer */}
-        <div className="border-t border-zinc-800">
-          <div className="max-w-6xl mx-auto px-6 py-16">
-            <div className="grid md:grid-cols-12 gap-12">
-              {/* Brand Section */}
-              <div className="md:col-span-5">
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
-                  alt="ZNPCV" 
-                  className="h-14 w-auto invert mb-6"
-                />
-                <p className="text-zinc-400 text-sm font-sans leading-relaxed mb-6 max-w-sm">
-                  {t('footerDesc')}
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 rounded-lg">
-                    <Lock className="w-4 h-4 text-emerald-500" />
-                    <span className="text-xs text-white">SSL</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 rounded-lg">
-                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                    <span className="text-xs text-white">SECURE</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 rounded-lg">
-                    <Globe className="w-4 h-4 text-emerald-500" />
-                    <span className="text-xs text-white">24/7</span>
-                  </div>
+      <footer className="bg-zinc-950 border-t border-zinc-800/50">
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="grid md:grid-cols-12 gap-12 mb-12">
+            {/* Brand */}
+            <div className="md:col-span-5">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                alt="ZNPCV" 
+                className="h-16 w-auto invert mb-6"
+              />
+              <p className="text-zinc-500 text-sm font-sans leading-relaxed max-w-sm mb-8">
+                {t('footerDesc')}
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
+                  <Lock className="w-4 h-4 text-white" />
+                  <span className="text-xs text-white tracking-wider">SSL</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
+                  <ShieldCheck className="w-4 h-4 text-white" />
+                  <span className="text-xs text-white tracking-wider">SECURE</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
+                  <Globe className="w-4 h-4 text-white" />
+                  <span className="text-xs text-white tracking-wider">24/7</span>
                 </div>
               </div>
+            </div>
 
-              {/* Quick Links */}
-              <div className="md:col-span-3">
-                <h4 className="text-white text-sm tracking-widest mb-6">QUICK LINKS</h4>
-                <ul className="space-y-4">
-                  <li>
-                    <button onClick={() => navigate(createPageUrl('Checklist'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2">
-                      <ChevronRight className="w-4 h-4" />
-                      {t('newAnalysis')}
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2">
-                      <ChevronRight className="w-4 h-4" />
-                      {t('dashboard')}
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Contact */}
-              <div className="md:col-span-4">
-                <h4 className="text-white text-sm tracking-widest mb-6">{t('contact')}</h4>
-                <div className="space-y-4">
-                  <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-4 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-colors group">
-                    <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                      <span className="text-emerald-500">@</span>
-                    </div>
-                    <div>
-                      <div className="text-xs text-zinc-500 mb-1">EMAIL</div>
-                      <div className="text-white text-sm group-hover:text-emerald-400 transition-colors">support@znpcv.com</div>
-                    </div>
-                  </a>
-                  <button className="w-full flex items-center gap-3 p-4 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-colors group">
-                    <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                      <HelpCircle className="w-5 h-5 text-blue-500" />
-                    </div>
-                    <div className="text-left">
-                      <div className="text-xs text-zinc-500 mb-1">SUPPORT</div>
-                      <div className="text-white text-sm group-hover:text-blue-400 transition-colors">{t('faqHelp')}</div>
-                    </div>
+            {/* Links */}
+            <div className="md:col-span-3">
+              <h4 className="text-white text-sm tracking-widest mb-6">NAVIGATION</h4>
+              <ul className="space-y-4">
+                <li>
+                  <button onClick={() => navigate(createPageUrl('Checklist'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2 group">
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    {t('newAnalysis')}
                   </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate(createPageUrl('Dashboard'))} className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-2 group">
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    {t('dashboard')}
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div className="md:col-span-4">
+              <h4 className="text-white text-sm tracking-widest mb-6">{t('contact')}</h4>
+              <a href="mailto:support@znpcv.com" className="flex items-center gap-4 p-5 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                  <span className="text-black text-lg">@</span>
                 </div>
-              </div>
+                <div>
+                  <div className="text-xs text-zinc-500 mb-1 tracking-wider">EMAIL</div>
+                  <div className="text-white group-hover:text-zinc-300 transition-colors">support@znpcv.com</div>
+                </div>
+              </a>
             </div>
           </div>
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-zinc-800 bg-zinc-950">
-          <div className="max-w-6xl mx-auto px-6 py-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-6">
-                <p className="text-white text-sm">
-                  © {new Date().getFullYear()} ZNPCV
-                </p>
-                <span className="text-zinc-700">|</span>
-                <p className="text-zinc-500 text-sm">{t('allRights')}</p>
-              </div>
-              <p className="text-zinc-600 text-xs font-sans text-center md:text-right max-w-md">
-                {t('riskWarning')}
-              </p>
+          {/* Bottom */}
+          <div className="pt-8 border-t border-zinc-800/50 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <p className="text-white text-sm">© {new Date().getFullYear()} ZNPCV</p>
+              <span className="text-zinc-800">|</span>
+              <p className="text-zinc-600 text-sm">{t('allRights')}</p>
             </div>
+            <p className="text-zinc-700 text-xs font-sans text-center md:text-right max-w-md">
+              {t('riskWarning')}
+            </p>
           </div>
         </div>
       </footer>
@@ -356,7 +340,7 @@ export default function HomePage() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 w-12 h-12 bg-emerald-500 text-black flex items-center justify-center shadow-lg hover:bg-emerald-400 transition-colors z-50 rounded-full"
+            className="fixed bottom-6 right-6 w-12 h-12 bg-white text-black flex items-center justify-center shadow-lg hover:bg-zinc-200 transition-colors z-50 rounded-full"
           >
             <ArrowUp className="w-5 h-5" />
           </motion.button>
