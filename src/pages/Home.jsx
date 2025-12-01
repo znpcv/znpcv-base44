@@ -251,16 +251,16 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-950 border-t border-slate-800">
+      <footer className="bg-black border-t border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-12">
           {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-8 mb-8 pb-8 border-b border-slate-800">
+          <div className="flex flex-wrap items-center justify-center gap-8 mb-8 pb-8 border-b border-zinc-800">
             {[
               { icon: Lock, key: 'sslEncrypted' },
               { icon: ShieldCheck, key: 'dataProtection' },
               { icon: Globe, key: 'worldwide' },
             ].map((item) => (
-              <div key={item.key} className="flex items-center gap-2 text-slate-400">
+              <div key={item.key} className="flex items-center gap-2 text-white">
                 <item.icon className="w-5 h-5 text-emerald-500" />
                 <span className="text-sm">{t(item.key)}</span>
               </div>
@@ -273,18 +273,18 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-10 w-auto invert"
+                className="h-12 w-auto invert"
               />
-              <p className="text-slate-500 text-sm font-sans max-w-md">
+              <p className="text-white text-sm font-sans max-w-md">
                 {t('footerDesc')}
               </p>
             </div>
             
             <div className="flex items-center gap-6">
-              <a href="mailto:support@znpcv.com" className="text-slate-400 hover:text-white text-sm transition-colors">
+              <a href="mailto:support@znpcv.com" className="text-white hover:text-emerald-400 text-sm transition-colors">
                 {t('contact')}: support@znpcv.com
               </a>
-              <button className="text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2">
+              <button className="text-white hover:text-emerald-400 text-sm transition-colors flex items-center gap-2">
                 <HelpCircle className="w-4 h-4" />
                 {t('faqHelp')}
               </button>
@@ -292,11 +292,11 @@ export default function HomePage() {
           </div>
 
           {/* Copyright */}
-          <div className="pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-slate-600 text-sm">
+          <div className="pt-6 border-t border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-white text-sm">
               © {new Date().getFullYear()} ZNPCV. {t('allRights')}
             </p>
-            <p className="text-slate-700 text-xs font-sans">
+            <p className="text-zinc-400 text-xs font-sans">
               {t('riskWarning')}
             </p>
           </div>
