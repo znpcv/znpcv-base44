@@ -270,15 +270,18 @@ export default function HomePage() {
               </p>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
-                  <Lock className="w-4 h-4 text-white" />
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <Lock className="w-4 h-4 text-emerald-400" />
                   <span className="text-xs text-white tracking-wider">SSL</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
-                  <ShieldCheck className="w-4 h-4 text-white" />
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   <span className="text-xs text-white tracking-wider">SECURE</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl">
-                  <Globe className="w-4 h-4 text-white" />
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <Globe className="w-4 h-4 text-emerald-400" />
                   <span className="text-xs text-white tracking-wider">24/7</span>
                 </div>
               </div>
@@ -303,18 +306,37 @@ export default function HomePage() {
               </ul>
             </div>
 
-            {/* Contact */}
+            {/* Contact & Support */}
             <div className="md:col-span-4">
               <h4 className="text-white text-sm tracking-widest mb-6">{t('contact')}</h4>
-              <a href="mailto:support@znpcv.com" className="flex items-center gap-4 p-5 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-                  <span className="text-black text-lg">@</span>
-                </div>
-                <div>
-                  <div className="text-xs text-zinc-500 mb-1 tracking-wider">EMAIL</div>
-                  <div className="text-white group-hover:text-zinc-300 transition-colors">support@znpcv.com</div>
-                </div>
-              </a>
+              <div className="space-y-3">
+                <a href="mailto:support@znpcv.com" className="flex items-center gap-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                  <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                    <span className="text-emerald-400 text-lg">@</span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-zinc-500 mb-0.5 tracking-wider">EMAIL</div>
+                    <div className="text-white text-sm group-hover:text-emerald-400 transition-colors">support@znpcv.com</div>
+                  </div>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                    <span className="text-emerald-400 text-xs">LIVE</span>
+                  </div>
+                </a>
+                <button className="w-full flex items-center gap-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                  <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                    <span className="text-blue-400 text-lg">?</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xs text-zinc-500 mb-0.5 tracking-wider">SUPPORT</div>
+                    <div className="text-white text-sm group-hover:text-blue-400 transition-colors">{t('faqHelp')}</div>
+                  </div>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                    <span className="text-blue-400 text-xs">24/7</span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
 
