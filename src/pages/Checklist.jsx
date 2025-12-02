@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import AssetSelector from '@/components/AssetSelector';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
-import LivePriceTracker from '@/components/LivePriceTracker';
+import LotSizeCalculator from '@/components/LotSizeCalculator';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
