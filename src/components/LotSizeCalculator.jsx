@@ -46,7 +46,7 @@ export default function LotSizeCalculator({
   // Form state
   const [accountSize, setAccountSize] = useState(initialData.account_size || '');
   const [customAccount, setCustomAccount] = useState('');
-  const [riskPercent, setRiskPercent] = useState(initialData.risk_percent || '1');
+  const [riskPercent, setRiskPercent] = useState(initialData.risk_percent || '3');
   const [leverage, setLeverage] = useState(100);
   const [entryPrice, setEntryPrice] = useState(initialData.entry_price || '');
   const [stopLoss, setStopLoss] = useState(initialData.stop_loss || '');
@@ -313,9 +313,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
               className={cn(
                 "py-2 px-1 rounded-lg text-xs font-bold transition-all border",
                 leverage === lev.value
-                  ? lev.value >= 400 ? "bg-red-500 text-white border-red-500" :
-                    lev.value >= 200 ? "bg-yellow-500 text-black border-yellow-500" :
-                    "bg-blue-500 text-white border-blue-500"
+                  ? "bg-blue-500 text-white border-blue-500"
                   : `${theme.input} hover:border-blue-500/50`
               )}
             >
@@ -521,10 +519,17 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
             )}
             
             {/* Warnings */}
-            {parseFloat(calculation.rr) > 0 && parseFloat(calculation.rr) < 2 && (
+            {parseFloat(calculation.rr) > 0 && parseFloat(calculation.rr) < 2.5 && (
               <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-yellow-500" />
-                <span className="text-yellow-500 text-xs">ZNPCV empfiehlt min. 1:2 R:R</span>
+                <span className="text-yellow-500 text-xs">ZNPCV empfiehlt mindestens 1:2.5 R:R</span>
+              </div>
+            )}
+            
+            {parseFloat(calculation.rr) >= 2.5 && (
+              <div className="mt-2 p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-500" />
+                <span className="text-emerald-500 text-xs">✓ Gutes Risk:Reward Verhältnis!</span>
               </div>
             )}
           </div>
