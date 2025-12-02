@@ -97,11 +97,7 @@ export default function ChecklistPage() {
   const update = (key, value) => setChecklist(prev => ({ ...prev, [key]: value }));
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const handleLivePriceUpdate = (price) => {
-    if (!checklist.entry_price) {
-      update('entry_price', price.toString());
-    }
-  };
+
 
   // Calculate scores
   const weeklyScore = (checklist.w_at_aoi ? 10 : 0) + (checklist.w_ema_touch ? 5 : 0) + 
@@ -722,7 +718,7 @@ export default function ChecklistPage() {
                   {riskCalc && (
                     <>
                       <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
-                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2 ? 'emerald' : 'yellow'} />
+                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'emerald' : 'yellow'} />
                       <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${checklist.risk_percent}%)`} color="red" />
                     </>
                   )}
