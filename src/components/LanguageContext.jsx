@@ -173,6 +173,116 @@ const translations = {
     warningButton: 'TRADE NICHT EINGEHEN',
     proceedAnyway: 'Trotzdem fortfahren',
     aPlusTradeOnly: 'NUR A+++ TRADES',
+    
+    // Additional translations
+    features: 'FUNKTIONEN',
+    featuresDesc: 'Professionelle Trading-Werkzeuge',
+    znpcvStandard: 'ZNPCV STANDARD',
+    stepChecklist: 'SCHRITT CHECKLISTE',
+    chartPatterns: 'CHART MUSTER',
+    tradingTools: 'DAS ULTIMATIVE TRADING-TOOL',
+    philosophy: 'ZNPCV PHILOSOPHIE',
+    disciplineQuote: 'Disziplin schlägt Talent. Jeden. Einzelnen. Tag.',
+    
+    // Risk Management
+    accountSize: 'KONTOGRÖSSE',
+    riskPercent: 'RISIKO %',
+    entryPrice: 'EINSTIEGSPREIS',
+    stopLoss: 'STOP LOSS',
+    takeProfit: 'TAKE PROFIT',
+    lotSizeCalc: 'LOT SIZE RECHNER',
+    recommendedLotSize: 'EMPFOHLENE LOT SIZE',
+    standardLots: 'Standard Lots',
+    miniLots: 'MINI LOTS',
+    microLots: 'MICRO LOTS',
+    units: 'EINHEITEN',
+    riskAmount: 'RISIKO $',
+    slPips: 'SL PIPS',
+    tpPips: 'TP PIPS',
+    potentialProfit: 'POTENZIELLER GEWINN',
+    rrRatio: 'R:R VERHÄLTNIS',
+    quickRisk: 'SCHNELLE RISIKO-AUSWAHL',
+    lotSizeInfo: 'Berechne deine exakte Lot Size basierend auf deinem Risiko. Gib Entry & Stop Loss ein, um die empfohlene Position zu sehen.',
+    enterEntryAndSL: 'Gib Entry Preis und Stop Loss ein, um deine Lot Size zu berechnen',
+    minRRWarning: 'ZNPCV empfiehlt mindestens 1:2 R:R Verhältnis',
+    goodRR: 'Gutes Risk:Reward Verhältnis!',
+    tradeLevels: 'TRADE LEVELS',
+    
+    // Checklist specific
+    assetDirection: 'ASSET & RICHTUNG',
+    selectPairDirection: 'Wähle dein Handelspaar und die Trade-Richtung',
+    goldenRules: 'ZNPCV GOLDENE REGELN',
+    longBuyRule: 'Wir kaufen IM AOI oder ÜBER dem AOI (Support)',
+    shortSellRule: 'Wir verkaufen IM AOI oder UNTER dem AOI (Resistance)',
+    neverBottomTop: 'NIE AM BODEN VERKAUFEN! NIE AM TOP KAUFEN!',
+    selectDirection: 'WÄHLE DEINE RICHTUNG',
+    buyInAoi: 'Kaufen im/über AOI',
+    sellInAoi: 'Verkaufen im/unter AOI',
+    weeklyAnalysis: 'WEEKLY ANALYSE',
+    weeklyConfirm: 'Weekly Timeframe Confirmations (max 60%)',
+    weeklyScore: 'WEEKLY SCORE',
+    atAoiRejected: 'AT AOI / REJECTED',
+    atAoiDesc: 'Preis ist am AOI ODER Preis lehnt AOI ab',
+    touchingEma: 'TOUCHING / REJECTING EMA',
+    touchingEmaDesc: 'Kerzen berühren ODER lehnen den EMA ab',
+    candlestickRejection: 'CANDLESTICK REJECTION',
+    candlestickDesc: 'Kerze zeigt klare Ablehnung (Pinbar, Doji, Hammer)',
+    rejectionPsp: 'REJECTION FROM PSP',
+    rejectionPspDesc: 'Ablehnung vom Previous Structure Point',
+    roundLevel: 'ROUND PSYCH LEVEL',
+    roundLevelDesc: 'Preis ist an ODER lehnt runde Zahl ab',
+    swingHighLow: 'SWING HIGH / SWING LOW',
+    swingDesc: 'Preis ist bei Swing High ODER Swing Low angekommen',
+    patternWeekly: 'PATTERN (WEEKLY)',
+    patternDesc: 'Double Top/Bottom, Normal/Inverted H&S',
+    dailyAnalysis: 'DAILY ANALYSE',
+    dailyConfirm: 'Daily Timeframe Confirmations (max 60%)',
+    dailyScore: 'DAILY SCORE',
+    h4Analysis: '4H ANALYSE',
+    h4Confirm: 'Lower Timeframe Confirmation (max 35%)',
+    h4Score: '4H SCORE',
+    entryChecklist: 'ENTRY CHECKLIST',
+    entryConfirm: 'Entry Confirmations (max 25%)',
+    entryTimeframe: 'ENTRY TIMEFRAME',
+    entryTimeframeDesc: '30 Minuten bis 1 Stunde (30min - 1H)',
+    entryScoreLabel: 'ENTRY SCORE',
+    mssShift: 'MSS - MARKET STRUCTURE SHIFT',
+    mssDesc: 'Shift of Structure / Marktstruktur hat gewechselt (30min-1hr)',
+    engulfingCandle: 'ENGULFING CANDLESTICK',
+    engulfingDesc: 'Engulfing Kerze nach Pullback sichtbar (Reversal Confirmation)',
+    patternIfAny: 'PATTERN (IF THERE IS ONE)',
+    patternIfAnyDesc: 'Falls ein Pattern auf Entry TF sichtbar ist',
+    entryTrigger: 'ENTRY TRIGGER TYP',
+    pinbarRejection: 'PINBAR REJECTION',
+    engulfing: 'ENGULFING',
+    riskManagementTitle: 'RISK MANAGEMENT',
+    riskManagementSubtitle: 'Position Sizing & Lot Size Calculator',
+    finalCheckTitle: 'FINAL CHECK',
+    finalCheckSubtitle: 'Letzte Bestätigung vor dem Trade',
+    confirmRule: 'BESTÄTIGE DIE ZNPCV REGEL',
+    buyInAboveAoi: 'ICH KAUFE IM ODER ÜBER DEM AOI',
+    notBuyResistance: 'Ich kaufe NICHT am Widerstand / Top',
+    sellInBelowAoi: 'ICH VERKAUFE IM ODER UNTER DEM AOI',
+    notSellSupport: 'Ich verkaufe NICHT an der Unterstützung / Boden',
+    selectDirFirst: 'Wähle zuerst eine Richtung im ersten Schritt',
+    tradeSummary: 'TRADE ZUSAMMENFASSUNG',
+    notesOptional: 'NOTIZEN (OPTIONAL)',
+    notesPlaceholderLong: 'Trade Notizen, Beobachtungen...',
+    readyToTradeLabel: 'BEREIT ZUM HANDELN',
+    notRecommended: 'ZNPCV empfiehlt NICHT zu traden (min. 85%)',
+    pointsBreakdown: 'PUNKTE BREAKDOWN',
+    total: 'GESAMT',
+    saveTrade: 'TRADE SPEICHERN',
+    warningScore: 'Dein Score ist unter 85%. Nach ZNPCV Standard solltest du diesen Trade NICHT eingehen.',
+    doNotEnter: 'TRADE NICHT EINGEHEN',
+    saveAnyway: 'Trotzdem speichern',
+    
+    // Pattern names
+    dblTop: 'DBL TOP',
+    dblBtm: 'DBL BTM',
+    hs: 'H&S',
+    invHs: 'INV H&S',
+    none: 'KEIN',
   },
   en: {
     // Header
@@ -346,6 +456,116 @@ const translations = {
     warningButton: 'DO NOT ENTER TRADE',
     proceedAnyway: 'Proceed anyway',
     aPlusTradeOnly: 'A+++ TRADES ONLY',
+    
+    // Additional translations
+    features: 'FEATURES',
+    featuresDesc: 'Professional Trading Tools',
+    znpcvStandard: 'ZNPCV STANDARD',
+    stepChecklist: 'STEP CHECKLIST',
+    chartPatterns: 'CHART PATTERNS',
+    tradingTools: 'THE ULTIMATE TRADING TOOL',
+    philosophy: 'ZNPCV PHILOSOPHY',
+    disciplineQuote: 'Discipline beats talent. Every. Single. Day.',
+    
+    // Risk Management
+    accountSize: 'ACCOUNT SIZE',
+    riskPercent: 'RISK %',
+    entryPrice: 'ENTRY PRICE',
+    stopLoss: 'STOP LOSS',
+    takeProfit: 'TAKE PROFIT',
+    lotSizeCalc: 'LOT SIZE CALCULATOR',
+    recommendedLotSize: 'RECOMMENDED LOT SIZE',
+    standardLots: 'Standard Lots',
+    miniLots: 'MINI LOTS',
+    microLots: 'MICRO LOTS',
+    units: 'UNITS',
+    riskAmount: 'RISK $',
+    slPips: 'SL PIPS',
+    tpPips: 'TP PIPS',
+    potentialProfit: 'POTENTIAL PROFIT',
+    rrRatio: 'R:R RATIO',
+    quickRisk: 'QUICK RISK SELECTION',
+    lotSizeInfo: 'Calculate your exact lot size based on your risk. Enter Entry & Stop Loss to see the recommended position.',
+    enterEntryAndSL: 'Enter Entry Price and Stop Loss to calculate your Lot Size',
+    minRRWarning: 'ZNPCV recommends at least 1:2 R:R ratio',
+    goodRR: 'Good Risk:Reward ratio!',
+    tradeLevels: 'TRADE LEVELS',
+    
+    // Checklist specific
+    assetDirection: 'ASSET & DIRECTION',
+    selectPairDirection: 'Select your trading pair and trade direction',
+    goldenRules: 'ZNPCV GOLDEN RULES',
+    longBuyRule: 'We buy IN the AOI or ABOVE the AOI (Support)',
+    shortSellRule: 'We sell IN the AOI or BELOW the AOI (Resistance)',
+    neverBottomTop: 'NEVER SELL AT THE BOTTOM! NEVER BUY AT THE TOP!',
+    selectDirection: 'SELECT YOUR DIRECTION',
+    buyInAoi: 'Buy in/above AOI',
+    sellInAoi: 'Sell in/below AOI',
+    weeklyAnalysis: 'WEEKLY ANALYSIS',
+    weeklyConfirm: 'Weekly Timeframe Confirmations (max 60%)',
+    weeklyScore: 'WEEKLY SCORE',
+    atAoiRejected: 'AT AOI / REJECTED',
+    atAoiDesc: 'Price is at AOI OR Price rejects AOI',
+    touchingEma: 'TOUCHING / REJECTING EMA',
+    touchingEmaDesc: 'Candles touch OR reject the EMA',
+    candlestickRejection: 'CANDLESTICK REJECTION',
+    candlestickDesc: 'Candle shows clear rejection (Pinbar, Doji, Hammer)',
+    rejectionPsp: 'REJECTION FROM PSP',
+    rejectionPspDesc: 'Rejection from Previous Structure Point',
+    roundLevel: 'ROUND PSYCH LEVEL',
+    roundLevelDesc: 'Price is at OR rejects round number',
+    swingHighLow: 'SWING HIGH / SWING LOW',
+    swingDesc: 'Price has reached Swing High OR Swing Low',
+    patternWeekly: 'PATTERN (WEEKLY)',
+    patternDesc: 'Double Top/Bottom, Normal/Inverted H&S',
+    dailyAnalysis: 'DAILY ANALYSIS',
+    dailyConfirm: 'Daily Timeframe Confirmations (max 60%)',
+    dailyScore: 'DAILY SCORE',
+    h4Analysis: '4H ANALYSIS',
+    h4Confirm: 'Lower Timeframe Confirmation (max 35%)',
+    h4Score: '4H SCORE',
+    entryChecklist: 'ENTRY CHECKLIST',
+    entryConfirm: 'Entry Confirmations (max 25%)',
+    entryTimeframe: 'ENTRY TIMEFRAME',
+    entryTimeframeDesc: '30 Minutes to 1 Hour (30min - 1H)',
+    entryScoreLabel: 'ENTRY SCORE',
+    mssShift: 'MSS - MARKET STRUCTURE SHIFT',
+    mssDesc: 'Shift of Structure / Market structure has shifted (30min-1hr)',
+    engulfingCandle: 'ENGULFING CANDLESTICK',
+    engulfingDesc: 'Engulfing candle visible after pullback (Reversal Confirmation)',
+    patternIfAny: 'PATTERN (IF THERE IS ONE)',
+    patternIfAnyDesc: 'If a pattern is visible on Entry TF',
+    entryTrigger: 'ENTRY TRIGGER TYPE',
+    pinbarRejection: 'PINBAR REJECTION',
+    engulfing: 'ENGULFING',
+    riskManagementTitle: 'RISK MANAGEMENT',
+    riskManagementSubtitle: 'Position Sizing & Lot Size Calculator',
+    finalCheckTitle: 'FINAL CHECK',
+    finalCheckSubtitle: 'Final confirmation before the trade',
+    confirmRule: 'CONFIRM THE ZNPCV RULE',
+    buyInAboveAoi: 'I BUY IN OR ABOVE THE AOI',
+    notBuyResistance: 'I do NOT buy at resistance / top',
+    sellInBelowAoi: 'I SELL IN OR BELOW THE AOI',
+    notSellSupport: 'I do NOT sell at support / bottom',
+    selectDirFirst: 'Select a direction in the first step first',
+    tradeSummary: 'TRADE SUMMARY',
+    notesOptional: 'NOTES (OPTIONAL)',
+    notesPlaceholderLong: 'Trade notes, observations...',
+    readyToTradeLabel: 'READY TO TRADE',
+    notRecommended: 'ZNPCV recommends NOT to trade (min. 85%)',
+    pointsBreakdown: 'POINTS BREAKDOWN',
+    total: 'TOTAL',
+    saveTrade: 'SAVE TRADE',
+    warningScore: 'Your score is below 85%. According to ZNPCV standard, you should NOT enter this trade.',
+    doNotEnter: 'DO NOT ENTER TRADE',
+    saveAnyway: 'Save anyway',
+    
+    // Pattern names
+    dblTop: 'DBL TOP',
+    dblBtm: 'DBL BTM',
+    hs: 'H&S',
+    invHs: 'INV H&S',
+    none: 'NONE',
   },
   fa: {
     // Header
@@ -519,6 +739,116 @@ const translations = {
     warningButton: 'وارد معامله نشوید',
     proceedAnyway: 'به هر حال ادامه دهید',
     aPlusTradeOnly: 'فقط معاملات A+++',
+    
+    // Additional translations
+    features: 'ویژگی‌ها',
+    featuresDesc: 'ابزارهای معاملاتی حرفه‌ای',
+    znpcvStandard: 'استاندارد ZNPCV',
+    stepChecklist: 'چک‌لیست مراحل',
+    chartPatterns: 'الگوهای نموداری',
+    tradingTools: 'ابزار نهایی معاملات',
+    philosophy: 'فلسفه ZNPCV',
+    disciplineQuote: 'انضباط استعداد را شکست می‌دهد. هر. روز.',
+    
+    // Risk Management
+    accountSize: 'اندازه حساب',
+    riskPercent: 'ریسک %',
+    entryPrice: 'قیمت ورود',
+    stopLoss: 'حد ضرر',
+    takeProfit: 'حد سود',
+    lotSizeCalc: 'محاسبه‌گر لات',
+    recommendedLotSize: 'لات پیشنهادی',
+    standardLots: 'لات استاندارد',
+    miniLots: 'مینی لات',
+    microLots: 'میکرو لات',
+    units: 'واحد',
+    riskAmount: 'مقدار ریسک $',
+    slPips: 'پیپ SL',
+    tpPips: 'پیپ TP',
+    potentialProfit: 'سود بالقوه',
+    rrRatio: 'نسبت R:R',
+    quickRisk: 'انتخاب سریع ریسک',
+    lotSizeInfo: 'لات دقیق خود را بر اساس ریسک محاسبه کنید. Entry و Stop Loss را وارد کنید.',
+    enterEntryAndSL: 'قیمت ورود و حد ضرر را وارد کنید تا لات محاسبه شود',
+    minRRWarning: 'ZNPCV حداقل نسبت 1:2 را توصیه می‌کند',
+    goodRR: 'نسبت ریسک به ریوارد خوب!',
+    tradeLevels: 'سطوح معامله',
+    
+    // Checklist specific
+    assetDirection: 'دارایی و جهت',
+    selectPairDirection: 'جفت ارز و جهت معامله را انتخاب کنید',
+    goldenRules: 'قوانین طلایی ZNPCV',
+    longBuyRule: 'ما در AOI یا بالای AOI خرید می‌کنیم (حمایت)',
+    shortSellRule: 'ما در AOI یا زیر AOI می‌فروشیم (مقاومت)',
+    neverBottomTop: 'هرگز در کف نفروشید! هرگز در سقف نخرید!',
+    selectDirection: 'جهت را انتخاب کنید',
+    buyInAoi: 'خرید در/بالای AOI',
+    sellInAoi: 'فروش در/زیر AOI',
+    weeklyAnalysis: 'تحلیل هفتگی',
+    weeklyConfirm: 'تاییدیه‌های تایم‌فریم هفتگی (حداکثر ۶۰٪)',
+    weeklyScore: 'امتیاز هفتگی',
+    atAoiRejected: 'در AOI / رد شده',
+    atAoiDesc: 'قیمت در AOI است یا AOI را رد می‌کند',
+    touchingEma: 'لمس / رد EMA',
+    touchingEmaDesc: 'کندل‌ها EMA را لمس یا رد می‌کنند',
+    candlestickRejection: 'رد کندل',
+    candlestickDesc: 'کندل رد واضح نشان می‌دهد (Pinbar، Doji، Hammer)',
+    rejectionPsp: 'رد از PSP',
+    rejectionPspDesc: 'رد از نقطه ساختار قبلی',
+    roundLevel: 'سطح روانی گرد',
+    roundLevelDesc: 'قیمت در عدد گرد است یا آن را رد می‌کند',
+    swingHighLow: 'سقف / کف سوئینگ',
+    swingDesc: 'قیمت به سقف یا کف سوئینگ رسیده است',
+    patternWeekly: 'الگو (هفتگی)',
+    patternDesc: 'سقف/کف دوقلو، سر و شانه معمولی/معکوس',
+    dailyAnalysis: 'تحلیل روزانه',
+    dailyConfirm: 'تاییدیه‌های تایم‌فریم روزانه (حداکثر ۶۰٪)',
+    dailyScore: 'امتیاز روزانه',
+    h4Analysis: 'تحلیل ۴ ساعته',
+    h4Confirm: 'تاییدیه تایم‌فریم پایین (حداکثر ۳۵٪)',
+    h4Score: 'امتیاز ۴ ساعته',
+    entryChecklist: 'چک‌لیست ورود',
+    entryConfirm: 'تاییدیه‌های ورود (حداکثر ۲۵٪)',
+    entryTimeframe: 'تایم‌فریم ورود',
+    entryTimeframeDesc: '۳۰ دقیقه تا ۱ ساعت',
+    entryScoreLabel: 'امتیاز ورود',
+    mssShift: 'MSS - تغییر ساختار بازار',
+    mssDesc: 'تغییر ساختار / ساختار بازار تغییر کرده است',
+    engulfingCandle: 'کندل انگالفینگ',
+    engulfingDesc: 'کندل انگالفینگ بعد از پولبک (تایید برگشت)',
+    patternIfAny: 'الگو (در صورت وجود)',
+    patternIfAnyDesc: 'اگر الگویی در تایم‌فریم ورود وجود دارد',
+    entryTrigger: 'نوع تریگر ورود',
+    pinbarRejection: 'رد پین‌بار',
+    engulfing: 'انگالفینگ',
+    riskManagementTitle: 'مدیریت ریسک',
+    riskManagementSubtitle: 'اندازه‌گیری پوزیشن و محاسبه‌گر لات',
+    finalCheckTitle: 'بررسی نهایی',
+    finalCheckSubtitle: 'تایید نهایی قبل از معامله',
+    confirmRule: 'قانون ZNPCV را تایید کنید',
+    buyInAboveAoi: 'من در یا بالای AOI می‌خرم',
+    notBuyResistance: 'من در مقاومت / سقف نمی‌خرم',
+    sellInBelowAoi: 'من در یا زیر AOI می‌فروشم',
+    notSellSupport: 'من در حمایت / کف نمی‌فروشم',
+    selectDirFirst: 'ابتدا جهت را در مرحله اول انتخاب کنید',
+    tradeSummary: 'خلاصه معامله',
+    notesOptional: 'یادداشت‌ها (اختیاری)',
+    notesPlaceholderLong: 'یادداشت‌های معامله، مشاهدات...',
+    readyToTradeLabel: 'آماده معامله',
+    notRecommended: 'ZNPCV توصیه می‌کند معامله نکنید (حداقل ۸۵٪)',
+    pointsBreakdown: 'تفکیک امتیازات',
+    total: 'مجموع',
+    saveTrade: 'ذخیره معامله',
+    warningScore: 'امتیاز شما زیر ۸۵٪ است. طبق استاندارد ZNPCV نباید وارد این معامله شوید.',
+    doNotEnter: 'وارد معامله نشوید',
+    saveAnyway: 'به هر حال ذخیره کنید',
+    
+    // Pattern names
+    dblTop: 'سقف دوقلو',
+    dblBtm: 'کف دوقلو',
+    hs: 'سر و شانه',
+    invHs: 'سر و شانه معکوس',
+    none: 'هیچ',
   }
 };
 
@@ -532,9 +862,20 @@ export function LanguageProvider({ children }) {
     return 'de';
   });
 
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('znpcv_darkmode') !== 'false';
+    }
+    return true;
+  });
+
   useEffect(() => {
     localStorage.setItem('znpcv_language', language);
   }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('znpcv_darkmode', darkMode.toString());
+  }, [darkMode]);
 
   const t = (key) => translations[language][key] || key;
   
@@ -543,11 +884,13 @@ export function LanguageProvider({ children }) {
     const currentIndex = langs.indexOf(language);
     setLanguage(langs[(currentIndex + 1) % langs.length]);
   };
+
+  const toggleDarkMode = () => setDarkMode(!darkMode);
   
   const isRTL = language === 'fa';
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, isRTL }}>
+    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, isRTL, darkMode, setDarkMode, toggleDarkMode }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -562,21 +905,50 @@ export function useLanguage() {
 }
 
 export function LanguageToggle() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, darkMode } = useLanguage();
   
   return (
-    <div className="flex items-center gap-1 bg-zinc-800 rounded-lg p-1">
+    <div className={`flex items-center gap-1 rounded-lg p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
       {['de', 'en', 'fa'].map((lang) => (
         <button
           key={lang}
           onClick={() => setLanguage(lang)}
           className={`px-2 py-1 text-xs tracking-wider rounded transition-colors ${
-            language === lang ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'
+            language === lang 
+              ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
+              : darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
           }`}
         >
           {lang.toUpperCase()}
         </button>
       ))}
     </div>
+  );
+}
+
+export function DarkModeToggle() {
+  const { darkMode, toggleDarkMode } = useLanguage();
+  
+  return (
+    <button
+      onClick={toggleDarkMode}
+      className={`p-2 rounded-lg transition-colors ${
+        darkMode 
+          ? 'bg-zinc-800 text-yellow-400 hover:bg-zinc-700' 
+          : 'bg-zinc-200 text-zinc-700 hover:bg-zinc-300'
+      }`}
+      title={darkMode ? 'Light Mode' : 'Dark Mode'}
+    >
+      {darkMode ? (
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+      )}
+    </button>
   );
 }
