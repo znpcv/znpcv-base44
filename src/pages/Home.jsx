@@ -317,9 +317,9 @@ export default function HomePage() {
             {/* Brand & Description */}
             <div className="md:col-span-4">
               <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0ab1f025f_schwa.png" 
                 alt="ZNPCV" 
-                className={`h-12 w-auto mb-4 ${darkMode ? 'invert' : ''}`}
+                className={`h-16 w-auto mb-4 ${darkMode ? '' : 'invert'}`}
               />
               <p className={`${theme.textMuted} text-sm font-sans leading-relaxed mb-5`}>
                 {t('footerDesc')}
@@ -405,9 +405,9 @@ export default function HomePage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0ab1f025f_schwa.png" 
                   alt="ZNPCV" 
-                  className={`h-6 w-auto opacity-50 ${darkMode ? 'invert' : ''}`}
+                  className={`h-8 w-auto opacity-50 ${darkMode ? '' : 'invert'}`}
                 />
                 <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
                 <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>

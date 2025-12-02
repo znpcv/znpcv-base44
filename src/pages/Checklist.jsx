@@ -777,7 +777,16 @@ export default function ChecklistPage() {
                 </div>
               </div>
 
-              <TradingQuote variant="minimal" />
+              {/* ZNPCV Logo */}
+            <div className="flex justify-center my-8">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0ab1f025f_schwa.png" 
+                alt="ZNPCV" 
+                className={`h-24 w-auto opacity-30 ${darkMode ? '' : 'invert'}`}
+              />
+            </div>
+
+            <TradingQuote variant="minimal" />
             </motion.div>
           )}
         </AnimatePresence>

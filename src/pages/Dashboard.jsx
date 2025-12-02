@@ -356,7 +356,7 @@ export default function DashboardPage() {
         {/* Footer */}
         <footer className={`mt-16 pt-8 border-t ${theme.border}`}>
           <div className="flex items-center justify-between">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className={`h-10 w-auto opacity-50 ${darkMode ? 'invert' : ''}`} />
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0ab1f025f_schwa.png" alt="ZNPCV" className={`h-12 w-auto opacity-50 ${darkMode ? '' : 'invert'}`} />
             <p className={`${theme.textDimmed} text-sm tracking-widest`}>WWW.ZNPCV.COM</p>
           </div>
         </footer>
