@@ -5,8 +5,8 @@ import { TrendingUp, TrendingDown, RefreshCw, Activity, AlertCircle } from 'luci
 import { cn } from "@/lib/utils";
 import { useLanguage } from '@/components/LanguageContext';
 
-export default function LivePriceTracker({ pair, onPriceUpdate }) {
-  const { darkMode } = useLanguage();
+export default function LivePriceTracker({ pair, direction, accountSize, riskPercent, stopLoss, takeProfit, onPriceUpdate, onCalculation }) {
+  const { darkMode, t } = useLanguage();
   const [priceData, setPriceData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -61,11 +61,120 @@ The data MUST be from OANDA - the world's most trusted Forex data source used by
       if (onPriceUpdate && result.current_price) {
         onPriceUpdate(result.current_price);
       }
+
+      // Calculate lot size with live price
+      if (result.current_price && accountSize && riskPercent && stopLoss) {
+        const calc = calculateLotSize(result.current_price, result.bid, result.ask);
+        if (onCalculation) {
+          onCalculation(calc);
+        }
+      }
     } catch (err) {
       setError('OANDA Daten konnten nicht geladen werden');
     } finally {
       setLoading(false);
     }
+  };
+
+  // Professional Lot Size Calculator
+  const calculateLotSize = (currentPrice, bid, ask) => {
+    const entry = currentPrice;
+    const sl = parseFloat(stopLoss) || 0;
+    const tp = parseFloat(takeProfit) || 0;
+    const account = parseFloat(accountSize) || 0;
+    const riskPct = parseFloat(riskPercent) || 1;
+    
+    if (!entry || !sl || !account) return null;
+    
+    const isLong = direction === 'long';
+    const slDistance = isLong ? entry - sl : sl - entry;
+    const tpDistance = tp ? (isLong ? tp - entry : entry - tp) : 0;
+    
+    if (slDistance <= 0) return null;
+    
+    // Determine pair characteristics
+    const p = pair?.toUpperCase() || '';
+    const isJPY = p.includes('JPY');
+    const isGold = p.includes('XAU') || p.includes('GOLD');
+    const isCrypto = p.includes('BTC') || p.includes('ETH');
+    const isIndex = p.includes('US30') || p.includes('SPX') || p.includes('NAS') || p.includes('DAX');
+    
+    // Pip value calculation based on pair type
+    let pipMultiplier, pipValue, contractSize;
+    
+    if (isJPY) {
+      pipMultiplier = 100; // 0.01 = 1 pip
+      pipValue = 1000 / entry; // ~$9.26 per pip for USD/JPY at 108
+      contractSize = 100000;
+    } else if (isGold) {
+      pipMultiplier = 10; // 0.1 = 1 pip for gold
+      pipValue = 10; // $10 per pip for 1 lot
+      contractSize = 100;
+    } else if (isCrypto) {
+      pipMultiplier = 1;
+      pipValue = 1;
+      contractSize = 1;
+    } else if (isIndex) {
+      pipMultiplier = 1;
+      pipValue = 1;
+      contractSize = 1;
+    } else {
+      // Standard Forex pairs
+      pipMultiplier = 10000; // 0.0001 = 1 pip
+      pipValue = 10; // $10 per pip for 1 standard lot (EUR/USD, GBP/USD, etc.)
+      contractSize = 100000;
+    }
+    
+    const slPips = Math.abs(entry - sl) * pipMultiplier;
+    const tpPips = tp ? Math.abs(tp - entry) * pipMultiplier : 0;
+    
+    // Risk amount in account currency (USD assumed)
+    const riskAmount = account * (riskPct / 100);
+    
+    // Lot size calculation: Lot Size = Risk Amount / (SL Pips × Pip Value)
+    const lotSize = riskAmount / (slPips * pipValue);
+    
+    // Position sizes
+    const standardLots = lotSize;
+    const miniLots = lotSize * 10;
+    const microLots = lotSize * 100;
+    const units = Math.round(lotSize * contractSize);
+    
+    // R:R calculation
+    const rr = tpDistance > 0 ? tpDistance / slDistance : 0;
+    const potentialProfit = riskAmount * rr;
+    
+    // Margin requirement (approximate, assuming 1:100 leverage)
+    const marginRequired = (units * entry) / 100;
+    
+    // Distance from current price
+    const distanceToSL = Math.abs(entry - sl);
+    const distanceToTP = tp ? Math.abs(tp - entry) : 0;
+    const slPercent = (distanceToSL / entry) * 100;
+    const tpPercent = tp ? (distanceToTP / entry) * 100 : 0;
+
+    return {
+      currentPrice: entry,
+      bid,
+      ask,
+      spread: ask && bid ? ((ask - bid) * pipMultiplier).toFixed(1) : null,
+      slPips: slPips.toFixed(1),
+      tpPips: tpPips.toFixed(1),
+      riskAmount: riskAmount.toFixed(2),
+      potentialProfit: potentialProfit.toFixed(2),
+      rr: rr.toFixed(2),
+      standardLots: standardLots.toFixed(2),
+      miniLots: miniLots.toFixed(2),
+      microLots: microLots.toFixed(0),
+      units,
+      marginRequired: marginRequired.toFixed(2),
+      slPercent: slPercent.toFixed(2),
+      tpPercent: tpPercent.toFixed(2),
+      pipValue: pipValue.toFixed(2),
+      isValid: slDistance > 0,
+      direction,
+      pair
+    };
   };
 
   useEffect(() => {
@@ -127,6 +236,11 @@ The data MUST be from OANDA - the world's most trusted Forex data source used by
 
   const isPositive = (priceData.change_percent || 0) >= 0;
   const spread = priceData.spread || (priceData.ask && priceData.bid ? ((priceData.ask - priceData.bid) * (pair.includes('JPY') ? 100 : 10000)).toFixed(1) : null);
+  
+  // Calculate lot size with current data
+  const liveCalc = priceData.current_price && accountSize && riskPercent && stopLoss 
+    ? calculateLotSize(priceData.current_price, priceData.bid, priceData.ask) 
+    : null;
 
   return (
     <motion.div 
@@ -196,6 +310,84 @@ The data MUST be from OANDA - the world's most trusted Forex data source used by
             <div className={`text-[10px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>24H TIEF</div>
             <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{priceData.low_24h?.toFixed(decimals) || '—'}</div>
           </div>
+        </div>
+      )}
+
+      {/* Live Lot Size Calculator */}
+      {liveCalc && liveCalc.isValid && (
+        <div className={`rounded-xl p-4 space-y-3 ${darkMode ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 border border-emerald-500/30' : 'bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20'}`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-emerald-500" />
+              <span className={`font-bold tracking-widest text-xs ${darkMode ? 'text-white' : 'text-black'}`}>LIVE LOT SIZE</span>
+            </div>
+            <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${direction === 'long' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}`}>
+              {direction?.toUpperCase()}
+            </div>
+          </div>
+          
+          {/* Main Lot Size */}
+          <div className={`text-center p-4 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-white/80'}`}>
+            <div className={`text-[10px] tracking-widest mb-1 ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>EMPFOHLENE LOT SIZE</div>
+            <div className={`text-4xl font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{liveCalc.standardLots}</div>
+            <div className={`text-xs ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>Standard Lots ({liveCalc.units.toLocaleString()} Units)</div>
+          </div>
+          
+          {/* Lot Sizes Grid */}
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>MINI</div>
+              <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{liveCalc.miniLots}</div>
+            </div>
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>MICRO</div>
+              <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{liveCalc.microLots}</div>
+            </div>
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>MARGIN</div>
+              <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-black'}`}>${liveCalc.marginRequired}</div>
+            </div>
+          </div>
+          
+          {/* Risk/Reward Details */}
+          <div className="grid grid-cols-4 gap-1.5 text-center">
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>RISIKO</div>
+              <div className="text-sm font-bold text-red-400">${liveCalc.riskAmount}</div>
+            </div>
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>SL</div>
+              <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-black'}`}>{liveCalc.slPips} pips</div>
+            </div>
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>TP</div>
+              <div className="text-sm font-bold text-emerald-400">{liveCalc.tpPips || '—'} pips</div>
+            </div>
+            <div className={`p-2 rounded-lg ${darkMode ? 'bg-black/20' : 'bg-white/60'}`}>
+              <div className={`text-[9px] ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>R:R</div>
+              <div className={cn("text-sm font-bold", parseFloat(liveCalc.rr) >= 2 ? "text-emerald-400" : parseFloat(liveCalc.rr) >= 1 ? "text-yellow-500" : "text-red-500")}>
+                1:{liveCalc.rr}
+              </div>
+            </div>
+          </div>
+          
+          {/* Potential Profit */}
+          {parseFloat(liveCalc.rr) > 0 && (
+            <div className="flex items-center justify-between p-3 bg-emerald-500/20 border border-emerald-500/30 rounded-lg">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-emerald-400" />
+                <span className="text-emerald-400 text-xs font-bold">POTENZIELLER GEWINN</span>
+              </div>
+              <span className="text-emerald-400 text-lg font-bold">${liveCalc.potentialProfit}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Show hint when missing data */}
+      {priceData && (!stopLoss || !accountSize) && (
+        <div className={`p-3 rounded-lg text-center text-xs ${darkMode ? 'bg-zinc-900/50 text-zinc-500' : 'bg-zinc-200/50 text-zinc-600'}`}>
+          Gib Account Size, Stop Loss und Risk % ein für Live Lot Size Berechnung
         </div>
       )}
 

@@ -620,10 +620,15 @@ export default function ChecklistPage() {
             <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
               
-              {/* Live Price Tracker */}
+              {/* Live Price Tracker with Lot Calculator */}
               {checklist.pair && (
                 <LivePriceTracker 
-                  pair={checklist.pair} 
+                  pair={checklist.pair}
+                  direction={checklist.direction}
+                  accountSize={checklist.account_size}
+                  riskPercent={checklist.risk_percent}
+                  stopLoss={checklist.stop_loss}
+                  takeProfit={checklist.take_profit}
                   onPriceUpdate={handleLivePriceUpdate}
                 />
               )}
