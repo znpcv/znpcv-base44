@@ -285,9 +285,9 @@ export default function ChecklistPage() {
             
             <button onClick={() => navigate(createPageUrl('Home'))}>
               <img src={darkMode 
-              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
-            } alt="ZNPCV" className="h-6 sm:h-8 w-auto cursor-pointer hover:opacity-80" />
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+            } alt="ZNPCV" className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer hover:opacity-80" />
             </button>
 
             <div className="flex items-center gap-1 sm:gap-2">
@@ -781,14 +781,14 @@ export default function ChecklistPage() {
               </div>
 
               {/* ZNPCV Logo */}
-            <div className="flex justify-center my-8">
+            <div className="flex justify-center items-center my-8">
               <img 
                 src={darkMode 
-                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-24 w-auto opacity-30"
+                className="h-20 sm:h-24 md:h-28 w-auto opacity-30"
               />
             </div>
 

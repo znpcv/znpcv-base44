@@ -97,11 +97,11 @@ export default function HomePage() {
             <button onClick={() => navigate(createPageUrl('Home'))}>
               <img 
                 src={darkMode 
-                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </button>
             
@@ -321,11 +321,11 @@ export default function HomePage() {
             <div className="md:col-span-4">
               <img 
                 src={darkMode 
-                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-16 w-auto mb-4"
+                className="h-16 sm:h-20 md:h-24 w-auto mb-4 mx-auto"
               />
               <p className={`${theme.textMuted} text-sm font-sans leading-relaxed mb-5`}>
                 {t('footerDesc')}
@@ -412,11 +412,11 @@ export default function HomePage() {
               <div className="flex items-center gap-4">
                 <img 
                   src={darkMode 
-                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
+                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
                   alt="ZNPCV" 
-                  className="h-8 w-auto opacity-50"
+                  className="h-8 sm:h-10 w-auto opacity-50"
                 />
                 <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
                 <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>

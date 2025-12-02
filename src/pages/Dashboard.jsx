@@ -120,9 +120,9 @@ export default function DashboardPage() {
               </button>
               <button onClick={() => navigate(createPageUrl('Home'))}>
                 <img src={darkMode 
-              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
-            } alt="ZNPCV" className="h-12 w-auto cursor-pointer hover:opacity-80" />
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+            } alt="ZNPCV" className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80" />
               </button>
             </div>
             <div className="flex items-center gap-3">
@@ -360,9 +360,9 @@ export default function DashboardPage() {
         <footer className={`mt-16 pt-8 border-t ${theme.border}`}>
           <div className="flex items-center justify-between">
             <img src={darkMode 
-              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
-              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
-            } alt="ZNPCV" className="h-12 w-auto opacity-50" />
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+            } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 w-auto opacity-50 mx-auto" />
             <p className={`${theme.textDimmed} text-sm tracking-widest`}>WWW.ZNPCV.COM</p>
           </div>
         </footer>
