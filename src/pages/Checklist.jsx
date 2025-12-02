@@ -10,14 +10,14 @@ import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
 import AssetSelector from '@/components/AssetSelector';
-import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
+import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
 export default function ChecklistPage() {
   const navigate = useNavigate();
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, darkMode } = useLanguage();
   const [searchParams] = useSearchParams();
   const checklistId = searchParams.get('id');
   
@@ -243,7 +243,7 @@ export default function ChecklistPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
           <div className="w-16 h-16 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <div className="text-white text-xl tracking-widest">LADEN...</div>
+          <div className="text-white text-xl tracking-widest">{t('loading')}</div>
         </motion.div>
       </div>
     );
@@ -269,6 +269,7 @@ export default function ChecklistPage() {
             </button>
 
             <div className="flex items-center gap-1 sm:gap-2">
+              <DarkModeToggle />
               <LanguageToggle />
             </div>
           </div>
@@ -322,7 +323,7 @@ export default function ChecklistPage() {
           {/* STEP 0: Asset & Direction */}
           {currentStep === 0 && (
             <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
-              <StepHeader number="01" title="ASSET & RICHTUNG" subtitle="Wähle dein Handelspaar und die Trade-Richtung" />
+              <StepHeader number="01" title={t('assetDirection')} subtitle={t('selectPairDirection')} />
               
               <AssetSelector selectedPair={checklist.pair} onSelect={(pair) => update('pair', pair)} />
               
@@ -333,31 +334,31 @@ export default function ChecklistPage() {
                   <div className="p-5 bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl">
                     <div className="flex items-center gap-3 mb-4">
                       <Shield className="w-6 h-6 text-white" />
-                      <span className="text-white font-bold tracking-widest">ZNPCV GOLDENE REGELN</span>
+                      <span className="text-white font-bold tracking-widest">{t('goldenRules')}</span>
                     </div>
                     <div className="space-y-3 text-sm font-sans">
                       <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
                         <TrendingUp className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <span className="text-emerald-400 font-bold">LONG / KAUFEN:</span>
-                          <span className="text-zinc-300 ml-2">Wir kaufen IM AOI oder ÜBER dem AOI (Support)</span>
+                          <span className="text-emerald-400 font-bold">LONG:</span>
+                          <span className="text-zinc-300 ml-2">{t('longBuyRule')}</span>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
                         <TrendingDown className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <span className="text-red-400 font-bold">SHORT / VERKAUFEN:</span>
-                          <span className="text-zinc-300 ml-2">Wir verkaufen IM AOI oder UNTER dem AOI (Resistance)</span>
+                          <span className="text-red-400 font-bold">SHORT:</span>
+                          <span className="text-zinc-300 ml-2">{t('shortSellRule')}</span>
                         </div>
                       </div>
                       <div className="p-3 bg-white/5 border border-white/10 rounded-xl text-center">
-                        <span className="text-white font-bold tracking-wider">⚠️ NIE AM BODEN VERKAUFEN! NIE AM TOP KAUFEN! ⚠️</span>
+                        <span className="text-white font-bold tracking-wider">⚠️ {t('neverBottomTop')} ⚠️</span>
                       </div>
                     </div>
                   </div>
                   
                   {/* Direction Selection */}
-                  <label className="text-zinc-500 text-sm tracking-widest block">WÄHLE DEINE RICHTUNG</label>
+                  <label className="text-zinc-500 text-sm tracking-widest block">{t('selectDirection')}</label>
                   <div className="grid grid-cols-2 gap-4">
                     <button onClick={() => update('direction', 'long')}
                       className={cn("p-6 border-2 rounded-2xl text-center transition-all",
@@ -367,7 +368,7 @@ export default function ChecklistPage() {
                       <TrendingUp className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'long' ? "text-white" : "text-emerald-500")} />
                       <div className={cn("text-xl tracking-wider font-bold", checklist.direction === 'long' ? "text-white" : "text-white")}>LONG</div>
                       <div className={cn("text-sm mt-1", checklist.direction === 'long' ? "text-emerald-100" : "text-zinc-500")}>
-                        Kaufen im/über AOI
+                        {t('buyInAoi')}
                       </div>
                     </button>
                     <button onClick={() => update('direction', 'short')}
@@ -378,7 +379,7 @@ export default function ChecklistPage() {
                       <TrendingDown className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'short' ? "text-white" : "text-red-500")} />
                       <div className={cn("text-xl tracking-wider font-bold", checklist.direction === 'short' ? "text-white" : "text-white")}>SHORT</div>
                       <div className={cn("text-sm mt-1", checklist.direction === 'short' ? "text-red-100" : "text-zinc-500")}>
-                        Verkaufen im/unter AOI
+                        {t('sellInAoi')}
                       </div>
                     </button>
                   </div>
@@ -390,11 +391,11 @@ export default function ChecklistPage() {
           {/* STEP 1: Weekly */}
           {currentStep === 1 && (
             <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="02" title="WEEKLY ANALYSE" subtitle="Weekly Timeframe Confirmations (max 60%)" />
+              <StepHeader number="02" title={t('weeklyAnalysis')} subtitle={t('weeklyConfirm')} />
               
               {/* Current Score */}
               <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-xs sm:text-sm">WEEKLY SCORE</span>
+                <span className="text-zinc-500 text-xs sm:text-sm">{t('weeklyScore')}</span>
                 <div className="flex items-center gap-2">
                   <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-emerald-500" : weeklyScore >= 25 ? "text-yellow-500" : "text-white")}>{weeklyScore}</span>
                   <span className="text-zinc-600 text-sm">/60%</span>
@@ -402,35 +403,35 @@ export default function ChecklistPage() {
               </div>
               
               <ChecklistItem checked={checklist.w_at_aoi} onChange={() => update('w_at_aoi', !checklist.w_at_aoi)} 
-                label="AT AOI / REJECTED" score={10} 
-                description="Preis ist am AOI ODER Preis lehnt AOI ab" />
+                label={t('atAoiRejected')} score={10} 
+                description={t('atAoiDesc')} />
               
               <ChecklistItem checked={checklist.w_ema_touch} onChange={() => update('w_ema_touch', !checklist.w_ema_touch)} 
-                label="TOUCHING / REJECTING EMA" score={5} 
-                description="Kerzen berühren ODER lehnen den EMA ab" />
+                label={t('touchingEma')} score={5} 
+                description={t('touchingEmaDesc')} />
               
               <ChecklistItem checked={checklist.w_candlestick} onChange={() => update('w_candlestick', !checklist.w_candlestick)} 
-                label="CANDLESTICK REJECTION" score={10} 
-                description="Kerze zeigt klare Ablehnung (Pinbar, Doji, Hammer)" />
+                label={t('candlestickRejection')} score={10} 
+                description={t('candlestickDesc')} />
               
               <ChecklistItem checked={checklist.w_psp_rejection} onChange={() => update('w_psp_rejection', !checklist.w_psp_rejection)} 
-                label="REJECTION FROM PSP" score={10} 
-                description="Ablehnung vom Previous Structure Point" />
+                label={t('rejectionPsp')} score={10} 
+                description={t('rejectionPspDesc')} />
               
               <ChecklistItem checked={checklist.w_round_level} onChange={() => update('w_round_level', !checklist.w_round_level)} 
-                label="ROUND PSYCH LEVEL" score={5} 
-                description="Preis ist an ODER lehnt runde Zahl ab (z.B. 1.1000)" />
+                label={t('roundLevel')} score={5} 
+                description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={checklist.w_swing} onChange={() => update('w_swing', !checklist.w_swing)} 
-                label="SWING HIGH / SWING LOW" score={10} 
-                description="Preis ist bei Swing High ODER Swing Low angekommen" />
+                label={t('swingHighLow')} score={10} 
+                description={t('swingDesc')} />
               
               <PatternSelector 
                 value={checklist.w_pattern} 
                 onChange={(v) => update('w_pattern', v)} 
                 score={10}
-                label="PATTERN (WEEKLY)"
-                description="Double Top/Bottom, Normal/Inverted H&S"
+                label={t('patternWeekly')}
+                description={t('patternDesc')}
               />
             </motion.div>
           )}
@@ -438,11 +439,11 @@ export default function ChecklistPage() {
           {/* STEP 2: Daily */}
           {currentStep === 2 && (
             <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="03" title="DAILY ANALYSE" subtitle="Daily Timeframe Confirmations (max 60%)" />
+              <StepHeader number="03" title={t('dailyAnalysis')} subtitle={t('dailyConfirm')} />
               
               {/* Current Score */}
               <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-xs sm:text-sm">DAILY SCORE</span>
+                <span className="text-zinc-500 text-xs sm:text-sm">{t('dailyScore')}</span>
                 <div className="flex items-center gap-2">
                   <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-emerald-500" : dailyScore >= 25 ? "text-yellow-500" : "text-white")}>{dailyScore}</span>
                   <span className="text-zinc-600 text-sm">/60%</span>
@@ -450,35 +451,35 @@ export default function ChecklistPage() {
               </div>
               
               <ChecklistItem checked={checklist.d_at_aoi} onChange={() => update('d_at_aoi', !checklist.d_at_aoi)} 
-                label="AT AOI / REJECTED" score={10} 
-                description="Preis ist am AOI ODER Preis lehnt AOI ab" />
+                label={t('atAoiRejected')} score={10} 
+                description={t('atAoiDesc')} />
               
               <ChecklistItem checked={checklist.d_ema_touch} onChange={() => update('d_ema_touch', !checklist.d_ema_touch)} 
-                label="TOUCHING / REJECTING EMA" score={5} 
-                description="Kerzen berühren ODER lehnen den EMA ab" />
+                label={t('touchingEma')} score={5} 
+                description={t('touchingEmaDesc')} />
               
               <ChecklistItem checked={checklist.d_candlestick} onChange={() => update('d_candlestick', !checklist.d_candlestick)} 
-                label="CANDLESTICK REJECTION" score={10} 
-                description="Kerze zeigt klare Ablehnung (Pinbar, Doji, Hammer)" />
+                label={t('candlestickRejection')} score={10} 
+                description={t('candlestickDesc')} />
               
               <ChecklistItem checked={checklist.d_psp_rejection} onChange={() => update('d_psp_rejection', !checklist.d_psp_rejection)} 
-                label="REJECTION FROM PSP" score={10} 
-                description="Ablehnung vom Previous Structure Point" />
+                label={t('rejectionPsp')} score={10} 
+                description={t('rejectionPspDesc')} />
               
               <ChecklistItem checked={checklist.d_round_level} onChange={() => update('d_round_level', !checklist.d_round_level)} 
-                label="ROUND PSYCH LEVEL" score={5} 
-                description="Preis ist an ODER lehnt runde Zahl ab (z.B. 1.1000)" />
+                label={t('roundLevel')} score={5} 
+                description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={checklist.d_swing} onChange={() => update('d_swing', !checklist.d_swing)} 
-                label="SWING HIGH / SWING LOW" score={10} 
-                description="Preis ist bei Swing High ODER Swing Low angekommen" />
+                label={t('swingHighLow')} score={10} 
+                description={t('swingDesc')} />
               
               <PatternSelector 
                 value={checklist.d_pattern} 
                 onChange={(v) => update('d_pattern', v)} 
                 score={10}
                 label="PATTERN (DAILY)"
-                description="Double Top/Bottom, Normal/Inverted H&S"
+                description={t('patternDesc')}
               />
             </motion.div>
           )}
@@ -486,11 +487,11 @@ export default function ChecklistPage() {
           {/* STEP 3: 4H */}
           {currentStep === 3 && (
             <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="04" title="4H ANALYSE" subtitle="Lower Timeframe Confirmation (max 35%)" />
+              <StepHeader number="04" title={t('h4Analysis')} subtitle={t('h4Confirm')} />
               
               {/* Current Score */}
               <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-xs sm:text-sm">4H SCORE</span>
+                <span className="text-zinc-500 text-xs sm:text-sm">{t('h4Score')}</span>
                 <div className="flex items-center gap-2">
                   <span className={cn("text-xl sm:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : "text-white")}>{h4Score}</span>
                   <span className="text-zinc-600 text-sm">/35%</span>
@@ -498,20 +499,20 @@ export default function ChecklistPage() {
               </div>
               
               <ChecklistItem checked={checklist.h4_ema_touch} onChange={() => update('h4_ema_touch', !checklist.h4_ema_touch)} 
-                label="TOUCHING / REJECTING EMA" score={5} 
-                description="Preis berührt ODER lehnt den EMA auf 4H ab" />
+                label={t('touchingEma')} score={5} 
+                description={t('touchingEmaDesc')} />
               
               <ChecklistItem checked={checklist.h4_candlestick} onChange={() => update('h4_candlestick', !checklist.h4_candlestick)} 
-                label="CANDLESTICK REJECTION" score={10} 
-                description="Klare Ablehnungskerze auf dem 4H Timeframe sichtbar" />
+                label={t('candlestickRejection')} score={10} 
+                description={t('candlestickDesc')} />
               
               <ChecklistItem checked={checklist.h4_psp_rejection} onChange={() => update('h4_psp_rejection', !checklist.h4_psp_rejection)} 
-                label="REJECTION FROM PSP" score={5} 
-                description="Rejection from Previous Structure Point auf 4H" />
+                label={t('rejectionPsp')} score={5} 
+                description={t('rejectionPspDesc')} />
               
               <ChecklistItem checked={checklist.h4_swing} onChange={() => update('h4_swing', !checklist.h4_swing)} 
-                label="SWING HIGH / SWING LOW" score={5} 
-                description="Preis ist bei Swing High ODER Swing Low angekommen" />
+                label={t('swingHighLow')} score={5} 
+                description={t('swingDesc')} />
               
               <PatternSelector 
                 value={checklist.h4_pattern} 
@@ -526,22 +527,22 @@ export default function ChecklistPage() {
           {/* STEP 4: Entry */}
           {currentStep === 4 && (
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="05" title="ENTRY CHECKLIST" subtitle="Entry Confirmations (max 25%)" />
+              <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
               {/* Timeframe Info */}
               <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <div className="flex items-center gap-3">
                   <Target className="w-5 h-5 text-blue-400" />
                   <div>
-                    <div className="text-blue-400 font-bold tracking-wider text-sm">ENTRY TIMEFRAME</div>
-                    <div className="text-zinc-400 text-sm">30 Minuten bis 1 Stunde (30min - 1H)</div>
+                    <div className="text-blue-400 font-bold tracking-wider text-sm">{t('entryTimeframe')}</div>
+                    <div className="text-zinc-400 text-sm">{t('entryTimeframeDesc')}</div>
                   </div>
                 </div>
               </div>
 
               {/* Current Score */}
               <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-sm">ENTRY SCORE</span>
+                <span className="text-zinc-500 text-sm">{t('entryScoreLabel')}</span>
                 <div className="flex items-center gap-2">
                   <span className={cn("text-2xl font-bold", entryScore >= 20 ? "text-emerald-500" : entryScore >= 10 ? "text-yellow-500" : "text-white")}>{entryScore}</span>
                   <span className="text-zinc-600">/25%</span>
@@ -549,24 +550,24 @@ export default function ChecklistPage() {
               </div>
               
               <ChecklistItem checked={checklist.entry_sos} onChange={() => update('entry_sos', !checklist.entry_sos)} 
-                label="MSS - MARKET STRUCTURE SHIFT" score={10} 
-                description="Shift of Structure / Marktstruktur hat gewechselt (30min-1hr)" />
+                label={t('mssShift')} score={10} 
+                description={t('mssDesc')} />
               
               <ChecklistItem checked={checklist.entry_engulfing} onChange={() => update('entry_engulfing', !checklist.entry_engulfing)} 
-                label="ENGULFING CANDLESTICK" score={10} 
-                description="Engulfing Kerze nach Pullback sichtbar (Reversal Confirmation)" />
+                label={t('engulfingCandle')} score={10} 
+                description={t('engulfingDesc')} />
               
               <PatternSelector 
                 value={checklist.entry_pattern} 
                 onChange={(v) => update('entry_pattern', v)} 
                 score={5}
-                label="PATTERN (IF THERE IS ONE)"
-                description="Falls ein Pattern auf Entry TF sichtbar ist"
+                label={t('patternIfAny')}
+                description={t('patternIfAnyDesc')}
               />
               
               {/* Entry Type */}
               <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-950">
-                <label className="text-zinc-500 text-sm tracking-widest mb-4 block">ENTRY TRIGGER TYP</label>
+                <label className="text-zinc-500 text-sm tracking-widest mb-4 block">{t('entryTrigger')}</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button onClick={() => update('entry_type', 'pinbar')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
@@ -574,7 +575,7 @@ export default function ChecklistPage() {
                         ? "bg-white border-white text-black" 
                         : "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white")}>
                     <div className="text-2xl mb-2">📍</div>
-                    <div className="font-bold tracking-wider text-sm">PINBAR REJECTION</div>
+                    <div className="font-bold tracking-wider text-sm">{t('pinbarRejection')}</div>
                   </button>
                   <button onClick={() => update('entry_type', 'engulfing')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
@@ -582,7 +583,7 @@ export default function ChecklistPage() {
                         ? "bg-white border-white text-black" 
                         : "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white")}>
                     <div className="text-2xl mb-2">🕯️</div>
-                    <div className="font-bold tracking-wider text-sm">ENGULFING</div>
+                    <div className="font-bold tracking-wider text-sm">{t('engulfing')}</div>
                   </button>
                 </div>
               </div>
@@ -592,14 +593,14 @@ export default function ChecklistPage() {
           {/* STEP 5: Risk Management */}
           {currentStep === 5 && (
             <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="06" title="RISK MANAGEMENT" subtitle="Position Sizing & Lot Size Calculator" />
+              <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
               
               {/* Info Box */}
               <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <div className="flex items-start gap-2">
                   <Info className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
                   <div className="text-xs text-blue-300 font-sans">
-                    Berechne deine exakte Lot Size basierend auf deinem Risiko. Gib Entry & Stop Loss ein, um die empfohlene Position zu sehen.
+                    {t('lotSizeInfo')}
                   </div>
                 </div>
               </div>
@@ -609,7 +610,7 @@ export default function ChecklistPage() {
                 <div>
                   <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
                     <DollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    ACCOUNT SIZE ($)
+                    {t('accountSize')} ($)
                   </label>
                   <Input type="number" value={checklist.account_size} onChange={(e) => update('account_size', e.target.value)}
                     placeholder="10000" className="bg-zinc-900 border-zinc-800 text-white text-base sm:text-lg h-11 sm:h-12 rounded-xl focus:border-white" />
@@ -617,7 +618,7 @@ export default function ChecklistPage() {
                 <div>
                   <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
                     <Percent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    RISIKO %
+                    {t('riskPercent')}
                   </label>
                   <Input type="number" step="0.1" value={checklist.risk_percent} onChange={(e) => update('risk_percent', e.target.value)}
                     placeholder="1" className="bg-zinc-900 border-zinc-800 text-white text-base sm:text-lg h-11 sm:h-12 rounded-xl focus:border-white" />
@@ -627,7 +628,7 @@ export default function ChecklistPage() {
               {/* Trade Levels */}
               <div className="border border-zinc-800 rounded-2xl p-4 sm:p-5 bg-zinc-950 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-white font-bold tracking-widest text-xs sm:text-sm">TRADE LEVELS</h4>
+                  <h4 className="text-white font-bold tracking-widest text-xs sm:text-sm">{t('tradeLevels')}</h4>
                   {checklist.pair && (
                     <div className="px-2 py-1 bg-zinc-800 rounded-md text-xs text-white font-bold">
                       {checklist.pair}
@@ -663,49 +664,49 @@ export default function ChecklistPage() {
                       <Layers className="w-5 h-5 text-black" />
                     </div>
                     <div>
-                      <span className="font-bold tracking-widest text-sm text-white block">LOT SIZE CALCULATOR</span>
+                      <span className="font-bold tracking-widest text-sm text-white block">{t('lotSizeCalc')}</span>
                       <span className="text-zinc-500 text-xs">Empfohlene Position für dein Risiko</span>
                     </div>
                   </div>
                   
                   {/* Main Lot Size Display */}
                   <div className="bg-white rounded-xl p-4 sm:p-5 text-center">
-                    <div className="text-xs text-zinc-500 mb-1 tracking-widest">EMPFOHLENE LOT SIZE</div>
+                    <div className="text-xs text-zinc-500 mb-1 tracking-widest">{t('recommendedLotSize')}</div>
                     <div className="text-4xl sm:text-5xl font-bold text-black mb-2">{riskCalc.standardLots}</div>
-                    <div className="text-sm text-zinc-600 font-sans">Standard Lots</div>
+                    <div className="text-sm text-zinc-600 font-sans">{t('standardLots')}</div>
                   </div>
                   
                   {/* Alternative Lot Sizes */}
                   <div className="grid grid-cols-3 gap-2">
                     <div className="text-center p-3 bg-zinc-900 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-zinc-500 mb-1">MINI LOTS</div>
+                      <div className="text-[10px] text-zinc-500 mb-1">{t('miniLots')}</div>
                       <div className="text-lg sm:text-xl font-bold text-white">{riskCalc.miniLots}</div>
                       <div className="text-[10px] text-zinc-600">0.1 Lot = 1 Mini</div>
                     </div>
                     <div className="text-center p-3 bg-zinc-900 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-zinc-500 mb-1">MICRO LOTS</div>
+                      <div className="text-[10px] text-zinc-500 mb-1">{t('microLots')}</div>
                       <div className="text-lg sm:text-xl font-bold text-white">{riskCalc.microLots}</div>
                       <div className="text-[10px] text-zinc-600">0.01 Lot = 1 Micro</div>
                     </div>
                     <div className="text-center p-3 bg-zinc-900 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-zinc-500 mb-1">UNITS</div>
+                      <div className="text-[10px] text-zinc-500 mb-1">{t('units')}</div>
                       <div className="text-lg sm:text-xl font-bold text-white">{(parseFloat(riskCalc.standardLots) * 100000).toLocaleString()}</div>
-                      <div className="text-[10px] text-zinc-600">Einheiten</div>
+                      <div className="text-[10px] text-zinc-600">{t('units')}</div>
                     </div>
                   </div>
                   
                   {/* Risk Details */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-zinc-500 mb-0.5">RISIKO $</div>
+                      <div className="text-[10px] text-zinc-500 mb-0.5">{t('riskAmount')}</div>
                       <div className="text-base sm:text-lg font-bold text-red-400">${riskCalc.riskAmount}</div>
                     </div>
                     <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-zinc-500 mb-0.5">SL PIPS</div>
+                      <div className="text-[10px] text-zinc-500 mb-0.5">{t('slPips')}</div>
                       <div className="text-base sm:text-lg font-bold text-zinc-300">{riskCalc.slPips}</div>
                     </div>
                     <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
-                      <div className="text-[10px] text-zinc-500 mb-0.5">TP PIPS</div>
+                      <div className="text-[10px] text-zinc-500 mb-0.5">{t('tpPips')}</div>
                       <div className="text-base sm:text-lg font-bold text-emerald-400">{riskCalc.tpPips || '—'}</div>
                     </div>
                     <div className="text-center p-2.5 sm:p-3 bg-zinc-950 rounded-xl border border-zinc-800">
@@ -723,7 +724,7 @@ export default function ChecklistPage() {
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <TrendingUp className="w-4 h-4 text-emerald-400" />
-                        <span className="text-emerald-400 text-sm font-bold">POTENZIELLER GEWINN</span>
+                        <span className="text-emerald-400 text-sm font-bold">{t('potentialProfit')}</span>
                       </div>
                       <span className="text-emerald-400 text-xl font-bold">${riskCalc.potentialProfit}</span>
                     </div>
@@ -733,14 +734,14 @@ export default function ChecklistPage() {
                   {parseFloat(riskCalc.rr) > 0 && parseFloat(riskCalc.rr) < 2 && (
                     <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
-                      <span className="text-yellow-400 text-xs sm:text-sm">ZNPCV empfiehlt mindestens 1:2 R:R Verhältnis</span>
+                      <span className="text-yellow-400 text-xs sm:text-sm">{t('minRRWarning')}</span>
                     </div>
                   )}
                   
                   {parseFloat(riskCalc.rr) >= 2 && (
                     <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center gap-2">
                       <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                      <span className="text-emerald-400 text-xs sm:text-sm">Gutes Risk:Reward Verhältnis!</span>
+                      <span className="text-emerald-400 text-xs sm:text-sm">{t('goodRR')}</span>
                     </div>
                   )}
                 </motion.div>
@@ -751,14 +752,14 @@ export default function ChecklistPage() {
                 <div className="border border-zinc-800 bg-zinc-950 rounded-2xl p-6 text-center">
                   <Calculator className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
                   <div className="text-zinc-500 text-sm font-sans">
-                    Gib Entry Preis und Stop Loss ein,<br />um deine Lot Size zu berechnen
+                    {t('enterEntryAndSL')}
                   </div>
                 </div>
               )}
 
               {/* Quick Risk Buttons */}
               <div className="border border-zinc-800 rounded-xl p-3 sm:p-4 bg-zinc-950">
-                <label className="text-zinc-500 text-[10px] sm:text-xs tracking-widest mb-2 block">SCHNELLE RISIKO-AUSWAHL</label>
+                <label className="text-zinc-500 text-[10px] sm:text-xs tracking-widest mb-2 block">{t('quickRisk')}</label>
                 <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                   {['0.5', '1', '1.5', '2', '3'].map((risk) => (
                     <button
@@ -782,13 +783,13 @@ export default function ChecklistPage() {
           {/* STEP 6: Final */}
           {currentStep === 6 && (
             <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="07" title="FINAL CHECK" subtitle="Letzte Bestätigung vor dem Trade" />
+              <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
               {/* Final Rule Confirmation */}
               <div className="border-2 border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-5">
                 <div className="flex items-center gap-3 mb-4">
                   <Shield className="w-6 h-6 text-white" />
-                  <span className="text-white font-bold tracking-widest">BESTÄTIGE DIE ZNPCV REGEL</span>
+                  <span className="text-white font-bold tracking-widest">{t('confirmRule')}</span>
                 </div>
                 
                 {checklist.direction === 'long' && (
@@ -803,10 +804,10 @@ export default function ChecklistPage() {
                     </div>
                     <div>
                       <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : "text-white")}>
-                        ICH KAUFE IM ODER ÜBER DEM AOI
+                        {t('buyInAboveAoi')}
                       </div>
                       <div className={cn("text-sm", checklist.confirms_rule ? "text-emerald-100" : "text-zinc-500")}>
-                        Ich kaufe NICHT am Widerstand / Top
+                        {t('notBuyResistance')}
                       </div>
                     </div>
                   </button>
@@ -824,10 +825,10 @@ export default function ChecklistPage() {
                     </div>
                     <div>
                       <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : "text-white")}>
-                        ICH VERKAUFE IM ODER UNTER DEM AOI
+                        {t('sellInBelowAoi')}
                       </div>
                       <div className={cn("text-sm", checklist.confirms_rule ? "text-red-100" : "text-zinc-500")}>
-                        Ich verkaufe NICHT an der Unterstützung / Boden
+                        {t('notSellSupport')}
                       </div>
                     </div>
                   </button>
@@ -835,14 +836,14 @@ export default function ChecklistPage() {
 
                 {!checklist.direction && (
                   <div className="text-zinc-500 text-center py-4 font-sans">
-                    Wähle zuerst eine Richtung im ersten Schritt
+                    {t('selectDirFirst')}
                   </div>
                 )}
               </div>
 
               {/* Trade Summary */}
               <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-950">
-                <h3 className="text-white font-bold tracking-widest mb-4">TRADE ZUSAMMENFASSUNG</h3>
+                <h3 className="text-white font-bold tracking-widest mb-4">{t('tradeSummary')}</h3>
                 
                 <div className="space-y-2">
                   <SummaryRow label="PAAR" value={checklist.pair || '-'} />
@@ -866,8 +867,8 @@ export default function ChecklistPage() {
 
               {/* Notes */}
               <div>
-                <label className="block text-zinc-500 tracking-widest text-sm mb-2">NOTIZEN (OPTIONAL)</label>
-                <Textarea value={checklist.notes} onChange={(e) => update('notes', e.target.value)} placeholder="Trade Notizen, Beobachtungen..."
+                <label className="block text-zinc-500 tracking-widest text-sm mb-2">{t('notesOptional')}</label>
+                <Textarea value={checklist.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
                   className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 min-h-[80px] rounded-xl font-sans focus:border-white" />
               </div>
 
@@ -882,17 +883,17 @@ export default function ChecklistPage() {
                 <div className={cn("text-5xl font-bold mb-1", progress >= 70 ? "text-black" : "text-white")}>{gradeInfo.grade}</div>
                 <div className={cn("text-3xl tracking-widest mb-2", progress >= 70 ? "text-black/80" : "text-white")}>{progress}%</div>
                 {progress >= 85 ? (
-                  <div className={cn("text-sm font-sans", progress >= 70 ? "text-black/60" : "text-white/60")}>✓ BEREIT ZUM HANDELN</div>
+                  <div className={cn("text-sm font-sans", progress >= 70 ? "text-black/60" : "text-white/60")}>✓ {t('readyToTradeLabel')}</div>
                 ) : (
                   <div className="text-sm font-sans text-white/80">
-                    ZNPCV empfiehlt NICHT zu traden (min. 85%)
+                    {t('notRecommended')}
                   </div>
                 )}
               </motion.div>
 
               {/* Score Breakdown */}
               <div className="p-3 sm:p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <div className="text-[10px] sm:text-xs text-zinc-600 tracking-widest mb-2 sm:mb-3 text-center">PUNKTE BREAKDOWN</div>
+                <div className="text-[10px] sm:text-xs text-zinc-600 tracking-widest mb-2 sm:mb-3 text-center">{t('pointsBreakdown')}</div>
                 <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs sm:text-sm">
                   <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
                     <div className="text-zinc-500 text-[10px] sm:text-xs">WEEKLY</div>
@@ -912,7 +913,7 @@ export default function ChecklistPage() {
                   </div>
                 </div>
                 <div className="mt-2 p-1.5 sm:p-2 bg-white text-black rounded-lg text-center font-bold text-sm sm:text-base">
-                  GESAMT: {progress}/180%
+                  {t('total')}: {progress}/180%
                 </div>
               </div>
 
@@ -926,14 +927,14 @@ export default function ChecklistPage() {
           {currentStep > 0 && (
             <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" 
               className="border-zinc-800 text-white hover:bg-zinc-900 hover:text-white rounded-xl tracking-widest px-5 h-12">
-              <ChevronLeft className="w-4 h-4 mr-1" /> ZURÜCK
+              <ChevronLeft className="w-4 h-4 mr-1" /> {t('back')}
             </Button>
           )}
           
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={() => setCurrentStep(prev => prev + 1)} 
               className="flex-1 bg-white hover:bg-zinc-200 text-black rounded-xl tracking-widest text-base h-12 font-bold">
-              WEITER <ChevronRight className="w-4 h-4 ml-1" />
+              {t('next')} <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
             <div className="flex-1 flex gap-2">
@@ -948,7 +949,7 @@ export default function ChecklistPage() {
                   isReady 
                     ? "bg-emerald-500 hover:bg-emerald-600 text-white" 
                     : "bg-zinc-800 hover:bg-zinc-700 text-white")}>
-                <Save className="w-4 h-4 mr-2" /> {saving ? 'SPEICHERN...' : 'TRADE SPEICHERN'}
+                <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
             </div>
           )}
@@ -965,7 +966,7 @@ export default function ChecklistPage() {
               <XOctagon className="w-16 h-16 text-red-500 mx-auto mb-4" />
               <h2 className="text-2xl tracking-widest mb-3 text-white">WARNUNG</h2>
               <p className="text-zinc-400 font-sans mb-6 text-sm leading-relaxed">
-                Dein Score ist unter 85%. Nach ZNPCV Standard solltest du diesen Trade NICHT eingehen.
+                {t('warningScore')}
               </p>
               
               <div className={cn("rounded-xl p-5 mb-6", gradeInfo.color)}>
@@ -976,11 +977,11 @@ export default function ChecklistPage() {
               <div className="space-y-3">
                 <Button onClick={() => { setShowWarning(false); navigate(createPageUrl('Dashboard')); }}
                   className="w-full bg-white hover:bg-zinc-200 text-black rounded-xl h-11 tracking-widest font-bold">
-                  TRADE NICHT EINGEHEN
+                  {t('doNotEnter')}
                 </Button>
                 <Button onClick={() => { setShowWarning(false); handleSave(true); }} variant="ghost"
                   className="w-full text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900 rounded-xl h-10 text-sm">
-                  Trotzdem speichern
+                  {t('saveAnyway')}
                 </Button>
               </div>
             </motion.div>
