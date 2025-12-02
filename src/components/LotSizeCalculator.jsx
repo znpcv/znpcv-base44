@@ -32,8 +32,8 @@ const LEVERAGE_OPTIONS = [
   { value: 500, label: '1:500' },
 ];
 
-// Risk percent presets
-const RISK_PRESETS = ['0.5', '1', '1.5', '2', '3'];
+// Risk percent presets (ZNPCV empfiehlt 3-5%)
+const RISK_PRESETS = ['1', '2', '3', '4', '5'];
 
 export default function LotSizeCalculator({ 
   pair, 
@@ -324,10 +324,10 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           ))}
         </div>
         
-        {leverage >= 200 && (
-          <div className={`mt-2 p-2 rounded-lg text-xs flex items-center gap-2 ${leverage >= 400 ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-500'}`}>
+        {leverage >= 500 && parseFloat(accountSize) >= 200000 && (
+          <div className="mt-2 p-2 rounded-lg text-xs flex items-center gap-2 bg-yellow-500/10 text-yellow-500">
             <AlertTriangle className="w-3 h-3" />
-            {leverage >= 400 ? 'Sehr hohes Risiko!' : 'Erhöhtes Risiko'}
+            Bei großen Konten (&gt;$200K) mit max. Hebel vorsichtig sein
           </div>
         )}
       </div>
@@ -347,9 +347,9 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
               className={cn(
                 "py-2.5 rounded-lg text-sm font-bold transition-all border",
                 riskPercent === risk
-                  ? risk === '3' ? "bg-red-500 text-white border-red-500" :
-                    risk === '2' ? "bg-yellow-500 text-black border-yellow-500" :
-                    "bg-emerald-500 text-white border-emerald-500"
+                  ? (risk === '3' || risk === '4' || risk === '5') 
+                    ? "bg-emerald-500 text-white border-emerald-500" 
+                    : "bg-blue-500 text-white border-blue-500"
                   : `${theme.input} hover:border-emerald-500/50`
               )}
             >
@@ -361,9 +361,12 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
         {accountSize && riskPercent && (
           <div className={`mt-2 text-center p-2 rounded-lg ${theme.bg}`}>
             <span className={`text-xs ${theme.textDim}`}>Risiko: </span>
-            <span className={`font-bold ${parseFloat(riskPercent) >= 2.5 ? 'text-red-400' : 'text-emerald-400'}`}>
+            <span className="font-bold text-emerald-400">
               ${(parseFloat(accountSize) * parseFloat(riskPercent) / 100).toFixed(2)}
             </span>
+            {(parseFloat(riskPercent) >= 3 && parseFloat(riskPercent) <= 5) && (
+              <span className="text-emerald-400 text-xs ml-2">✓ ZNPCV</span>
+            )}
           </div>
         )}
       </div>
@@ -498,8 +501,8 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
               <div className={`p-3 rounded-lg ${theme.bg}`}>
                 <div className={`text-[9px] ${theme.textDim}`}>R:R RATIO</div>
                 <div className={cn("text-lg font-bold", 
-                  parseFloat(calculation.rr) >= 2 ? "text-emerald-400" : 
-                  parseFloat(calculation.rr) >= 1 ? "text-yellow-500" : "text-red-500"
+                  parseFloat(calculation.rr) >= 2.5 ? "text-emerald-400" : 
+                  parseFloat(calculation.rr) >= 1.5 ? "text-yellow-500" : "text-red-500"
                 )}>
                   1:{calculation.rr}
                 </div>
