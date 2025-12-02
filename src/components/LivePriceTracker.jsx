@@ -27,28 +27,36 @@ export default function LivePriceTracker({ pair, direction, accountSize, riskPer
     const oandaPair = formatPairForOanda(pair);
     
     try {
-      // Get live price from OANDA using LLM with internet context
+      // Get live price from OANDA via TradingView
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `Get the CURRENT LIVE market price for ${pair} (${oandaPair}) from OANDA. 
-        
-IMPORTANT: Use OANDA as the data source - this is the industry standard for Forex traders worldwide.
-Search for "OANDA ${pair} live rate" or check fxrates.oanda.com for the most accurate real-time data.
+        prompt: `Get the CURRENT LIVE market price for ${pair} (${oandaPair}) from TradingView OANDA charts.
 
-Return the exact current bid and ask prices from OANDA. Be precise to 5 decimal places for Forex pairs (or 3 for JPY pairs, 2 for Gold/XAU).
+CRITICAL: The data MUST come from TradingView with OANDA as the broker/data provider.
+- Search for "TradingView OANDA ${pair}" or "OANDA:${oandaPair} TradingView"
+- Check tradingview.com for OANDA:${oandaPair} chart
+- The symbol format on TradingView is OANDA:${oandaPair}
 
-The data MUST be from OANDA - the world's most trusted Forex data source used by professional traders globally.`,
+This is the exact same data traders see on TradingView when using OANDA charts.
+
+Return PRECISE prices:
+- 5 decimal places for standard Forex (EUR/USD, GBP/USD, etc.)
+- 3 decimal places for JPY pairs (USD/JPY, EUR/JPY, etc.)
+- 2 decimal places for Gold (XAU/USD)
+
+IMPORTANT: Bid = selling price, Ask = buying price. The spread should be realistic (typically 0.5-3 pips for major pairs).`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
           properties: {
             current_price: { type: "number", description: "Mid price (average of bid and ask)" },
-            bid: { type: "number", description: "OANDA bid price" },
-            ask: { type: "number", description: "OANDA ask price" },
+            bid: { type: "number", description: "OANDA bid price from TradingView" },
+            ask: { type: "number", description: "OANDA ask price from TradingView" },
             spread: { type: "number", description: "Spread in pips" },
-            change_percent: { type: "number", description: "24h change percentage" },
-            high_24h: { type: "number", description: "24h high" },
-            low_24h: { type: "number", description: "24h low" },
-            source: { type: "string", description: "Data source (should be OANDA)" },
+            change_percent: { type: "number", description: "Daily change percentage" },
+            high_24h: { type: "number", description: "Daily high" },
+            low_24h: { type: "number", description: "Daily low" },
+            open: { type: "number", description: "Daily open price" },
+            source: { type: "string", description: "Should be OANDA via TradingView" },
             timestamp: { type: "string", description: "Time of the quote" }
           },
           required: ["current_price", "bid", "ask"]
@@ -248,15 +256,20 @@ The data MUST be from OANDA - the world's most trusted Forex data source used by
       animate={{ opacity: 1, y: 0 }}
       className="border-2 border-blue-500/30 bg-gradient-to-br from-blue-500/10 to-blue-500/5 rounded-2xl p-4 sm:p-5 space-y-4"
     >
-      {/* Header with OANDA branding */}
+      {/* Header with OANDA + TradingView branding */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xs">O</span>
+          <div className="flex -space-x-1">
+            <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center border-2 border-blue-500 z-10">
+              <span className="text-white font-bold text-[10px]">O</span>
+            </div>
+            <div className="w-7 h-7 bg-black rounded-lg flex items-center justify-center border-2 border-zinc-700">
+              <span className="text-blue-400 font-bold text-[10px]">TV</span>
+            </div>
           </div>
           <div>
-            <span className={`font-bold tracking-widest text-sm ${darkMode ? 'text-white' : 'text-black'}`}>OANDA LIVE</span>
-            <div className="text-[10px] text-blue-400">Globaler Forex Standard</div>
+            <span className={`font-bold tracking-widest text-xs ${darkMode ? 'text-white' : 'text-black'}`}>OANDA × TRADINGVIEW</span>
+            <div className="text-[9px] text-blue-400">Live Forex Daten</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -394,7 +407,7 @@ The data MUST be from OANDA - the world's most trusted Forex data source used by
       {/* Footer with source and update */}
       <div className={`flex items-center justify-between text-xs pt-2 border-t ${darkMode ? 'border-zinc-800 text-zinc-500' : 'border-zinc-300 text-zinc-600'}`}>
         <div className="flex items-center gap-2">
-          <span>Quelle: <span className="text-blue-400 font-bold">OANDA</span></span>
+          <span>Quelle: <span className="text-blue-400 font-bold">OANDA:TradingView</span></span>
           <span>•</span>
           <span>{lastUpdate ? lastUpdate.toLocaleTimeString('de-DE') : '—'}</span>
         </div>

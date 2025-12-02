@@ -643,54 +643,167 @@ export default function ChecklistPage() {
                 </div>
               </div>
 
-              {/* Account & Risk */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
-                    <DollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    {t('accountSize')} ($)
-                  </label>
-                  <Input type="number" value={checklist.account_size} onChange={(e) => update('account_size', e.target.value)}
-                    placeholder="10000" className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black focus:border-black'} text-base sm:text-lg h-11 sm:h-12 rounded-xl`} />
+              {/* Account Size Selection */}
+              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary} space-y-3`}>
+                <label className={`flex items-center gap-2 ${theme.textMuted} text-xs sm:text-sm tracking-widest`}>
+                  <DollarSign className="w-4 h-4" />
+                  {t('accountSize')} (USD)
+                </label>
+                
+                {/* Preset Account Sizes */}
+                <div className="grid grid-cols-4 gap-2">
+                  {['1000', '5000', '10000', '25000', '50000', '100000', '200000'].map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => update('account_size', size)}
+                      className={cn(
+                        "p-2 sm:p-2.5 rounded-lg text-center transition-all border text-xs font-bold",
+                        checklist.account_size === size
+                          ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
+                          : darkMode ? "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black bg-zinc-100"
+                      )}
+                    >
+                      {size === '1000' ? '$1K' : 
+                       size === '5000' ? '$5K' : 
+                       size === '10000' ? '$10K' : 
+                       size === '25000' ? '$25K' : 
+                       size === '50000' ? '$50K' : 
+                       size === '100000' ? '$100K' : '$200K'}
+                    </button>
+                  ))}
+                  {/* Manual Input Option */}
+                  <button
+                    onClick={() => {
+                      const custom = prompt('Kontogröße in USD eingeben:');
+                      if (custom && !isNaN(custom)) update('account_size', custom);
+                    }}
+                    className={cn(
+                      "p-2 sm:p-2.5 rounded-lg text-center transition-all border text-xs font-bold",
+                      !['1000', '5000', '10000', '25000', '50000', '100000', '200000'].includes(checklist.account_size) && checklist.account_size
+                        ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
+                        : darkMode ? "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black bg-zinc-100"
+                    )}
+                  >
+                    {!['1000', '5000', '10000', '25000', '50000', '100000', '200000'].includes(checklist.account_size) && checklist.account_size 
+                      ? `$${parseInt(checklist.account_size).toLocaleString()}` 
+                      : '✏️'}
+                  </button>
                 </div>
-                <div>
-                  <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
-                    <Percent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    {t('riskPercent')}
-                  </label>
-                  <Input type="number" step="0.1" value={checklist.risk_percent} onChange={(e) => update('risk_percent', e.target.value)}
-                    placeholder="1" className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black focus:border-black'} text-base sm:text-lg h-11 sm:h-12 rounded-xl`} />
+                
+                {/* Current Selection Display */}
+                {checklist.account_size && (
+                  <div className={`flex items-center justify-center gap-2 p-2 rounded-lg ${darkMode ? 'bg-emerald-500/20 border border-emerald-500/30' : 'bg-emerald-500/10 border border-emerald-500/20'}`}>
+                    <DollarSign className="w-4 h-4 text-emerald-500" />
+                    <span className="text-emerald-500 font-bold text-lg">${parseInt(checklist.account_size).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Risk Percent Selection */}
+              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary} space-y-3`}>
+                <label className={`flex items-center gap-2 ${theme.textMuted} text-xs sm:text-sm tracking-widest`}>
+                  <Percent className="w-4 h-4" />
+                  {t('riskPercent')}
+                </label>
+                
+                <div className="grid grid-cols-6 gap-2">
+                  {['0.5', '1', '1.5', '2', '2.5', '3'].map((risk) => (
+                    <button
+                      key={risk}
+                      onClick={() => update('risk_percent', risk)}
+                      className={cn(
+                        "p-2.5 sm:p-3 rounded-lg text-center transition-all border text-sm font-bold",
+                        checklist.risk_percent === risk
+                          ? risk === '3' || risk === '2.5' 
+                            ? "bg-red-500 text-white border-red-500"
+                            : risk === '2' 
+                              ? "bg-yellow-500 text-black border-yellow-500"
+                              : darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
+                          : darkMode ? "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black bg-zinc-100"
+                      )}
+                    >
+                      {risk}%
+                    </button>
+                  ))}
                 </div>
+                
+                {/* Risk Warning */}
+                {parseFloat(checklist.risk_percent) >= 2.5 && (
+                  <div className="flex items-center gap-2 p-2 bg-red-500/20 border border-red-500/30 rounded-lg">
+                    <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <span className="text-red-400 text-xs">Hohes Risiko! ZNPCV empfiehlt max. 2%</span>
+                  </div>
+                )}
+                
+                {checklist.risk_percent && checklist.account_size && (
+                  <div className={`text-center p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <span className={`text-xs ${theme.textMuted}`}>Risiko pro Trade: </span>
+                    <span className={`font-bold ${parseFloat(checklist.risk_percent) >= 2.5 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      ${(parseFloat(checklist.account_size) * parseFloat(checklist.risk_percent) / 100).toFixed(2)}
+                    </span>
+                  </div>
+                )}
               </div>
               
-              {/* Trade Levels */}
+              {/* Trade Levels with Icons */}
               <div className={`border ${theme.borderCard} rounded-2xl p-4 sm:p-5 ${theme.bgSecondary} space-y-4`}>
                 <div className="flex items-center justify-between">
-                  <h4 className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm`}>{t('tradeLevels')}</h4>
+                  <div className="flex items-center gap-2">
+                    <Target className={`w-4 h-4 ${theme.text}`} />
+                    <h4 className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm`}>{t('tradeLevels')}</h4>
+                  </div>
                   {checklist.pair && (
-                    <div className={`px-2 py-1 rounded-md text-xs font-bold ${darkMode ? 'bg-zinc-800 text-white' : 'bg-zinc-300 text-black'}`}>
-                      {checklist.pair}
+                    <div className="flex items-center gap-2">
+                      <div className={`px-2 py-1 rounded-md text-xs font-bold ${checklist.direction === 'long' ? 'bg-emerald-500 text-white' : checklist.direction === 'short' ? 'bg-red-500 text-white' : darkMode ? 'bg-zinc-800 text-white' : 'bg-zinc-300 text-black'}`}>
+                        {checklist.direction === 'long' ? '↑' : checklist.direction === 'short' ? '↓' : ''} {checklist.pair}
+                      </div>
                     </div>
                   )}
                 </div>
                 
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   <div>
-                    <label className={`${theme.textDimmed} text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block`}>ENTRY</label>
+                    <label className={`flex items-center gap-1 ${theme.textDimmed} text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5`}>
+                      <Target className="w-3 h-3" />
+                      ENTRY
+                    </label>
                     <Input type="number" step="0.00001" value={checklist.entry_price} onChange={(e) => update('entry_price', e.target.value)}
                       placeholder="1.08500" className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white focus:border-white' : 'bg-white border-zinc-300 text-black focus:border-black'} h-10 sm:h-11 rounded-lg text-center text-sm`} />
                   </div>
                   <div>
-                    <label className="text-red-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">STOP LOSS</label>
+                    <label className="flex items-center gap-1 text-red-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5">
+                      <Shield className="w-3 h-3" />
+                      STOP LOSS
+                    </label>
                     <Input type="number" step="0.00001" value={checklist.stop_loss} onChange={(e) => update('stop_loss', e.target.value)}
                       placeholder="1.08200" className={`bg-red-500/10 border-red-500/30 ${darkMode ? 'text-white' : 'text-black'} h-10 sm:h-11 rounded-lg text-center text-sm focus:border-red-500`} />
                   </div>
                   <div>
-                    <label className="text-emerald-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">TAKE PROFIT</label>
+                    <label className="flex items-center gap-1 text-emerald-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5">
+                      <TrendingUp className="w-3 h-3" />
+                      TAKE PROFIT
+                    </label>
                     <Input type="number" step="0.00001" value={checklist.take_profit} onChange={(e) => update('take_profit', e.target.value)}
                       placeholder="1.09200" className={`bg-emerald-500/10 border-emerald-500/30 ${darkMode ? 'text-white' : 'text-black'} h-10 sm:h-11 rounded-lg text-center text-sm focus:border-emerald-500`} />
                   </div>
                 </div>
+                
+                {/* Direction indicator */}
+                {checklist.direction && checklist.entry_price && checklist.stop_loss && (
+                  <div className={`flex items-center justify-center gap-3 p-2 rounded-lg ${checklist.direction === 'long' ? 'bg-emerald-500/10 border border-emerald-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
+                    {checklist.direction === 'long' ? (
+                      <>
+                        <TrendingUp className="w-4 h-4 text-emerald-500" />
+                        <span className="text-emerald-500 text-xs font-bold">LONG POSITION</span>
+                      </>
+                    ) : (
+                      <>
+                        <TrendingDown className="w-4 h-4 text-red-500" />
+                        <span className="text-red-500 text-xs font-bold">SHORT POSITION</span>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* LOT SIZE CALCULATOR - Main Feature */}
@@ -795,26 +908,7 @@ export default function ChecklistPage() {
                 </div>
               )}
 
-              {/* Quick Risk Buttons */}
-              <div className={`border ${theme.borderCard} rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 block`}>{t('quickRisk')}</label>
-                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
-                  {['0.5', '1', '1.5', '2', '3'].map((risk) => (
-                    <button
-                      key={risk}
-                      onClick={() => update('risk_percent', risk)}
-                      className={cn(
-                        "p-2 sm:p-2.5 rounded-lg text-center transition-all border text-xs sm:text-sm font-bold",
-                        checklist.risk_percent === risk
-                          ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
-                          : darkMode ? "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black bg-zinc-100"
-                      )}
-                    >
-                      {risk}%
-                    </button>
-                  ))}
-                </div>
-              </div>
+
             </motion.div>
           )}
 
