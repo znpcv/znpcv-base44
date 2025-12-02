@@ -204,7 +204,7 @@ const translations = {
     quickRisk: 'SCHNELLE RISIKO-AUSWAHL',
     lotSizeInfo: 'Berechne deine exakte Lot Size basierend auf deinem Risiko. Gib Entry & Stop Loss ein, um die empfohlene Position zu sehen.',
     enterEntryAndSL: 'Gib Entry Preis und Stop Loss ein, um deine Lot Size zu berechnen',
-    minRRWarning: 'ZNPCV empfiehlt mindestens 1:2 R:R Verhältnis',
+    minRRWarning: 'ZNPCV empfiehlt mindestens 1:2.5 R:R Verhältnis',
     goodRR: 'Gutes Risk:Reward Verhältnis!',
     tradeLevels: 'TRADE LEVELS',
     
@@ -487,7 +487,7 @@ const translations = {
     quickRisk: 'QUICK RISK SELECTION',
     lotSizeInfo: 'Calculate your exact lot size based on your risk. Enter Entry & Stop Loss to see the recommended position.',
     enterEntryAndSL: 'Enter Entry Price and Stop Loss to calculate your Lot Size',
-    minRRWarning: 'ZNPCV recommends at least 1:2 R:R ratio',
+    minRRWarning: 'ZNPCV recommends at least 1:2.5 R:R ratio',
     goodRR: 'Good Risk:Reward ratio!',
     tradeLevels: 'TRADE LEVELS',
     
@@ -770,7 +770,7 @@ const translations = {
     quickRisk: 'انتخاب سریع ریسک',
     lotSizeInfo: 'لات دقیق خود را بر اساس ریسک محاسبه کنید. Entry و Stop Loss را وارد کنید.',
     enterEntryAndSL: 'قیمت ورود و حد ضرر را وارد کنید تا لات محاسبه شود',
-    minRRWarning: 'ZNPCV حداقل نسبت 1:2 را توصیه می‌کند',
+    minRRWarning: 'ZNPCV حداقل نسبت 1:2.5 را توصیه می‌کند',
     goodRR: 'نسبت ریسک به ریوارد خوب!',
     tradeLevels: 'سطوح معامله',
     
