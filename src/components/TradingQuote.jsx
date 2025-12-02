@@ -11,7 +11,7 @@ const QUOTES = [
 ];
 
 export default function TradingQuote({ variant = 'default' }) {
-  const { t } = useLanguage();
+  const { t, darkMode } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function TradingQuote({ variant = 'default' }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-zinc-600 text-sm italic font-sans">{t(QUOTES[currentIndex].key)}</p>
+            <p className={`text-sm italic font-sans ${darkMode ? 'text-zinc-500' : 'text-zinc-600'}`}>{t(QUOTES[currentIndex].key)}</p>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -40,7 +40,7 @@ export default function TradingQuote({ variant = 'default' }) {
   }
 
   return (
-    <div className="relative py-12 border-y border-zinc-800/50">
+    <div className={`relative py-12 border-y ${darkMode ? 'border-zinc-800/50' : 'border-zinc-200'}`}>
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -50,10 +50,10 @@ export default function TradingQuote({ variant = 'default' }) {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <p className="text-xl md:text-2xl text-white italic font-sans leading-relaxed max-w-2xl mx-auto mb-4">
+          <p className={`text-xl md:text-2xl italic font-sans leading-relaxed max-w-2xl mx-auto mb-4 ${darkMode ? 'text-white' : 'text-zinc-800'}`}>
             {t(QUOTES[currentIndex].key)}
           </p>
-          <p className="text-zinc-600 text-sm tracking-widest">— {QUOTES[currentIndex].author}</p>
+          <p className={`text-sm tracking-widest ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>— {QUOTES[currentIndex].author}</p>
         </motion.div>
       </AnimatePresence>
 
@@ -64,7 +64,9 @@ export default function TradingQuote({ variant = 'default' }) {
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex ? 'bg-white w-6' : 'bg-zinc-700 hover:bg-zinc-600'
+              index === currentIndex 
+                ? (darkMode ? 'bg-white' : 'bg-zinc-900') + ' w-6' 
+                : darkMode ? 'bg-zinc-700 hover:bg-zinc-600' : 'bg-zinc-300 hover:bg-zinc-400'
             }`}
           />
         ))}
