@@ -69,7 +69,7 @@ export default function ChecklistPage() {
     stop_loss: '',
     take_profit: '',
     account_size: '',
-    risk_percent: '1',
+    risk_percent: '3',
     
     // Final Rules
     confirms_rule: false,
@@ -722,7 +722,7 @@ export default function ChecklistPage() {
                   {riskCalc && (
                     <>
                       <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
-                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2 ? 'emerald' : 'yellow'} />
+                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'emerald' : 'yellow'} />
                       <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${checklist.risk_percent}%)`} color="red" />
                     </>
                   )}
