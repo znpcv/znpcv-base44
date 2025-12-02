@@ -119,7 +119,10 @@ export default function DashboardPage() {
                 <Home className="w-6 h-6" />
               </button>
               <button onClick={() => navigate(createPageUrl('Home'))}>
-                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className={`h-12 w-auto cursor-pointer hover:opacity-80 ${darkMode ? 'invert' : ''}`} />
+                <img src={darkMode 
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
+            } alt="ZNPCV" className="h-12 w-auto cursor-pointer hover:opacity-80" />
               </button>
             </div>
             <div className="flex items-center gap-3">
@@ -356,7 +359,10 @@ export default function DashboardPage() {
         {/* Footer */}
         <footer className={`mt-16 pt-8 border-t ${theme.border}`}>
           <div className="flex items-center justify-between">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0ab1f025f_schwa.png" alt="ZNPCV" className={`h-12 w-auto opacity-50 ${darkMode ? '' : 'invert'}`} />
+            <img src={darkMode 
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/0d76bb102_schwa.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/006a71847_PNGZNPCVLOGOwei.jpg"
+            } alt="ZNPCV" className="h-12 w-auto opacity-50" />
             <p className={`${theme.textDimmed} text-sm tracking-widest`}>WWW.ZNPCV.COM</p>
           </div>
         </footer>
