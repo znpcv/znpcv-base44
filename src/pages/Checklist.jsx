@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import AssetSelector from '@/components/AssetSelector';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
+import LivePriceTracker from '@/components/LivePriceTracker';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
@@ -95,6 +96,12 @@ export default function ChecklistPage() {
 
   const update = (key, value) => setChecklist(prev => ({ ...prev, [key]: value }));
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const handleLivePriceUpdate = (price) => {
+    if (!checklist.entry_price) {
+      update('entry_price', price.toString());
+    }
+  };
 
   // Calculate scores
   const weeklyScore = (checklist.w_at_aoi ? 10 : 0) + (checklist.w_ema_touch ? 5 : 0) + 
@@ -238,34 +245,50 @@ export default function ChecklistPage() {
     final: 'FINAL'
   };
 
+  // Theme classes
+  const theme = {
+    bg: darkMode ? 'bg-black' : 'bg-white',
+    bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    bgCard: darkMode ? 'bg-zinc-900' : 'bg-zinc-50',
+    text: darkMode ? 'text-white' : 'text-zinc-900',
+    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+    textMuted: darkMode ? 'text-zinc-500' : 'text-zinc-500',
+    textDimmed: darkMode ? 'text-zinc-600' : 'text-zinc-400',
+    border: darkMode ? 'border-zinc-800/50' : 'border-zinc-200',
+    borderCard: darkMode ? 'border-zinc-800' : 'border-zinc-300',
+    progressBg: darkMode ? 'bg-zinc-900' : 'bg-zinc-200',
+    navBg: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    scoreBg: darkMode ? 'bg-zinc-900/50' : 'bg-zinc-100/50',
+  };
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className={`min-h-screen ${theme.bg} flex items-center justify-center`}>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
-          <div className="w-16 h-16 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <div className="text-white text-xl tracking-widest">{t('loading')}</div>
+          <div className={`w-16 h-16 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full animate-spin mx-auto mb-4`} />
+          <div className={`${theme.text} text-xl tracking-widest`}>{t('loading')}</div>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-black border-b border-zinc-800/50 sticky top-0 z-50">
+      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
         <div className="max-w-3xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1 sm:gap-2">
-              <button onClick={() => navigate(createPageUrl('Home'))} className="p-1.5 sm:p-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-zinc-900">
+              <button onClick={() => navigate(createPageUrl('Home'))} className={`p-1.5 sm:p-2 ${theme.textMuted} hover:${theme.text} transition-colors rounded-lg ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-200'}`}>
                 <Home className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className="p-1.5 sm:p-2 text-zinc-500 hover:text-white transition-colors rounded-lg hover:bg-zinc-900">
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`p-1.5 sm:p-2 ${theme.textMuted} hover:${theme.text} transition-colors rounded-lg ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-200'}`}>
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
             
             <button onClick={() => navigate(createPageUrl('Home'))}>
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className="h-6 sm:h-8 w-auto cursor-pointer hover:opacity-80 invert" />
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" alt="ZNPCV" className={`h-6 sm:h-8 w-auto cursor-pointer hover:opacity-80 ${darkMode ? 'invert' : ''}`} />
             </button>
 
             <div className="flex items-center gap-1 sm:gap-2">
@@ -276,18 +299,20 @@ export default function ChecklistPage() {
         </div>
         
         {/* Progress Bar */}
-        <div className="h-1 bg-zinc-900">
-          <motion.div className={cn("h-full", gradeInfo.color)} initial={{ width: 0 }} animate={{ width: `${Math.min(progress, 100)}%` }} transition={{ duration: 0.5 }} />
+        <div className={theme.progressBg}>
+          <motion.div className={cn("h-1", gradeInfo.color)} initial={{ width: 0 }} animate={{ width: `${Math.min(progress, 100)}%` }} transition={{ duration: 0.5 }} />
         </div>
       </header>
 
       {/* Steps Navigation */}
-      <div className="bg-zinc-950 border-b border-zinc-800/50 overflow-x-auto scrollbar-hide">
+      <div className={`${theme.navBg} border-b ${theme.border} overflow-x-auto scrollbar-hide`}>
         <div className="max-w-3xl mx-auto px-2 sm:px-4 py-1.5 sm:py-2 flex gap-0.5 sm:gap-1">
           {STEPS.map((step, index) => (
             <button key={step} onClick={() => setCurrentStep(index)}
               className={cn("px-1.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs tracking-wider sm:tracking-widest whitespace-nowrap transition-all rounded-md sm:rounded-lg flex-1 min-w-0",
-                currentStep === index ? 'bg-white text-black font-bold' : 'text-zinc-600 hover:text-white hover:bg-zinc-900')}>
+                currentStep === index 
+                  ? darkMode ? 'bg-white text-black font-bold' : 'bg-zinc-900 text-white font-bold'
+                  : `${theme.textDimmed} ${darkMode ? 'hover:text-white hover:bg-zinc-900' : 'hover:text-black hover:bg-zinc-200'}`)}>
               <span className="hidden sm:inline">{index + 1}. </span>{stepLabels[step]}
             </button>
           ))}
@@ -295,24 +320,24 @@ export default function ChecklistPage() {
       </div>
 
       {/* Score Overview Bar with Progress */}
-      <div className="bg-zinc-900/50 border-b border-zinc-800/30">
+      <div className={`${theme.scoreBg} border-b ${darkMode ? 'border-zinc-800/30' : 'border-zinc-200/50'}`}>
         <div className="max-w-3xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5">
           {/* Score Badge - Prominent */}
           <div className="flex items-center justify-between mb-2">
             <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold", gradeInfo.color, 
-              progress >= 85 ? "text-black" : "text-white")}>
+              progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>
               <span className="text-base sm:text-lg">{progress}%</span>
               <span className="text-xs opacity-80">{gradeInfo.grade}</span>
             </div>
-            <span className="text-zinc-500 text-xs">MAX: 180%</span>
+            <span className={`${theme.textMuted} text-xs`}>MAX: 180%</span>
           </div>
           
           {/* Score Details */}
           <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs flex-wrap">
-            <span className="text-zinc-500">W: <span className={weeklyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{weeklyScore}/60</span></span>
-            <span className="text-zinc-500">D: <span className={dailyScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{dailyScore}/60</span></span>
-            <span className="text-zinc-500">4H: <span className={h4Score > 0 ? "text-white font-bold" : "text-zinc-600"}>{h4Score}/35</span></span>
-            <span className="text-zinc-500">E: <span className={entryScore > 0 ? "text-white font-bold" : "text-zinc-600"}>{entryScore}/25</span></span>
+            <span className={theme.textMuted}>W: <span className={weeklyScore > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{weeklyScore}/60</span></span>
+            <span className={theme.textMuted}>D: <span className={dailyScore > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{dailyScore}/60</span></span>
+            <span className={theme.textMuted}>4H: <span className={h4Score > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{h4Score}/35</span></span>
+            <span className={theme.textMuted}>E: <span className={entryScore > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{entryScore}/25</span></span>
           </div>
         </div>
       </div>
@@ -331,34 +356,34 @@ export default function ChecklistPage() {
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                   
                   {/* ZNPCV Rules Box */}
-                  <div className="p-5 bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl">
+                  <div className={`p-5 rounded-2xl border-2 ${darkMode ? 'bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800' : 'bg-gradient-to-br from-zinc-100 to-zinc-50 border-zinc-300'}`}>
                     <div className="flex items-center gap-3 mb-4">
-                      <Shield className="w-6 h-6 text-white" />
-                      <span className="text-white font-bold tracking-widest">{t('goldenRules')}</span>
+                      <Shield className={`w-6 h-6 ${theme.text}`} />
+                      <span className={`${theme.text} font-bold tracking-widest`}>{t('goldenRules')}</span>
                     </div>
                     <div className="space-y-3 text-sm font-sans">
                       <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
                         <TrendingUp className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <span className="text-emerald-400 font-bold">LONG:</span>
-                          <span className="text-zinc-300 ml-2">{t('longBuyRule')}</span>
+                          <span className="text-emerald-500 font-bold">LONG:</span>
+                          <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('longBuyRule')}</span>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
                         <TrendingDown className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                         <div>
-                          <span className="text-red-400 font-bold">SHORT:</span>
-                          <span className="text-zinc-300 ml-2">{t('shortSellRule')}</span>
+                          <span className="text-red-500 font-bold">SHORT:</span>
+                          <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('shortSellRule')}</span>
                         </div>
                       </div>
-                      <div className="p-3 bg-white/5 border border-white/10 rounded-xl text-center">
-                        <span className="text-white font-bold tracking-wider">⚠️ {t('neverBottomTop')} ⚠️</span>
+                      <div className={`p-3 rounded-xl text-center border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-zinc-900/5 border-zinc-900/20'}`}>
+                        <span className={`${theme.text} font-bold tracking-wider`}>⚠️ {t('neverBottomTop')} ⚠️</span>
                       </div>
                     </div>
                   </div>
                   
                   {/* Direction Selection */}
-                  <label className="text-zinc-500 text-sm tracking-widest block">{t('selectDirection')}</label>
+                  <label className={`${theme.textMuted} text-sm tracking-widest block`}>{t('selectDirection')}</label>
                   <div className="grid grid-cols-2 gap-4">
                     <button onClick={() => update('direction', 'long')}
                       className={cn("p-6 border-2 rounded-2xl text-center transition-all",
@@ -394,11 +419,11 @@ export default function ChecklistPage() {
               <StepHeader number="02" title={t('weeklyAnalysis')} subtitle={t('weeklyConfirm')} />
               
               {/* Current Score */}
-              <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-xs sm:text-sm">{t('weeklyScore')}</span>
+              <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
+                <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('weeklyScore')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-emerald-500" : weeklyScore >= 25 ? "text-yellow-500" : "text-white")}>{weeklyScore}</span>
-                  <span className="text-zinc-600 text-sm">/60%</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-emerald-500" : weeklyScore >= 25 ? "text-yellow-500" : theme.text)}>{weeklyScore}</span>
+                  <span className={`${theme.textDimmed} text-sm`}>/60%</span>
                 </div>
               </div>
               
@@ -442,11 +467,11 @@ export default function ChecklistPage() {
               <StepHeader number="03" title={t('dailyAnalysis')} subtitle={t('dailyConfirm')} />
               
               {/* Current Score */}
-              <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-xs sm:text-sm">{t('dailyScore')}</span>
+              <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
+                <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('dailyScore')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-emerald-500" : dailyScore >= 25 ? "text-yellow-500" : "text-white")}>{dailyScore}</span>
-                  <span className="text-zinc-600 text-sm">/60%</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-emerald-500" : dailyScore >= 25 ? "text-yellow-500" : theme.text)}>{dailyScore}</span>
+                  <span className={`${theme.textDimmed} text-sm`}>/60%</span>
                 </div>
               </div>
               
@@ -490,11 +515,11 @@ export default function ChecklistPage() {
               <StepHeader number="04" title={t('h4Analysis')} subtitle={t('h4Confirm')} />
               
               {/* Current Score */}
-              <div className="flex items-center justify-between p-2.5 sm:p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-xs sm:text-sm">{t('h4Score')}</span>
+              <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
+                <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('h4Score')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : "text-white")}>{h4Score}</span>
-                  <span className="text-zinc-600 text-sm">/35%</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : theme.text)}>{h4Score}</span>
+                  <span className={`${theme.textDimmed} text-sm`}>/35%</span>
                 </div>
               </div>
               
@@ -541,11 +566,11 @@ export default function ChecklistPage() {
               </div>
 
               {/* Current Score */}
-              <div className="flex items-center justify-between p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <span className="text-zinc-500 text-sm">{t('entryScoreLabel')}</span>
+              <div className={`flex items-center justify-between p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
+                <span className={`${theme.textMuted} text-sm`}>{t('entryScoreLabel')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", entryScore >= 20 ? "text-emerald-500" : entryScore >= 10 ? "text-yellow-500" : "text-white")}>{entryScore}</span>
-                  <span className="text-zinc-600">/25%</span>
+                  <span className={cn("text-2xl font-bold", entryScore >= 20 ? "text-emerald-500" : entryScore >= 10 ? "text-yellow-500" : theme.text)}>{entryScore}</span>
+                  <span className={theme.textDimmed}>/25%</span>
                 </div>
               </div>
               
@@ -566,22 +591,22 @@ export default function ChecklistPage() {
               />
               
               {/* Entry Type */}
-              <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-950">
-                <label className="text-zinc-500 text-sm tracking-widest mb-4 block">{t('entryTrigger')}</label>
+              <div className={`border ${theme.borderCard} rounded-2xl p-5 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-sm tracking-widest mb-4 block`}>{t('entryTrigger')}</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button onClick={() => update('entry_type', 'pinbar')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
                       checklist.entry_type === 'pinbar' 
-                        ? "bg-white border-white text-black" 
-                        : "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white")}>
+                        ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
+                        : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
                     <div className="text-2xl mb-2">📍</div>
                     <div className="font-bold tracking-wider text-sm">{t('pinbarRejection')}</div>
                   </button>
                   <button onClick={() => update('entry_type', 'engulfing')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
                       checklist.entry_type === 'engulfing' 
-                        ? "bg-white border-white text-black" 
-                        : "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white")}>
+                        ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
+                        : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
                     <div className="text-2xl mb-2">🕯️</div>
                     <div className="font-bold tracking-wider text-sm">{t('engulfing')}</div>
                   </button>
@@ -595,6 +620,14 @@ export default function ChecklistPage() {
             <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
               
+              {/* Live Price Tracker */}
+              {checklist.pair && (
+                <LivePriceTracker 
+                  pair={checklist.pair} 
+                  onPriceUpdate={handleLivePriceUpdate}
+                />
+              )}
+
               {/* Info Box */}
               <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <div className="flex items-start gap-2">
@@ -613,7 +646,7 @@ export default function ChecklistPage() {
                     {t('accountSize')} ($)
                   </label>
                   <Input type="number" value={checklist.account_size} onChange={(e) => update('account_size', e.target.value)}
-                    placeholder="10000" className="bg-zinc-900 border-zinc-800 text-white text-base sm:text-lg h-11 sm:h-12 rounded-xl focus:border-white" />
+                    placeholder="10000" className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black focus:border-black'} text-base sm:text-lg h-11 sm:h-12 rounded-xl`} />
                 </div>
                 <div>
                   <label className="flex items-center gap-2 text-zinc-500 text-xs sm:text-sm tracking-widest mb-2">
@@ -621,16 +654,16 @@ export default function ChecklistPage() {
                     {t('riskPercent')}
                   </label>
                   <Input type="number" step="0.1" value={checklist.risk_percent} onChange={(e) => update('risk_percent', e.target.value)}
-                    placeholder="1" className="bg-zinc-900 border-zinc-800 text-white text-base sm:text-lg h-11 sm:h-12 rounded-xl focus:border-white" />
+                    placeholder="1" className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black focus:border-black'} text-base sm:text-lg h-11 sm:h-12 rounded-xl`} />
                 </div>
               </div>
               
               {/* Trade Levels */}
-              <div className="border border-zinc-800 rounded-2xl p-4 sm:p-5 bg-zinc-950 space-y-4">
+              <div className={`border ${theme.borderCard} rounded-2xl p-4 sm:p-5 ${theme.bgSecondary} space-y-4`}>
                 <div className="flex items-center justify-between">
-                  <h4 className="text-white font-bold tracking-widest text-xs sm:text-sm">{t('tradeLevels')}</h4>
+                  <h4 className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm`}>{t('tradeLevels')}</h4>
                   {checklist.pair && (
-                    <div className="px-2 py-1 bg-zinc-800 rounded-md text-xs text-white font-bold">
+                    <div className={`px-2 py-1 rounded-md text-xs font-bold ${darkMode ? 'bg-zinc-800 text-white' : 'bg-zinc-300 text-black'}`}>
                       {checklist.pair}
                     </div>
                   )}
@@ -638,19 +671,19 @@ export default function ChecklistPage() {
                 
                 <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   <div>
-                    <label className="text-zinc-600 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">ENTRY</label>
+                    <label className={`${theme.textDimmed} text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block`}>ENTRY</label>
                     <Input type="number" step="0.00001" value={checklist.entry_price} onChange={(e) => update('entry_price', e.target.value)}
-                      placeholder="1.08500" className="bg-zinc-900 border-zinc-800 text-white h-10 sm:h-11 rounded-lg text-center text-sm focus:border-white" />
+                      placeholder="1.08500" className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white focus:border-white' : 'bg-white border-zinc-300 text-black focus:border-black'} h-10 sm:h-11 rounded-lg text-center text-sm`} />
                   </div>
                   <div>
                     <label className="text-red-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">STOP LOSS</label>
                     <Input type="number" step="0.00001" value={checklist.stop_loss} onChange={(e) => update('stop_loss', e.target.value)}
-                      placeholder="1.08200" className="bg-red-500/10 border-red-500/30 text-white h-10 sm:h-11 rounded-lg text-center text-sm focus:border-red-500" />
+                      placeholder="1.08200" className={`bg-red-500/10 border-red-500/30 ${darkMode ? 'text-white' : 'text-black'} h-10 sm:h-11 rounded-lg text-center text-sm focus:border-red-500`} />
                   </div>
                   <div>
                     <label className="text-emerald-400 text-[10px] sm:text-xs tracking-widest mb-1 sm:mb-1.5 block">TAKE PROFIT</label>
                     <Input type="number" step="0.00001" value={checklist.take_profit} onChange={(e) => update('take_profit', e.target.value)}
-                      placeholder="1.09200" className="bg-emerald-500/10 border-emerald-500/30 text-white h-10 sm:h-11 rounded-lg text-center text-sm focus:border-emerald-500" />
+                      placeholder="1.09200" className={`bg-emerald-500/10 border-emerald-500/30 ${darkMode ? 'text-white' : 'text-black'} h-10 sm:h-11 rounded-lg text-center text-sm focus:border-emerald-500`} />
                   </div>
                 </div>
               </div>
@@ -749,17 +782,17 @@ export default function ChecklistPage() {
 
               {/* Show placeholder when no calculation */}
               {!riskCalc && checklist.account_size && (
-                <div className="border border-zinc-800 bg-zinc-950 rounded-2xl p-6 text-center">
-                  <Calculator className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                  <div className="text-zinc-500 text-sm font-sans">
+                <div className={`border ${theme.borderCard} ${theme.bgSecondary} rounded-2xl p-6 text-center`}>
+                  <Calculator className={`w-10 h-10 ${theme.textDimmed} mx-auto mb-3`} />
+                  <div className={`${theme.textMuted} text-sm font-sans`}>
                     {t('enterEntryAndSL')}
                   </div>
                 </div>
               )}
 
               {/* Quick Risk Buttons */}
-              <div className="border border-zinc-800 rounded-xl p-3 sm:p-4 bg-zinc-950">
-                <label className="text-zinc-500 text-[10px] sm:text-xs tracking-widest mb-2 block">{t('quickRisk')}</label>
+              <div className={`border ${theme.borderCard} rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 block`}>{t('quickRisk')}</label>
                 <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                   {['0.5', '1', '1.5', '2', '3'].map((risk) => (
                     <button
@@ -768,8 +801,8 @@ export default function ChecklistPage() {
                       className={cn(
                         "p-2 sm:p-2.5 rounded-lg text-center transition-all border text-xs sm:text-sm font-bold",
                         checklist.risk_percent === risk
-                          ? "bg-white text-black border-white"
-                          : "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900"
+                          ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
+                          : darkMode ? "border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black bg-zinc-100"
                       )}
                     >
                       {risk}%
@@ -786,10 +819,10 @@ export default function ChecklistPage() {
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
               {/* Final Rule Confirmation */}
-              <div className="border-2 border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950 rounded-2xl p-5">
+              <div className={`border-2 rounded-2xl p-5 ${darkMode ? 'border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950' : 'border-zinc-300 bg-gradient-to-br from-zinc-100 to-zinc-50'}`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <Shield className="w-6 h-6 text-white" />
-                  <span className="text-white font-bold tracking-widest">{t('confirmRule')}</span>
+                  <Shield className={`w-6 h-6 ${theme.text}`} />
+                  <span className={`${theme.text} font-bold tracking-widest`}>{t('confirmRule')}</span>
                 </div>
                 
                 {checklist.direction === 'long' && (
@@ -797,9 +830,9 @@ export default function ChecklistPage() {
                     className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
                       checklist.confirms_rule 
                         ? "bg-emerald-500 border-emerald-400 text-white" 
-                        : "border-zinc-700 hover:border-emerald-500/50 bg-zinc-900")}>
+                        : darkMode ? "border-zinc-700 hover:border-emerald-500/50 bg-zinc-900" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
-                      checklist.confirms_rule ? "border-white bg-white" : "border-zinc-600")}>
+                      checklist.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
                       {checklist.confirms_rule && <Check className="w-4 h-4 text-emerald-500" />}
                     </div>
                     <div>
@@ -818,9 +851,9 @@ export default function ChecklistPage() {
                     className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
                       checklist.confirms_rule 
                         ? "bg-red-500 border-red-400 text-white" 
-                        : "border-zinc-700 hover:border-red-500/50 bg-zinc-900")}>
+                        : darkMode ? "border-zinc-700 hover:border-red-500/50 bg-zinc-900" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
-                      checklist.confirms_rule ? "border-white bg-white" : "border-zinc-600")}>
+                      checklist.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
                       {checklist.confirms_rule && <Check className="w-4 h-4 text-red-500" />}
                     </div>
                     <div>
@@ -835,29 +868,29 @@ export default function ChecklistPage() {
                 )}
 
                 {!checklist.direction && (
-                  <div className="text-zinc-500 text-center py-4 font-sans">
+                  <div className={`${theme.textMuted} text-center py-4 font-sans`}>
                     {t('selectDirFirst')}
                   </div>
                 )}
               </div>
 
               {/* Trade Summary */}
-              <div className="border border-zinc-800 rounded-2xl p-5 bg-zinc-950">
-                <h3 className="text-white font-bold tracking-widest mb-4">{t('tradeSummary')}</h3>
+              <div className={`border ${theme.borderCard} rounded-2xl p-5 ${theme.bgSecondary}`}>
+                <h3 className={`${theme.text} font-bold tracking-widest mb-4`}>{t('tradeSummary')}</h3>
                 
                 <div className="space-y-2">
                   <SummaryRow label="PAAR" value={checklist.pair || '-'} />
                   <SummaryRow label="RICHTUNG" 
                     value={checklist.direction === 'long' ? '↑ LONG' : checklist.direction === 'short' ? '↓ SHORT' : '-'} 
                     color={checklist.direction === 'long' ? 'emerald' : checklist.direction === 'short' ? 'red' : null} />
-                  <div className="border-t border-zinc-800 my-3" />
+                  <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
                   <SummaryRow label="WEEKLY" value={`${weeklyScore}/60%`} color={weeklyScore >= 40 ? 'emerald' : weeklyScore >= 25 ? 'yellow' : null} />
                   <SummaryRow label="DAILY" value={`${dailyScore}/60%`} color={dailyScore >= 40 ? 'emerald' : dailyScore >= 25 ? 'yellow' : null} />
                   <SummaryRow label="4H SCORE" value={`${h4Score}/35%`} color={h4Score >= 25 ? 'emerald' : h4Score >= 15 ? 'yellow' : null} />
                   <SummaryRow label="ENTRY SCORE" value={`${entryScore}/25%`} color={entryScore >= 20 ? 'emerald' : entryScore >= 10 ? 'yellow' : null} />
                   {riskCalc && (
                     <>
-                      <div className="border-t border-zinc-800 my-3" />
+                      <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
                       <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2 ? 'emerald' : 'yellow'} />
                       <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${checklist.risk_percent}%)`} color="red" />
                     </>
@@ -867,9 +900,9 @@ export default function ChecklistPage() {
 
               {/* Notes */}
               <div>
-                <label className="block text-zinc-500 tracking-widest text-sm mb-2">{t('notesOptional')}</label>
+                <label className={`block ${theme.textMuted} tracking-widest text-sm mb-2`}>{t('notesOptional')}</label>
                 <Textarea value={checklist.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 min-h-[80px] rounded-xl font-sans focus:border-white" />
+                  className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[80px] rounded-xl font-sans`} />
               </div>
 
               {/* Final Grade */}
@@ -892,27 +925,27 @@ export default function ChecklistPage() {
               </motion.div>
 
               {/* Score Breakdown */}
-              <div className="p-3 sm:p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
-                <div className="text-[10px] sm:text-xs text-zinc-600 tracking-widest mb-2 sm:mb-3 text-center">{t('pointsBreakdown')}</div>
+              <div className={`p-3 sm:p-4 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
+                <div className={`text-[10px] sm:text-xs ${theme.textDimmed} tracking-widest mb-2 sm:mb-3 text-center`}>{t('pointsBreakdown')}</div>
                 <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs sm:text-sm">
-                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-[10px] sm:text-xs">WEEKLY</div>
-                    <div className="text-white font-bold">{weeklyScore}/60</div>
+                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>WEEKLY</div>
+                    <div className={`${theme.text} font-bold`}>{weeklyScore}/60</div>
                   </div>
-                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-[10px] sm:text-xs">DAILY</div>
-                    <div className="text-white font-bold">{dailyScore}/60</div>
+                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>DAILY</div>
+                    <div className={`${theme.text} font-bold`}>{dailyScore}/60</div>
                   </div>
-                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-[10px] sm:text-xs">4H</div>
-                    <div className="text-white font-bold">{h4Score}/35</div>
+                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>4H</div>
+                    <div className={`${theme.text} font-bold`}>{h4Score}/35</div>
                   </div>
-                  <div className="p-1.5 sm:p-2 bg-zinc-900 rounded-lg">
-                    <div className="text-zinc-500 text-[10px] sm:text-xs">ENTRY</div>
-                    <div className="text-white font-bold">{entryScore}/25</div>
+                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>ENTRY</div>
+                    <div className={`${theme.text} font-bold`}>{entryScore}/25</div>
                   </div>
                 </div>
-                <div className="mt-2 p-1.5 sm:p-2 bg-white text-black rounded-lg text-center font-bold text-sm sm:text-base">
+                <div className={`mt-2 p-1.5 sm:p-2 rounded-lg text-center font-bold text-sm sm:text-base ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
                   {t('total')}: {progress}/180%
                 </div>
               </div>
@@ -926,14 +959,14 @@ export default function ChecklistPage() {
         <div className="mt-10 flex gap-3">
           {currentStep > 0 && (
             <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" 
-              className="border-zinc-800 text-white hover:bg-zinc-900 hover:text-white rounded-xl tracking-widest px-5 h-12">
+              className={`rounded-xl tracking-widest px-5 h-12 ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:text-white' : 'border-zinc-300 text-black hover:bg-zinc-100'}`}>
               <ChevronLeft className="w-4 h-4 mr-1" /> {t('back')}
             </Button>
           )}
           
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={() => setCurrentStep(prev => prev + 1)} 
-              className="flex-1 bg-white hover:bg-zinc-200 text-black rounded-xl tracking-widest text-base h-12 font-bold">
+              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
               {t('next')} <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
@@ -948,7 +981,7 @@ export default function ChecklistPage() {
                 className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold",
                   isReady 
                     ? "bg-emerald-500 hover:bg-emerald-600 text-white" 
-                    : "bg-zinc-800 hover:bg-zinc-700 text-white")}>
+                    : darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-zinc-300 hover:bg-zinc-400 text-black")}>
                 <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
             </div>
@@ -993,7 +1026,7 @@ export default function ChecklistPage() {
       <AnimatePresence>
         {showScrollTop && (
           <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
-            onClick={scrollToTop} className="fixed bottom-6 right-6 w-11 h-11 bg-white text-black flex items-center justify-center shadow-lg hover:bg-zinc-200 transition-colors z-50 rounded-full">
+            onClick={scrollToTop} className={`fixed bottom-6 right-6 w-11 h-11 flex items-center justify-center shadow-lg transition-colors z-50 rounded-full ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
             <ArrowUp className="w-5 h-5" />
           </motion.button>
         )}
@@ -1002,37 +1035,41 @@ export default function ChecklistPage() {
   );
 }
 
-// Sub-components
+// Sub-components  
 function StepHeader({ number, title, subtitle }) {
+  const { darkMode } = useLanguage();
   return (
     <div className="text-center mb-4 sm:mb-6">
-      <div className="text-3xl sm:text-5xl font-light text-zinc-800 mb-1">{number}</div>
-      <h2 className="text-xl sm:text-2xl md:text-3xl tracking-widest mb-1 text-white">{title}</h2>
-      <p className="text-zinc-600 text-xs sm:text-sm tracking-wider">{subtitle}</p>
+      <div className={`text-3xl sm:text-5xl font-light mb-1 ${darkMode ? 'text-zinc-800' : 'text-zinc-300'}`}>{number}</div>
+      <h2 className={`text-xl sm:text-2xl md:text-3xl tracking-widest mb-1 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
+      <p className={`text-xs sm:text-sm tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{subtitle}</p>
     </div>
   );
 }
 
 function ChecklistItem({ checked, onChange, label, score, description }) {
+  const { darkMode } = useLanguage();
   return (
     <button onClick={onChange} className={cn(
       "w-full p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 transition-all text-left rounded-xl border-2",
       checked 
         ? "bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/10" 
-        : "border-zinc-800 hover:border-zinc-700 bg-zinc-950 hover:bg-zinc-900"
+        : darkMode 
+          ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950 hover:bg-zinc-900"
+          : "border-zinc-300 hover:border-zinc-400 bg-zinc-100 hover:bg-zinc-200"
     )}>
       <div className={cn(
         "w-6 h-6 sm:w-7 sm:h-7 border-2 flex items-center justify-center flex-shrink-0 rounded-lg transition-all",
-        checked ? "border-white bg-white" : "border-zinc-700"
+        checked ? "border-white bg-white" : darkMode ? "border-zinc-700" : "border-zinc-400"
       )}>
         {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" />}
       </div>
       <div className="flex-1 min-w-0">
-        <span className={cn("text-xs sm:text-sm tracking-wider block font-bold", checked ? "text-white" : "text-white")}>{label}</span>
-        {description && <span className={cn("text-[10px] sm:text-xs font-sans block mt-0.5 line-clamp-1", checked ? "text-emerald-100" : "text-zinc-600")}>{description}</span>}
+        <span className={cn("text-xs sm:text-sm tracking-wider block font-bold", checked ? "text-white" : darkMode ? "text-white" : "text-black")}>{label}</span>
+        {description && <span className={cn("text-[10px] sm:text-xs font-sans block mt-0.5 line-clamp-1", checked ? "text-emerald-100" : darkMode ? "text-zinc-600" : "text-zinc-500")}>{description}</span>}
       </div>
       <div className={cn("px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex-shrink-0", 
-        checked ? "bg-white text-emerald-600" : "bg-zinc-800 text-zinc-500")}>
+        checked ? "bg-white text-emerald-600" : darkMode ? "bg-zinc-800 text-zinc-500" : "bg-zinc-300 text-zinc-700")}>
         +{score}%
       </div>
     </button>
@@ -1040,12 +1077,13 @@ function ChecklistItem({ checked, onChange, label, score, description }) {
 }
 
 function PatternSelector({ value, onChange, score, label, description }) {
+  const { t, darkMode } = useLanguage();
   const patterns = [
-    { key: 'double_top', label: 'DBL TOP', icon: 'double_top' },
-    { key: 'double_bottom', label: 'DBL BTM', icon: 'double_bottom' },
-    { key: 'head_shoulders', label: 'H&S', icon: 'hs' },
-    { key: 'inv_head_shoulders', label: 'INV H&S', icon: 'inv_hs' },
-    { key: 'none', label: 'KEIN', icon: 'none' },
+    { key: 'double_top', label: t('dblTop'), icon: 'double_top' },
+    { key: 'double_bottom', label: t('dblBtm'), icon: 'double_bottom' },
+    { key: 'head_shoulders', label: t('hs'), icon: 'hs' },
+    { key: 'inv_head_shoulders', label: t('invHs'), icon: 'inv_hs' },
+    { key: 'none', label: t('none'), icon: 'none' },
   ];
 
   const PatternIcon = ({ type, className }) => {
@@ -1087,11 +1125,11 @@ function PatternSelector({ value, onChange, score, label, description }) {
   };
 
   return (
-    <div className="border border-zinc-800 rounded-xl p-3 sm:p-4 bg-zinc-950">
+    <div className={`border rounded-xl p-3 sm:p-4 ${darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100'}`}>
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <div className="min-w-0 flex-1">
-          <label className="text-zinc-400 text-[10px] sm:text-xs tracking-widest block">{label}</label>
-          {description && <span className="text-zinc-600 text-[10px] sm:text-xs hidden sm:block">{description}</span>}
+          <label className={`text-[10px] sm:text-xs tracking-widest block ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>{label}</label>
+          {description && <span className={`text-[10px] sm:text-xs hidden sm:block ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{description}</span>}
         </div>
         {value && value !== 'none' && (
           <div className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-emerald-500 text-white flex-shrink-0">+{score}%</div>
@@ -1103,9 +1141,11 @@ function PatternSelector({ value, onChange, score, label, description }) {
             className={cn("p-2 sm:p-3 border rounded-lg text-center transition-all flex flex-col items-center justify-center gap-1",
               value === pattern.key
                 ? pattern.key === 'none' 
-                  ? "bg-zinc-700 border-zinc-600 text-white" 
+                  ? darkMode ? "bg-zinc-700 border-zinc-600 text-white" : "bg-zinc-400 border-zinc-400 text-white"
                   : "bg-emerald-500 border-emerald-400 text-white"
-                : "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white")}>
+                : darkMode 
+                  ? "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white"
+                  : "border-zinc-300 text-zinc-600 hover:border-zinc-400 bg-zinc-50 hover:text-black")}>
             <div className="w-6 h-4 sm:w-8 sm:h-5">
               <PatternIcon type={pattern.icon} />
             </div>
@@ -1118,6 +1158,7 @@ function PatternSelector({ value, onChange, score, label, description }) {
 }
 
 function SummaryRow({ label, value, color }) {
+  const { darkMode } = useLanguage();
   const colorClasses = {
     emerald: 'text-emerald-400',
     red: 'text-red-400',
@@ -1127,8 +1168,8 @@ function SummaryRow({ label, value, color }) {
   
   return (
     <div className="flex justify-between items-center py-2">
-      <span className="text-zinc-600 text-xs tracking-wider">{label}</span>
-      <span className={cn("font-bold text-sm", color ? colorClasses[color] : "text-white")}>{value}</span>
+      <span className={`text-xs tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{label}</span>
+      <span className={cn("font-bold text-sm", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
     </div>
   );
 }

@@ -169,80 +169,76 @@ export default function HomePage() {
           <p className={`${theme.textDimmed} text-sm mt-3 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
-        {/* Main Actions - MODERN REDESIGN */}
+        {/* Main Actions - BLACK & WHITE REDESIGN */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="grid md:grid-cols-2 gap-6 mb-16"
         >
-          {/* New Analysis - PRIMARY */}
+          {/* New Analysis - WHITE */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className="group relative p-8 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-3xl hover:from-emerald-600 hover:to-emerald-700 transition-all text-left overflow-hidden shadow-2xl shadow-emerald-500/20"
+            className="group relative p-8 bg-white text-black rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden"
           >
             {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-20 translate-x-20" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-16 -translate-x-16" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-black/5 rounded-full -translate-y-20 translate-x-20" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/5 rounded-full translate-y-16 -translate-x-16" />
             
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-12 h-12 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center">
-                  <ClipboardCheck className="w-6 h-6" />
+                <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center">
+                  <ClipboardCheck className="w-6 h-6 text-white" />
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur text-white text-xs rounded-full ml-auto">
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500 text-white text-xs rounded-full ml-auto">
                   <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                   START
                 </div>
               </div>
               
               <h2 className="text-3xl tracking-wider mb-3 font-bold">{t('newAnalysis')}</h2>
-              <p className="text-emerald-100 text-sm leading-relaxed mb-6 font-sans max-w-xs">
+              <p className="text-zinc-600 text-sm leading-relaxed mb-6 font-sans max-w-xs">
                 {t('newAnalysisDesc')}
               </p>
               
-              <div className="flex items-center gap-3 text-white font-bold tracking-widest">
+              <div className="flex items-center gap-3 text-black font-bold tracking-widest">
                 <span className="text-lg">{t('startNow')}</span>
-                <div className="w-10 h-10 bg-white text-emerald-600 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform">
+                <div className="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform">
                   <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
             </div>
           </button>
 
-          {/* Dashboard - MODERN */}
+          {/* Dashboard - BLACK */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className={`group relative p-8 rounded-3xl transition-all text-left overflow-hidden border-2 ${
-              darkMode 
-                ? 'bg-zinc-900 border-zinc-700 hover:border-zinc-500' 
-                : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'
-            }`}
+            className="group relative p-8 bg-black text-white rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2 border-zinc-800"
           >
             {/* Decorative grid */}
             <div className="absolute inset-0 opacity-5">
-              <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
+              <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
             </div>
             
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
-                  <BarChart3 className={`w-6 h-6 ${theme.text}`} />
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center">
+                  <BarChart3 className="w-6 h-6 text-black" />
                 </div>
-                <div className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-full ml-auto ${darkMode ? 'bg-zinc-800 text-zinc-300' : 'bg-zinc-200 text-zinc-700'}`}>
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full ml-auto">
                   <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                   LIVE
                 </div>
               </div>
               
-              <h2 className={`text-3xl tracking-wider mb-3 font-bold ${theme.text}`}>{t('dashboard')}</h2>
-              <p className={`${theme.textMuted} text-sm leading-relaxed mb-6 font-sans max-w-xs`}>
+              <h2 className="text-3xl tracking-wider mb-3 font-bold">{t('dashboard')}</h2>
+              <p className="text-zinc-400 text-sm leading-relaxed mb-6 font-sans max-w-xs">
                 {t('dashboardDesc')}
               </p>
               
-              <div className={`flex items-center gap-3 font-bold tracking-widest ${theme.text}`}>
+              <div className="flex items-center gap-3 text-white font-bold tracking-widest">
                 <span className="text-lg">{t('openDashboard')}</span>
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ${darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'}`}>
+                <div className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform">
                   <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
