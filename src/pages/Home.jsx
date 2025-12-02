@@ -7,7 +7,7 @@ import {
   Activity, Award, HelpCircle
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
-import { useLanguage, LanguageToggle } from '@/components/LanguageContext';
+import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 
 const SESSIONS = [
@@ -19,7 +19,7 @@ const SESSIONS = [
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, darkMode } = useLanguage();
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(247);
@@ -68,10 +68,23 @@ export default function HomePage() {
     return hour >= session.openHour && hour < session.closeHour;
   };
 
+  // Theme classes
+  const theme = {
+    bg: darkMode ? 'bg-black' : 'bg-white',
+    bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    bgCard: darkMode ? 'bg-zinc-900' : 'bg-zinc-50',
+    text: darkMode ? 'text-white' : 'text-zinc-900',
+    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+    textMuted: darkMode ? 'text-zinc-500' : 'text-zinc-500',
+    textDimmed: darkMode ? 'text-zinc-600' : 'text-zinc-400',
+    border: darkMode ? 'border-zinc-800/50' : 'border-zinc-200',
+    borderCard: darkMode ? 'border-zinc-800' : 'border-zinc-300',
+  };
+
   return (
-    <div className={`min-h-screen bg-black text-white ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
-      <header className="bg-black border-b border-zinc-800/50">
+      <header className={`${theme.bg} border-b ${theme.border}`}>
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -85,14 +98,15 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity invert"
+                className={`h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity ${darkMode ? 'invert' : ''}`}
               />
             </button>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <DarkModeToggle />
               <LanguageToggle />
-              <div className="text-right text-white hidden sm:block">
-                <div className="text-xs text-zinc-500">{t('localTime')}</div>
+              <div className={`text-right hidden sm:block ${theme.text}`}>
+                <div className={`text-xs ${theme.textMuted}`}>{t('localTime')}</div>
                 <div className="text-lg font-mono font-bold">
                   {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                 </div>
@@ -103,10 +117,10 @@ export default function HomePage() {
       </header>
 
       {/* Market Sessions Bar */}
-      <div className="bg-zinc-950 border-b border-zinc-800/50">
+      <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
         <div className="max-w-6xl mx-auto px-6 py-2.5">
           <div className="flex items-center justify-between gap-4 overflow-x-auto">
-            <div className="flex items-center gap-2 text-zinc-400 text-sm whitespace-nowrap">
+            <div className={`flex items-center gap-2 ${theme.textSecondary} text-sm whitespace-nowrap`}>
               <Globe className="w-4 h-4" />
               <span className="hidden sm:inline">{t('marketSessions')}</span>
             </div>
@@ -117,12 +131,12 @@ export default function HomePage() {
                   <div key={session.name} className="flex items-center gap-2 whitespace-nowrap">
                     <span className="text-base">{session.emoji}</span>
                     <div>
-                      <div className="text-[10px] text-zinc-600">{session.name}</div>
-                      <div className={`text-xs font-mono font-bold ${isOpen ? 'text-emerald-400' : 'text-zinc-600'}`}>
+                      <div className={`text-[10px] ${theme.textDimmed}`}>{session.name}</div>
+                      <div className={`text-xs font-mono font-bold ${isOpen ? 'text-emerald-500' : theme.textDimmed}`}>
                         {times[session.name] || '--:--:--'}
                       </div>
                     </div>
-                    <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-700'}`} />
+                    <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                   </div>
                 );
               })}
@@ -138,67 +152,100 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-xs mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-500 text-xs mb-6">
             <Zap className="w-3.5 h-3.5" />
-            <span className="tracking-widest">THE ULTIMATE TRADING TOOL</span>
+            <span className="tracking-widest">{t('tradingTools')}</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
             ZNPCV
           </h1>
-          <h2 className="text-xl md:text-2xl tracking-widest text-zinc-400 mb-6">
+          <h2 className={`text-xl md:text-2xl tracking-widest ${theme.textSecondary} mb-6`}>
             {t('ultimateChecklist')}
           </h2>
-          <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic">
-            "Disziplin schlägt Talent. Jeden. Einzelnen. Tag."
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic`}>
+            "{t('disciplineQuote')}"
           </p>
-          <p className="text-zinc-600 text-sm mt-3 tracking-widest">— ZNPCV PHILOSOPHY</p>
+          <p className={`${theme.textDimmed} text-sm mt-3 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
-        {/* Main Actions - PROMINENT */}
+        {/* Main Actions - MODERN REDESIGN */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-4 mb-16"
+          className="grid md:grid-cols-2 gap-6 mb-16"
         >
           {/* New Analysis - PRIMARY */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className="group p-8 bg-white text-black rounded-2xl hover:bg-zinc-100 transition-all text-left relative overflow-hidden"
+            className="group relative p-8 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-3xl hover:from-emerald-600 hover:to-emerald-700 transition-all text-left overflow-hidden shadow-2xl shadow-emerald-500/20"
           >
-            <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500 text-white text-xs rounded-full">
-              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-              START
-            </div>
-            <ClipboardCheck className="w-10 h-10 mb-4" />
-            <h2 className="text-2xl tracking-wider mb-2">{t('newAnalysis')}</h2>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-4 font-sans">
-              {t('newAnalysisDesc')}
-            </p>
-            <div className="flex items-center gap-2 text-black text-sm font-bold tracking-widest">
-              <span>{t('startNow')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-20 translate-x-20" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-16 -translate-x-16" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-12 h-12 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center">
+                  <ClipboardCheck className="w-6 h-6" />
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur text-white text-xs rounded-full ml-auto">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  START
+                </div>
+              </div>
+              
+              <h2 className="text-3xl tracking-wider mb-3 font-bold">{t('newAnalysis')}</h2>
+              <p className="text-emerald-100 text-sm leading-relaxed mb-6 font-sans max-w-xs">
+                {t('newAnalysisDesc')}
+              </p>
+              
+              <div className="flex items-center gap-3 text-white font-bold tracking-widest">
+                <span className="text-lg">{t('startNow')}</span>
+                <div className="w-10 h-10 bg-white text-emerald-600 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform">
+                  <ArrowRight className="w-5 h-5" />
+                </div>
+              </div>
             </div>
           </button>
 
-          {/* Dashboard */}
+          {/* Dashboard - MODERN */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className="group p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-zinc-600 transition-all text-left relative overflow-hidden"
+            className={`group relative p-8 rounded-3xl transition-all text-left overflow-hidden border-2 ${
+              darkMode 
+                ? 'bg-zinc-900 border-zinc-700 hover:border-zinc-500' 
+                : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'
+            }`}
           >
-            <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full">
-              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-              LIVE
+            {/* Decorative grid */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
             </div>
-            <BarChart3 className="w-10 h-10 text-white mb-4" />
-            <h2 className="text-2xl tracking-wider mb-2">{t('dashboard')}</h2>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-4 font-sans">
-              {t('dashboardDesc')}
-            </p>
-            <div className="flex items-center gap-2 text-white text-sm font-bold tracking-widest">
-              <span>{t('openDashboard')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-6">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+                  <BarChart3 className={`w-6 h-6 ${theme.text}`} />
+                </div>
+                <div className={`flex items-center gap-1.5 px-3 py-1 text-xs rounded-full ml-auto ${darkMode ? 'bg-zinc-800 text-zinc-300' : 'bg-zinc-200 text-zinc-700'}`}>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                  LIVE
+                </div>
+              </div>
+              
+              <h2 className={`text-3xl tracking-wider mb-3 font-bold ${theme.text}`}>{t('dashboard')}</h2>
+              <p className={`${theme.textMuted} text-sm leading-relaxed mb-6 font-sans max-w-xs`}>
+                {t('dashboardDesc')}
+              </p>
+              
+              <div className={`flex items-center gap-3 font-bold tracking-widest ${theme.text}`}>
+                <span className="text-lg">{t('openDashboard')}</span>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ${darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'}`}>
+                  <ArrowRight className="w-5 h-5" />
+                </div>
+              </div>
             </div>
           </button>
         </motion.div>
@@ -216,8 +263,8 @@ export default function HomePage() {
           className="mb-16"
         >
           <div className="text-center mb-8">
-            <h3 className="text-xl tracking-widest mb-2">FEATURES</h3>
-            <p className="text-zinc-600 text-sm">Professionelle Trading-Werkzeuge</p>
+            <h3 className="text-xl tracking-widest mb-2">{t('features')}</h3>
+            <p className={`${theme.textDimmed} text-sm`}>{t('featuresDesc')}</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-4">
@@ -231,13 +278,13 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className="p-6 bg-zinc-950 border border-zinc-800/50 rounded-2xl hover:border-zinc-700 transition-all group"
+                className={`p-6 ${theme.bgSecondary} border ${theme.border} rounded-2xl hover:border-emerald-500/50 transition-all group`}
               >
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <item.icon className="w-6 h-6 text-black" />
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                  <item.icon className={`w-6 h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
                 </div>
-                <h3 className="text-lg tracking-wider mb-2">{t(item.titleKey)}</h3>
-                <p className="text-sm text-zinc-500 leading-relaxed font-sans">{t(item.descKey)}</p>
+                <h3 className={`text-lg tracking-wider mb-2 ${theme.text}`}>{t(item.titleKey)}</h3>
+                <p className={`text-sm ${theme.textMuted} leading-relaxed font-sans`}>{t(item.descKey)}</p>
               </motion.div>
             ))}
           </div>
@@ -251,21 +298,21 @@ export default function HomePage() {
           className="grid grid-cols-3 gap-3 md:gap-4"
         >
           {[
-            { value: '85%+', label: 'ZNPCV Standard', icon: Award },
-            { value: '7', label: 'Step Checklist', icon: CheckCircle2 },
-            { value: '4', label: 'Chart Patterns', icon: Activity },
+            { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
+            { value: '7', labelKey: 'stepChecklist', icon: CheckCircle2 },
+            { value: '4', labelKey: 'chartPatterns', icon: Activity },
           ].map((stat) => (
-            <div key={stat.label} className="text-center p-5 md:p-6 border border-zinc-800/50 rounded-2xl bg-zinc-950">
-              <stat.icon className="w-6 h-6 mx-auto mb-3 text-white" />
-              <div className="text-2xl md:text-3xl font-light mb-1">{stat.value}</div>
-              <div className="text-[10px] md:text-xs text-zinc-600 tracking-widest">{stat.label}</div>
+            <div key={stat.labelKey} className={`text-center p-5 md:p-6 border ${theme.border} rounded-2xl ${theme.bgSecondary}`}>
+              <stat.icon className={`w-6 h-6 mx-auto mb-3 ${theme.text}`} />
+              <div className={`text-2xl md:text-3xl font-light mb-1 ${theme.text}`}>{stat.value}</div>
+              <div className={`text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
             </div>
           ))}
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-zinc-950 border-t border-zinc-800/50">
+      <footer className={`${theme.bgSecondary} border-t ${theme.border}`}>
         <div className="max-w-6xl mx-auto px-6 py-12">
           
           {/* Main Footer Content */}
@@ -276,81 +323,81 @@ export default function HomePage() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                 alt="ZNPCV" 
-                className="h-12 w-auto invert mb-4"
+                className={`h-12 w-auto mb-4 ${darkMode ? 'invert' : ''}`}
               />
-              <p className="text-zinc-500 text-sm font-sans leading-relaxed mb-5">
+              <p className={`${theme.textMuted} text-sm font-sans leading-relaxed mb-5`}>
                 {t('footerDesc')}
               </p>
               <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
+                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  <Lock className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] text-white">SSL</span>
+                  <Lock className="w-3 h-3 text-emerald-500" />
+                  <span className={`text-[10px] ${theme.text}`}>SSL</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] text-white">SECURE</span>
+                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                  <span className={`text-[10px] ${theme.text}`}>SECURE</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-md">
-                  <Globe className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] text-white">24/7</span>
+                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <Globe className="w-3 h-3 text-emerald-500" />
+                  <span className={`text-[10px] ${theme.text}`}>24/7</span>
                 </div>
               </div>
             </div>
 
             {/* Navigation */}
             <div className="md:col-span-3">
-              <h4 className="text-white text-xs tracking-widest mb-4 flex items-center gap-2">
-                <div className="w-1 h-4 bg-white rounded-full" />
+              <h4 className={`${theme.text} text-xs tracking-widest mb-4 flex items-center gap-2`}>
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
                 NAVIGATION
               </h4>
               <div className="space-y-2">
                 <button onClick={() => navigate(createPageUrl('Checklist'))} 
-                  className="w-full flex items-center gap-3 p-2.5 bg-zinc-900/50 border border-zinc-800/50 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all group">
-                  <ClipboardCheck className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
-                  <span className="text-zinc-400 group-hover:text-white text-sm transition-colors">{t('newAnalysis')}</span>
-                  <ChevronRight className="w-3 h-3 text-zinc-600 ml-auto group-hover:translate-x-1 transition-transform" />
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <ClipboardCheck className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('newAnalysis')}</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
                 <button onClick={() => navigate(createPageUrl('Dashboard'))} 
-                  className="w-full flex items-center gap-3 p-2.5 bg-zinc-900/50 border border-zinc-800/50 rounded-lg hover:border-zinc-700 hover:bg-zinc-900 transition-all group">
-                  <BarChart3 className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
-                  <span className="text-zinc-400 group-hover:text-white text-sm transition-colors">{t('dashboard')}</span>
-                  <ChevronRight className="w-3 h-3 text-zinc-600 ml-auto group-hover:translate-x-1 transition-transform" />
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <BarChart3 className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('dashboard')}</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
               </div>
             </div>
 
             {/* Contact */}
             <div className="md:col-span-5">
-              <h4 className="text-white text-xs tracking-widest mb-4 flex items-center gap-2">
-                <div className="w-1 h-4 bg-white rounded-full" />
+              <h4 className={`${theme.text} text-xs tracking-widest mb-4 flex items-center gap-2`}>
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
                 {t('contact')}
               </h4>
               <div className="space-y-2">
-                <a href="mailto:support@znpcv.com" className="flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                <a href="mailto:support@znpcv.com" className={`flex items-center gap-3 p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
                   <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <span className="text-emerald-400 text-sm">@</span>
+                    <span className="text-emerald-500 text-sm">@</span>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[10px] text-zinc-600 tracking-wider">EMAIL</div>
-                    <div className="text-white text-sm group-hover:text-emerald-400 transition-colors">support@znpcv.com</div>
+                    <div className={`text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
+                    <div className={`${theme.text} text-sm group-hover:text-emerald-500 transition-colors`}>support@znpcv.com</div>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-emerald-400 text-[10px]">LIVE</span>
+                    <span className="text-emerald-500 text-[10px]">LIVE</span>
                   </div>
                 </a>
-                <button className="w-full flex items-center gap-3 p-3 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors group">
+                <button className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
                   <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <HelpCircle className="w-4 h-4 text-blue-400" />
+                    <HelpCircle className="w-4 h-4 text-blue-500" />
                   </div>
                   <div className="flex-1 text-left">
-                    <div className="text-[10px] text-zinc-600 tracking-wider">SUPPORT</div>
-                    <div className="text-white text-sm group-hover:text-blue-400 transition-colors">{t('faqHelp')}</div>
+                    <div className={`text-[10px] ${theme.textDimmed} tracking-wider`}>SUPPORT</div>
+                    <div className={`${theme.text} text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-blue-400 text-[10px]">24/7</span>
+                    <span className="text-blue-500 text-[10px]">24/7</span>
                   </div>
                 </button>
               </div>
@@ -358,20 +405,20 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="pt-6 border-t border-zinc-800/50">
+          <div className={`pt-6 border-t ${theme.border}`}>
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <img 
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/d3c7f1a34_schwa.png" 
                   alt="ZNPCV" 
-                  className="h-6 w-auto invert opacity-50"
+                  className={`h-6 w-auto opacity-50 ${darkMode ? 'invert' : ''}`}
                 />
-                <div className="h-4 w-px bg-zinc-800" />
-                <p className="text-zinc-500 text-xs">© {new Date().getFullYear()} ZNPCV</p>
-                <div className="h-4 w-px bg-zinc-800 hidden sm:block" />
-                <p className="text-zinc-600 text-xs hidden sm:block">{t('allRights')}</p>
+                <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
+                <div className={`h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textDimmed} text-xs hidden sm:block`}>{t('allRights')}</p>
               </div>
-              <p className="text-zinc-700 text-[10px] font-sans text-center md:text-right max-w-sm leading-relaxed">
+              <p className={`${theme.textDimmed} text-[10px] font-sans text-center md:text-right max-w-sm leading-relaxed`}>
                 {t('riskWarning')}
               </p>
             </div>
@@ -387,7 +434,7 @@ export default function HomePage() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 w-11 h-11 bg-white text-black flex items-center justify-center shadow-lg hover:bg-zinc-200 transition-colors z-50 rounded-full"
+            className={`fixed bottom-6 right-6 w-11 h-11 flex items-center justify-center shadow-lg transition-colors z-50 rounded-full ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
           >
             <ArrowUp className="w-5 h-5" />
           </motion.button>
