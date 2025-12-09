@@ -9,36 +9,40 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 
 const FAQ_DATA = [
   {
-    category: 'ALLGEMEIN',
+    category: '🎯 GRUNDLAGEN',
     questions: [
       {
         q: 'Was ist ZNPCV?',
-        a: 'ZNPCV ist die ultimative Trading-Checkliste für professionelle Forex-Trader. Unsere Plattform hilft dir, diszipliniert und strukturiert zu traden, indem sie eine systematische Multi-Timeframe-Analyse (Weekly, Daily, 4H) ermöglicht.'
+        a: 'ZNPCV ist eine professionelle Trading-Checkliste, die dich zwingt, strukturiert und diszipliniert zu analysieren. Keine emotionalen Trades mehr – nur A+++ Setups mit Multi-Timeframe Confluence!'
       },
       {
-        q: 'Wie funktioniert die Checkliste?',
-        a: 'Die ZNPCV Checkliste führt dich durch 7 Schritte: Asset & Direction, Weekly Analysis, Daily Analysis, 4H Analysis, Entry Checklist, Risk Management und Final Check. Jeder Schritt gibt Punkte, und nur bei mindestens 85% (A+++) solltest du den Trade eingehen.'
+        q: 'Für wen ist ZNPCV?',
+        a: 'Für Trader die fertig sind mit impulsiven, emotionalen Entscheidungen. Ob du Forex, Crypto, Stocks, Commodities oder Indices tradest - ZNPCV zwingt Disziplin, Struktur und Konsistenz in jeden einzelnen Trade.'
       },
       {
-        q: 'Warum 85% Minimum?',
-        a: 'Nach dem ZNPCV Standard sollst du nur A+++ Trades eingehen. Ein Score unter 85% bedeutet, dass nicht genügend Bestätigungen vorhanden sind, was die Erfolgswahrscheinlichkeit reduziert.'
+        q: 'Welche Assets kann ich analysieren?',
+        a: 'ZNPCV unterstützt alle Major Forex Paare, aber die Methodik funktioniert auch für Crypto, Stocks, Commodities und Indices.'
+      },
+      {
+        q: 'Ist ZNPCV kostenlos?',
+        a: 'Ja! ZNPCV ist komplett kostenlos nutzbar. Alle Features stehen dir ohne Einschränkungen zur Verfügung.'
+      },
+      {
+        q: 'Wie funktioniert die 85% Regel?',
+        a: 'ZNPCV empfiehlt nur Trades mit mindestens 85% Score. Das entspricht einem A+++ Setup mit maximaler Confluence über alle Timeframes (Weekly, Daily, 4H und Entry).'
       }
     ]
   },
   {
-    category: 'TRADING METHODIK',
+    category: '📊 TRADING KONZEPTE',
     questions: [
-      {
-        q: 'Was bedeuten die goldenen Regeln?',
-        a: 'Die ZNPCV Goldenen Regeln sind: 1) Wir kaufen IM oder ÜBER dem AOI (Support), 2) Wir verkaufen IM oder UNTER dem AOI (Resistance), 3) NIE am Boden verkaufen, NIE am Top kaufen!'
-      },
       {
         q: 'Was ist AOI (Area of Interest)?',
         a: 'AOI (Area of Interest) ist die zentrale Preiszone wo du einsteigen möchtest. Es kombiniert Support/Resistance, Struktur und Confluence und ist der EINZIGE Bereich wo ein Trade erlaubt ist.'
       },
       {
         q: 'Was ist RPL (Round Psych Level)?',
-        a: 'RPL (Round Psych Level) ist ein rundes Zahlen-Level (wie 1.1000, 1.2000, 2000, 50000) das viele Trader und Algorithmen beobachten. Diese psychologischen Levels dienen oft als starker Support oder Resistance und sind wichtig in deinem AOI und Risk Planning.'
+        a: 'RPL (Round Psych Level) ist ein rundes Zahlen-Level (wie 1.1000, 1.2000, 2000, 50000) das viele Trader und Algorithmen beobachten. Diese psychologischen Levels dienen oft als starker Support oder Resistance.'
       },
       {
         q: 'Was ist eine EMA?',
@@ -49,12 +53,17 @@ const FAQ_DATA = [
         a: 'MSS (Market Structure Shift) oder SOS (Shift of Structure) bedeutet die Trendstruktur hat sich geändert - zum Beispiel von höheren Highs/höheren Lows zu tieferen Highs/tieferen Lows, oft vor einem größeren Reversal.'
       },
       {
-        q: 'Was ist eine Engulfing Candle?',
-        a: 'Eine Engulfing Candle ist ein starkes Reversal Pattern wo der Body der aktuellen Kerze den Body der vorherigen Kerze komplett umschließt, signalisiert aggressive Kontrolle durch Käufer oder Verkäufer.'
-      },
-      {
         q: 'Was sind Swing High und Swing Low?',
         a: 'Ein Swing High ist ein lokaler Peak wo der Preis abgelehnt wird und nach unten dreht. Ein Swing Low ist ein lokaler Bottom wo der Preis abgelehnt wird und nach oben dreht. Sie markieren wichtige Wendepunkte.'
+      }
+    ]
+  },
+  {
+    category: '🕯️ CHART PATTERNS',
+    questions: [
+      {
+        q: 'Was ist eine Engulfing Candle?',
+        a: 'Eine Engulfing Candle ist ein starkes Reversal Pattern wo der Body der aktuellen Kerze den Body der vorherigen Kerze komplett umschließt, signalisiert aggressive Kontrolle durch Käufer oder Verkäufer.'
       },
       {
         q: 'Was ist ein Head and Shoulders Pattern?',
@@ -66,71 +75,75 @@ const FAQ_DATA = [
       },
       {
         q: 'Welche Patterns werden unterstützt?',
-        a: 'ZNPCV unterstützt vier Chart Patterns: Double Top, Double Bottom, Head & Shoulders (H&S) und Inverted Head & Shoulders (INV H&S).'
+        a: 'ZNPCV unterstützt vier Chart Patterns: Double Top, Double Bottom, Head & Shoulders (H&S) und Inverted Head & Shoulders (INV H&S). Diese müssen auf Weekly, Daily oder 4H Timeframe erscheinen.'
       }
     ]
   },
   {
-    category: 'RISK MANAGEMENT',
+    category: '⚡ GOLDENE REGELN',
     questions: [
       {
-        q: 'Wie berechne ich die richtige Lot Size?',
-        a: 'Der integrierte Lot Size Calculator berechnet automatisch deine empfohlene Position basierend auf Kontogröße, Risiko%, Entry Price und Stop Loss. Gib einfach deine Parameter ein und du erhältst Standard Lots, Mini Lots und Micro Lots.'
+        q: 'Was bedeuten die goldenen Regeln?',
+        a: 'Die ZNPCV Goldenen Regeln sind: 1) Wir kaufen IM oder ÜBER dem AOI (Support), 2) Wir verkaufen IM oder UNTER dem AOI (Resistance), 3) NIE am Boden verkaufen, NIE am Top kaufen! Diese Regeln schützen dich vor emotionalen Fehlentscheidungen.'
       },
       {
-        q: 'Was ist ein gutes Risk:Reward Verhältnis?',
-        a: 'ZNPCV empfiehlt mindestens 1:2.5 R:R Ratio. Das bedeutet, für jeden risikierten Dollar solltest du mindestens 2.50 Dollar Gewinnpotenzial haben.'
+        q: 'Warum nie am Top kaufen / Boden verkaufen?',
+        a: 'Am Top zu kaufen bedeutet du kaufst in Resistance (hohe Wahrscheinlichkeit für Reversal). Am Boden zu verkaufen bedeutet du verkaufst in Support (hohe Wahrscheinlichkeit für Bounce). Beides verstößt gegen die AOI Logik und führt zu schlechten Entries.'
+      }
+    ]
+  },
+  {
+    category: '💰 RISIKOMANAGEMENT',
+    questions: [
+      {
+        q: 'Wie berechne ich meine Lot Size?',
+        a: 'Der integrierte Lot Size Calculator berechnet automatisch deine optimale Position basierend auf Account Size, Risk %, Entry, Stop Loss und dem gewählten Pair. Gib einfach deine Daten ein!'
+      },
+      {
+        q: 'Was ist ein gutes R:R Verhältnis?',
+        a: 'ZNPCV empfiehlt mindestens 1:2.5 Risk:Reward. Das bedeutet, für jeden Dollar den du riskierst, solltest du mindestens 2.50$ Profit-Potential haben. Bei schlechterem R:R wird eine Warnung angezeigt.'
       },
       {
         q: 'Wie viel sollte ich pro Trade riskieren?',
-        a: 'Die klassische Regel ist 1-2% deines Kontos pro Trade. Nie mehr als 5% gleichzeitig in offenen Positionen riskieren.'
+        a: 'Die goldene Regel: Nie mehr als 1-2% deines Accounts pro Trade. Der ZNPCV Calculator hilft dir, die exakte Lot Size zu berechnen basierend auf deinem individuellen Risk %.'
       }
     ]
   },
   {
-    category: 'FEATURES',
+    category: '🚀 FEATURES & FUNKTIONEN',
     questions: [
       {
+        q: 'Was ist die Multi-Timeframe Analyse?',
+        a: 'ZNPCV analysiert Weekly (max 60%), Daily (max 60%), 4H (max 35%) und Entry (max 25%) Timeframes systematisch. Nur wenn alle übereinstimmen (Confluence), hast du ein A+++ Setup mit 85%+ Score.'
+      },
+      {
         q: 'Kann ich meine Trades speichern?',
-        a: 'Ja! Jede Analyse wird automatisch gespeichert. Du kannst sie jederzeit im Dashboard einsehen, bearbeiten oder löschen.'
+        a: 'Ja! Alle deine Analysen werden automatisch gespeichert. Du kannst sie jederzeit im Dashboard aufrufen, bearbeiten oder löschen. Jede Analyse bekommt einen eindeutigen Status (In Progress / Ready to Trade).'
       },
       {
-        q: 'Gibt es einen Economic Calendar?',
-        a: 'Ja, ZNPCV bietet einen integrierten Economic Calendar mit Live Forex Factory Events. Du siehst wichtige News, Impact Level und Forecast vs. Actual Zahlen.'
+        q: 'Gibt es einen Performance Tracker?',
+        a: 'Ja, das Dashboard zeigt alle deine Analysen, Stats, Win/Loss Ratio, durchschnittliche Completion, historische Performance mit Chart, und einen integrierten Kalender für deine Trades.'
       },
       {
-        q: 'Wo finde ich meine Trade History?',
-        a: 'Im Trade History Bereich siehst du alle deine ausgeführten Trades mit Win/Loss/Breakeven Status, P&L, Win Rate und detaillierte Statistiken.'
-      },
-      {
-        q: 'Ist ZNPCV auch mobil nutzbar?',
-        a: 'Absolut! ZNPCV ist vollständig responsive und funktioniert perfekt auf Smartphone, Tablet und Desktop.'
+        q: 'Was ist der Economic Calendar?',
+        a: 'Der Economic Calendar zeigt wichtige Wirtschafts-Events (High/Medium/Low Impact) die Marktbewegungen verursachen können. Plane deine Trades rund um diese Events für bessere Ergebnisse.'
       }
     ]
   },
   {
-    category: 'ACCOUNT & SICHERHEIT',
+    category: '🔒 ACCOUNT & SICHERHEIT',
     questions: [
       {
         q: 'Wie erstelle ich einen Account?',
-        a: 'Klicke auf "Login" und folge den Anweisungen. Die Registrierung ist schnell und sicher über Base44 Authentication.'
+        a: 'Klicke auf "Login" und folge den Anweisungen. Die Registrierung ist schnell und sicher über Base44 Authentication. Keine Kreditkarte nötig.'
       },
       {
         q: 'Sind meine Daten sicher?',
-        a: 'Ja! ZNPCV nutzt SSL-Verschlüsselung und ist DSGVO-konform. Alle Daten werden sicher gespeichert.'
+        a: 'Ja! ZNPCV nutzt SSL-Verschlüsselung, sichere Datenbanken und ist DSGVO-konform. Alle Daten werden verschlüsselt gespeichert und niemals an Dritte weitergegeben.'
       },
       {
         q: 'Kann ich meinen Account löschen?',
-        a: 'Ja, kontaktiere uns einfach per E-Mail und wir löschen deinen Account und alle Daten sofort.'
-      }
-    ]
-  },
-  {
-    category: 'FÜR WEN IST ZNPCV?',
-    questions: [
-      {
-        q: 'Für welche Trader ist ZNPCV gedacht?',
-        a: 'Für Trader die fertig sind mit impulsiven, emotionalen Entscheidungen. Ob du Forex, Crypto, Stocks, Commodities oder Indices tradest - ZNPCV zwingt Disziplin, Struktur und Konsistenz in jeden einzelnen Trade.'
+        a: 'Ja, kontaktiere uns einfach per E-Mail an support@znpcv.com und wir löschen deinen Account und alle Daten sofort gemäß DSGVO-Richtlinien.'
       }
     ]
   }
