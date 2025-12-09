@@ -1,6 +1,244 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const translations = {
+  zh: {
+    // 简体中文
+    online: '在线',
+    localTime: '本地时间',
+    ultimateChecklist: '终极检查清单',
+    tradingTools: '终极交易工具',
+    disciplineQuote: '纪律胜过天赋。每一天。',
+    philosophy: 'ZNPCV 哲学',
+    newAnalysis: '新分析',
+    newAnalysisDesc: '使用终极ZNPCV检查清单开始你的专业多时间框架分析',
+    startNow: '立即开始',
+    dashboard: '仪表板',
+    dashboardDesc: '分析概览、绩效跟踪和详细统计',
+    openDashboard: '打开',
+    marketSessions: '市场时段',
+    features: '功能',
+    featuresDesc: '专业交易工具',
+    preciseAnalysis: '精确分析',
+    preciseAnalysisDesc: 'W-D-4H汇合系统，实现最高准确度',
+    riskManagement: '风险管理',
+    riskManagementDesc: '集成R:R评估和SL/TP规划',
+    performanceTracking: '绩效跟踪',
+    performanceTrackingDesc: '详细统计和成功率',
+    znpcvStandard: 'ZNPCV标准',
+    stepChecklist: '步骤检查清单',
+    chartPatterns: '图表模式',
+    contact: '联系',
+    faqHelp: '常见问题和帮助',
+    footerDesc: '专业交易者的终极交易检查清单。为最大纪律和一致结果而开发。',
+    riskWarning: '交易涉及风险。过往结果不保证未来利润。',
+    allRights: '版权所有。',
+    // Dashboard
+    tradingDashboard: '交易仪表板',
+    overviewStats: '概览与绩效',
+    totalAnalyses: '总分析',
+    readyToTradeShort: '就绪',
+    inProgress: '进行中',
+    withConfluence: '有汇合',
+    activity30Days: '活动（30天）',
+    lastAnalyses: '最新分析',
+    calendar: '日历',
+    avgCompletion: '平均完成度',
+    loading: '加载中...',
+    noAnalyses: '无分析',
+    startFirstAnalysis: '开始第一个分析',
+    // Checklist
+    assetDirection: '资产和方向',
+    selectPairDirection: '选择你的交易对和交易方向',
+    goldenRules: 'ZNPCV黄金法则',
+    longBuyRule: '我们在AOI内或上方买入（支撑）',
+    shortSellRule: '我们在AOI内或下方卖出（阻力）',
+    neverBottomTop: '永远不要在底部卖出！永远不要在顶部买入！',
+    selectDirection: '选择你的方向',
+    buyInAoi: '在/上方AOI买入',
+    sellInAoi: '在/下方AOI卖出',
+    back: '返回',
+    next: '下一步',
+    save: '保存',
+    saving: '保存中...',
+    saveTrade: '保存交易',
+  },
+  es: {
+    // Español
+    online: 'EN LÍNEA',
+    localTime: 'HORA LOCAL',
+    ultimateChecklist: 'CHECKLIST DEFINITIVO',
+    tradingTools: 'LA HERRAMIENTA DEFINITIVA',
+    disciplineQuote: 'La disciplina vence al talento. Todos. Los. Días.',
+    philosophy: 'FILOSOFÍA ZNPCV',
+    newAnalysis: 'NUEVO ANÁLISIS',
+    newAnalysisDesc: 'Inicia tu análisis profesional multi-timeframe con el checklist definitivo ZNPCV',
+    startNow: 'Comenzar ahora',
+    dashboard: 'PANEL',
+    dashboardDesc: 'Vista general de tus análisis, seguimiento de rendimiento y estadísticas detalladas',
+    openDashboard: 'Abrir',
+    marketSessions: 'SESIONES DE MERCADO',
+    features: 'CARACTERÍSTICAS',
+    featuresDesc: 'Herramientas de Trading Profesionales',
+    preciseAnalysis: 'ANÁLISIS PRECISO',
+    preciseAnalysisDesc: 'Sistema de Confluencia W-D-4H para máxima precisión',
+    riskManagement: 'GESTIÓN DE RIESGO',
+    riskManagementDesc: 'Evaluación integrada R:R y planificación SL/TP',
+    performanceTracking: 'SEGUIMIENTO DE RENDIMIENTO',
+    performanceTrackingDesc: 'Estadísticas detalladas y tasas de éxito',
+    znpcvStandard: 'ESTÁNDAR ZNPCV',
+    stepChecklist: 'CHECKLIST DE PASOS',
+    chartPatterns: 'PATRONES DE GRÁFICO',
+    contact: 'CONTACTO',
+    faqHelp: 'PREGUNTAS FRECUENTES Y AYUDA',
+    footerDesc: 'El checklist de trading definitivo para traders profesionales. Desarrollado para máxima disciplina y resultados consistentes.',
+    riskWarning: 'El trading implica riesgos. Los resultados pasados no garantizan ganancias futuras.',
+    allRights: 'Todos los derechos reservados.',
+    tradingDashboard: 'PANEL DE TRADING',
+    overviewStats: 'VISTA GENERAL Y RENDIMIENTO',
+    totalAnalyses: 'ANÁLISIS TOTALES',
+    readyToTradeShort: 'LISTO',
+    inProgress: 'EN PROGRESO',
+    withConfluence: 'CON CONFLUENCIA',
+    activity30Days: 'ACTIVIDAD (30 DÍAS)',
+    lastAnalyses: 'ÚLTIMOS ANÁLISIS',
+    calendar: 'CALENDARIO',
+    avgCompletion: 'COMPLETITUD PROMEDIO',
+    loading: 'CARGANDO...',
+    noAnalyses: 'SIN ANÁLISIS',
+    startFirstAnalysis: 'INICIAR PRIMER ANÁLISIS',
+    assetDirection: 'ACTIVO Y DIRECCIÓN',
+    selectPairDirection: 'Selecciona tu par de trading y dirección',
+    goldenRules: 'REGLAS DORADAS ZNPCV',
+    longBuyRule: 'Compramos EN o SOBRE el AOI (Soporte)',
+    shortSellRule: 'Vendemos EN o BAJO el AOI (Resistencia)',
+    neverBottomTop: '¡NUNCA VENDER EN EL FONDO! ¡NUNCA COMPRAR EN EL TOP!',
+    selectDirection: 'SELECCIONA TU DIRECCIÓN',
+    buyInAoi: 'Comprar en/sobre AOI',
+    sellInAoi: 'Vender en/bajo AOI',
+    back: 'ATRÁS',
+    next: 'SIGUIENTE',
+    save: 'GUARDAR',
+    saving: 'GUARDANDO...',
+    saveTrade: 'GUARDAR OPERACIÓN',
+  },
+  fr: {
+    // Français
+    online: 'EN LIGNE',
+    localTime: 'HEURE LOCALE',
+    ultimateChecklist: 'CHECKLIST ULTIME',
+    tradingTools: "L'OUTIL ULTIME",
+    disciplineQuote: 'La discipline bat le talent. Chaque. Jour.',
+    philosophy: 'PHILOSOPHIE ZNPCV',
+    newAnalysis: 'NOUVELLE ANALYSE',
+    newAnalysisDesc: 'Commencez votre analyse professionnelle multi-timeframe avec la checklist ultime ZNPCV',
+    startNow: 'Commencer maintenant',
+    dashboard: 'TABLEAU DE BORD',
+    dashboardDesc: 'Vue d\'ensemble de vos analyses, suivi des performances et statistiques détaillées',
+    openDashboard: 'Ouvrir',
+    marketSessions: 'SESSIONS DE MARCHÉ',
+    features: 'FONCTIONNALITÉS',
+    featuresDesc: 'Outils de Trading Professionnels',
+    preciseAnalysis: 'ANALYSE PRÉCISE',
+    preciseAnalysisDesc: 'Système de Confluence W-D-4H pour une précision maximale',
+    riskManagement: 'GESTION DES RISQUES',
+    riskManagementDesc: 'Évaluation intégrée R:R et planification SL/TP',
+    performanceTracking: 'SUIVI DES PERFORMANCES',
+    performanceTrackingDesc: 'Statistiques détaillées et taux de réussite',
+    znpcvStandard: 'STANDARD ZNPCV',
+    stepChecklist: 'CHECKLIST D\'ÉTAPES',
+    chartPatterns: 'MODÈLES DE GRAPHIQUE',
+    contact: 'CONTACT',
+    faqHelp: 'FAQ ET AIDE',
+    footerDesc: 'La checklist de trading ultime pour les traders professionnels. Développée pour une discipline maximale et des résultats cohérents.',
+    riskWarning: 'Le trading comporte des risques. Les résultats passés ne garantissent pas les profits futurs.',
+    allRights: 'Tous droits réservés.',
+    tradingDashboard: 'TABLEAU DE BORD TRADING',
+    overviewStats: 'VUE D\'ENSEMBLE ET PERFORMANCE',
+    totalAnalyses: 'ANALYSES TOTALES',
+    readyToTradeShort: 'PRÊT',
+    inProgress: 'EN COURS',
+    withConfluence: 'AVEC CONFLUENCE',
+    activity30Days: 'ACTIVITÉ (30 JOURS)',
+    lastAnalyses: 'DERNIÈRES ANALYSES',
+    calendar: 'CALENDRIER',
+    avgCompletion: 'COMPLÉTION MOYENNE',
+    loading: 'CHARGEMENT...',
+    noAnalyses: 'AUCUNE ANALYSE',
+    startFirstAnalysis: 'COMMENCER LA PREMIÈRE ANALYSE',
+    assetDirection: 'ACTIF ET DIRECTION',
+    selectPairDirection: 'Sélectionnez votre paire de trading et la direction',
+    goldenRules: 'RÈGLES D\'OR ZNPCV',
+    longBuyRule: 'Nous achetons DANS ou AU-DESSUS de l\'AOI (Support)',
+    shortSellRule: 'Nous vendons DANS ou EN-DESSOUS de l\'AOI (Résistance)',
+    neverBottomTop: 'JAMAIS VENDRE AU BAS! JAMAIS ACHETER AU HAUT!',
+    selectDirection: 'SÉLECTIONNEZ VOTRE DIRECTION',
+    buyInAoi: 'Acheter dans/au-dessus AOI',
+    sellInAoi: 'Vendre dans/en-dessous AOI',
+    back: 'RETOUR',
+    next: 'SUIVANT',
+    save: 'ENREGISTRER',
+    saving: 'ENREGISTREMENT...',
+    saveTrade: 'ENREGISTRER L\'OPÉRATION',
+  },
+  ar: {
+    // العربية
+    online: 'متصل',
+    localTime: 'الوقت المحلي',
+    ultimateChecklist: 'القائمة النهائية',
+    tradingTools: 'الأداة النهائية للتداول',
+    disciplineQuote: 'الانضباط يتفوق على الموهبة. كل. يوم.',
+    philosophy: 'فلسفة ZNPCV',
+    newAnalysis: 'تحليل جديد',
+    newAnalysisDesc: 'ابدأ تحليلك الاحترافي متعدد الأطر الزمنية مع قائمة ZNPCV النهائية',
+    startNow: 'ابدأ الآن',
+    dashboard: 'لوحة التحكم',
+    dashboardDesc: 'نظرة عامة على تحليلاتك، تتبع الأداء والإحصائيات التفصيلية',
+    openDashboard: 'فتح',
+    marketSessions: 'جلسات السوق',
+    features: 'الميزات',
+    featuresDesc: 'أدوات التداول المهنية',
+    preciseAnalysis: 'تحليل دقيق',
+    preciseAnalysisDesc: 'نظام التقارب W-D-4H لأقصى دقة',
+    riskManagement: 'إدارة المخاطر',
+    riskManagementDesc: 'تقييم R:R المتكامل وتخطيط SL/TP',
+    performanceTracking: 'تتبع الأداء',
+    performanceTrackingDesc: 'إحصائيات مفصلة ومعدلات نجاح',
+    znpcvStandard: 'معيار ZNPCV',
+    stepChecklist: 'قائمة الخطوات',
+    chartPatterns: 'أنماط الرسم البياني',
+    contact: 'اتصل',
+    faqHelp: 'الأسئلة الشائعة والمساعدة',
+    footerDesc: 'قائمة التداول النهائية للمتداولين المحترفين. مطورة لأقصى انضباط ونتائج متسقة.',
+    riskWarning: 'التداول ينطوي على مخاطر. النتائج السابقة لا تضمن الأرباح المستقبلية.',
+    allRights: 'جميع الحقوق محفوظة.',
+    tradingDashboard: 'لوحة تحكم التداول',
+    overviewStats: 'نظرة عامة والأداء',
+    totalAnalyses: 'إجمالي التحليلات',
+    readyToTradeShort: 'جاهز',
+    inProgress: 'قيد التنفيذ',
+    withConfluence: 'مع التقارب',
+    activity30Days: 'النشاط (30 يومًا)',
+    lastAnalyses: 'أحدث التحليلات',
+    calendar: 'التقويم',
+    avgCompletion: 'متوسط الإكمال',
+    loading: 'جاري التحميل...',
+    noAnalyses: 'لا توجد تحليلات',
+    startFirstAnalysis: 'ابدأ التحليل الأول',
+    assetDirection: 'الأصل والاتجاه',
+    selectPairDirection: 'اختر زوج التداول والاتجاه',
+    goldenRules: 'القواعد الذهبية ZNPCV',
+    longBuyRule: 'نشتري في أو فوق AOI (الدعم)',
+    shortSellRule: 'نبيع في أو تحت AOI (المقاومة)',
+    neverBottomTop: 'لا تبع أبدًا في القاع! لا تشتري أبدًا في القمة!',
+    selectDirection: 'اختر اتجاهك',
+    buyInAoi: 'شراء في/فوق AOI',
+    sellInAoi: 'بيع في/تحت AOI',
+    back: 'رجوع',
+    next: 'التالي',
+    save: 'حفظ',
+    saving: 'جاري الحفظ...',
+    saveTrade: 'حفظ الصفقة',
+  },
   de: {
     // Header
     online: 'ONLINE',
@@ -880,14 +1118,14 @@ export function LanguageProvider({ children }) {
   const t = (key) => translations[language][key] || key;
   
   const toggleLanguage = () => {
-    const langs = ['de', 'en', 'fa'];
+    const langs = ['de', 'en', 'fa', 'zh', 'es', 'fr', 'ar'];
     const currentIndex = langs.indexOf(language);
     setLanguage(langs[(currentIndex + 1) % langs.length]);
   };
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
   
-  const isRTL = language === 'fa';
+  const isRTL = language === 'fa' || language === 'ar';
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, isRTL, darkMode, setDarkMode, toggleDarkMode }}>
@@ -907,9 +1145,19 @@ export function useLanguage() {
 export function LanguageToggle() {
   const { language, setLanguage, darkMode } = useLanguage();
   
+  const langLabels = {
+    de: 'DE',
+    en: 'EN',
+    fa: 'فا',
+    zh: '中',
+    es: 'ES',
+    fr: 'FR',
+    ar: 'ع'
+  };
+  
   return (
-    <div className={`flex items-center gap-1 rounded-lg p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
-      {['de', 'en', 'fa'].map((lang) => (
+    <div className={`flex items-center gap-0.5 rounded-lg p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+      {['de', 'en', 'fa', 'zh', 'es', 'fr', 'ar'].map((lang) => (
         <button
           key={lang}
           onClick={() => setLanguage(lang)}
@@ -919,7 +1167,7 @@ export function LanguageToggle() {
               : darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
           }`}
         >
-          {lang.toUpperCase()}
+          {langLabels[lang]}
         </button>
       ))}
     </div>

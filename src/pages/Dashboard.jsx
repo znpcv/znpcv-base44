@@ -140,6 +140,10 @@ export default function DashboardPage() {
                 <Calendar className="w-5 h-5 mr-2" />
                 CALENDAR
               </Button>
+              <Button onClick={() => navigate(createPageUrl('TradeHistory'))} variant="outline" className={`hidden md:flex px-4 py-2 rounded-xl tracking-widest ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'}`}>
+                <Activity className="w-5 h-5 mr-2" />
+                HISTORY
+              </Button>
 
               <DarkModeToggle />
               <LanguageToggle />

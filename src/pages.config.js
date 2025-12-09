@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import EconomicCalendar from './pages/EconomicCalendar';
 import FAQ from './pages/FAQ';
+import TradeHistory from './pages/TradeHistory';
 import __Layout from './Layout.jsx';
 
 
@@ -12,6 +13,7 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "EconomicCalendar": EconomicCalendar,
     "FAQ": FAQ,
+    "TradeHistory": TradeHistory,
 }
 
 export const pagesConfig = {
