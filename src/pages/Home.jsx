@@ -413,23 +413,16 @@ export default function HomePage() {
                   </div>
                 </button>
 
-                {/* Trustpilot */}
-                <a href="https://www.trustpilot.com/review/znpcv.com" target="_blank" rel="noopener noreferrer" className={`w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <img 
-                      src={darkMode 
-                        ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/37569f134_furschwarzenhitergrundtrustpilot.png"
-                        : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/c4fd14bda_logo_dark.png"
-                      }
-                      alt="Trustpilot" 
-                      className="w-5 h-5"
-                    />
-                  </div>
-                  <div className="flex-1 text-left min-w-0">
-                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>REVIEWS</div>
-                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-emerald-500 transition-colors`}>Trustpilot</div>
-                  </div>
-                </a>
+                </div>
+            </div>
+          </div>
+
+          {/* Trustpilot Reviews */}
+          <div className={`py-8 sm:py-10 border-t ${theme.border}`}>
+            <div className="max-w-5xl mx-auto">
+              {/* TrustBox widget - Carousel */}
+              <div className="trustpilot-widget" data-locale="en-US" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="676f5a3b8c6df500014b4e24" data-style-height="130px" data-style-width="100%" data-theme={darkMode ? "dark" : "light"} data-stars="1,2,3,4,5" data-review-languages="en">
+                <a href="https://www.trustpilot.com/review/znpcv.com" target="_blank" rel="noopener noreferrer" className={`text-xs ${theme.textMuted} hover:text-emerald-500 transition-colors`}>Trustpilot Reviews</a>
               </div>
             </div>
           </div>
