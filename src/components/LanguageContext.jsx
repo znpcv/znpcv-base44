@@ -1211,32 +1211,38 @@ export function useLanguage() {
 export function LanguageToggle() {
   const { language, setLanguage, darkMode } = useLanguage();
   
-  const langLabels = {
-    de: 'DE',
-    en: 'EN',
-    fa: 'فا',
-    zh: '中',
-    es: 'ES',
-    fr: 'FR',
-    ar: 'ع',
-    hi: 'हि',
-    ja: '日',
-    pt: 'PT'
-  };
+  const languages = [
+    { code: 'de', flag: '🇩🇪', label: 'DE' },
+    { code: 'en', flag: '🇬🇧', label: 'EN' },
+    { code: 'zh', flag: '🇨🇳', label: 'ZH' },
+    { code: 'es', flag: '🇪🇸', label: 'ES' },
+    { code: 'fr', flag: '🇫🇷', label: 'FR' },
+    { code: 'pt', flag: '🇵🇹', label: 'PT' },
+    { code: 'hi', flag: '🇮🇳', label: 'HI' },
+    { code: 'ja', flag: '🇯🇵', label: 'JA' },
+    { code: 'ar', flag: '🇸🇦', label: 'AR' },
+    { code: 'fa', flag: '🇮🇷', label: 'FA' }
+  ];
   
   return (
-    <div className={`flex flex-wrap items-center gap-0.5 rounded-lg p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
-      {['de', 'en', 'zh', 'es', 'fr', 'pt', 'hi', 'ja', 'ar', 'fa'].map((lang) => (
+    <div className={`flex flex-wrap items-center gap-1 rounded-xl p-1.5 border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+      {languages.map((lang) => (
         <button
-          key={lang}
-          onClick={() => setLanguage(lang)}
-          className={`px-2 py-1 text-xs tracking-wider rounded transition-colors ${
-            language === lang 
-              ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
-              : darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
+          key={lang.code}
+          onClick={() => setLanguage(lang.code)}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all ${
+            language === lang.code 
+              ? darkMode 
+                ? 'bg-white text-black shadow-lg' 
+                : 'bg-zinc-900 text-white shadow-lg'
+              : darkMode 
+                ? 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800' 
+                : 'text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200'
           }`}
+          title={lang.label}
         >
-          {langLabels[lang]}
+          <span className="text-base leading-none">{lang.flag}</span>
+          <span className="hidden sm:inline">{lang.label}</span>
         </button>
       ))}
     </div>

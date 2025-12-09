@@ -405,22 +405,14 @@ export default function HomePage() {
                     <div className={`text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
                     <div className={`${theme.text} text-sm group-hover:text-emerald-500 transition-colors`}>support@znpcv.com</div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-emerald-500 text-[10px]">LIVE</span>
-                  </div>
                 </a>
-                <button className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
+                <button onClick={() => navigate(createPageUrl('FAQ'))} className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
                   <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
                     <HelpCircle className="w-4 h-4 text-blue-500" />
                   </div>
                   <div className="flex-1 text-left">
                     <div className={`text-[10px] ${theme.textDimmed} tracking-wider`}>SUPPORT</div>
                     <div className={`${theme.text} text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-                    <span className="text-blue-500 text-[10px]">24/7</span>
                   </div>
                 </button>
               </div>
