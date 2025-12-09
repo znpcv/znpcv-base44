@@ -9,7 +9,7 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 
 const FAQ_DATA = [
   {
-    category: '🎯 GRUNDLAGEN',
+    category: 'GRUNDLAGEN',
     questions: [
       {
         q: 'Was ist ZNPCV?',
@@ -23,10 +23,7 @@ const FAQ_DATA = [
         q: 'Welche Assets kann ich analysieren?',
         a: 'ZNPCV unterstützt alle Major Forex Paare, aber die Methodik funktioniert auch für Crypto, Stocks, Commodities und Indices.'
       },
-      {
-        q: 'Ist ZNPCV kostenlos?',
-        a: 'Ja! ZNPCV ist komplett kostenlos nutzbar. Alle Features stehen dir ohne Einschränkungen zur Verfügung.'
-      },
+
       {
         q: 'Wie funktioniert die 85% Regel?',
         a: 'ZNPCV empfiehlt nur Trades mit mindestens 85% Score. Das entspricht einem A+++ Setup mit maximaler Confluence über alle Timeframes (Weekly, Daily, 4H und Entry).'
@@ -34,7 +31,7 @@ const FAQ_DATA = [
     ]
   },
   {
-    category: '📊 TRADING KONZEPTE',
+    category: 'TRADING KONZEPTE',
     questions: [
       {
         q: 'Was ist AOI (Area of Interest)?',
@@ -59,7 +56,7 @@ const FAQ_DATA = [
     ]
   },
   {
-    category: '🕯️ CHART PATTERNS',
+    category: 'CHART PATTERNS',
     questions: [
       {
         q: 'Was ist eine Engulfing Candle?',
@@ -80,7 +77,7 @@ const FAQ_DATA = [
     ]
   },
   {
-    category: '⚡ GOLDENE REGELN',
+    category: 'GOLDENE REGELN',
     questions: [
       {
         q: 'Was bedeuten die goldenen Regeln?',
@@ -93,7 +90,7 @@ const FAQ_DATA = [
     ]
   },
   {
-    category: '💰 RISIKOMANAGEMENT',
+    category: 'RISIKOMANAGEMENT',
     questions: [
       {
         q: 'Wie berechne ich meine Lot Size?',
@@ -110,7 +107,7 @@ const FAQ_DATA = [
     ]
   },
   {
-    category: '🚀 FEATURES & FUNKTIONEN',
+    category: 'FEATURES & FUNKTIONEN',
     questions: [
       {
         q: 'Was ist die Multi-Timeframe Analyse?',
@@ -131,7 +128,7 @@ const FAQ_DATA = [
     ]
   },
   {
-    category: '🔒 ACCOUNT & SICHERHEIT',
+    category: 'ACCOUNT & SICHERHEIT',
     questions: [
       {
         q: 'Wie erstelle ich einen Account?',
@@ -239,7 +236,7 @@ export default function FAQPage() {
             Wenn du weitere Fragen hast, kontaktiere uns gerne direkt
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6`}>
+            <Button className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 font-bold`}>
               <Mail className="w-5 h-5 mr-2" />
               support@znpcv.com
             </Button>

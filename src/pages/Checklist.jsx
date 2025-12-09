@@ -13,6 +13,7 @@ import AssetSelector from '@/components/AssetSelector';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 import LotSizeCalculator from '@/components/LotSizeCalculator';
+import LivePriceDisplay from '@/components/LivePriceDisplay';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
@@ -348,8 +349,14 @@ export default function ChecklistPage() {
           {currentStep === 0 && (
             <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <StepHeader number="01" title={t('assetDirection')} subtitle={t('selectPairDirection')} />
-              
+
               <AssetSelector selectedPair={checklist.pair} onSelect={(pair) => update('pair', pair)} />
+
+              {checklist.pair && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <LivePriceDisplay pair={checklist.pair} darkMode={darkMode} />
+                </motion.div>
+              )}
               
               {checklist.pair && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">

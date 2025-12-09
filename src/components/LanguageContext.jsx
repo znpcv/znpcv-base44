@@ -180,6 +180,66 @@ const translations = {
     saving: 'ENREGISTREMENT...',
     saveTrade: 'ENREGISTRER L\'OPÉRATION',
   },
+  hi: {
+    // हिन्दी
+    online: 'ऑनलाइन',
+    localTime: 'स्थानीय समय',
+    ultimateChecklist: 'अंतिम चेकलिस्ट',
+    tradingTools: 'परम ट्रेडिंग टूल',
+    disciplineQuote: 'अनुशासन प्रतिभा को हराता है। हर। दिन।',
+    philosophy: 'ZNPCV दर्शन',
+    newAnalysis: 'नया विश्लेषण',
+    newAnalysisDesc: 'अंतिम ZNPCV चेकलिस्ट के साथ अपना पेशेवर मल्टी-टाइमफ्रेम विश्लेषण शुरू करें',
+    startNow: 'अभी शुरू करें',
+    dashboard: 'डैशबोर्ड',
+    dashboardDesc: 'आपके विश्लेषण, प्रदर्शन ट्रैकिंग और विस्तृत आँकड़ों का अवलोकन',
+    openDashboard: 'खोलें',
+    back: 'वापस',
+    next: 'अगला',
+    save: 'सहेजें',
+    saving: 'सहेज रहा है...',
+    saveTrade: 'ट्रेड सहेजें',
+  },
+  ja: {
+    // 日本語
+    online: 'オンライン',
+    localTime: '現地時間',
+    ultimateChecklist: '究極のチェックリスト',
+    tradingTools: '究極のトレーディングツール',
+    disciplineQuote: '規律は才能に勝つ。毎日。',
+    philosophy: 'ZNPCV哲学',
+    newAnalysis: '新しい分析',
+    newAnalysisDesc: '究極のZNPCVチェックリストでプロのマルチタイムフレーム分析を開始',
+    startNow: '今すぐ始める',
+    dashboard: 'ダッシュボード',
+    dashboardDesc: 'あなたの分析、パフォーマンス追跡、詳細な統計の概要',
+    openDashboard: '開く',
+    back: '戻る',
+    next: '次へ',
+    save: '保存',
+    saving: '保存中...',
+    saveTrade: 'トレードを保存',
+  },
+  pt: {
+    // Português
+    online: 'ONLINE',
+    localTime: 'HORA LOCAL',
+    ultimateChecklist: 'CHECKLIST DEFINITIVA',
+    tradingTools: 'A FERRAMENTA DEFINITIVA',
+    disciplineQuote: 'Disciplina vence talento. Todos. Os. Dias.',
+    philosophy: 'FILOSOFIA ZNPCV',
+    newAnalysis: 'NOVA ANÁLISE',
+    newAnalysisDesc: 'Comece sua análise profissional multi-timeframe com o checklist definitivo ZNPCV',
+    startNow: 'Começar agora',
+    dashboard: 'PAINEL',
+    dashboardDesc: 'Visão geral de suas análises, rastreamento de desempenho e estatísticas detalhadas',
+    openDashboard: 'Abrir',
+    back: 'VOLTAR',
+    next: 'PRÓXIMO',
+    save: 'SALVAR',
+    saving: 'SALVANDO...',
+    saveTrade: 'SALVAR NEGOCIAÇÃO',
+  },
   ar: {
     // العربية
     online: 'متصل',
@@ -1118,14 +1178,14 @@ export function LanguageProvider({ children }) {
   const t = (key) => translations[language][key] || key;
   
   const toggleLanguage = () => {
-    const langs = ['de', 'en', 'fa', 'zh', 'es', 'fr', 'ar'];
+    const langs = ['de', 'en', 'fa', 'zh', 'es', 'fr', 'ar', 'hi', 'ja', 'pt'];
     const currentIndex = langs.indexOf(language);
     setLanguage(langs[(currentIndex + 1) % langs.length]);
   };
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
   
-  const isRTL = language === 'fa' || language === 'ar';
+  const isRTL = language === 'fa' || language === 'ar' || language === 'hi';
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, isRTL, darkMode, setDarkMode, toggleDarkMode }}>
@@ -1152,12 +1212,15 @@ export function LanguageToggle() {
     zh: '中',
     es: 'ES',
     fr: 'FR',
-    ar: 'ع'
+    ar: 'ع',
+    hi: 'हि',
+    ja: '日',
+    pt: 'PT'
   };
   
   return (
-    <div className={`flex items-center gap-0.5 rounded-lg p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
-      {['de', 'en', 'fa', 'zh', 'es', 'fr', 'ar'].map((lang) => (
+    <div className={`flex flex-wrap items-center gap-0.5 rounded-lg p-1 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+      {['de', 'en', 'zh', 'es', 'fr', 'pt', 'hi', 'ja', 'ar', 'fa'].map((lang) => (
         <button
           key={lang}
           onClick={() => setLanguage(lang)}
