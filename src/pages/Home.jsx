@@ -335,15 +335,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Data Provider */}
-              <div className={`flex items-center justify-center md:justify-start gap-2 p-3 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                <span className={`text-[10px] ${theme.textMuted} tracking-wider`}>DATA BY</span>
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/4ca26c7d2_6304efe625d6dc4dd1612d71.png"
-                  alt="Trading Economics" 
-                  className="h-3 sm:h-4 w-auto opacity-80"
-                />
-              </div>
               </div>
 
             {/* Navigation */}
@@ -365,13 +356,6 @@ export default function HomePage() {
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('dashboard')}</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
-                <button onClick={() => navigate(createPageUrl('EconomicCalendar'))} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <Calendar className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Economic Calendar</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
-
                 <button onClick={() => navigate(createPageUrl('TradeHistory'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
                   <Activity className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
