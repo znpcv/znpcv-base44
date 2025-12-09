@@ -7,36 +7,51 @@ const ASSET_CATEGORIES = {
   forex: {
     label: 'FOREX',
     icon: DollarSign,
-    pairs: [
-      // EUR Pairs
-      { symbol: 'EUR/USD', flags: '🇪🇺🇺🇸' },
-      { symbol: 'EUR/GBP', flags: '🇪🇺🇬🇧' },
-      { symbol: 'EUR/JPY', flags: '🇪🇺🇯🇵' },
-      { symbol: 'EUR/CHF', flags: '🇪🇺🇨🇭' },
-      { symbol: 'EUR/AUD', flags: '🇪🇺🇦🇺' },
-      { symbol: 'EUR/CAD', flags: '🇪🇺🇨🇦' },
-      { symbol: 'EUR/NZD', flags: '🇪🇺🇳🇿' },
-      // USD Pairs
-      { symbol: 'GBP/USD', flags: '🇬🇧🇺🇸' },
-      { symbol: 'USD/JPY', flags: '🇺🇸🇯🇵' },
-      { symbol: 'USD/CHF', flags: '🇺🇸🇨🇭' },
-      { symbol: 'AUD/USD', flags: '🇦🇺🇺🇸' },
-      { symbol: 'USD/CAD', flags: '🇺🇸🇨🇦' },
-      { symbol: 'NZD/USD', flags: '🇳🇿🇺🇸' },
-      // GBP Pairs
-      { symbol: 'GBP/JPY', flags: '🇬🇧🇯🇵' },
-      { symbol: 'GBP/CHF', flags: '🇬🇧🇨🇭' },
-      { symbol: 'GBP/AUD', flags: '🇬🇧🇦🇺' },
-      { symbol: 'GBP/CAD', flags: '🇬🇧🇨🇦' },
-      { symbol: 'GBP/NZD', flags: '🇬🇧🇳🇿' },
-      // AUD Pairs
-      { symbol: 'AUD/JPY', flags: '🇦🇺🇯🇵' },
-      { symbol: 'AUD/CAD', flags: '🇦🇺🇨🇦' },
-      { symbol: 'AUD/NZD', flags: '🇦🇺🇳🇿' },
-      // Other Crosses
-      { symbol: 'NZD/JPY', flags: '🇳🇿🇯🇵' },
-      { symbol: 'CAD/JPY', flags: '🇨🇦🇯🇵' },
-      { symbol: 'CHF/JPY', flags: '🇨🇭🇯🇵' },
+    groups: [
+      {
+        name: 'MAJOR PAIRS',
+        pairs: [
+          { symbol: 'EUR/USD', flags: '🇪🇺🇺🇸' },
+          { symbol: 'GBP/USD', flags: '🇬🇧🇺🇸' },
+          { symbol: 'USD/JPY', flags: '🇺🇸🇯🇵' },
+          { symbol: 'USD/CHF', flags: '🇺🇸🇨🇭' },
+          { symbol: 'AUD/USD', flags: '🇦🇺🇺🇸' },
+          { symbol: 'USD/CAD', flags: '🇺🇸🇨🇦' },
+          { symbol: 'NZD/USD', flags: '🇳🇿🇺🇸' },
+        ]
+      },
+      {
+        name: 'EUR CROSSES',
+        pairs: [
+          { symbol: 'EUR/GBP', flags: '🇪🇺🇬🇧' },
+          { symbol: 'EUR/JPY', flags: '🇪🇺🇯🇵' },
+          { symbol: 'EUR/CHF', flags: '🇪🇺🇨🇭' },
+          { symbol: 'EUR/AUD', flags: '🇪🇺🇦🇺' },
+          { symbol: 'EUR/CAD', flags: '🇪🇺🇨🇦' },
+          { symbol: 'EUR/NZD', flags: '🇪🇺🇳🇿' },
+        ]
+      },
+      {
+        name: 'GBP CROSSES',
+        pairs: [
+          { symbol: 'GBP/JPY', flags: '🇬🇧🇯🇵' },
+          { symbol: 'GBP/CHF', flags: '🇬🇧🇨🇭' },
+          { symbol: 'GBP/AUD', flags: '🇬🇧🇦🇺' },
+          { symbol: 'GBP/CAD', flags: '🇬🇧🇨🇦' },
+          { symbol: 'GBP/NZD', flags: '🇬🇧🇳🇿' },
+        ]
+      },
+      {
+        name: 'OTHER CROSSES',
+        pairs: [
+          { symbol: 'AUD/JPY', flags: '🇦🇺🇯🇵' },
+          { symbol: 'AUD/CAD', flags: '🇦🇺🇨🇦' },
+          { symbol: 'AUD/NZD', flags: '🇦🇺🇳🇿' },
+          { symbol: 'NZD/JPY', flags: '🇳🇿🇯🇵' },
+          { symbol: 'CAD/JPY', flags: '🇨🇦🇯🇵' },
+          { symbol: 'CHF/JPY', flags: '🇨🇭🇯🇵' },
+        ]
+      }
     ]
   },
   crypto: {
@@ -120,8 +135,15 @@ export default function AssetSelector({ selectedPair, onSelect }) {
 
   const getSelectedPairData = () => {
     for (const [key, cat] of Object.entries(ASSET_CATEGORIES)) {
-      const found = cat.pairs.find(p => p.symbol === selectedPair);
-      if (found) return { ...found, category: key };
+      if (cat.groups) {
+        for (const group of cat.groups) {
+          const found = group.pairs.find(p => p.symbol === selectedPair);
+          if (found) return { ...found, category: key };
+        }
+      } else if (cat.pairs) {
+        const found = cat.pairs.find(p => p.symbol === selectedPair);
+        if (found) return { ...found, category: key };
+      }
     }
     return null;
   };
@@ -158,35 +180,73 @@ export default function AssetSelector({ selectedPair, onSelect }) {
         key={activeCategory}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
+        className="space-y-6"
       >
-        {ASSET_CATEGORIES[activeCategory].pairs.map((pair) => {
-          const Icon = ASSET_CATEGORIES[activeCategory].icon;
-          return (
-            <button
-              key={pair.symbol}
-              onClick={() => onSelect(pair.symbol)}
-              className={cn(
-                "py-4 px-3 border rounded-2xl text-center transition-all",
-                selectedPair === pair.symbol
-                  ? "bg-white border-white text-black"
-                  : "border-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-950"
-              )}
-            >
-              {isForex && pair.flags ? (
-                <div className="text-2xl mb-2 tracking-wider">{pair.flags}</div>
-              ) : (
-                <div className={cn(
-                  "w-10 h-10 mx-auto mb-2 rounded-lg flex items-center justify-center",
-                  selectedPair === pair.symbol ? "bg-black/10" : "bg-zinc-800"
-                )}>
-                  <Icon className={cn("w-5 h-5", selectedPair === pair.symbol ? "text-black" : "text-zinc-400")} />
-                </div>
-              )}
-              <div className="text-sm tracking-wider font-bold">{pair.symbol}</div>
-            </button>
-          );
-        })}
+        {ASSET_CATEGORIES[activeCategory].groups ? (
+          ASSET_CATEGORIES[activeCategory].groups.map((group) => (
+            <div key={group.name}>
+              <div className="text-xs text-zinc-600 tracking-widest mb-3 flex items-center gap-2">
+                <div className="w-1 h-3 bg-zinc-700 rounded-full" />
+                {group.name}
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                {group.pairs.map((pair) => {
+                  const Icon = ASSET_CATEGORIES[activeCategory].icon;
+                  return (
+                    <button
+                      key={pair.symbol}
+                      onClick={() => onSelect(pair.symbol)}
+                      className={cn(
+                        "py-4 px-3 border rounded-2xl text-center transition-all",
+                        selectedPair === pair.symbol
+                          ? "bg-white border-white text-black"
+                          : "border-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-950"
+                      )}
+                    >
+                      {pair.flags ? (
+                        <div className="text-2xl mb-2 tracking-wider">{pair.flags}</div>
+                      ) : (
+                        <div className={cn(
+                          "w-10 h-10 mx-auto mb-2 rounded-lg flex items-center justify-center",
+                          selectedPair === pair.symbol ? "bg-black/10" : "bg-zinc-800"
+                        )}>
+                          <Icon className={cn("w-5 h-5", selectedPair === pair.symbol ? "text-black" : "text-zinc-400")} />
+                        </div>
+                      )}
+                      <div className="text-sm tracking-wider font-bold">{pair.symbol}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {ASSET_CATEGORIES[activeCategory].pairs.map((pair) => {
+              const Icon = ASSET_CATEGORIES[activeCategory].icon;
+              return (
+                <button
+                  key={pair.symbol}
+                  onClick={() => onSelect(pair.symbol)}
+                  className={cn(
+                    "py-4 px-3 border rounded-2xl text-center transition-all",
+                    selectedPair === pair.symbol
+                      ? "bg-white border-white text-black"
+                      : "border-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-950"
+                  )}
+                >
+                  <div className={cn(
+                    "w-10 h-10 mx-auto mb-2 rounded-lg flex items-center justify-center",
+                    selectedPair === pair.symbol ? "bg-black/10" : "bg-zinc-800"
+                  )}>
+                    <Icon className={cn("w-5 h-5", selectedPair === pair.symbol ? "text-black" : "text-zinc-400")} />
+                  </div>
+                  <div className="text-sm tracking-wider font-bold">{pair.symbol}</div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
 
       {/* Selected Display */}
