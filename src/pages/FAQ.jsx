@@ -1,0 +1,209 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { Home, HelpCircle, ChevronDown, Mail, MessageCircle } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { createPageUrl } from "@/utils";
+import { cn } from "@/lib/utils";
+import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
+
+const FAQ_DATA = [
+  {
+    category: 'ALLGEMEIN',
+    questions: [
+      {
+        q: 'Was ist ZNPCV?',
+        a: 'ZNPCV ist die ultimative Trading-Checkliste für professionelle Forex-Trader. Unsere Plattform hilft dir, diszipliniert und strukturiert zu traden, indem sie eine systematische Multi-Timeframe-Analyse (Weekly, Daily, 4H) ermöglicht.'
+      },
+      {
+        q: 'Wie funktioniert die Checkliste?',
+        a: 'Die ZNPCV Checkliste führt dich durch 7 Schritte: Asset & Direction, Weekly Analysis, Daily Analysis, 4H Analysis, Entry Checklist, Risk Management und Final Check. Jeder Schritt gibt Punkte, und nur bei mindestens 85% (A+++) solltest du den Trade eingehen.'
+      },
+      {
+        q: 'Warum 85% Minimum?',
+        a: 'Nach dem ZNPCV Standard sollst du nur A+++ Trades eingehen. Ein Score unter 85% bedeutet, dass nicht genügend Bestätigungen vorhanden sind, was die Erfolgswahrscheinlichkeit reduziert.'
+      }
+    ]
+  },
+  {
+    category: 'TRADING METHODIK',
+    questions: [
+      {
+        q: 'Was bedeuten die goldenen Regeln?',
+        a: 'Die ZNPCV Goldenen Regeln sind: 1) Wir kaufen IM oder ÜBER dem AOI (Support), 2) Wir verkaufen IM oder UNTER dem AOI (Resistance), 3) NIE am Boden verkaufen, NIE am Top kaufen!'
+      },
+      {
+        q: 'Was ist AOI (Area of Interest)?',
+        a: 'AOI ist deine markierte Zone im Chart, wo du eine Reaktion erwartest. Es kann ein Support- oder Resistance-Level sein, basierend auf vorherigen Preisstrukturen.'
+      },
+      {
+        q: 'Welche Patterns werden unterstützt?',
+        a: 'ZNPCV unterstützt vier Chart Patterns: Double Top, Double Bottom, Head & Shoulders (H&S) und Inverted Head & Shoulders (INV H&S).'
+      },
+      {
+        q: 'Was ist MSS / SOS?',
+        a: 'MSS (Market Structure Shift) oder SOS (Shift of Structure) bedeutet, dass die Marktstruktur gewechselt hat - von Bullish zu Bearish oder umgekehrt. Dies ist ein wichtiges Einstiegssignal.'
+      }
+    ]
+  },
+  {
+    category: 'RISK MANAGEMENT',
+    questions: [
+      {
+        q: 'Wie berechne ich die richtige Lot Size?',
+        a: 'Der integrierte Lot Size Calculator berechnet automatisch deine empfohlene Position basierend auf Kontogröße, Risiko%, Entry Price und Stop Loss. Gib einfach deine Parameter ein und du erhältst Standard Lots, Mini Lots und Micro Lots.'
+      },
+      {
+        q: 'Was ist ein gutes Risk:Reward Verhältnis?',
+        a: 'ZNPCV empfiehlt mindestens 1:2.5 R:R Ratio. Das bedeutet, für jeden risikierten Dollar solltest du mindestens 2.50 Dollar Gewinnpotenzial haben.'
+      },
+      {
+        q: 'Wie viel sollte ich pro Trade riskieren?',
+        a: 'Die klassische Regel ist 1-2% deines Kontos pro Trade. Nie mehr als 5% gleichzeitig in offenen Positionen riskieren.'
+      }
+    ]
+  },
+  {
+    category: 'FEATURES',
+    questions: [
+      {
+        q: 'Kann ich meine Trades speichern?',
+        a: 'Ja! Jede Analyse wird automatisch gespeichert. Du kannst sie jederzeit im Dashboard einsehen, bearbeiten oder löschen.'
+      },
+      {
+        q: 'Gibt es einen Economic Calendar?',
+        a: 'Ja, ZNPCV bietet einen integrierten Economic Calendar mit Live Forex Factory Events. Du siehst wichtige News, Impact Level und Forecast vs. Actual Zahlen.'
+      },
+      {
+        q: 'Wo finde ich meine Trade History?',
+        a: 'Im Trade History Bereich siehst du alle deine ausgeführten Trades mit Win/Loss/Breakeven Status, P&L, Win Rate und detaillierte Statistiken.'
+      },
+      {
+        q: 'Ist ZNPCV auch mobil nutzbar?',
+        a: 'Absolut! ZNPCV ist vollständig responsive und funktioniert perfekt auf Smartphone, Tablet und Desktop.'
+      }
+    ]
+  },
+  {
+    category: 'ACCOUNT & SICHERHEIT',
+    questions: [
+      {
+        q: 'Wie erstelle ich einen Account?',
+        a: 'Klicke auf "Login" und folge den Anweisungen. Die Registrierung ist schnell und sicher über Base44 Authentication.'
+      },
+      {
+        q: 'Sind meine Daten sicher?',
+        a: 'Ja! ZNPCV nutzt SSL-Verschlüsselung und ist DSGVO-konform. Alle Daten werden sicher gespeichert.'
+      },
+      {
+        q: 'Kann ich meinen Account löschen?',
+        a: 'Ja, kontaktiere uns einfach per E-Mail und wir löschen deinen Account und alle Daten sofort.'
+      }
+    ]
+  }
+];
+
+export default function FAQPage() {
+  const navigate = useNavigate();
+  const { isRTL, darkMode } = useLanguage();
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const theme = {
+    bg: darkMode ? 'bg-black' : 'bg-white',
+    bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    bgCard: darkMode ? 'bg-zinc-900' : 'bg-zinc-50',
+    text: darkMode ? 'text-white' : 'text-zinc-900',
+    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+    textMuted: darkMode ? 'text-zinc-500' : 'text-zinc-500',
+    border: darkMode ? 'border-zinc-800/50' : 'border-zinc-200',
+  };
+
+  return (
+    <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
+      <header className={`${theme.bg} border-b ${theme.border}`}>
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                <Home className="w-6 h-6" />
+              </button>
+              <button onClick={() => navigate(createPageUrl('Home'))}>
+                <img src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                } alt="ZNPCV" className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80" />
+              </button>
+            </div>
+            <div className="flex items-center gap-3">
+              <DarkModeToggle />
+              <LanguageToggle />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-6 py-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <HelpCircle className={`w-10 h-10 ${theme.text}`} />
+          </div>
+          <h1 className={`text-4xl md:text-5xl tracking-widest mb-4 ${theme.text}`}>FAQ & HILFE</h1>
+          <p className={`${theme.textMuted} text-lg max-w-2xl mx-auto font-sans`}>
+            Häufig gestellte Fragen zu ZNPCV, Trading Methodik und Features
+          </p>
+        </motion.div>
+
+        {FAQ_DATA.map((category, catIndex) => (
+          <motion.div key={catIndex} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: catIndex * 0.1 }}
+            className="mb-8">
+            <h2 className={`text-xl tracking-widest mb-4 ${theme.text}`}>{category.category}</h2>
+            <div className="space-y-3">
+              {category.questions.map((item, qIndex) => {
+                const index = `${catIndex}-${qIndex}`;
+                const isOpen = openIndex === index;
+                return (
+                  <div key={qIndex} className={`border ${theme.border} rounded-xl overflow-hidden ${theme.bgCard}`}>
+                    <button onClick={() => setOpenIndex(isOpen ? null : index)}
+                      className={`w-full p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-colors`}>
+                      <span className={`text-left font-bold tracking-wider ${theme.text}`}>{item.q}</span>
+                      <ChevronDown className={cn("w-5 h-5 transition-transform", isOpen && "rotate-180", theme.textMuted)} />
+                    </button>
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                          className={`border-t ${theme.border}`}>
+                          <div className={`p-5 ${theme.textSecondary} font-sans leading-relaxed`}>
+                            {item.a}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        ))}
+
+        {/* Contact Section */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+          className={`mt-16 p-8 border ${theme.border} rounded-2xl ${theme.bgCard} text-center`}>
+          <h3 className={`text-2xl tracking-widest mb-4 ${theme.text}`}>WEITERE FRAGEN?</h3>
+          <p className={`${theme.textMuted} mb-6 font-sans`}>
+            Wenn du weitere Fragen hast, kontaktiere uns gerne direkt
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6`}>
+              <Mail className="w-5 h-5 mr-2" />
+              support@znpcv.com
+            </Button>
+            <Button variant="outline" className={`${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'} rounded-xl px-6`}>
+              <MessageCircle className="w-5 h-5 mr-2" />
+              Live Chat
+            </Button>
+          </div>
+        </motion.div>
+      </main>
+    </div>
+  );
+}

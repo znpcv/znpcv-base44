@@ -126,6 +126,14 @@ export default function DashboardPage() {
               </button>
             </div>
             <div className="flex items-center gap-3">
+              <Button onClick={() => navigate(createPageUrl('EconomicCalendar'))} variant="outline" className={`hidden md:flex px-4 py-2 rounded-xl tracking-widest ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'}`}>
+                <Calendar className="w-5 h-5 mr-2" />
+                CALENDAR
+              </Button>
+              <Button onClick={() => navigate(createPageUrl('TradeHistory'))} variant="outline" className={`hidden md:flex px-4 py-2 rounded-xl tracking-widest ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'}`}>
+                <Activity className="w-5 h-5 mr-2" />
+                HISTORY
+              </Button>
               <DarkModeToggle />
               <LanguageToggle />
               <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-6 py-3 rounded-xl tracking-widest ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>

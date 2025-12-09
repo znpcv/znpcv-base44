@@ -366,6 +366,24 @@ export default function HomePage() {
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('dashboard')}</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
+                <button onClick={() => navigate(createPageUrl('EconomicCalendar'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <Calendar className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Economic Calendar</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
+                <button onClick={() => navigate(createPageUrl('TradeHistory'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <Activity className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Trade History</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
+                <button onClick={() => navigate(createPageUrl('FAQ'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <HelpCircle className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>FAQ & Help</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
               </div>
             </div>
 
