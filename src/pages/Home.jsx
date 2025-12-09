@@ -23,7 +23,7 @@ export default function HomePage() {
   const { t, isRTL, darkMode } = useLanguage();
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [onlineUsers, setOnlineUsers] = useState(247);
+  const [serverStatus, setServerStatus] = useState('operational');
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -43,17 +43,12 @@ export default function HomePage() {
     };
     updateTimes();
     const interval = setInterval(updateTimes, 1000);
-    
-    const userInterval = setInterval(() => {
-      setOnlineUsers(prev => Math.max(200, prev + Math.floor(Math.random() * 5) - 2));
-    }, 5000);
 
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
     
     return () => {
       clearInterval(interval);
-      clearInterval(userInterval);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -91,7 +86,7 @@ export default function HomePage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-emerald-400">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-sm font-medium">{onlineUsers} {t('online')}</span>
+                <span className="text-sm font-medium tracking-wider">SYSTEM OPERATIONAL</span>
               </div>
             </div>
             

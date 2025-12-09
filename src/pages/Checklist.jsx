@@ -815,7 +815,7 @@ export default function ChecklistPage() {
           
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={() => setCurrentStep(prev => prev + 1)} 
-              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
+              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2 ${darkMode ? 'bg-white hover:bg-zinc-100 text-black border-white' : 'bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900'}`}>
               {t('next')} <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
@@ -827,10 +827,10 @@ export default function ChecklistPage() {
                 </Button>
               )}
               <Button onClick={() => handleSave(false)} disabled={saving || !checklist.pair}
-                className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold",
+                className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2",
                   isReady 
-                    ? "bg-emerald-500 hover:bg-emerald-600 text-white" 
-                    : darkMode ? "bg-zinc-800 hover:bg-zinc-700 text-white" : "bg-zinc-300 hover:bg-zinc-400 text-black")}>
+                    ? "bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500" 
+                    : darkMode ? "bg-white hover:bg-zinc-100 text-black border-white" : "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900")}>
                 <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
             </div>
@@ -858,11 +858,11 @@ export default function ChecklistPage() {
 
               <div className="space-y-3">
                 <Button onClick={() => { setShowWarning(false); navigate(createPageUrl('Dashboard')); }}
-                  className="w-full bg-white hover:bg-zinc-200 text-black rounded-xl h-11 tracking-widest font-bold">
+                  className="w-full bg-white hover:bg-zinc-200 text-black rounded-xl h-11 tracking-widest font-bold border-2 border-white">
                   {t('doNotEnter')}
                 </Button>
                 <Button onClick={() => { setShowWarning(false); handleSave(true); }} variant="ghost"
-                  className="w-full text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900 rounded-xl h-10 text-sm">
+                  className="w-full text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 rounded-xl h-10 text-sm">
                   {t('saveAnyway')}
                 </Button>
               </div>

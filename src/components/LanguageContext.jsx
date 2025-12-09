@@ -32,7 +32,6 @@ const translations = {
     footerDesc: '专业交易者的终极交易检查清单。为最大纪律和一致结果而开发。',
     riskWarning: '交易涉及风险。过往结果不保证未来利润。',
     allRights: '版权所有。',
-    // Dashboard
     tradingDashboard: '交易仪表板',
     overviewStats: '概览与绩效',
     totalAnalyses: '总分析',
@@ -46,7 +45,6 @@ const translations = {
     loading: '加载中...',
     noAnalyses: '无分析',
     startFirstAnalysis: '开始第一个分析',
-    // Checklist
     assetDirection: '资产和方向',
     selectPairDirection: '选择你的交易对和交易方向',
     goldenRules: 'ZNPCV黄金法则',
@@ -61,6 +59,10 @@ const translations = {
     save: '保存',
     saving: '保存中...',
     saveTrade: '保存交易',
+    direction: '方向',
+    long: '买入',
+    short: '卖出',
+    of: '的',
   },
   es: {
     // Español
@@ -120,6 +122,10 @@ const translations = {
     save: 'GUARDAR',
     saving: 'GUARDANDO...',
     saveTrade: 'GUARDAR OPERACIÓN',
+    direction: 'DIRECCIÓN',
+    long: 'LARGO',
+    short: 'CORTO',
+    of: 'DE',
   },
   fr: {
     // Français
