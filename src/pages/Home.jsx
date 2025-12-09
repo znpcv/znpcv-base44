@@ -417,16 +417,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Trustpilot Reviews */}
-          <div className={`py-8 sm:py-10 border-t ${theme.border}`}>
-            <div className="max-w-5xl mx-auto">
-              {/* TrustBox widget - Carousel */}
-              <div className="trustpilot-widget" data-locale="en-US" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="676f5a3b8c6df500014b4e24" data-style-height="130px" data-style-width="100%" data-theme={darkMode ? "dark" : "light"} data-stars="1,2,3,4,5" data-review-languages="en">
-                <a href="https://www.trustpilot.com/review/znpcv.com" target="_blank" rel="noopener noreferrer" className={`text-xs ${theme.textMuted} hover:text-emerald-500 transition-colors`}>Trustpilot Reviews</a>
-              </div>
-            </div>
-          </div>
-
           {/* Bottom Bar */}
           <div className={`pt-6 sm:pt-8 border-t ${theme.border}`}>
             <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
