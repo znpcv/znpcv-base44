@@ -81,58 +81,53 @@ export default function HomePage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-emerald-400">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-sm font-medium tracking-wider">SYSTEM OPERATIONAL</span>
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-emerald-400">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-[10px] sm:text-sm font-medium tracking-wider hidden xs:inline">SYSTEM OPERATIONAL</span>
+                <span className="text-[10px] sm:text-sm font-medium tracking-wider xs:hidden">ONLINE</span>
               </div>
             </div>
-            
-            <button onClick={() => navigate(createPageUrl('Home'))}>
+
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img 
                 src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </button>
-            
-            <div className="flex items-center gap-3">
+
+            <div className="flex items-center gap-1.5 sm:gap-3">
               <DarkModeToggle />
               <LanguageToggle />
-              <div className={`text-right hidden sm:block ${theme.text}`}>
-                <div className={`text-xs ${theme.textMuted}`}>{t('localTime')}</div>
-                <div className="text-lg font-mono font-bold">
-                  {currentTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </header>
 
       {/* Market Sessions Bar */}
-      <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-6 py-2.5">
-          <div className="flex items-center justify-between gap-4 overflow-x-auto">
-            <div className={`flex items-center gap-2 ${theme.textSecondary} text-sm whitespace-nowrap`}>
-              <Globe className="w-4 h-4" />
+      <div className={`${theme.bgSecondary} border-b ${theme.border} overflow-hidden`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-2">
+          <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
+            <div className={`flex items-center gap-2 ${theme.textSecondary} text-xs whitespace-nowrap flex-shrink-0`}>
+              <Globe className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{t('marketSessions')}</span>
             </div>
-            <div className="flex items-center gap-4 sm:gap-6">
+            <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto scrollbar-hide">
               {SESSIONS.map((session) => {
                 const isOpen = isSessionOpen(session);
                 return (
-                  <div key={session.name} className="flex items-center gap-2 whitespace-nowrap">
-                    <span className="text-base">{session.emoji}</span>
-                    <div>
-                      <div className={`text-[10px] ${theme.textDimmed}`}>{session.name}</div>
-                      <div className={`text-xs font-mono font-bold ${isOpen ? 'text-emerald-500' : theme.textDimmed}`}>
-                        {times[session.name] || '--:--:--'}
+                  <div key={session.name} className="flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                    <span className="text-sm">{session.emoji}</span>
+                    <div className="hidden sm:block">
+                      <div className={`text-[9px] ${theme.textDimmed} leading-tight`}>{session.name}</div>
+                      <div className={`text-[11px] font-mono font-bold leading-tight ${isOpen ? 'text-emerald-500' : theme.textDimmed}`}>
+                        {times[session.name]?.slice(0, 5) || '--:--'}
                       </div>
                     </div>
                     <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
@@ -145,7 +140,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-6 py-12 md:py-16">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

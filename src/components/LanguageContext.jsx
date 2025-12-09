@@ -1210,6 +1210,7 @@ export function useLanguage() {
 
 export function LanguageToggle() {
   const { language, setLanguage, darkMode } = useLanguage();
+  const [isOpen, setIsOpen] = React.useState(false);
   
   const languages = [
     { code: 'de', flag: '🇩🇪', label: 'DE' },
@@ -1224,27 +1225,55 @@ export function LanguageToggle() {
     { code: 'fa', flag: '🇮🇷', label: 'FA' }
   ];
   
+  const currentLang = languages.find(l => l.code === language) || languages[0];
+  
   return (
-    <div className={`flex flex-wrap items-center gap-1 rounded-xl p-1.5 border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
-      {languages.map((lang) => (
-        <button
-          key={lang.code}
-          onClick={() => setLanguage(lang.code)}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold tracking-widest rounded-lg transition-all ${
-            language === lang.code 
-              ? darkMode 
-                ? 'bg-white text-black shadow-lg' 
-                : 'bg-zinc-900 text-white shadow-lg'
-              : darkMode 
-                ? 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800' 
-                : 'text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200'
-          }`}
-          title={lang.label}
-        >
-          <span className="text-base leading-none">{lang.flag}</span>
-          <span className="hidden sm:inline">{lang.label}</span>
-        </button>
-      ))}
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
+          darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'
+        }`}
+      >
+        <span className="text-lg leading-none">{currentLang.flag}</span>
+        <span className="text-xs font-bold tracking-widest">{currentLang.label}</span>
+        <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
+          <div className={`absolute right-0 mt-2 w-48 rounded-xl border shadow-2xl z-20 overflow-hidden ${
+            darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
+          }`}>
+            <div className="grid grid-cols-2 gap-1 p-2">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                    setIsOpen(false);
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+                    language === lang.code 
+                      ? darkMode 
+                        ? 'bg-white text-black' 
+                        : 'bg-zinc-900 text-white'
+                      : darkMode 
+                        ? 'text-zinc-400 hover:text-white hover:bg-zinc-800' 
+                        : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
+                  }`}
+                >
+                  <span className="text-base leading-none">{lang.flag}</span>
+                  <span className="text-xs font-bold tracking-wider">{lang.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
