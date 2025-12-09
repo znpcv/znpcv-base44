@@ -158,9 +158,9 @@ export default function DashboardPage() {
 
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className={`text-4xl tracking-widest mb-2 ${theme.text}`}>{t('tradingDashboard')}</h1>
-          <p className={`${theme.textMuted} tracking-wider`}>{t('overviewStats')}</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
+          <h1 className={`text-3xl sm:text-4xl tracking-widest mb-2 ${theme.text}`}>{t('tradingDashboard')}</h1>
+          <p className={`${theme.textMuted} tracking-wider text-sm sm:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
         {/* Stats */}
@@ -172,13 +172,13 @@ export default function DashboardPage() {
             { label: t('withConfluence'), value: stats.withConfluence, icon: BarChart3 },
           ].map((stat, index) => (
             <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 + index * 0.05 }}
-              className={cn("border rounded-2xl p-6", 
+              className={cn("border rounded-2xl p-4 sm:p-6", 
                 stat.highlight 
                   ? "bg-emerald-500 text-white border-emerald-500" 
                   : `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-6 h-6 mb-4", stat.highlight ? "text-white" : theme.text)} />
-              <div className={cn("text-4xl font-light mb-1", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-xs tracking-widest", stat.highlight ? "text-emerald-100" : theme.textMuted)}>{stat.label}</div>
+              <stat.icon className={cn("w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4", stat.highlight ? "text-white" : theme.text)} />
+              <div className={cn("text-3xl sm:text-4xl font-light mb-1", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
+              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-emerald-100" : theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -188,12 +188,13 @@ export default function DashboardPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Chart */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg tracking-widest mb-6 flex items-center gap-3 ${theme.text}`}>
-                <BarChart3 className="w-5 h-5" />
-                {t('activity30Days')}
+              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">{t('activity30Days')}</span>
+                <span className="sm:hidden text-sm">ACTIVITY</span>
               </h3>
-              <div className="h-48">
+              <div className="h-40 sm:h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={performanceData}>
                     <defs>
@@ -202,8 +203,8 @@ export default function DashboardPage() {
                         <stop offset="95%" stopColor={darkMode ? "#ffffff" : "#10b981"} stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={10} tickLine={false} axisLine={false} />
-                    <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={10} tickLine={false} axisLine={false} />
+                    <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
+                    <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
                     <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
                     <Area type="monotone" dataKey="trades" stroke={darkMode ? "#ffffff" : "#10b981"} strokeWidth={2} fillOpacity={1} fill="url(#colorTrades)" />
                   </AreaChart>
@@ -214,15 +215,15 @@ export default function DashboardPage() {
             {/* Trade History with Win/Loss */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
               className={`border ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
-              <div className={`p-5 border-b ${theme.border} flex items-center justify-between`}>
-                <h3 className={`text-lg tracking-widest ${theme.text}`}>TRADE HISTORY</h3>
-                <div className="flex gap-2">
+              <div className={`p-4 sm:p-5 border-b ${theme.border} flex items-center justify-between flex-wrap gap-2`}>
+                <h3 className={`text-base sm:text-lg tracking-widest ${theme.text}`}>TRADE HISTORY</h3>
+                <div className="flex gap-1.5 sm:gap-2">
                   {['all', 'win', 'loss'].map((f) => (
                     <button key={f} onClick={() => setFilter(f)}
-                      className={cn("px-3 py-1 text-xs tracking-wider rounded-lg transition-all",
+                      className={cn("px-2 sm:px-3 py-1 text-[10px] sm:text-xs tracking-wider rounded-lg transition-all font-bold border-2",
                         filter === f 
-                          ? darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
-                          : darkMode ? "bg-zinc-800 text-zinc-400" : "bg-zinc-200 text-zinc-600")}>
+                          ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
+                          : darkMode ? "bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700" : "bg-zinc-100 text-zinc-600 border-zinc-300 hover:text-black hover:border-zinc-400")}>
                       {f.toUpperCase()}
                     </button>
                   ))}
@@ -232,28 +233,28 @@ export default function DashboardPage() {
               {isLoading ? (
                 <div className={`p-8 text-center ${theme.textDimmed}`}>{t('loading')}</div>
               ) : recentTrades.length === 0 ? (
-                <div className="p-8 text-center">
-                  <p className={`${theme.textDimmed} mb-4`}>{t('noAnalyses')}</p>
-                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-xl ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                <div className="p-6 sm:p-8 text-center">
+                  <p className={`${theme.textDimmed} mb-4 text-sm sm:text-base`}>{t('noAnalyses')}</p>
+                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-xl border-2 font-bold ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                     {t('startFirstAnalysis')}
                   </Button>
                 </div>
               ) : (
-                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[500px] overflow-y-auto`}>
+                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[400px] sm:max-h-[500px] overflow-y-auto`}>
                   {recentTrades.filter(t => filter === 'all' || t.outcome === filter).map((trade) => (
                     <div key={trade.id} onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}
-                      className={`p-5 cursor-pointer transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
+                      className={`p-4 sm:p-5 cursor-pointer transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
                       <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-3">
-                          <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className={cn("w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl",
                             trade.outcome === 'win' ? 'bg-emerald-500 text-white' :
                             trade.outcome === 'loss' ? 'bg-red-500 text-white' : 
                             trade.direction === 'long' ? 'border-2 border-emerald-500 text-emerald-500' : 'border-2 border-red-500 text-red-500')}>
-                            {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                            {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" /> : <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                           </div>
                           <div>
-                            <div className={`text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
-                            <div className={`text-xs ${theme.textDimmed}`}>
+                            <div className={`text-sm sm:text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
+                            <div className={`text-[10px] sm:text-xs ${theme.textDimmed}`}>
                               {format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}
                             </div>
                           </div>
@@ -261,12 +262,12 @@ export default function DashboardPage() {
                         <div className="text-right">
                           {trade.outcome && (
                             <>
-                              <div className={cn("text-lg font-bold",
+                              <div className={cn("text-base sm:text-lg font-bold",
                                 parseFloat(trade.pnl) > 0 ? 'text-emerald-500' :
                                 parseFloat(trade.pnl) < 0 ? 'text-red-500' : theme.text)}>
                                 {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
                               </div>
-                              <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
+                              <div className={cn("text-[10px] sm:text-xs tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full",
                                 trade.outcome === 'win' ? 'bg-emerald-500/20 text-emerald-500' :
                                 trade.outcome === 'loss' ? 'bg-red-500/20 text-red-500' : 'bg-zinc-600/20 text-zinc-400')}>
                                 {trade.outcome.toUpperCase()}
@@ -274,13 +275,13 @@ export default function DashboardPage() {
                             </>
                           )}
                           {!trade.outcome && (
-                            <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">
+                            <span className="px-2 sm:px-3 py-1 bg-blue-500 text-white text-[10px] sm:text-xs tracking-wider rounded-full font-bold">
                               {trade.status === 'ready_to_trade' ? 'READY' : 'PENDING'}
                             </span>
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 text-xs">
+                      <div className="flex items-center gap-4 text-[10px] sm:text-xs">
                         <span className={theme.textMuted}>Score: <span className={theme.text}>{Math.round(trade.completion_percentage || 0)}%</span></span>
                       </div>
                     </div>
@@ -291,12 +292,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Right */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Direction Pie */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg tracking-widest mb-4 flex items-center gap-3 ${theme.text}`}>
-                <PieChart className="w-5 h-5" />
+              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-4 flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+                <PieChart className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('direction')}
               </h3>
               <div className="h-40">
@@ -323,27 +324,27 @@ export default function DashboardPage() {
 
             {/* Market Sessions */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg tracking-widest mb-4 flex items-center gap-3 ${theme.text}`}>
-                <Globe className="w-5 h-5" />
+              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-4 flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+                <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('marketSessions')}
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {SESSIONS.map((session) => {
                   const isOpen = isSessionOpen(session);
                   return (
-                    <div key={session.name} className={cn("flex items-center justify-between p-4 border rounded-xl transition-all",
-                      isOpen ? "border-emerald-500 bg-emerald-500 text-white" : `${theme.border}`)}>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xl">{session.emoji}</span>
+                    <div key={session.name} className={cn("flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all",
+                      isOpen ? "border-emerald-500 bg-emerald-500 text-white" : darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-300 bg-zinc-100")}>
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-lg sm:text-xl">{session.emoji}</span>
                         <div>
-                          <div className={cn("text-sm tracking-wider", isOpen ? "text-white" : theme.text)}>{session.name}</div>
-                          <div className={cn("text-xs", isOpen ? "text-emerald-100" : theme.textDimmed)}>
-                            {isOpen ? `● ${t('open')}` : `○ ${t('closed')}`}
+                          <div className={cn("text-xs sm:text-sm tracking-wider font-bold", isOpen ? "text-white" : theme.text)}>{session.name}</div>
+                          <div className={cn("text-[10px] sm:text-xs", isOpen ? "text-emerald-100" : theme.textDimmed)}>
+                            {isOpen ? '● OPEN' : '○ CLOSED'}
                           </div>
                         </div>
                       </div>
-                      <div className={cn("text-2xl font-mono", isOpen ? "text-white" : theme.textMuted)}>
+                      <div className={cn("text-xl sm:text-2xl font-mono font-bold", isOpen ? "text-white" : theme.textMuted)}>
                         {times[session.name] || '--:--'}
                       </div>
                     </div>
@@ -354,10 +355,10 @@ export default function DashboardPage() {
 
             {/* Calendar */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
+              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className={`text-lg tracking-widest flex items-center gap-3 ${theme.text}`}>
-                  <Calendar className="w-5 h-5" />
+                <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   {t('calendar')}
                 </h3>
                 <div className="flex gap-3">
@@ -392,9 +393,9 @@ export default function DashboardPage() {
 
             {/* Avg Completion */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary} text-center`}>
-              <div className={`text-6xl font-light mb-2 ${theme.text}`}>{stats.avgCompletion}%</div>
-              <div className={`text-sm ${theme.textMuted} tracking-widest mb-4`}>{t('avgCompletion')}</div>
+              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary} text-center`}>
+              <div className={`text-5xl sm:text-6xl font-light mb-2 ${theme.text}`}>{stats.avgCompletion}%</div>
+              <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-3 sm:mb-4`}>{t('avgCompletion')}</div>
               <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                 <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${stats.avgCompletion}%` }} />
               </div>

@@ -93,30 +93,30 @@ export default function TradeHistoryPage() {
         </motion.div>
 
         {/* Stats Grid */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className={cn("border rounded-2xl p-6", stats.totalPnL >= 0 ? "bg-emerald-500 border-emerald-500 text-white" : "bg-red-500 border-red-500 text-white")}>
-            <TrendingUp className="w-6 h-6 mb-4" />
-            <div className="text-3xl font-light mb-1">${stats.totalPnL.toFixed(2)}</div>
-            <div className="text-xs tracking-widest opacity-80">TOTAL P&L</div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className={cn("border-2 rounded-2xl p-4 sm:p-6", stats.totalPnL >= 0 ? "bg-emerald-500 border-emerald-500 text-white" : "bg-red-500 border-red-500 text-white")}>
+            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4" />
+            <div className="text-2xl sm:text-3xl font-light mb-1">${stats.totalPnL.toFixed(2)}</div>
+            <div className="text-[10px] sm:text-xs tracking-widest opacity-80">TOTAL P&L</div>
           </div>
-          <div className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-            <Award className={`w-6 h-6 mb-4 ${theme.text}`} />
-            <div className={`text-3xl font-light mb-1 ${theme.text}`}>{stats.winRate}%</div>
-            <div className={`text-xs tracking-widest ${theme.textMuted}`}>WIN RATE</div>
+          <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+            <Award className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+            <div className={`text-2xl sm:text-3xl font-light mb-1 ${theme.text}`}>{stats.winRate}%</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>WIN RATE</div>
           </div>
-          <div className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-            <Target className={`w-6 h-6 mb-4 ${theme.text}`} />
-            <div className={`text-3xl font-light mb-1 ${theme.text}`}>{stats.wins}/{stats.losses}</div>
-            <div className={`text-xs tracking-widest ${theme.textMuted}`}>W/L RATIO</div>
+          <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+            <Target className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+            <div className={`text-2xl sm:text-3xl font-light mb-1 ${theme.text}`}>{stats.wins}/{stats.losses}</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>W/L RATIO</div>
           </div>
-          <div className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-            <Calendar className={`w-6 h-6 mb-4 ${theme.text}`} />
-            <div className={`text-3xl font-light mb-1 ${theme.text}`}>{stats.executedTrades.length}</div>
-            <div className={`text-xs tracking-widest ${theme.textMuted}`}>TRADES</div>
+          <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+            <Calendar className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+            <div className={`text-2xl sm:text-3xl font-light mb-1 ${theme.text}`}>{stats.executedTrades.length}</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>TRADES</div>
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Trades List */}
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
