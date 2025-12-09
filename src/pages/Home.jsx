@@ -301,45 +301,58 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className={`${theme.bgSecondary} border-t ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+
           {/* Main Footer Content */}
-          <div className="grid md:grid-cols-12 gap-8 md:gap-12 mb-10">
-            
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-10">
+
             {/* Brand & Description */}
-            <div className="md:col-span-4">
+            <div className="md:col-span-4 text-center md:text-left">
               <img 
                 src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-16 sm:h-20 md:h-24 w-auto mb-4 mx-auto"
+                className="h-14 sm:h-16 md:h-20 w-auto mb-3 sm:mb-4 mx-auto md:mx-0"
               />
-              <p className={`${theme.textMuted} text-sm font-sans leading-relaxed mb-5`}>
+              <p className={`${theme.textMuted} text-xs sm:text-sm font-sans leading-relaxed mb-4 sm:mb-5`}>
                 {t('footerDesc')}
               </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-5">
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
                   <Lock className="w-3 h-3 text-emerald-500" />
-                  <span className={`text-[10px] ${theme.text}`}>SSL</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL</span>
                 </div>
-                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                  <span className={`text-[10px] ${theme.text}`}>SECURE</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SECURE</span>
                 </div>
-                <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <Globe className="w-3 h-3 text-emerald-500" />
-                  <span className={`text-[10px] ${theme.text}`}>24/7</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
                 </div>
+              </div>
+
+              {/* Data Provider */}
+              <div className={`flex items-center justify-center md:justify-start gap-2 p-3 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                <span className={`text-[10px] ${theme.textMuted} tracking-wider`}>DATA BY</span>
+                <img 
+                  src={darkMode 
+                    ? "https://tradingeconomics.com/images/te-logo-white.svg"
+                    : "https://tradingeconomics.com/images/te-logo.svg"
+                  }
+                  alt="Trading Economics" 
+                  className="h-3 sm:h-4 w-auto opacity-80"
+                />
               </div>
             </div>
 
             {/* Navigation */}
             <div className="md:col-span-3">
-              <h4 className={`${theme.text} text-xs tracking-widest mb-4 flex items-center gap-2`}>
-                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+              <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
+                <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
                 NAVIGATION
               </h4>
               <div className="space-y-2">
@@ -379,51 +392,65 @@ export default function HomePage() {
 
             {/* Contact */}
             <div className="md:col-span-5">
-              <h4 className={`${theme.text} text-xs tracking-widest mb-4 flex items-center gap-2`}>
-                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+              <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
+                <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
                 {t('contact')}
               </h4>
               <div className="space-y-2">
-                <a href="mailto:support@znpcv.com" className={`flex items-center gap-3 p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
-                  <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <span className="text-emerald-500 text-sm">@</span>
+                <a href="mailto:support@znpcv.com" className={`flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-emerald-500 text-xs sm:text-sm">@</span>
                   </div>
-                  <div className="flex-1">
-                    <div className={`text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
-                    <div className={`${theme.text} text-sm group-hover:text-emerald-500 transition-colors`}>support@znpcv.com</div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
+                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-emerald-500 transition-colors truncate`}>support@znpcv.com</div>
                   </div>
                 </a>
-                <button onClick={() => navigate(createPageUrl('FAQ'))} className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <HelpCircle className="w-4 h-4 text-blue-500" />
+                <button onClick={() => navigate(createPageUrl('FAQ'))} className={`w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
                   </div>
-                  <div className="flex-1 text-left">
-                    <div className={`text-[10px] ${theme.textDimmed} tracking-wider`}>SUPPORT</div>
-                    <div className={`${theme.text} text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
+                  <div className="flex-1 text-left min-w-0">
+                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>SUPPORT</div>
+                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
                   </div>
                 </button>
               </div>
             </div>
           </div>
 
+          {/* Trustpilot Widget */}
+          <div className={`py-6 sm:py-8 border-t ${theme.border}`}>
+            <div className="max-w-4xl mx-auto text-center">
+              <h4 className={`${theme.text} text-xs tracking-widest mb-4 flex items-center gap-2 justify-center`}>
+                <div className={`w-1 h-3 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                TRUSTED BY TRADERS
+              </h4>
+              {/* TrustBox widget - Carousel */}
+              <div className="trustpilot-widget" data-locale="en-US" data-template-id="53aa8912dec7e10d38f59f36" data-businessunit-id="676f5a3b8c6df500014b4e24" data-style-height="140px" data-style-width="100%" data-theme={darkMode ? "dark" : "light"} data-stars="1,2,3,4,5" data-review-languages="en">
+                <a href="https://www.trustpilot.com/review/znpcv.com" target="_blank" rel="noopener noreferrer" className={`text-xs ${theme.textMuted} hover:text-emerald-500`}>Trustpilot</a>
+              </div>
+            </div>
+          </div>
+
           {/* Bottom Bar */}
-          <div className={`pt-6 border-t ${theme.border}`}>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
+          <div className={`pt-6 sm:pt-8 border-t ${theme.border}`}>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
                 <img 
                   src={darkMode 
                     ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                     : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
                   alt="ZNPCV" 
-                  className="h-8 sm:h-10 w-auto opacity-50"
+                  className="h-7 sm:h-8 md:h-10 w-auto opacity-50"
                 />
-                <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
-                <div className={`h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <p className={`${theme.textDimmed} text-xs hidden sm:block`}>{t('allRights')}</p>
+                <div className={`h-3 sm:h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textMuted} text-[10px] sm:text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
+                <div className={`h-3 sm:h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textDimmed} text-[10px] sm:text-xs hidden sm:block`}>{t('allRights')}</p>
               </div>
-              <p className={`${theme.textDimmed} text-[10px] font-sans text-center md:text-right max-w-sm leading-relaxed`}>
+              <p className={`${theme.textDimmed} text-[9px] sm:text-[10px] font-sans text-center md:text-right max-w-sm sm:max-w-md leading-relaxed px-2 sm:px-0`}>
                 {t('riskWarning')}
               </p>
             </div>

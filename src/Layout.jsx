@@ -2,6 +2,20 @@ import React from 'react';
 import { LanguageProvider } from './components/LanguageContext';
 
 export default function Layout({ children }) {
+  React.useEffect(() => {
+    // Load Trustpilot widget script
+    const script = document.createElement('script');
+    script.src = '//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <LanguageProvider>
       <style>
