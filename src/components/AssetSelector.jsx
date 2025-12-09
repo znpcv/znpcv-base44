@@ -8,30 +8,35 @@ const ASSET_CATEGORIES = {
     label: 'FOREX',
     icon: DollarSign,
     pairs: [
+      // EUR Pairs
       { symbol: 'EUR/USD', flags: '🇪🇺🇺🇸' },
+      { symbol: 'EUR/GBP', flags: '🇪🇺🇬🇧' },
+      { symbol: 'EUR/JPY', flags: '🇪🇺🇯🇵' },
+      { symbol: 'EUR/CHF', flags: '🇪🇺🇨🇭' },
+      { symbol: 'EUR/AUD', flags: '🇪🇺🇦🇺' },
+      { symbol: 'EUR/CAD', flags: '🇪🇺🇨🇦' },
+      { symbol: 'EUR/NZD', flags: '🇪🇺🇳🇿' },
+      // USD Pairs
       { symbol: 'GBP/USD', flags: '🇬🇧🇺🇸' },
       { symbol: 'USD/JPY', flags: '🇺🇸🇯🇵' },
       { symbol: 'USD/CHF', flags: '🇺🇸🇨🇭' },
       { symbol: 'AUD/USD', flags: '🇦🇺🇺🇸' },
       { symbol: 'USD/CAD', flags: '🇺🇸🇨🇦' },
       { symbol: 'NZD/USD', flags: '🇳🇿🇺🇸' },
-      { symbol: 'EUR/GBP', flags: '🇪🇺🇬🇧' },
-      { symbol: 'EUR/JPY', flags: '🇪🇺🇯🇵' },
+      // GBP Pairs
       { symbol: 'GBP/JPY', flags: '🇬🇧🇯🇵' },
-      { symbol: 'EUR/AUD', flags: '🇪🇺🇦🇺' },
+      { symbol: 'GBP/CHF', flags: '🇬🇧🇨🇭' },
       { symbol: 'GBP/AUD', flags: '🇬🇧🇦🇺' },
-      { symbol: 'EUR/CAD', flags: '🇪🇺🇨🇦' },
       { symbol: 'GBP/CAD', flags: '🇬🇧🇨🇦' },
+      { symbol: 'GBP/NZD', flags: '🇬🇧🇳🇿' },
+      // AUD Pairs
       { symbol: 'AUD/JPY', flags: '🇦🇺🇯🇵' },
+      { symbol: 'AUD/CAD', flags: '🇦🇺🇨🇦' },
+      { symbol: 'AUD/NZD', flags: '🇦🇺🇳🇿' },
+      // Other Crosses
       { symbol: 'NZD/JPY', flags: '🇳🇿🇯🇵' },
       { symbol: 'CAD/JPY', flags: '🇨🇦🇯🇵' },
       { symbol: 'CHF/JPY', flags: '🇨🇭🇯🇵' },
-      { symbol: 'EUR/CHF', flags: '🇪🇺🇨🇭' },
-      { symbol: 'GBP/CHF', flags: '🇬🇧🇨🇭' },
-      { symbol: 'AUD/CAD', flags: '🇦🇺🇨🇦' },
-      { symbol: 'AUD/NZD', flags: '🇦🇺🇳🇿' },
-      { symbol: 'EUR/NZD', flags: '🇪🇺🇳🇿' },
-      { symbol: 'GBP/NZD', flags: '🇬🇧🇳🇿' },
     ]
   },
   crypto: {
