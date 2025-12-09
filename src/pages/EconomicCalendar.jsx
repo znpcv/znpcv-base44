@@ -275,8 +275,13 @@ export default function EconomicCalendarPage() {
             <AlertCircle className="w-5 h-5 text-yellow-500" />
             <span className="text-sm tracking-widest text-yellow-600 dark:text-yellow-400 font-bold">WICHTIGER HINWEIS</span>
           </div>
-          <p className={`text-sm ${theme.textSecondary} mb-4 font-sans`}>
-            <strong>Live-Daten Integration:</strong> Forex Factory erlaubt keine direkte API-Nutzung. Für echte Live-Daten benötigst du eine Backend-Integration mit Web Scraping oder alternative APIs wie Trading Economics, Investing.com oder FXStreet. Aktuell werden Demo-Daten angezeigt.
+          <p className={`text-sm ${theme.textSecondary} mb-4 font-sans leading-relaxed`}>
+            <strong>🔴 Live-Daten Setup erforderlich:</strong><br/>
+            1. Registriere dich auf <a href="https://tradingeconomics.com/api" target="_blank" rel="noopener" className="text-blue-500 underline">Trading Economics API</a> (kostenloser Plan verfügbar)<br/>
+            2. Hole deinen API Key<br/>
+            3. Setze den Key in Dashboard → Settings → Secrets als <code className="bg-zinc-800 px-2 py-0.5 rounded">TRADING_ECONOMICS_API_KEY</code><br/>
+            4. Die Integration ist vorbereitet in <code className="bg-zinc-800 px-2 py-0.5 rounded">functions/fetchTradingEconomics.js</code><br/><br/>
+            <strong>Alternative:</strong> Forex Factory, Investing.com oder FXStreet APIs. Aktuell werden Demo-Daten angezeigt.
           </p>
           <div className="flex flex-wrap gap-4 text-sm mt-4 pt-4 border-t border-yellow-500/30">
             <div className="flex items-center gap-2">
