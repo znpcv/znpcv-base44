@@ -17,16 +17,28 @@ export default function EconomicCalendarPage() {
   const [filter, setFilter] = useState('all');
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Mock data - in production, fetch from Forex Factory API or alternative
   useEffect(() => {
     fetchEconomicEvents();
   }, [selectedDate]);
 
   const fetchEconomicEvents = async () => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const mockEvents = [
+    
+    try {
+      // HINWEIS: Forex Factory hat keine öffentliche API
+      // Für Production brauchst du:
+      // 1. Backend Function mit Web Scraping
+      // 2. Alternative API (Trading Economics, Investing.com)
+      // 3. RSS Feed Parser
+      
+      // Demo: Fetch from backend function
+      // const response = await base44.functions.fetchForexFactoryCalendar({ 
+      //   date: format(selectedDate, 'yyyy-MM-dd') 
+      // });
+      
+      // Mock Daten mit realistischer Struktur
+      setTimeout(() => {
+        const mockEvents = [
         {
           time: '12:00',
           currency: 'USD',
@@ -91,9 +103,14 @@ export default function EconomicCalendarPage() {
           previous: '-3.0M'
         }
       ];
-      setEvents(mockEvents);
+        setEvents(mockEvents);
+        setLoading(false);
+      }, 500);
+    } catch (error) {
+      console.error('Calendar fetch error:', error);
+      setEvents([]);
       setLoading(false);
-    }, 500);
+    }
   };
 
   const getImpactColor = (impact) => {
@@ -251,25 +268,28 @@ export default function EconomicCalendarPage() {
           </div>
         </motion.div>
 
-        {/* Impact Legend */}
+        {/* Info & Legend */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className={`mt-6 p-5 border ${theme.border} rounded-xl ${theme.bgCard}`}>
-          <div className="flex items-center gap-2 mb-4">
-            <AlertCircle className={`w-5 h-5 ${theme.textMuted}`} />
-            <span className={`text-sm tracking-widest ${theme.textMuted}`}>IMPACT LEGEND</span>
+          className={`mt-6 p-5 border-2 border-yellow-500/30 rounded-xl bg-yellow-500/5`}>
+          <div className="flex items-center gap-2 mb-3">
+            <AlertCircle className="w-5 h-5 text-yellow-500" />
+            <span className="text-sm tracking-widest text-yellow-600 dark:text-yellow-400 font-bold">WICHTIGER HINWEIS</span>
           </div>
-          <div className="flex flex-wrap gap-4 text-sm">
+          <p className={`text-sm ${theme.textSecondary} mb-4 font-sans`}>
+            <strong>Live-Daten Integration:</strong> Forex Factory erlaubt keine direkte API-Nutzung. Für echte Live-Daten benötigst du eine Backend-Integration mit Web Scraping oder alternative APIs wie Trading Economics, Investing.com oder FXStreet. Aktuell werden Demo-Daten angezeigt.
+          </p>
+          <div className="flex flex-wrap gap-4 text-sm mt-4 pt-4 border-t border-yellow-500/30">
             <div className="flex items-center gap-2">
               <span className="text-red-500">🔴</span>
-              <span className={theme.textSecondary}>HIGH IMPACT - Erwartete starke Marktbewegung</span>
+              <span className={theme.textSecondary}>HIGH - Starke Bewegung</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-yellow-500">🟡</span>
-              <span className={theme.textSecondary}>MEDIUM IMPACT - Moderate Marktbewegung</span>
+              <span className={theme.textSecondary}>MEDIUM - Moderate Bewegung</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-blue-500">🟢</span>
-              <span className={theme.textSecondary}>LOW IMPACT - Geringe Marktbewegung</span>
+              <span className={theme.textSecondary}>LOW - Geringe Bewegung</span>
             </div>
           </div>
         </motion.div>

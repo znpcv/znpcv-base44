@@ -179,10 +179,11 @@ export default function HomePage() {
           transition={{ delay: 0.2 }}
           className="grid md:grid-cols-2 gap-6 mb-16"
         >
-          {/* New Analysis - WHITE */}
+          {/* New Analysis */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className="group relative p-8 bg-white text-black rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden"
+            className={cn("group relative p-8 rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
+              darkMode ? "bg-white text-black" : "bg-black text-white")}
           >
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-black/5 rounded-full -translate-y-20 translate-x-20" />
@@ -190,8 +191,9 @@ export default function HomePage() {
             
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center">
-                  <ClipboardCheck className="w-6 h-6 text-white" />
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-black" : "bg-white")}>
+                  <ClipboardCheck className={cn("w-6 h-6", darkMode ? "text-white" : "text-black")} />
                 </div>
                 <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500 text-white text-xs rounded-full ml-auto">
                   <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
@@ -199,24 +201,26 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <h2 className="text-3xl tracking-wider mb-3 font-bold">{t('newAnalysis')}</h2>
-              <p className="text-zinc-600 text-sm leading-relaxed mb-6 font-sans max-w-xs">
+              <h2 className={cn("text-3xl tracking-wider mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-sm leading-relaxed mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
                 {t('newAnalysisDesc')}
               </p>
-              
-              <div className="flex items-center gap-3 text-black font-bold tracking-widest">
+
+              <div className={cn("flex items-center gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
                 <span className="text-lg">{t('startNow')}</span>
-                <div className="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform">
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-black text-white" : "bg-white text-black")}>
                   <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
             </div>
           </button>
 
-          {/* Dashboard - BLACK */}
+          {/* Dashboard */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className="group relative p-8 bg-black text-white rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2 border-zinc-800"
+            className={cn("group relative p-8 rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+              darkMode ? "bg-black text-white border-zinc-800" : "bg-white text-black border-zinc-300")}
           >
             {/* Decorative grid */}
             <div className="absolute inset-0 opacity-5">
@@ -225,8 +229,9 @@ export default function HomePage() {
             
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center">
-                  <BarChart3 className="w-6 h-6 text-black" />
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-white" : "bg-black")}>
+                  <BarChart3 className={cn("w-6 h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
                 <div className="flex items-center gap-1.5 px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full ml-auto">
                   <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
@@ -234,14 +239,15 @@ export default function HomePage() {
                 </div>
               </div>
               
-              <h2 className="text-3xl tracking-wider mb-3 font-bold">{t('dashboard')}</h2>
-              <p className="text-zinc-400 text-sm leading-relaxed mb-6 font-sans max-w-xs">
+              <h2 className={cn("text-3xl tracking-wider mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-sm leading-relaxed mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 {t('dashboardDesc')}
               </p>
-              
-              <div className="flex items-center gap-3 text-white font-bold tracking-widest">
+
+              <div className={cn("flex items-center gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
                 <span className="text-lg">{t('openDashboard')}</span>
-                <div className="w-10 h-10 bg-white text-black rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform">
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-5 h-5" />
                 </div>
               </div>

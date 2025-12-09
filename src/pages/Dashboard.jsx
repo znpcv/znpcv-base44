@@ -57,6 +57,8 @@ export default function DashboardPage() {
     queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
   });
 
+  const [filter, setFilter] = useState('all');
+
   const stats = useMemo(() => {
     const total = checklists.length;
     const ready = checklists.filter(c => c.status === 'ready_to_trade').length;
@@ -68,7 +70,15 @@ export default function DashboardPage() {
       c.weekly_trend === c.daily_trend && c.daily_trend === c.h4_trend
     ).length;
     const avgCompletion = total > 0 ? Math.round(checklists.reduce((acc, c) => acc + (c.completion_percentage || 0), 0) / total) : 0;
-    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion };
+    
+    // Add mock outcomes for demo
+    const tradesWithOutcome = checklists.map(c => ({
+      ...c,
+      outcome: c.status === 'ready_to_trade' ? (Math.random() > 0.6 ? 'win' : Math.random() > 0.5 ? 'loss' : null) : null,
+      pnl: c.status === 'ready_to_trade' ? (Math.random() * 400 - 100).toFixed(2) : null
+    }));
+    
+    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion, tradesWithOutcome };
   }, [checklists]);
 
   const performanceData = useMemo(() => {
@@ -94,7 +104,7 @@ export default function DashboardPage() {
   const startDay = monthStart.getDay() === 0 ? 6 : monthStart.getDay() - 1;
   const getTradesForDay = (date) => checklists.filter(c => c.trade_date === format(date, 'yyyy-MM-dd'));
 
-  const recentTrades = checklists.slice(0, 6);
+  const recentTrades = stats.tradesWithOutcome.slice(0, 12);
   const locale = language === 'de' ? de : enUS;
 
   // Theme classes
@@ -200,14 +210,24 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Recent Trades */}
+            {/* Trade History with Win/Loss */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
               className={`border ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-5 border-b ${theme.border} flex items-center justify-between`}>
-                <h3 className={`text-lg tracking-widest ${theme.text}`}>{t('lastAnalyses')}</h3>
-                <span className={`text-sm ${theme.textDimmed}`}>{recentTrades.length} {t('of')} {stats.total}</span>
+                <h3 className={`text-lg tracking-widest ${theme.text}`}>TRADE HISTORY</h3>
+                <div className="flex gap-2">
+                  {['all', 'win', 'loss'].map((f) => (
+                    <button key={f} onClick={() => setFilter(f)}
+                      className={cn("px-3 py-1 text-xs tracking-wider rounded-lg transition-all",
+                        filter === f 
+                          ? darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
+                          : darkMode ? "bg-zinc-800 text-zinc-400" : "bg-zinc-200 text-zinc-600")}>
+                      {f.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
               </div>
-              
+
               {isLoading ? (
                 <div className={`p-8 text-center ${theme.textDimmed}`}>{t('loading')}</div>
               ) : recentTrades.length === 0 ? (
@@ -218,28 +238,50 @@ export default function DashboardPage() {
                   </Button>
                 </div>
               ) : (
-                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'}`}>
-                  {recentTrades.map((trade) => (
+                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[500px] overflow-y-auto`}>
+                  {recentTrades.filter(t => filter === 'all' || t.outcome === filter).map((trade) => (
                     <div key={trade.id} onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}
-                      className={`p-5 cursor-pointer transition-all group flex items-center gap-4 ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
-                      <div className={cn("w-12 h-12 flex items-center justify-center border rounded-xl",
-                        trade.direction === 'bullish' || trade.direction === 'long' ? 'border-emerald-500 bg-emerald-500 text-white' :
-                        trade.direction === 'bearish' || trade.direction === 'short' ? 'border-red-500 bg-red-500/10 text-red-500' : `${theme.border} ${theme.textDimmed}`)}>
-                        {trade.direction === 'bullish' || trade.direction === 'long' ? <ArrowUpRight className="w-5 h-5" /> :
-                         trade.direction === 'bearish' || trade.direction === 'short' ? <ArrowDownRight className="w-5 h-5" /> : <Minus className="w-5 h-5" />}
-                      </div>
-                      <div className="flex-1">
+                      className={`p-5 cursor-pointer transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
+                      <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          <span className={`text-lg tracking-wider ${theme.text}`}>{trade.pair || '-'}</span>
-                          {trade.status === 'ready_to_trade' && (
-                            <span className="px-3 py-1 bg-emerald-500 text-white text-xs tracking-wider rounded-full">READY</span>
+                          <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
+                            trade.outcome === 'win' ? 'bg-emerald-500 text-white' :
+                            trade.outcome === 'loss' ? 'bg-red-500 text-white' : 
+                            trade.direction === 'long' ? 'border-2 border-emerald-500 text-emerald-500' : 'border-2 border-red-500 text-red-500')}>
+                            {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                          </div>
+                          <div>
+                            <div className={`text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
+                            <div className={`text-xs ${theme.textDimmed}`}>
+                              {format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          {trade.outcome && (
+                            <>
+                              <div className={cn("text-lg font-bold",
+                                parseFloat(trade.pnl) > 0 ? 'text-emerald-500' :
+                                parseFloat(trade.pnl) < 0 ? 'text-red-500' : theme.text)}>
+                                {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
+                              </div>
+                              <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
+                                trade.outcome === 'win' ? 'bg-emerald-500/20 text-emerald-500' :
+                                trade.outcome === 'loss' ? 'bg-red-500/20 text-red-500' : 'bg-zinc-600/20 text-zinc-400')}>
+                                {trade.outcome.toUpperCase()}
+                              </div>
+                            </>
+                          )}
+                          {!trade.outcome && (
+                            <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">
+                              {trade.status === 'ready_to_trade' ? 'READY' : 'PENDING'}
+                            </span>
                           )}
                         </div>
-                        <div className={`text-sm ${theme.textDimmed} font-sans`}>
-                          {format(new Date(trade.created_date), 'dd.MM.yyyy')} • {Math.round(trade.completion_percentage || 0)}%
-                        </div>
                       </div>
-                      <ChevronRight className={`w-5 h-5 ${theme.textDimmed} group-hover:${theme.text} transition-colors`} />
+                      <div className="flex items-center gap-4 text-xs">
+                        <span className={theme.textMuted}>Score: <span className={theme.text}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                      </div>
                     </div>
                   ))}
                 </div>

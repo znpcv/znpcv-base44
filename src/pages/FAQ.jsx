@@ -34,15 +34,39 @@ const FAQ_DATA = [
       },
       {
         q: 'Was ist AOI (Area of Interest)?',
-        a: 'AOI ist deine markierte Zone im Chart, wo du eine Reaktion erwartest. Es kann ein Support- oder Resistance-Level sein, basierend auf vorherigen Preisstrukturen.'
+        a: 'AOI (Area of Interest) ist die zentrale Preiszone wo du einsteigen möchtest. Es kombiniert Support/Resistance, Struktur und Confluence und ist der EINZIGE Bereich wo ein Trade erlaubt ist.'
+      },
+      {
+        q: 'Was ist RPL (Round Psych Level)?',
+        a: 'RPL (Round Psych Level) ist ein rundes Zahlen-Level (wie 1.1000, 1.2000, 2000, 50000) das viele Trader und Algorithmen beobachten. Diese psychologischen Levels dienen oft als starker Support oder Resistance und sind wichtig in deinem AOI und Risk Planning.'
+      },
+      {
+        q: 'Was ist eine EMA?',
+        a: 'Eine EMA (Exponential Moving Average) ist ein gleitender Durchschnitt der mehr Gewicht auf aktuelle Preisdaten legt. Sie wird verwendet um Trend-Richtung und dynamische Support/Resistance zu definieren.'
+      },
+      {
+        q: 'Was ist MSS / SOS?',
+        a: 'MSS (Market Structure Shift) oder SOS (Shift of Structure) bedeutet die Trendstruktur hat sich geändert - zum Beispiel von höheren Highs/höheren Lows zu tieferen Highs/tieferen Lows, oft vor einem größeren Reversal.'
+      },
+      {
+        q: 'Was ist eine Engulfing Candle?',
+        a: 'Eine Engulfing Candle ist ein starkes Reversal Pattern wo der Body der aktuellen Kerze den Body der vorherigen Kerze komplett umschließt, signalisiert aggressive Kontrolle durch Käufer oder Verkäufer.'
+      },
+      {
+        q: 'Was sind Swing High und Swing Low?',
+        a: 'Ein Swing High ist ein lokaler Peak wo der Preis abgelehnt wird und nach unten dreht. Ein Swing Low ist ein lokaler Bottom wo der Preis abgelehnt wird und nach oben dreht. Sie markieren wichtige Wendepunkte.'
+      },
+      {
+        q: 'Was ist ein Head and Shoulders Pattern?',
+        a: 'Ein Head and Shoulders ist ein Reversal Pattern mit drei Peaks: ein linker Shoulder, ein höherer Head, und ein rechter Shoulder, signalisiert oft das Ende eines Uptrends. Ein Inverse Head and Shoulders ist die bullish Mirror Version am Bottom.'
+      },
+      {
+        q: 'Was ist ein Double Top und Double Bottom?',
+        a: 'Ein Double Top bildet sich wenn der Preis das gleiche Resistance Level zweimal testet und scheitert, oft signalisiert bearish Reversal. Ein Double Bottom ist die bullish Version am Support, wo der Preis das gleiche Low zweimal ablehnt bevor es steigt.'
       },
       {
         q: 'Welche Patterns werden unterstützt?',
         a: 'ZNPCV unterstützt vier Chart Patterns: Double Top, Double Bottom, Head & Shoulders (H&S) und Inverted Head & Shoulders (INV H&S).'
-      },
-      {
-        q: 'Was ist MSS / SOS?',
-        a: 'MSS (Market Structure Shift) oder SOS (Shift of Structure) bedeutet, dass die Marktstruktur gewechselt hat - von Bullish zu Bearish oder umgekehrt. Dies ist ein wichtiges Einstiegssignal.'
       }
     ]
   },
@@ -98,6 +122,15 @@ const FAQ_DATA = [
       {
         q: 'Kann ich meinen Account löschen?',
         a: 'Ja, kontaktiere uns einfach per E-Mail und wir löschen deinen Account und alle Daten sofort.'
+      }
+    ]
+  },
+  {
+    category: 'FÜR WEN IST ZNPCV?',
+    questions: [
+      {
+        q: 'Für welche Trader ist ZNPCV gedacht?',
+        a: 'Für Trader die fertig sind mit impulsiven, emotionalen Entscheidungen. Ob du Forex, Crypto, Stocks, Commodities oder Indices tradest - ZNPCV zwingt Disziplin, Struktur und Konsistenz in jeden einzelnen Trade.'
       }
     ]
   }
