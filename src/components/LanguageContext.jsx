@@ -1213,16 +1213,16 @@ export function LanguageToggle() {
   const [isOpen, setIsOpen] = React.useState(false);
   
   const languages = [
-    { code: 'de', flag: '🇩🇪', label: 'DE' },
-    { code: 'en', flag: '🇬🇧', label: 'EN' },
-    { code: 'zh', flag: '🇨🇳', label: 'ZH' },
-    { code: 'es', flag: '🇪🇸', label: 'ES' },
-    { code: 'fr', flag: '🇫🇷', label: 'FR' },
-    { code: 'pt', flag: '🇵🇹', label: 'PT' },
-    { code: 'hi', flag: '🇮🇳', label: 'HI' },
-    { code: 'ja', flag: '🇯🇵', label: 'JA' },
-    { code: 'ar', flag: '🇸🇦', label: 'AR' },
-    { code: 'fa', flag: '🇮🇷', label: 'FA' }
+    { code: 'de', label: 'DE' },
+    { code: 'en', label: 'EN' },
+    { code: 'zh', label: 'ZH' },
+    { code: 'es', label: 'ES' },
+    { code: 'fr', label: 'FR' },
+    { code: 'pt', label: 'PT' },
+    { code: 'hi', label: 'HI' },
+    { code: 'ja', label: 'JA' },
+    { code: 'ar', label: 'AR' },
+    { code: 'fa', label: 'FA' }
   ];
   
   const currentLang = languages.find(l => l.code === language) || languages[0];
@@ -1231,11 +1231,10 @@ export function LanguageToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
-          darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'
+        className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
+          darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
         }`}
       >
-        <span className="text-lg leading-none">{currentLang.flag}</span>
         <span className="text-xs font-bold tracking-widest">{currentLang.label}</span>
         <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1245,7 +1244,7 @@ export function LanguageToggle() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className={`absolute right-0 mt-2 w-48 rounded-xl border shadow-2xl z-20 overflow-hidden ${
+          <div className={`absolute right-0 mt-2 w-40 rounded-xl border-2 shadow-2xl z-20 overflow-hidden ${
             darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
           }`}>
             <div className="grid grid-cols-2 gap-1 p-2">
@@ -1256,7 +1255,7 @@ export function LanguageToggle() {
                     setLanguage(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+                  className={`px-3 py-2 rounded-lg transition-all text-xs font-bold tracking-widest ${
                     language === lang.code 
                       ? darkMode 
                         ? 'bg-white text-black' 
@@ -1266,8 +1265,7 @@ export function LanguageToggle() {
                         : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
                   }`}
                 >
-                  <span className="text-base leading-none">{lang.flag}</span>
-                  <span className="text-xs font-bold tracking-wider">{lang.label}</span>
+                  {lang.label}
                 </button>
               ))}
             </div>

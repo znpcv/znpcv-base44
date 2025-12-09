@@ -111,30 +111,22 @@ export default function HomePage() {
       </header>
 
       {/* Market Sessions Bar */}
-      <div className={`${theme.bgSecondary} border-b ${theme.border} overflow-hidden`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-2">
-          <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
-            <div className={`flex items-center gap-2 ${theme.textSecondary} text-xs whitespace-nowrap flex-shrink-0`}>
-              <Globe className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{t('marketSessions')}</span>
-            </div>
-            <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto scrollbar-hide">
-              {SESSIONS.map((session) => {
-                const isOpen = isSessionOpen(session);
-                return (
-                  <div key={session.name} className="flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
-                    <span className="text-sm">{session.emoji}</span>
-                    <div className="hidden sm:block">
-                      <div className={`text-[9px] ${theme.textDimmed} leading-tight`}>{session.name}</div>
-                      <div className={`text-[11px] font-mono font-bold leading-tight ${isOpen ? 'text-emerald-500' : theme.textDimmed}`}>
-                        {times[session.name]?.slice(0, 5) || '--:--'}
-                      </div>
-                    </div>
-                    <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+      <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
+          <div className="flex items-center justify-center gap-6 overflow-x-auto scrollbar-hide">
+            <Globe className={`w-4 h-4 flex-shrink-0 ${theme.textMuted}`} />
+            {SESSIONS.map((session) => {
+              const isOpen = isSessionOpen(session);
+              return (
+                <div key={session.name} className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-base">{session.emoji}</span>
+                  <div className={`text-sm font-mono font-bold ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
+                    {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
-                );
-              })}
-            </div>
+                  <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -263,7 +255,7 @@ export default function HomePage() {
             <p className={`${theme.textDimmed} text-sm`}>{t('featuresDesc')}</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
               { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
