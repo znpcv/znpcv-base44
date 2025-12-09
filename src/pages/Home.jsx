@@ -412,6 +412,21 @@ export default function HomePage() {
                     <div className={`${theme.text} text-xs sm:text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
                   </div>
                 </button>
+                
+                {/* Trustpilot */}
+                <div className="mt-6 text-center md:text-left">
+                  <a href="https://www.trustpilot.com/review/znpcv.com" target="_blank" rel="noopener noreferrer" className="inline-block group">
+                    <img 
+                      src={darkMode 
+                        ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/37569f134_furschwarzenhitergrundtrustpilot.png"
+                        : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/c4fd14bda_logo_dark.png"
+                      }
+                      alt="Trustpilot" 
+                      className="h-6 sm:h-7 w-auto group-hover:opacity-70 transition-opacity"
+                    />
+                  </a>
+                  <p className={`${theme.textDimmed} text-[10px] mt-2 tracking-wider`}>TRUSTED BY TRADERS</p>
+                </div>
 
                 </div>
             </div>
