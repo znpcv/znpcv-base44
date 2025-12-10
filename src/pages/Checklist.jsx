@@ -605,35 +605,40 @@ export default function ChecklistPage() {
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
-              {/* ZNPCV Golden Rules - Modern Design */}
-              <div className={`relative overflow-hidden rounded-2xl border-2 ${darkMode ? 'bg-gradient-to-br from-amber-500/10 via-zinc-900 to-zinc-950 border-amber-500/30' : 'bg-gradient-to-br from-amber-50 via-white to-zinc-50 border-amber-400/40'}`}>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -translate-y-16 translate-x-16" />
-                <div className="relative p-4 sm:p-5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                      <Shield className="w-4 h-4 text-amber-500" />
-                    </div>
-                    <span className={`${theme.text} font-bold tracking-widest text-sm`}>{t('goldenRules')}</span>
+              {/* ZNPCV Golden Rule - Ultra Compact */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className={`p-3 rounded-xl border-2 border-emerald-500/30 ${darkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="w-4 h-4 text-emerald-500" />
+                    <span className="text-emerald-500 font-bold text-xs">LONG</span>
                   </div>
-                  <p className={`text-sm sm:text-base font-sans leading-relaxed ${darkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>
-                    {t('goldenRuleText')}
-                  </p>
+                  <div className={`text-[10px] font-sans ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                    AOI Support<br/>✓ Im/Über AOI
+                  </div>
+                </div>
+                <div className={`p-3 rounded-xl border-2 border-red-500/30 ${darkMode ? 'bg-red-500/10' : 'bg-red-50'}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingDown className="w-4 h-4 text-red-500" />
+                    <span className="text-red-500 font-bold text-xs">SHORT</span>
+                  </div>
+                  <div className={`text-[10px] font-sans ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                    AOI Resistance<br/>✓ Im/Unter AOI
+                  </div>
                 </div>
               </div>
+              <div className={`flex items-center justify-center gap-2 p-2 rounded-lg border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+                <Shield className={`w-3 h-3 ${theme.textMuted}`} />
+                <span className={`text-[10px] ${theme.textMuted} tracking-wide`}>
+                  ⛔ Nicht am Widerstand kaufen • Nicht am Support verkaufen
+                </span>
+              </div>
 
-              {/* Entry Timeframe Info - Modern Design */}
-              <div className={`relative overflow-hidden rounded-xl border ${darkMode ? 'bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border-blue-500/30' : 'bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-300'}`}>
-                <div className="p-3 sm:p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                      <Target className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <div className="text-xs sm:text-sm font-sans">
-                      <div className="text-blue-400 font-bold mb-1">{t('entryTimeframe')}</div>
-                      <div className={`leading-relaxed ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>{t('entryTimeframeDesc')}</div>
-                    </div>
-                  </div>
-                </div>
+              {/* Entry Timeframe - Ultra Compact */}
+              <div className={`flex items-center gap-2 p-2.5 rounded-lg border ${darkMode ? 'bg-blue-500/5 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
+                <Target className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                <span className={`text-[10px] font-sans ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  <span className="text-blue-400 font-bold">30min/1H</span> • Swing/Day Trading
+                </span>
               </div>
 
               {/* Current Score */}
