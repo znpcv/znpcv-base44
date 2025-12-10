@@ -35,6 +35,7 @@ export default function ChecklistPage() {
     direction: '',
     
     // Weekly Checklist (max 60%)
+    w_trend: '',               // bullish/bearish - NEW
     w_at_aoi: false,           // 10%
     w_ema_touch: false,        // 5%
     w_candlestick: false,      // 10%
@@ -44,6 +45,7 @@ export default function ChecklistPage() {
     w_pattern: '',             // 10%
     
     // Daily Checklist (max 60%)
+    d_trend: '',               // bullish/bearish - NEW
     d_at_aoi: false,           // 10%
     d_ema_touch: false,        // 5%
     d_candlestick: false,      // 10%
@@ -53,6 +55,7 @@ export default function ChecklistPage() {
     d_pattern: '',             // 10%
     
     // 4H Checklist (max 35%)
+    h4_trend: '',              // bullish/bearish - NEW
     h4_ema_touch: false,        // 5%
     h4_candlestick: false,      // 10%
     h4_psp_rejection: false,    // 5%
@@ -361,33 +364,6 @@ export default function ChecklistPage() {
               {checklist.pair && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                   
-                  {/* ZNPCV Rules Box */}
-                  <div className={`p-5 rounded-2xl border-2 ${darkMode ? 'bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800' : 'bg-gradient-to-br from-zinc-100 to-zinc-50 border-zinc-300'}`}>
-                    <div className="flex items-center gap-3 mb-4">
-                      <Shield className={`w-6 h-6 ${theme.text}`} />
-                      <span className={`${theme.text} font-bold tracking-widest`}>{t('goldenRules')}</span>
-                    </div>
-                    <div className="space-y-3 text-sm font-sans">
-                      <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                        <TrendingUp className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <span className="text-emerald-500 font-bold">LONG:</span>
-                          <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('longBuyRule')}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
-                        <TrendingDown className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <span className="text-red-500 font-bold">SHORT:</span>
-                          <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('shortSellRule')}</span>
-                        </div>
-                      </div>
-                      <div className={`p-3 rounded-xl text-center border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-zinc-900/5 border-zinc-900/20'}`}>
-                        <span className={`${theme.text} font-bold tracking-wider`}>⚠️ {t('neverBottomTop')} ⚠️</span>
-                      </div>
-                    </div>
-                  </div>
-                  
                   {/* Direction Selection */}
                   <label className={`${theme.textMuted} text-sm tracking-widest block`}>{t('selectDirection')}</label>
                   <div className="grid grid-cols-2 gap-4">
@@ -430,6 +406,29 @@ export default function ChecklistPage() {
                 <div className="flex items-center gap-2">
                   <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-emerald-500" : weeklyScore >= 25 ? "text-yellow-500" : theme.text)}>{weeklyScore}</span>
                   <span className={`${theme.textDimmed} text-sm`}>/60%</span>
+                </div>
+              </div>
+
+              {/* Trend Selection */}
+              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('weeklyTrend')}</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button onClick={() => update('w_trend', 'bullish')}
+                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                      checklist.w_trend === 'bullish' 
+                        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
+                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bullish' ? "text-white" : "text-emerald-500")} />
+                    <div className="font-bold tracking-wider text-sm">BULLISH</div>
+                  </button>
+                  <button onClick={() => update('w_trend', 'bearish')}
+                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                      checklist.w_trend === 'bearish' 
+                        ? "bg-red-500 border-red-400 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
+                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bearish' ? "text-white" : "text-red-500")} />
+                    <div className="font-bold tracking-wider text-sm">BEARISH</div>
+                  </button>
                 </div>
               </div>
               
@@ -480,6 +479,29 @@ export default function ChecklistPage() {
                   <span className={`${theme.textDimmed} text-sm`}>/60%</span>
                 </div>
               </div>
+
+              {/* Trend Selection */}
+              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('dailyTrend')}</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button onClick={() => update('d_trend', 'bullish')}
+                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                      checklist.d_trend === 'bullish' 
+                        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
+                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bullish' ? "text-white" : "text-emerald-500")} />
+                    <div className="font-bold tracking-wider text-sm">BULLISH</div>
+                  </button>
+                  <button onClick={() => update('d_trend', 'bearish')}
+                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                      checklist.d_trend === 'bearish' 
+                        ? "bg-red-500 border-red-400 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
+                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bearish' ? "text-white" : "text-red-500")} />
+                    <div className="font-bold tracking-wider text-sm">BEARISH</div>
+                  </button>
+                </div>
+              </div>
               
               <ChecklistItem checked={checklist.d_at_aoi} onChange={() => update('d_at_aoi', !checklist.d_at_aoi)} 
                 label={t('atAoiRejected')} score={10} 
@@ -528,6 +550,29 @@ export default function ChecklistPage() {
                   <span className={`${theme.textDimmed} text-sm`}>/35%</span>
                 </div>
               </div>
+
+              {/* Trend Selection */}
+              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('h4Trend')}</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button onClick={() => update('h4_trend', 'bullish')}
+                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                      checklist.h4_trend === 'bullish' 
+                        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
+                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bullish' ? "text-white" : "text-emerald-500")} />
+                    <div className="font-bold tracking-wider text-sm">BULLISH</div>
+                  </button>
+                  <button onClick={() => update('h4_trend', 'bearish')}
+                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                      checklist.h4_trend === 'bearish' 
+                        ? "bg-red-500 border-red-400 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
+                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bearish' ? "text-white" : "text-red-500")} />
+                    <div className="font-bold tracking-wider text-sm">BEARISH</div>
+                  </button>
+                </div>
+              </div>
               
               <ChecklistItem checked={checklist.h4_ema_touch} onChange={() => update('h4_ema_touch', !checklist.h4_ema_touch)} 
                 label={t('touchingEma')} score={5} 
@@ -560,6 +605,33 @@ export default function ChecklistPage() {
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
+              {/* ZNPCV Golden Rules */}
+              <div className={`p-5 rounded-2xl border-2 ${darkMode ? 'bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800' : 'bg-gradient-to-br from-zinc-100 to-zinc-50 border-zinc-300'}`}>
+                <div className="flex items-center gap-3 mb-4">
+                  <Shield className={`w-6 h-6 ${theme.text}`} />
+                  <span className={`${theme.text} font-bold tracking-widest`}>{t('goldenRules')}</span>
+                </div>
+                <div className="space-y-3 text-sm font-sans">
+                  <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                    <TrendingUp className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-emerald-500 font-bold">LONG:</span>
+                      <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('longBuyRule')}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
+                    <TrendingDown className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-red-500 font-bold">SHORT:</span>
+                      <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('shortSellRule')}</span>
+                    </div>
+                  </div>
+                  <div className={`p-3 rounded-xl text-center border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-zinc-900/5 border-zinc-900/20'}`}>
+                    <span className={`${theme.text} font-bold tracking-wider`}>⚠️ {t('neverBottomTop')} ⚠️</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Timeframe Info */}
               <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <div className="flex items-center gap-3">
