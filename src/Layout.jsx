@@ -1,7 +1,8 @@
 import React from 'react';
 import { LanguageProvider } from './components/LanguageContext';
+import PaywallGuard from './components/PaywallGuard';
 
-export default function Layout({ children }) {
+export default function Layout({ children, currentPageName }) {
   React.useEffect(() => {
     // Load Trustpilot widget script
     const script = document.createElement('script');
@@ -15,6 +16,9 @@ export default function Layout({ children }) {
       }
     };
   }, []);
+
+  const noPaywallPages = ['Payment', 'PaymentSuccess'];
+  const shouldShowPaywall = !noPaywallPages.includes(currentPageName);
 
   return (
     <LanguageProvider>
@@ -36,7 +40,11 @@ export default function Layout({ children }) {
         `}
       </style>
       <div className="min-h-screen bg-black">
-        {children}
+        {shouldShowPaywall ? (
+          <PaywallGuard>{children}</PaywallGuard>
+        ) : (
+          children
+        )}
       </div>
     </LanguageProvider>
   );
