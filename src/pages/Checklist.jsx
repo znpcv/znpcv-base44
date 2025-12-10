@@ -605,24 +605,33 @@ export default function ChecklistPage() {
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
-              {/* ZNPCV Golden Rules - Compact */}
-              <div className={`p-3 sm:p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-100/50 border-zinc-300'}`}>
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className={`w-4 h-4 ${theme.text}`} />
-                  <span className={`${theme.textMuted} text-xs tracking-widest`}>{t('goldenRules')}</span>
-                </div>
-                <div className={`text-xs sm:text-sm font-sans leading-relaxed ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                  {t('goldenRuleText')}
+              {/* ZNPCV Golden Rules - Modern Design */}
+              <div className={`relative overflow-hidden rounded-2xl border-2 ${darkMode ? 'bg-gradient-to-br from-amber-500/10 via-zinc-900 to-zinc-950 border-amber-500/30' : 'bg-gradient-to-br from-amber-50 via-white to-zinc-50 border-amber-400/40'}`}>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -translate-y-16 translate-x-16" />
+                <div className="relative p-4 sm:p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-amber-500" />
+                    </div>
+                    <span className={`${theme.text} font-bold tracking-widest text-sm`}>{t('goldenRules')}</span>
+                  </div>
+                  <p className={`text-sm sm:text-base font-sans leading-relaxed ${darkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                    {t('goldenRuleText')}
+                  </p>
                 </div>
               </div>
 
-              {/* Entry Timeframe Info */}
-              <div className={`p-3 rounded-xl border ${darkMode ? 'bg-blue-500/5 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
-                <div className="flex items-center gap-2">
-                  <Target className="w-4 h-4 text-blue-400" />
-                  <div className="text-xs sm:text-sm font-sans">
-                    <span className="text-blue-400 font-bold">{t('entryTimeframe')}: </span>
-                    <span className={darkMode ? 'text-zinc-400' : 'text-zinc-600'}>{t('entryTimeframeDesc')}</span>
+              {/* Entry Timeframe Info - Modern Design */}
+              <div className={`relative overflow-hidden rounded-xl border ${darkMode ? 'bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border-blue-500/30' : 'bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-300'}`}>
+                <div className="p-3 sm:p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-7 h-7 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                      <Target className="w-4 h-4 text-blue-400" />
+                    </div>
+                    <div className="text-xs sm:text-sm font-sans">
+                      <div className="text-blue-400 font-bold mb-1">{t('entryTimeframe')}</div>
+                      <div className={`leading-relaxed ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>{t('entryTimeframeDesc')}</div>
+                    </div>
                   </div>
                 </div>
               </div>
