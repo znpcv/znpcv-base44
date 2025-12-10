@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
+import AccountButton from '@/components/AccountButton';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ export default function TradeHistoryPage() {
               </Button>
               <DarkModeToggle />
               <LanguageToggle />
+              <AccountButton />
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
+import AccountButton from '@/components/AccountButton';
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -143,6 +144,7 @@ export default function DashboardPage() {
 
               <DarkModeToggle />
               <LanguageToggle />
+              <AccountButton />
               <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-6 py-3 rounded-xl tracking-widest font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
                 <Plus className="w-5 h-5 mr-2" />
                 {t('newAnalysis').split(' ')[0]}

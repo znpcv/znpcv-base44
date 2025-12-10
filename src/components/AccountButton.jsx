@@ -1,0 +1,118 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
+import { User, LogOut, Settings } from 'lucide-react';
+import { createPageUrl } from "@/utils";
+import { useLanguage } from '@/components/LanguageContext';
+
+export default function AccountButton() {
+  const navigate = useNavigate();
+  const { darkMode } = useLanguage();
+  const [user, setUser] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const isAuth = await base44.auth.isAuthenticated();
+        if (isAuth) {
+          const userData = await base44.auth.me();
+          setUser(userData);
+        }
+      } catch (err) {
+        setUser(null);
+      }
+    };
+    loadUser();
+  }, []);
+
+  const handleLogout = async () => {
+    await base44.auth.logout();
+    navigate(createPageUrl('Home'));
+  };
+
+  if (!user) {
+    return (
+      <button
+        onClick={() => base44.auth.redirectToLogin()}
+        className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all font-bold ${
+          darkMode 
+            ? 'bg-white text-black border-white hover:bg-zinc-200' 
+            : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'
+        }`}
+      >
+        <User className="w-5 h-5" />
+        <span className="hidden sm:inline text-sm tracking-widest">LOGIN</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all ${
+          darkMode 
+            ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' 
+            : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
+        }`}
+      >
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+          darkMode ? 'bg-white' : 'bg-zinc-900'
+        }`}>
+          <User className={`w-5 h-5 ${darkMode ? 'text-black' : 'text-white'}`} />
+        </div>
+        <div className="hidden sm:block text-left">
+          <div className={`text-xs font-bold tracking-wider ${darkMode ? 'text-white' : 'text-black'}`}>
+            {user.full_name || 'User'}
+          </div>
+          <div className={`text-[10px] ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+            {user.role?.toUpperCase()}
+          </div>
+        </div>
+      </button>
+
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
+          <div className={`absolute right-0 mt-2 w-56 rounded-xl border-2 shadow-2xl z-20 overflow-hidden ${
+            darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
+          }`}>
+            <button
+              onClick={() => {
+                navigate(createPageUrl('Account'));
+                setIsOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
+                darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-100'
+              }`}
+            >
+              <Settings className={`w-5 h-5 ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`} />
+              <div className="text-left">
+                <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-black'}`}>
+                  Account
+                </div>
+                <div className={`text-xs ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  Einstellungen & Profil
+                </div>
+              </div>
+            </button>
+            <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-200'}`} />
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 transition-colors text-red-500 ${
+                darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-100'
+              }`}
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="text-sm font-bold">Ausloggen</span>
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

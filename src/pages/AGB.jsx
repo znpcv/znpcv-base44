@@ -19,7 +19,7 @@ export default function AGBPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
         <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
-          <button onClick={() => navigate(createPageUrl('Home'))} className={theme.textSecondary}>
+          <button onClick={() => navigate(-1)} className={theme.textSecondary}>
             <Home className="w-6 h-6" />
           </button>
           <img 

@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import AGB from './pages/AGB';
 import Datenschutz from './pages/Datenschutz';
 import Impressum from './pages/Impressum';
+import Account from './pages/Account';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +25,7 @@ export const PAGES = {
     "AGB": AGB,
     "Datenschutz": Datenschutz,
     "Impressum": Impressum,
+    "Account": Account,
 }
 
 export const pagesConfig = {
