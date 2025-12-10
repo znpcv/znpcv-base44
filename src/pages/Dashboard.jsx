@@ -145,7 +145,7 @@ export default function DashboardPage() {
 
               <LanguageToggle />
               <AccountButton />
-              <Button onClick={() => navigate(createPageUrl('Checklist'))} className="px-4 sm:px-6 py-2 sm:py-3 rounded-xl tracking-widest font-bold bg-zinc-800 hover:bg-zinc-700 text-white border-2 border-zinc-700 hover:border-zinc-600">
+              <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl tracking-widest font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
                 <Plus className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
                 <span className="hidden sm:inline">{t('newAnalysis').split(' ')[0]}</span>
                 <span className="sm:hidden">NEW</span>
@@ -234,7 +234,7 @@ export default function DashboardPage() {
               ) : recentTrades.length === 0 ? (
                 <div className="p-6 sm:p-8 text-center">
                   <p className={`${theme.textDimmed} mb-4 text-sm sm:text-base`}>{t('noAnalyses')}</p>
-                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className="rounded-xl border-2 font-bold bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700 hover:border-zinc-600">
+                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-xl border-2 font-bold ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                     {t('startFirstAnalysis')}
                   </Button>
                 </div>
