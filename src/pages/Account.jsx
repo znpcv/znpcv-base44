@@ -3,12 +3,14 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { Home, User, Mail, Calendar, LogOut, Edit2, Save, X, Shield, Phone, MapPin, Upload, Camera } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
+import CountrySelect, { COUNTRIES } from '@/components/CountrySelect';
 import { format } from 'date-fns';
 
 export default function AccountPage() {
@@ -19,8 +21,13 @@ export default function AccountPage() {
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
+  const [phoneCountryCode, setPhoneCountryCode] = useState('');
   const [bio, setBio] = useState('');
   const [country, setCountry] = useState('');
+  const [addressStreet, setAddressStreet] = useState('');
+  const [addressCity, setAddressCity] = useState('');
+  const [addressPostalCode, setAddressPostalCode] = useState('');
+  const [addressCountry, setAddressCountry] = useState('');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -34,8 +41,13 @@ export default function AccountPage() {
       setUser(userData);
       setFullName(userData.full_name || '');
       setPhone(userData.phone || '');
+      setPhoneCountryCode(userData.phone_country_code || '+49');
       setBio(userData.bio || '');
       setCountry(userData.country || '');
+      setAddressStreet(userData.address_street || '');
+      setAddressCity(userData.address_city || '');
+      setAddressPostalCode(userData.address_postal_code || '');
+      setAddressCountry(userData.address_country || '');
     } catch (err) {
       navigate(createPageUrl('Home'));
     } finally {
@@ -49,8 +61,13 @@ export default function AccountPage() {
       await base44.auth.updateMe({ 
         full_name: fullName,
         phone: phone,
+        phone_country_code: phoneCountryCode,
         bio: bio,
-        country: country
+        country: country,
+        address_street: addressStreet,
+        address_city: addressCity,
+        address_postal_code: addressPostalCode,
+        address_country: addressCountry
       });
       await loadUser();
       setEditing(false);
@@ -58,6 +75,14 @@ export default function AccountPage() {
       console.error(err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleCountryChange = (countryCode) => {
+    setCountry(countryCode);
+    const selectedCountry = COUNTRIES.find(c => c.code === countryCode);
+    if (selectedCountry && !phoneCountryCode) {
+      setPhoneCountryCode(selectedCountry.dial);
     }
   };
 
@@ -181,8 +206,13 @@ export default function AccountPage() {
                           setEditing(false); 
                           setFullName(user.full_name); 
                           setPhone(user.phone || '');
+                          setPhoneCountryCode(user.phone_country_code || '+49');
                           setBio(user.bio || '');
                           setCountry(user.country || '');
+                          setAddressStreet(user.address_street || '');
+                          setAddressCity(user.address_city || '');
+                          setAddressPostalCode(user.address_postal_code || '');
+                          setAddressCountry(user.address_country || '');
                         }} variant="outline" className={`${theme.border}`}>
                           <X className="w-4 h-4" />
                         </Button>
@@ -226,37 +256,54 @@ export default function AccountPage() {
                 <div className={`text-base ${theme.text} break-all`}>{user.email}</div>
               </div>
 
-              <div className={`p-4 border ${theme.border} rounded-xl`}>
+              <div className={`p-4 border ${theme.border} rounded-xl sm:col-span-2`}>
                 <div className="flex items-center gap-3 mb-2">
                   <Phone className={`w-5 h-5 ${theme.textSecondary}`} />
                   <span className={`text-xs tracking-wider ${theme.textSecondary}`}>TELEFON</span>
                 </div>
                 {editing ? (
-                  <Input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+49 123 456789"
-                    className={`${theme.border} h-9`}
-                  />
+                  <div className="flex gap-2">
+                    <Select value={phoneCountryCode} onValueChange={setPhoneCountryCode}>
+                      <SelectTrigger className={`w-32 ${theme.border}`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {COUNTRIES.map((c) => (
+                          <SelectItem key={c.dial} value={c.dial}>
+                            {c.dial}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                      placeholder="123456789"
+                      className={`flex-1 ${theme.border} h-9`}
+                    />
+                  </div>
                 ) : (
-                  <div className={`text-base ${theme.text}`}>{user.phone || '-'}</div>
+                  <div className={`text-base ${theme.text}`}>
+                    {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
+                  </div>
                 )}
               </div>
 
-              <div className={`p-4 border ${theme.border} rounded-xl`}>
+              <div className={`p-4 border ${theme.border} rounded-xl sm:col-span-2`}>
                 <div className="flex items-center gap-3 mb-2">
                   <MapPin className={`w-5 h-5 ${theme.textSecondary}`} />
                   <span className={`text-xs tracking-wider ${theme.textSecondary}`}>LAND</span>
                 </div>
                 {editing ? (
-                  <Input
+                  <CountrySelect
                     value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    placeholder="Deutschland"
-                    className={`${theme.border} h-9`}
+                    onChange={handleCountryChange}
+                    className={`${theme.border}`}
                   />
                 ) : (
-                  <div className={`text-base ${theme.text}`}>{user.country || '-'}</div>
+                  <div className={`text-base ${theme.text}`}>
+                    {COUNTRIES.find(c => c.code === user.country)?.name || '-'}
+                  </div>
                 )}
               </div>
 
@@ -286,6 +333,86 @@ export default function AccountPage() {
                 <div className={`text-base ${theme.text} font-mono text-xs break-all`}>
                   {user.id.substring(0, 12)}...
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Address Section (Optional) */}
+          <div className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-8 mb-6 ${theme.bgCard}`}>
+            <h3 className={`text-xl tracking-widest mb-4 ${theme.text} flex items-center gap-2`}>
+              <MapPin className="w-5 h-5" />
+              ADRESSE (OPTIONAL)
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className={`sm:col-span-2`}>
+                <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
+                  STRASSE & HAUSNUMMER
+                </label>
+                {editing ? (
+                  <Input
+                    value={addressStreet}
+                    onChange={(e) => setAddressStreet(e.target.value)}
+                    placeholder="Musterstraße 123"
+                    className={`${theme.border}`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text} p-3 border ${theme.border} rounded-lg`}>
+                    {user.address_street || '-'}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
+                  POSTLEITZAHL
+                </label>
+                {editing ? (
+                  <Input
+                    value={addressPostalCode}
+                    onChange={(e) => setAddressPostalCode(e.target.value)}
+                    placeholder="12345"
+                    className={`${theme.border}`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text} p-3 border ${theme.border} rounded-lg`}>
+                    {user.address_postal_code || '-'}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
+                  STADT
+                </label>
+                {editing ? (
+                  <Input
+                    value={addressCity}
+                    onChange={(e) => setAddressCity(e.target.value)}
+                    placeholder="Berlin"
+                    className={`${theme.border}`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text} p-3 border ${theme.border} rounded-lg`}>
+                    {user.address_city || '-'}
+                  </div>
+                )}
+              </div>
+
+              <div className={`sm:col-span-2`}>
+                <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
+                  LAND DER ADRESSE
+                </label>
+                {editing ? (
+                  <CountrySelect
+                    value={addressCountry}
+                    onChange={setAddressCountry}
+                    className={`${theme.border}`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text} p-3 border ${theme.border} rounded-lg`}>
+                    {COUNTRIES.find(c => c.code === user.address_country)?.name || '-'}
+                  </div>
+                )}
               </div>
             </div>
           </div>
