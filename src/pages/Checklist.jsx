@@ -605,40 +605,24 @@ export default function ChecklistPage() {
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
-              {/* ZNPCV Golden Rules */}
-              <div className={`p-5 rounded-2xl border-2 ${darkMode ? 'bg-gradient-to-br from-zinc-900 to-zinc-950 border-zinc-800' : 'bg-gradient-to-br from-zinc-100 to-zinc-50 border-zinc-300'}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Shield className={`w-6 h-6 ${theme.text}`} />
-                  <span className={`${theme.text} font-bold tracking-widest`}>{t('goldenRules')}</span>
+              {/* ZNPCV Golden Rules - Compact */}
+              <div className={`p-3 sm:p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-100/50 border-zinc-300'}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className={`w-4 h-4 ${theme.text}`} />
+                  <span className={`${theme.textMuted} text-xs tracking-widest`}>{t('goldenRules')}</span>
                 </div>
-                <div className="space-y-3 text-sm font-sans">
-                  <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                    <TrendingUp className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="text-emerald-500 font-bold">LONG:</span>
-                      <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('longBuyRule')}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
-                    <TrendingDown className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="text-red-500 font-bold">SHORT:</span>
-                      <span className={`ml-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('shortSellRule')}</span>
-                    </div>
-                  </div>
-                  <div className={`p-3 rounded-xl text-center border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-zinc-900/5 border-zinc-900/20'}`}>
-                    <span className={`${theme.text} font-bold tracking-wider`}>⚠️ {t('neverBottomTop')} ⚠️</span>
-                  </div>
+                <div className={`text-xs sm:text-sm font-sans leading-relaxed ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                  {t('goldenRuleText')}
                 </div>
               </div>
 
-              {/* Timeframe Info */}
-              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-                <div className="flex items-center gap-3">
-                  <Target className="w-5 h-5 text-blue-400" />
-                  <div>
-                    <div className="text-blue-400 font-bold tracking-wider text-sm">{t('entryTimeframe')}</div>
-                    <div className="text-zinc-400 text-sm">{t('entryTimeframeDesc')}</div>
+              {/* Entry Timeframe Info */}
+              <div className={`p-3 rounded-xl border ${darkMode ? 'bg-blue-500/5 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
+                <div className="flex items-center gap-2">
+                  <Target className="w-4 h-4 text-blue-400" />
+                  <div className="text-xs sm:text-sm font-sans">
+                    <span className="text-blue-400 font-bold">{t('entryTimeframe')}: </span>
+                    <span className={darkMode ? 'text-zinc-400' : 'text-zinc-600'}>{t('entryTimeframeDesc')}</span>
                   </div>
                 </div>
               </div>
