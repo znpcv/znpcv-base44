@@ -605,40 +605,15 @@ export default function ChecklistPage() {
             <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
-              {/* ZNPCV Golden Rule - Ultra Compact */}
-              <div className="grid grid-cols-2 gap-2">
-                <div className={`p-3 rounded-xl border-2 border-emerald-500/30 ${darkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <TrendingUp className="w-4 h-4 text-emerald-500" />
-                    <span className="text-emerald-500 font-bold text-xs">LONG</span>
-                  </div>
-                  <div className={`text-[10px] font-sans ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                    AOI Support<br/>✓ Im/Über AOI
+              {/* Entry Timeframe Info */}
+              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <Target className="w-5 h-5 text-blue-400" />
+                  <div>
+                    <div className="text-blue-400 font-bold tracking-wider text-sm">{t('entryTimeframe')}</div>
+                    <div className="text-zinc-400 text-sm">{t('entryTimeframeDesc')}</div>
                   </div>
                 </div>
-                <div className={`p-3 rounded-xl border-2 border-red-500/30 ${darkMode ? 'bg-red-500/10' : 'bg-red-50'}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <TrendingDown className="w-4 h-4 text-red-500" />
-                    <span className="text-red-500 font-bold text-xs">SHORT</span>
-                  </div>
-                  <div className={`text-[10px] font-sans ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                    AOI Resistance<br/>✓ Im/Unter AOI
-                  </div>
-                </div>
-              </div>
-              <div className={`flex items-center justify-center gap-2 p-2 rounded-lg border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
-                <Shield className={`w-3 h-3 ${theme.textMuted}`} />
-                <span className={`text-[10px] ${theme.textMuted} tracking-wide`}>
-                  ⛔ Nicht am Widerstand kaufen • Nicht am Support verkaufen
-                </span>
-              </div>
-
-              {/* Entry Timeframe - Ultra Compact */}
-              <div className={`flex items-center gap-2 p-2.5 rounded-lg border ${darkMode ? 'bg-blue-500/5 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
-                <Target className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
-                <span className={`text-[10px] font-sans ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  <span className="text-blue-400 font-bold">30min/1H</span> • Swing/Day Trading
-                </span>
               </div>
 
               {/* Current Score */}
