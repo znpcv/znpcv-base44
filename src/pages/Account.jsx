@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { Home, User, Mail, Calendar, LogOut, Edit2, Save, X, Shield } from 'lucide-react';
+import { Home, User, Mail, Calendar, LogOut, Edit2, Save, X, Shield, Phone, MapPin, Upload, Camera } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
+import AccountButton from '@/components/AccountButton';
 import { format } from 'date-fns';
 
 export default function AccountPage() {
@@ -16,7 +18,11 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [bio, setBio] = useState('');
+  const [country, setCountry] = useState('');
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     loadUser();
@@ -27,6 +33,9 @@ export default function AccountPage() {
       const userData = await base44.auth.me();
       setUser(userData);
       setFullName(userData.full_name || '');
+      setPhone(userData.phone || '');
+      setBio(userData.bio || '');
+      setCountry(userData.country || '');
     } catch (err) {
       navigate(createPageUrl('Home'));
     } finally {
@@ -37,13 +46,34 @@ export default function AccountPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await base44.auth.updateMe({ full_name: fullName });
+      await base44.auth.updateMe({ 
+        full_name: fullName,
+        phone: phone,
+        bio: bio,
+        country: country
+      });
       await loadUser();
       setEditing(false);
     } catch (err) {
       console.error(err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.auth.updateMe({ profile_image: file_url });
+      await loadUser();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -91,6 +121,7 @@ export default function AccountPage() {
             <div className="flex items-center gap-3">
               <DarkModeToggle />
               <LanguageToggle />
+              <AccountButton />
             </div>
           </div>
         </div>
@@ -100,43 +131,88 @@ export default function AccountPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-4xl tracking-widest mb-8">MEIN ACCOUNT</h1>
 
-          {/* Profile Card */}
+          {/* Profile Header */}
           <div className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-8 mb-6 ${theme.bgCard}`}>
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center gap-4">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
-                  <User className={`w-8 h-8 ${darkMode ? 'text-black' : 'text-white'}`} />
-                </div>
-                <div>
-                  <div className={`text-xs tracking-wider ${theme.textSecondary} mb-1`}>VOLLSTÄNDIGER NAME</div>
-                  {editing ? (
-                    <Input
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      className={`font-bold text-lg ${theme.border}`}
-                      placeholder="Dein Name"
-                    />
+            <div className="flex flex-col sm:flex-row items-start gap-6 mb-6">
+              {/* Profile Image */}
+              <div className="relative group">
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                  {user.profile_image ? (
+                    <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
-                    <div className={`text-xl font-bold ${theme.text}`}>{user.full_name || '-'}</div>
+                    <User className={`w-12 h-12 ${darkMode ? 'text-black' : 'text-white'}`} />
                   )}
                 </div>
+                <label className={`absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer`}>
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+                  {uploading ? (
+                    <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <Camera className="w-6 h-6 text-white" />
+                  )}
+                </label>
               </div>
-              <div className="flex gap-2">
-                {editing ? (
-                  <>
-                    <Button onClick={handleSave} disabled={saving} className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
-                      <Save className="w-4 h-4 mr-2" />
-                      {saving ? 'SPEICHERN...' : 'SPEICHERN'}
-                    </Button>
-                    <Button onClick={() => { setEditing(false); setFullName(user.full_name); }} variant="outline" className={`${theme.border}`}>
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </>
-                ) : (
-                  <Button onClick={() => setEditing(true)} variant="outline" className={`${theme.border}`}>
-                    <Edit2 className="w-4 h-4 mr-2" />
-                    BEARBEITEN
-                  </Button>
+
+              {/* Name & Edit */}
+              <div className="flex-1 w-full">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className={`text-xs tracking-wider ${theme.textSecondary} mb-2`}>VOLLSTÄNDIGER NAME</div>
+                    {editing ? (
+                      <Input
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className={`font-bold text-lg ${theme.border} mb-4`}
+                        placeholder="Dein Name"
+                      />
+                    ) : (
+                      <div className={`text-2xl font-bold ${theme.text} mb-1`}>{user.full_name || '-'}</div>
+                    )}
+                    <div className={`text-sm ${theme.textSecondary}`}>{user.email}</div>
+                  </div>
+                  <div className="flex gap-2 ml-4">
+                    {editing ? (
+                      <>
+                        <Button onClick={handleSave} disabled={saving} className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                          <Save className="w-4 h-4 mr-2" />
+                          {saving ? 'SPEICHERN...' : 'SPEICHERN'}
+                        </Button>
+                        <Button onClick={() => { 
+                          setEditing(false); 
+                          setFullName(user.full_name); 
+                          setPhone(user.phone || '');
+                          setBio(user.bio || '');
+                          setCountry(user.country || '');
+                        }} variant="outline" className={`${theme.border}`}>
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button onClick={() => setEditing(true)} variant="outline" className={`${theme.border}`}>
+                        <Edit2 className="w-4 h-4 mr-2" />
+                        BEARBEITEN
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bio */}
+                {editing && (
+                  <div className="mb-4">
+                    <div className={`text-xs tracking-wider ${theme.textSecondary} mb-2`}>BIO</div>
+                    <Textarea
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      placeholder="Erzähl etwas über dich..."
+                      className={`${theme.border} h-20 resize-none`}
+                    />
+                  </div>
+                )}
+                {!editing && bio && (
+                  <div className="mb-4">
+                    <div className={`text-xs tracking-wider ${theme.textSecondary} mb-1`}>BIO</div>
+                    <p className={`text-sm ${theme.text}`}>{bio}</p>
+                  </div>
                 )}
               </div>
             </div>
@@ -147,7 +223,41 @@ export default function AccountPage() {
                   <Mail className={`w-5 h-5 ${theme.textSecondary}`} />
                   <span className={`text-xs tracking-wider ${theme.textSecondary}`}>E-MAIL</span>
                 </div>
-                <div className={`text-base ${theme.text}`}>{user.email}</div>
+                <div className={`text-base ${theme.text} break-all`}>{user.email}</div>
+              </div>
+
+              <div className={`p-4 border ${theme.border} rounded-xl`}>
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone className={`w-5 h-5 ${theme.textSecondary}`} />
+                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>TELEFON</span>
+                </div>
+                {editing ? (
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+49 123 456789"
+                    className={`${theme.border} h-9`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text}`}>{user.phone || '-'}</div>
+                )}
+              </div>
+
+              <div className={`p-4 border ${theme.border} rounded-xl`}>
+                <div className="flex items-center gap-3 mb-2">
+                  <MapPin className={`w-5 h-5 ${theme.textSecondary}`} />
+                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>LAND</span>
+                </div>
+                {editing ? (
+                  <Input
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    placeholder="Deutschland"
+                    className={`${theme.border} h-9`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text}`}>{user.country || '-'}</div>
+                )}
               </div>
 
               <div className={`p-4 border ${theme.border} rounded-xl`}>
@@ -173,27 +283,35 @@ export default function AccountPage() {
                   <User className={`w-5 h-5 ${theme.textSecondary}`} />
                   <span className={`text-xs tracking-wider ${theme.textSecondary}`}>USER ID</span>
                 </div>
-                <div className={`text-base ${theme.text} font-mono text-xs`}>
-                  {user.id.substring(0, 8)}...
+                <div className={`text-base ${theme.text} font-mono text-xs break-all`}>
+                  {user.id.substring(0, 12)}...
                 </div>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <Button 
+              onClick={() => navigate(createPageUrl('Home'))} 
+              variant="outline" 
+              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest ${theme.border}`}
+            >
+              <Home className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+              <span className="hidden sm:inline">HOME</span>
+            </Button>
             <Button 
               onClick={() => navigate(createPageUrl('Dashboard'))} 
               variant="outline" 
-              className={`h-14 text-base tracking-widest ${theme.border}`}
+              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest ${theme.border}`}
             >
               DASHBOARD
             </Button>
             <Button 
               onClick={handleLogout} 
-              className={`h-14 text-base tracking-widest bg-red-500 hover:bg-red-600 text-white`}
+              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest bg-red-500 hover:bg-red-600 text-white`}
             >
-              <LogOut className="w-5 h-5 mr-2" />
+              <LogOut className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               AUSLOGGEN
             </Button>
           </div>

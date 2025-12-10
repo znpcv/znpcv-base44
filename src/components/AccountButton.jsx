@@ -51,19 +51,23 @@ export default function AccountButton() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
           darkMode 
             ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' 
             : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
         }`}
       >
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden ${
           darkMode ? 'bg-white' : 'bg-zinc-900'
         }`}>
-          <User className={`w-5 h-5 ${darkMode ? 'text-black' : 'text-white'}`} />
+          {user.profile_image ? (
+            <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" />
+          ) : (
+            <User className={`w-5 h-5 ${darkMode ? 'text-black' : 'text-white'}`} />
+          )}
         </div>
         <div className="hidden sm:block text-left">
-          <div className={`text-xs font-bold tracking-wider ${darkMode ? 'text-white' : 'text-black'}`}>
+          <div className={`text-xs font-bold tracking-wider ${darkMode ? 'text-white' : 'text-black'} truncate max-w-[120px]`}>
             {user.full_name || 'User'}
           </div>
           <div className={`text-[10px] ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>

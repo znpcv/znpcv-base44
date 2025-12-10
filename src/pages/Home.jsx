@@ -9,6 +9,7 @@ import {
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
+import AccountButton from '@/components/AccountButton';
 import { cn } from "@/lib/utils";
 
 const SESSIONS = [
@@ -105,6 +106,7 @@ export default function HomePage() {
             <div className="flex items-center gap-1.5 sm:gap-3">
               <DarkModeToggle />
               <LanguageToggle />
+              <AccountButton />
             </div>
           </div>
         </div>
