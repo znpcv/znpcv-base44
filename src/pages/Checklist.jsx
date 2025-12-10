@@ -815,7 +815,7 @@ export default function ChecklistPage() {
           
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={() => setCurrentStep(prev => prev + 1)} 
-              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2 ${darkMode ? 'bg-white hover:bg-zinc-100 text-black border-white' : 'bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900'}`}>
+              className="flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2 bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700 hover:border-zinc-600">
               {t('next')} <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
@@ -830,7 +830,7 @@ export default function ChecklistPage() {
                 className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2",
                   isReady 
                     ? "bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500" 
-                    : darkMode ? "bg-white hover:bg-zinc-100 text-black border-white" : "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900")}>
+                    : "bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700 hover:border-zinc-600")}>
                 <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
             </div>
@@ -858,7 +858,7 @@ export default function ChecklistPage() {
 
               <div className="space-y-3">
                 <Button onClick={() => { setShowWarning(false); navigate(createPageUrl('Dashboard')); }}
-                  className="w-full bg-white hover:bg-zinc-200 text-black rounded-xl h-11 tracking-widest font-bold border-2 border-white">
+                  className="w-full bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl h-11 tracking-widest font-bold border-2 border-zinc-700 hover:border-zinc-600">
                   {t('doNotEnter')}
                 </Button>
                 <Button onClick={() => { setShowWarning(false); handleSave(true); }} variant="ghost"
