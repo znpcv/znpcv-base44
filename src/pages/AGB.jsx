@@ -18,19 +18,24 @@ export default function AGBPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className={theme.textSecondary}>
-            <Home className="w-6 h-6" />
-          </button>
-          <img 
-            src={darkMode 
-              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-            }
-            alt="ZNPCV" 
-            className="h-10 w-auto"
-          />
-          <DarkModeToggle />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <DarkModeToggle />
+              <button onClick={() => navigate(-1)} className={theme.textSecondary}>
+                <Home className="w-6 h-6" />
+              </button>
+            </div>
+            <img 
+              src={darkMode 
+                ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+              }
+              alt="ZNPCV" 
+              className="h-10 w-auto"
+            />
+            <div className="w-12" />
+          </div>
         </div>
       </header>
 

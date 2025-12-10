@@ -101,9 +101,10 @@ export default function AccountPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <DarkModeToggle />
               <button onClick={() => navigate(-1)} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
                 <Home className="w-6 h-6" />
               </button>
@@ -114,12 +115,11 @@ export default function AccountPage() {
                     : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
                   alt="ZNPCV" 
-                  className="h-12 w-auto cursor-pointer"
+                  className="h-10 sm:h-12 w-auto cursor-pointer"
                 />
               </button>
             </div>
-            <div className="flex items-center gap-3">
-              <DarkModeToggle />
+            <div className="flex items-center gap-2 sm:gap-3">
               <LanguageToggle />
               <AccountButton />
             </div>

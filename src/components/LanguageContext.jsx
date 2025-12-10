@@ -68,6 +68,11 @@ const translations = {
     // Español
     online: 'EN LÍNEA',
     localTime: 'HORA LOCAL',
+    myAccount: 'MI CUENTA',
+    logout: 'CERRAR SESIÓN',
+    login: 'INICIAR SESIÓN',
+    editProfile: 'EDITAR PERFIL',
+    save: 'GUARDAR',
     ultimateChecklist: 'CHECKLIST DEFINITIVO',
     tradingTools: 'LA HERRAMIENTA DEFINITIVA',
     disciplineQuote: 'La disciplina vence al talento. Todos. Los. Días.',
@@ -309,6 +314,11 @@ const translations = {
     // Header
     online: 'ONLINE',
     localTime: 'ORTSZEIT',
+    myAccount: 'MEIN ACCOUNT',
+    logout: 'AUSLOGGEN',
+    login: 'ANMELDEN',
+    editProfile: 'PROFIL BEARBEITEN',
+    save: 'SPEICHERN',
     
     // Home
     ultimateChecklist: 'ULTIMATIVE CHECKLISTE',
@@ -592,6 +602,11 @@ const translations = {
     // Header
     online: 'ONLINE',
     localTime: 'LOCAL TIME',
+    myAccount: 'MY ACCOUNT',
+    logout: 'LOGOUT',
+    login: 'LOGIN',
+    editProfile: 'EDIT PROFILE',
+    save: 'SAVE',
     
     // Home
     ultimateChecklist: 'ULTIMATE CHECKLIST',

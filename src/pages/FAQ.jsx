@@ -164,9 +164,10 @@ export default function FAQPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <DarkModeToggle />
               <button onClick={() => navigate(-1)} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
                 <Home className="w-6 h-6" />
               </button>
@@ -174,12 +175,12 @@ export default function FAQPage() {
                 <img src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                } alt="ZNPCV" className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80" />
+                } alt="ZNPCV" className="h-10 sm:h-12 w-auto cursor-pointer hover:opacity-80" />
               </button>
             </div>
-            <div className="flex items-center gap-3">
-              <DarkModeToggle />
+            <div className="flex items-center gap-2 sm:gap-3">
               <LanguageToggle />
+              <AccountButton />
             </div>
           </div>
         </div>

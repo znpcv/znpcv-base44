@@ -123,9 +123,10 @@ export default function DashboardPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <DarkModeToggle />
               <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
                 <Home className="w-6 h-6" />
               </button>
@@ -136,18 +137,18 @@ export default function DashboardPage() {
             } alt="ZNPCV" className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80" />
               </button>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Button onClick={() => navigate(createPageUrl('TradeHistory'))} variant="outline" className={`hidden md:flex px-4 py-2 rounded-xl tracking-widest font-bold ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:border-zinc-700' : 'border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400'}`}>
                 <Activity className="w-5 h-5 mr-2" />
                 HISTORY
               </Button>
 
-              <DarkModeToggle />
               <LanguageToggle />
               <AccountButton />
-              <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-6 py-3 rounded-xl tracking-widest font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
-                <Plus className="w-5 h-5 mr-2" />
-                {t('newAnalysis').split(' ')[0]}
+              <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl tracking-widest font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
+                <Plus className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
+                <span className="hidden sm:inline">{t('newAnalysis').split(' ')[0]}</span>
+                <span className="sm:hidden">NEW</span>
               </Button>
             </div>
           </div>

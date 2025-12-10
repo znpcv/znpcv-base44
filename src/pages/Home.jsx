@@ -82,14 +82,10 @@ export default function HomePage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 sm:gap-4">
-              <div className="flex items-center gap-1.5 sm:gap-2 text-emerald-400">
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-[10px] sm:text-sm font-medium tracking-wider hidden xs:inline">SYSTEM OPERATIONAL</span>
-                <span className="text-[10px] sm:text-sm font-medium tracking-wider xs:hidden">ONLINE</span>
-              </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <DarkModeToggle />
             </div>
 
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
@@ -99,12 +95,11 @@ export default function HomePage() {
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </button>
 
-            <div className="flex items-center gap-1.5 sm:gap-3">
-              <DarkModeToggle />
+            <div className="flex items-center gap-2 sm:gap-3">
               <LanguageToggle />
               <AccountButton />
             </div>
@@ -420,7 +415,13 @@ export default function HomePage() {
 
           {/* Bottom Bar */}
           <div className={`pt-6 sm:pt-8 border-t ${theme.border}`}>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 mb-4">
+            <div className="flex flex-col items-center gap-4 mb-6">
+              <div className="flex items-center gap-2 text-emerald-400">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-xs font-medium tracking-wider">SYSTEM OPERATIONAL</span>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
               <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
                 <img 
                   src={darkMode 
@@ -428,14 +429,14 @@ export default function HomePage() {
                     : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
                   alt="ZNPCV" 
-                  className="h-7 sm:h-8 md:h-10 w-auto opacity-50"
+                  className="h-8 sm:h-10 w-auto opacity-50"
                 />
-                <div className={`h-3 sm:h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <p className={`${theme.textMuted} text-[10px] sm:text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
-                <div className={`h-3 sm:h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <p className={`${theme.textDimmed} text-[10px] sm:text-xs hidden sm:block`}>{t('allRights')}</p>
+                <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
+                <div className={`h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textDimmed} text-xs hidden sm:block`}>{t('allRights')}</p>
               </div>
-              <p className={`${theme.textDimmed} text-[9px] sm:text-[10px] font-sans text-center md:text-right max-w-sm sm:max-w-md leading-relaxed px-2 sm:px-0`}>
+              <p className={`${theme.textDimmed} text-[10px] font-sans text-center md:text-right max-w-md leading-relaxed`}>
                 {t('riskWarning')}
               </p>
             </div>
