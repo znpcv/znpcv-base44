@@ -1,6 +1,5 @@
 import React from 'react';
 import { LanguageProvider } from './components/LanguageContext';
-import PaywallGuard from './components/PaywallGuard';
 
 export default function Layout({ children, currentPageName }) {
   React.useEffect(() => {
@@ -16,9 +15,6 @@ export default function Layout({ children, currentPageName }) {
       }
     };
   }, []);
-
-  const noPaywallPages = ['Payment', 'PaymentSuccess', 'Login', 'Register', 'AGB', 'Datenschutz', 'Impressum'];
-  const shouldShowPaywall = !noPaywallPages.includes(currentPageName);
 
   return (
     <LanguageProvider>
@@ -40,11 +36,7 @@ export default function Layout({ children, currentPageName }) {
         `}
       </style>
       <div className="min-h-screen bg-black">
-        {shouldShowPaywall ? (
-          <PaywallGuard>{children}</PaywallGuard>
-        ) : (
-          children
-        )}
+        {children}
       </div>
     </LanguageProvider>
   );
