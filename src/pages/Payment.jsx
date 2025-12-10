@@ -238,7 +238,10 @@ export default function PaymentPage() {
 
             <div className={`mt-6 pt-6 border-t ${theme.border} text-center`}>
               <p className={`text-xs ${theme.textSecondary}`}>
-                By completing this purchase, you agree to our Terms of Service and Privacy Policy.
+                Mit dem Kauf akzeptieren Sie unsere{' '}
+                <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.text} underline`}>AGB</button>
+                {' '}und{' '}
+                <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.text} underline`}>Datenschutzerklärung</button>.
               </p>
             </div>
           </motion.div>

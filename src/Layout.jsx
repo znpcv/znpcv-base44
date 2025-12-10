@@ -17,7 +17,7 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  const noPaywallPages = ['Payment', 'PaymentSuccess'];
+  const noPaywallPages = ['Payment', 'PaymentSuccess', 'Login', 'Register', 'AGB', 'Datenschutz', 'Impressum'];
   const shouldShowPaywall = !noPaywallPages.includes(currentPageName);
 
   return (

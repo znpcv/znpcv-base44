@@ -5,6 +5,10 @@ import FAQ from './pages/FAQ';
 import TradeHistory from './pages/TradeHistory';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
+import Register from './pages/Register';
+import AGB from './pages/AGB';
+import Datenschutz from './pages/Datenschutz';
+import Impressum from './pages/Impressum';
 import __Layout from './Layout.jsx';
 
 
@@ -16,6 +20,10 @@ export const PAGES = {
     "TradeHistory": TradeHistory,
     "Payment": Payment,
     "PaymentSuccess": PaymentSuccess,
+    "Register": Register,
+    "AGB": AGB,
+    "Datenschutz": Datenschutz,
+    "Impressum": Impressum,
 }
 
 export const pagesConfig = {

@@ -119,7 +119,7 @@ export default function PaywallGuard({ children }) {
             </Button>
 
             <p className={`text-xs ${theme.textSecondary} mt-6`}>
-              100% secure checkout • 30-day money-back guarantee
+              100% sicherer Checkout • Digitales Produkt - Sofortiger Zugang
             </p>
           </motion.div>
         </main>
