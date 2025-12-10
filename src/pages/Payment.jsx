@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useEffect as useReactEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
@@ -16,34 +17,49 @@ function CheckoutForm({ onSuccess }) {
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isReady, setIsReady] = useState(false);
   const { darkMode } = useLanguage();
+
+  useEffect(() => {
+    if (stripe && elements) {
+      setIsReady(true);
+    }
+  }, [stripe, elements]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!stripe || !elements) return;
+    
+    if (!stripe || !elements) {
+      setErrorMessage('Payment system not ready. Please wait...');
+      return;
+    }
 
     setIsProcessing(true);
     setErrorMessage('');
 
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + createPageUrl('PaymentSuccess'),
-      },
-      redirect: 'if_required'
-    });
-
-    if (error) {
-      setErrorMessage(error.message);
-      setIsProcessing(false);
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      // Update user payment status
-      await base44.auth.updateMe({
-        payment_status: 'paid',
-        payment_date: new Date().toISOString(),
-        stripe_payment_intent: paymentIntent.id
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin + createPageUrl('PaymentSuccess'),
+        },
+        redirect: 'if_required'
       });
-      onSuccess();
+
+      if (error) {
+        setErrorMessage(error.message);
+        setIsProcessing(false);
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        await base44.auth.updateMe({
+          payment_status: 'paid',
+          payment_date: new Date().toISOString(),
+          stripe_payment_intent: paymentIntent.id
+        });
+        onSuccess();
+      }
+    } catch (err) {
+      setErrorMessage(err.message || 'Payment failed. Please try again.');
+      setIsProcessing(false);
     }
   };
 
@@ -62,10 +78,10 @@ function CheckoutForm({ onSuccess }) {
       )}
       <Button 
         type="submit" 
-        disabled={!stripe || isProcessing}
+        disabled={!stripe || !isReady || isProcessing}
         className={`w-full py-4 text-lg tracking-widest font-bold rounded-xl ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
       >
-        {isProcessing ? 'PROCESSING...' : 'PAY $99 NOW'}
+        {isProcessing ? 'PROCESSING...' : !isReady ? 'LOADING...' : 'PAY $99 NOW'}
       </Button>
     </form>
   );
@@ -90,18 +106,14 @@ export default function PaymentPage() {
           return;
         }
 
-        // Create payment intent via integration
-        const response = await base44.integrations.Core.InvokeLLM({
-          prompt: `Create a Stripe payment intent for $99 USD. Return JSON: {"clientSecret": "pi_xxx_secret_xxx"}`,
-          response_json_schema: {
-            type: "object",
-            properties: {
-              clientSecret: { type: "string" }
-            }
-          }
-        });
-
-        setClientSecret(response.clientSecret || 'demo_secret_placeholder');
+        // NOTE: You need to create a backend function to generate a real Stripe payment intent
+        // For now, using a demo client secret - replace this with actual Stripe integration
+        
+        // Demo mode: Create a test payment intent
+        // In production, call your backend: const { clientSecret } = await base44.functions.createPaymentIntent({ amount: 9900 });
+        
+        setErrorMessage('DEMO MODE: Configure Stripe backend integration to enable real payments');
+        setClientSecret('demo_test_secret_placeholder');
       } catch (error) {
         console.error('Payment init error:', error);
       } finally {
