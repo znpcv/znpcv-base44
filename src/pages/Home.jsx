@@ -24,6 +24,7 @@ export default function HomePage() {
   const { t, isRTL, darkMode } = useLanguage();
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [localTime, setLocalTime] = useState(new Date());
   const [serverStatus, setServerStatus] = useState('operational');
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -31,6 +32,7 @@ export default function HomePage() {
     const updateTimes = () => {
       const now = new Date();
       setCurrentTime(now);
+      setLocalTime(now);
       const newTimes = {};
       SESSIONS.forEach(session => {
         newTimes[session.name] = now.toLocaleTimeString('de-DE', {
@@ -47,7 +49,7 @@ export default function HomePage() {
 
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('scroll', handleScroll);
@@ -84,8 +86,14 @@ export default function HomePage() {
       <header className={`${theme.bg} border-b ${theme.border}`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <DarkModeToggle />
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <span className={`text-xs font-bold tracking-widest font-mono ${theme.text}`}>
+                  {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                </span>
+              </div>
             </div>
 
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
