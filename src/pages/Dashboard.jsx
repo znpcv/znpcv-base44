@@ -185,11 +185,11 @@ export default function DashboardPage() {
             <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 + index * 0.05 }}
               className={cn("border rounded-2xl p-4 sm:p-6", 
                 stat.highlight 
-                  ? "bg-emerald-500 text-white border-emerald-500" 
+                  ? "bg-teal-600 text-white border-teal-600" 
                   : `${theme.border} ${theme.bgSecondary}`)}>
               <stat.icon className={cn("w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4", stat.highlight ? "text-white" : theme.text)} />
               <div className={cn("text-3xl sm:text-4xl font-light mb-1", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-emerald-100" : theme.textMuted)}>{stat.label}</div>
+              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-teal-100" : theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -210,14 +210,14 @@ export default function DashboardPage() {
                   <AreaChart data={performanceData}>
                     <defs>
                       <linearGradient id="colorTrades" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={darkMode ? "#ffffff" : "#10b981"} stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor={darkMode ? "#ffffff" : "#10b981"} stopOpacity={0}/>
+                        <stop offset="5%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
                     <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
                     <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
-                    <Area type="monotone" dataKey="trades" stroke={darkMode ? "#ffffff" : "#10b981"} strokeWidth={2} fillOpacity={1} fill="url(#colorTrades)" />
+                    <Area type="monotone" dataKey="trades" stroke={darkMode ? "#ffffff" : "#0d9488"} strokeWidth={2} fillOpacity={1} fill="url(#colorTrades)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -258,9 +258,9 @@ export default function DashboardPage() {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}>
                           <div className={cn("w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl",
-                            trade.outcome === 'win' ? 'bg-emerald-500 text-white' :
-                            trade.outcome === 'loss' ? 'bg-red-500 text-white' : 
-                            trade.direction === 'long' ? 'border-2 border-emerald-500 text-emerald-500' : 'border-2 border-red-500 text-red-500')}>
+                            trade.outcome === 'win' ? 'bg-teal-600 text-white' :
+                            trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 
+                            trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
                             {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" /> : <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                           </div>
                           <div>
@@ -327,12 +327,12 @@ export default function DashboardPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
                     <Pie data={[
-                      { name: t('long'), value: stats.longs, color: '#10b981' },
-                      { name: t('short'), value: stats.shorts, color: '#ef4444' },
+                      { name: t('long'), value: stats.longs, color: '#0d9488' },
+                      { name: t('short'), value: stats.shorts, color: '#e11d48' },
                     ].filter(d => d.value > 0)} cx="50%" cy="50%" innerRadius={40} outerRadius={60} paddingAngle={4} dataKey="value">
                       {[
-                        { name: t('long'), value: stats.longs, color: '#10b981' },
-                        { name: t('short'), value: stats.shorts, color: '#ef4444' },
+                        { name: t('long'), value: stats.longs, color: '#0d9488' },
+                        { name: t('short'), value: stats.shorts, color: '#e11d48' },
                       ].filter(d => d.value > 0).map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                     </Pie>
                     <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
@@ -340,8 +340,8 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               </div>
               <div className="flex justify-center gap-6 mt-4">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-emerald-500 rounded" /><span className={`text-sm ${theme.textMuted}`}>{t('long')} ({stats.longs})</span></div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-500 rounded" /><span className={`text-sm ${theme.textMuted}`}>{t('short')} ({stats.shorts})</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>{t('long')} ({stats.longs})</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>{t('short')} ({stats.shorts})</span></div>
               </div>
             </motion.div>
 
@@ -357,7 +357,7 @@ export default function DashboardPage() {
                   const isOpen = isSessionOpen(session);
                   return (
                     <div key={session.name} className={cn("flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all",
-                      isOpen ? "border-emerald-500 bg-emerald-500 text-white" : darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-300 bg-zinc-100")}>
+                      isOpen ? "border-teal-600 bg-teal-600 text-white" : darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-300 bg-zinc-100")}>
                       <div className="flex items-center gap-2 sm:gap-3">
                         <span className="text-lg sm:text-xl">{session.emoji}</span>
                         <div>
@@ -407,7 +407,7 @@ export default function DashboardPage() {
                       trades.length > 0 && !isToday(day) && (darkMode ? "bg-zinc-900" : "bg-zinc-200")
                     )}>
                       {format(day, 'd')}
-                      {hasReady && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-emerald-500 rounded-full" />}
+                      {hasReady && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-teal-600 rounded-full" />}
                     </div>
                   );
                 })}
@@ -420,7 +420,7 @@ export default function DashboardPage() {
               <div className={`text-5xl sm:text-6xl font-light mb-2 ${theme.text}`}>{stats.avgCompletion}%</div>
               <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-3 sm:mb-4`}>{t('avgCompletion')}</div>
               <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${stats.avgCompletion}%` }} />
+                <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: `${stats.avgCompletion}%` }} />
               </div>
             </motion.div>
           </div>

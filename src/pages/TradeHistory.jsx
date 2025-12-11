@@ -58,8 +58,8 @@ export default function TradeHistoryPage() {
     : stats.tradesWithOutcome.filter(t => t.outcome === filter);
 
   const pieData = [
-    { name: 'Wins', value: stats.wins, color: '#10b981' },
-    { name: 'Losses', value: stats.losses, color: '#ef4444' },
+    { name: 'Wins', value: stats.wins, color: '#0d9488' },
+    { name: 'Losses', value: stats.losses, color: '#e11d48' },
     { name: 'Breakeven', value: stats.breakeven, color: '#6b7280' }
   ].filter(d => d.value > 0);
 
@@ -108,7 +108,7 @@ export default function TradeHistoryPage() {
 
         {/* Stats Grid */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <div className={cn("border-2 rounded-2xl p-4 sm:p-6", stats.totalPnL >= 0 ? "bg-emerald-500 border-emerald-500 text-white" : "bg-red-500 border-red-500 text-white")}>
+          <div className={cn("border-2 rounded-2xl p-4 sm:p-6", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4" />
             <div className="text-2xl sm:text-3xl font-light mb-1">${stats.totalPnL.toFixed(2)}</div>
             <div className="text-[10px] sm:text-xs tracking-widest opacity-80">TOTAL P&L</div>
@@ -156,10 +156,10 @@ export default function TradeHistoryPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}>
                         <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
-                          trade.outcome === 'win' ? 'bg-emerald-500 text-white' :
-                          trade.outcome === 'loss' ? 'bg-red-500 text-white' :
+                          trade.outcome === 'win' ? 'bg-teal-600 text-white' :
+                          trade.outcome === 'loss' ? 'bg-rose-600 text-white' :
                           trade.outcome === 'breakeven' ? 'bg-zinc-600 text-white' :
-                          trade.direction === 'long' ? 'border-2 border-emerald-500 text-emerald-500' : 'border-2 border-red-500 text-red-500')}>
+                          trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
                           {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                         </div>
                         <div>
@@ -219,8 +219,8 @@ export default function TradeHistoryPage() {
                 </ResponsiveContainer>
               </div>
               <div className="flex justify-center gap-4 mt-4">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-emerald-500 rounded" /><span className={`text-sm ${theme.textMuted}`}>Win ({stats.wins})</span></div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-500 rounded" /><span className={`text-sm ${theme.textMuted}`}>Loss ({stats.losses})</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>Win ({stats.wins})</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>Loss ({stats.losses})</span></div>
               </div>
             </motion.div>
 
@@ -229,15 +229,15 @@ export default function TradeHistoryPage() {
               <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>AVG WIN/LOSS</h3>
               <div className="space-y-4">
                 <div>
-                  <div className="flex justify-between mb-2"><span className={theme.textMuted}>AVG WIN</span><span className="text-emerald-500 font-bold">${stats.avgWin}</span></div>
+                  <div className="flex justify-between mb-2"><span className={theme.textMuted}>AVG WIN</span><span className="text-teal-600 font-bold">${stats.avgWin}</span></div>
                   <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                    <div className="h-full bg-emerald-500" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
+                    <div className="h-full bg-teal-600" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between mb-2"><span className={theme.textMuted}>AVG LOSS</span><span className="text-red-500 font-bold">${stats.avgLoss}</span></div>
+                  <div className="flex justify-between mb-2"><span className={theme.textMuted}>AVG LOSS</span><span className="text-rose-600 font-bold">${stats.avgLoss}</span></div>
                   <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                    <div className="h-full bg-red-500" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
+                    <div className="h-full bg-rose-600" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
                   </div>
                 </div>
               </div>
