@@ -487,17 +487,17 @@ export default function ChecklistPage() {
                   <button onClick={() => update('d_trend', 'bullish')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
                       checklist.d_trend === 'bullish' 
-                        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
-                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bullish' ? "text-white" : "text-emerald-500")} />
+                        ? "bg-teal-600 border-teal-500 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50 text-black")}>
+                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bullish' ? "text-white" : "text-teal-600")} />
                     <div className="font-bold tracking-wider text-sm">BULLISH</div>
                   </button>
                   <button onClick={() => update('d_trend', 'bearish')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
                       checklist.d_trend === 'bearish' 
-                        ? "bg-red-500 border-red-400 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
-                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bearish' ? "text-white" : "text-red-500")} />
+                        ? "bg-rose-600 border-rose-500 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50 text-black")}>
+                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bearish' ? "text-white" : "text-rose-600")} />
                     <div className="font-bold tracking-wider text-sm">BEARISH</div>
                   </button>
                 </div>
@@ -558,17 +558,17 @@ export default function ChecklistPage() {
                   <button onClick={() => update('h4_trend', 'bullish')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
                       checklist.h4_trend === 'bullish' 
-                        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
-                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bullish' ? "text-white" : "text-emerald-500")} />
+                        ? "bg-teal-600 border-teal-500 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50 text-black")}>
+                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bullish' ? "text-white" : "text-teal-600")} />
                     <div className="font-bold tracking-wider text-sm">BULLISH</div>
                   </button>
                   <button onClick={() => update('h4_trend', 'bearish')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
                       checklist.h4_trend === 'bearish' 
-                        ? "bg-red-500 border-red-400 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
-                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bearish' ? "text-white" : "text-red-500")} />
+                        ? "bg-rose-600 border-rose-500 text-white shadow-lg" 
+                        : darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50 text-black")}>
+                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bearish' ? "text-white" : "text-rose-600")} />
                     <div className="font-bold tracking-wider text-sm">BEARISH</div>
                   </button>
                 </div>
