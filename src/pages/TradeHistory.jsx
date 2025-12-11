@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar } from 'lucide-react';
+import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
@@ -17,10 +17,22 @@ export default function TradeHistoryPage() {
   const { t, isRTL, darkMode } = useLanguage();
   const [filter, setFilter] = useState('all');
 
-  const { data: checklists = [], isLoading } = useQuery({
+  const { data: checklists = [], isLoading, refetch } = useQuery({
     queryKey: ['checklists'],
     queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
   });
+
+  const handleDeleteTrade = async (e, tradeId) => {
+    e.stopPropagation();
+    if (window.confirm('Trade wirklich löschen?')) {
+      try {
+        await base44.entities.TradeChecklist.delete(tradeId);
+        refetch();
+      } catch (error) {
+        console.error('Delete failed:', error);
+      }
+    }
+  };
 
   const stats = useMemo(() => {
     const tradesWithOutcome = checklists.map(c => ({
@@ -139,10 +151,10 @@ export default function TradeHistoryPage() {
               </div>
               <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[600px] overflow-y-auto`}>
                 {filteredTrades.map((trade) => (
-                  <div key={trade.id} onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}
-                    className={`p-5 cursor-pointer transition-all ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
+                  <div key={trade.id}
+                    className={`p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}>
                         <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
                           trade.outcome === 'win' ? 'bg-emerald-500 text-white' :
                           trade.outcome === 'loss' ? 'bg-red-500 text-white' :
@@ -155,22 +167,34 @@ export default function TradeHistoryPage() {
                           <div className={`text-xs ${theme.textMuted}`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        {trade.outcome && (
-                          <>
-                            <div className={cn("text-lg font-bold",
-                              parseFloat(trade.pnl) > 0 ? 'text-emerald-500' :
-                              parseFloat(trade.pnl) < 0 ? 'text-red-500' : theme.text)}>
-                              {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
-                            </div>
-                            <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
-                              trade.outcome === 'win' ? 'bg-emerald-500/20 text-emerald-500' :
-                              trade.outcome === 'loss' ? 'bg-red-500/20 text-red-500' : 'bg-zinc-600/20 text-zinc-400')}>
-                              {trade.outcome.toUpperCase()}
-                            </div>
-                          </>
-                        )}
-                        {!trade.outcome && <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">PENDING</span>}
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          {trade.outcome && (
+                            <>
+                              <div className={cn("text-lg font-bold",
+                                parseFloat(trade.pnl) > 0 ? 'text-emerald-500' :
+                                parseFloat(trade.pnl) < 0 ? 'text-red-500' : theme.text)}>
+                                {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
+                              </div>
+                              <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
+                                trade.outcome === 'win' ? 'bg-emerald-500/20 text-emerald-500' :
+                                trade.outcome === 'loss' ? 'bg-red-500/20 text-red-500' : 'bg-zinc-600/20 text-zinc-400')}>
+                                {trade.outcome.toUpperCase()}
+                              </div>
+                            </>
+                          )}
+                          {!trade.outcome && <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">PENDING</span>}
+                        </div>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}
+                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-zinc-800 text-zinc-400 hover:text-white' : 'hover:bg-zinc-300 text-zinc-600 hover:text-black'}`}>
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button onClick={(e) => handleDeleteTrade(e, trade.id)}
+                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-red-500/20 text-red-400 hover:text-red-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
