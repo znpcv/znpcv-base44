@@ -225,11 +225,11 @@ export default function ChecklistPage() {
   };
 
   const getGrade = (p) => {
-    if (p >= 100) return { grade: 'A+++', color: 'bg-emerald-500', border: 'border-emerald-500' };
-    if (p >= 90) return { grade: 'A++', color: 'bg-emerald-400', border: 'border-emerald-400' };
+    if (p >= 100) return { grade: 'A+++', color: 'bg-teal-600', border: 'border-teal-600' };
+    if (p >= 90) return { grade: 'A++', color: 'bg-teal-500', border: 'border-teal-500' };
     if (p >= 85) return { grade: 'A+', color: 'bg-blue-500', border: 'border-blue-500' };
-    if (p >= 70) return { grade: 'OK', color: 'bg-yellow-500', border: 'border-yellow-500' };
-    return { grade: 'NO TRADE', color: 'bg-red-500', border: 'border-red-500' };
+    if (p >= 70) return { grade: 'OK', color: 'bg-amber-500', border: 'border-amber-500' };
+    return { grade: 'NO TRADE', color: 'bg-rose-600', border: 'border-rose-600' };
   };
   
   const gradeInfo = getGrade(progress);
@@ -372,9 +372,9 @@ export default function ChecklistPage() {
                         checklist.direction === 'long' 
                           ? "bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/20" 
                           : "border-zinc-800 hover:border-emerald-500/50 bg-zinc-950 hover:bg-emerald-500/5")}>
-                      <TrendingUp className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'long' ? "text-white" : "text-emerald-500")} />
+                      <TrendingUp className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'long' ? "text-white" : "text-teal-600")} />
                       <div className={cn("text-xl tracking-wider font-bold", checklist.direction === 'long' ? "text-white" : "text-white")}>LONG</div>
-                      <div className={cn("text-sm mt-1", checklist.direction === 'long' ? "text-emerald-100" : "text-zinc-500")}>
+                      <div className={cn("text-sm mt-1", checklist.direction === 'long' ? "text-teal-100" : "text-zinc-500")}>
                         {t('buyInAoi')}
                       </div>
                     </button>
@@ -383,9 +383,9 @@ export default function ChecklistPage() {
                         checklist.direction === 'short' 
                           ? "bg-red-500 border-red-400 text-white shadow-lg shadow-red-500/20" 
                           : "border-zinc-800 hover:border-red-500/50 bg-zinc-950 hover:bg-red-500/5")}>
-                      <TrendingDown className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'short' ? "text-white" : "text-red-500")} />
+                      <TrendingDown className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'short' ? "text-white" : "text-rose-600")} />
                       <div className={cn("text-xl tracking-wider font-bold", checklist.direction === 'short' ? "text-white" : "text-white")}>SHORT</div>
-                      <div className={cn("text-sm mt-1", checklist.direction === 'short' ? "text-red-100" : "text-zinc-500")}>
+                      <div className={cn("text-sm mt-1", checklist.direction === 'short' ? "text-rose-100" : "text-zinc-500")}>
                         {t('sellInAoi')}
                       </div>
                     </button>
@@ -404,7 +404,7 @@ export default function ChecklistPage() {
               <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
                 <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('weeklyScore')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-emerald-500" : weeklyScore >= 25 ? "text-yellow-500" : theme.text)}>{weeklyScore}</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-teal-600" : weeklyScore >= 25 ? "text-amber-500" : theme.text)}>{weeklyScore}</span>
                   <span className={`${theme.textDimmed} text-sm`}>/60%</span>
                 </div>
               </div>
@@ -418,7 +418,7 @@ export default function ChecklistPage() {
                       checklist.w_trend === 'bullish' 
                         ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
                         : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
-                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bullish' ? "text-white" : "text-emerald-500")} />
+                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bullish' ? "text-white" : "text-teal-600")} />
                     <div className="font-bold tracking-wider text-sm">BULLISH</div>
                   </button>
                   <button onClick={() => update('w_trend', 'bearish')}
@@ -426,7 +426,7 @@ export default function ChecklistPage() {
                       checklist.w_trend === 'bearish' 
                         ? "bg-red-500 border-red-400 text-white shadow-lg" 
                         : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
-                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bearish' ? "text-white" : "text-red-500")} />
+                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bearish' ? "text-white" : "text-rose-600")} />
                     <div className="font-bold tracking-wider text-sm">BEARISH</div>
                   </button>
                 </div>
@@ -475,7 +475,7 @@ export default function ChecklistPage() {
               <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
                 <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('dailyScore')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-emerald-500" : dailyScore >= 25 ? "text-yellow-500" : theme.text)}>{dailyScore}</span>
+                  <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-teal-600" : dailyScore >= 25 ? "text-amber-500" : theme.text)}>{dailyScore}</span>
                   <span className={`${theme.textDimmed} text-sm`}>/60%</span>
                 </div>
               </div>
@@ -620,7 +620,7 @@ export default function ChecklistPage() {
               <div className={`flex items-center justify-between p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
                 <span className={`${theme.textMuted} text-sm`}>{t('entryScoreLabel')}</span>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", entryScore >= 20 ? "text-emerald-500" : entryScore >= 10 ? "text-yellow-500" : theme.text)}>{entryScore}</span>
+                  <span className={cn("text-2xl font-bold", entryScore >= 20 ? "text-teal-600" : entryScore >= 10 ? "text-amber-500" : theme.text)}>{entryScore}</span>
                   <span className={theme.textDimmed}>/25%</span>
                 </div>
               </div>
@@ -711,17 +711,17 @@ export default function ChecklistPage() {
                   <button onClick={() => update('confirms_rule', !checklist.confirms_rule)}
                     className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
                       checklist.confirms_rule 
-                        ? "bg-emerald-500 border-emerald-400 text-white" 
-                        : darkMode ? "border-zinc-700 hover:border-emerald-500/50 bg-zinc-900" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50")}>
+                        ? "bg-teal-600 border-teal-500 text-white" 
+                        : darkMode ? "border-zinc-700 hover:border-teal-600/50 bg-zinc-900" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
                       checklist.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {checklist.confirms_rule && <Check className="w-4 h-4 text-emerald-500" />}
+                      {checklist.confirms_rule && <Check className="w-4 h-4 text-teal-600" />}
                     </div>
                     <div>
-                      <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : "text-white")}>
+                      <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-sm", checklist.confirms_rule ? "text-emerald-100" : "text-zinc-500")}>
+                      <div className={cn("text-sm", checklist.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
                         {t('notBuyResistance')}
                       </div>
                     </div>
@@ -732,17 +732,17 @@ export default function ChecklistPage() {
                   <button onClick={() => update('confirms_rule', !checklist.confirms_rule)}
                     className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
                       checklist.confirms_rule 
-                        ? "bg-red-500 border-red-400 text-white" 
-                        : darkMode ? "border-zinc-700 hover:border-red-500/50 bg-zinc-900" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50")}>
+                        ? "bg-rose-600 border-rose-500 text-white" 
+                        : darkMode ? "border-zinc-700 hover:border-rose-600/50 bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
                       checklist.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {checklist.confirms_rule && <Check className="w-4 h-4 text-red-500" />}
+                      {checklist.confirms_rule && <Check className="w-4 h-4 text-rose-600" />}
                     </div>
                     <div>
-                      <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : "text-white")}>
+                      <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('sellInBelowAoi')}
                       </div>
-                      <div className={cn("text-sm", checklist.confirms_rule ? "text-red-100" : "text-zinc-500")}>
+                      <div className={cn("text-sm", checklist.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
                         {t('notSellSupport')}
                       </div>
                     </div>
@@ -764,17 +764,17 @@ export default function ChecklistPage() {
                   <SummaryRow label="PAAR" value={checklist.pair || '-'} />
                   <SummaryRow label="RICHTUNG" 
                     value={checklist.direction === 'long' ? '↑ LONG' : checklist.direction === 'short' ? '↓ SHORT' : '-'} 
-                    color={checklist.direction === 'long' ? 'emerald' : checklist.direction === 'short' ? 'red' : null} />
+                    color={checklist.direction === 'long' ? 'teal' : checklist.direction === 'short' ? 'rose' : null} />
                   <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
-                  <SummaryRow label="WEEKLY" value={`${weeklyScore}/60%`} color={weeklyScore >= 40 ? 'emerald' : weeklyScore >= 25 ? 'yellow' : null} />
-                  <SummaryRow label="DAILY" value={`${dailyScore}/60%`} color={dailyScore >= 40 ? 'emerald' : dailyScore >= 25 ? 'yellow' : null} />
-                  <SummaryRow label="4H SCORE" value={`${h4Score}/35%`} color={h4Score >= 25 ? 'emerald' : h4Score >= 15 ? 'yellow' : null} />
-                  <SummaryRow label="ENTRY SCORE" value={`${entryScore}/25%`} color={entryScore >= 20 ? 'emerald' : entryScore >= 10 ? 'yellow' : null} />
+                  <SummaryRow label="WEEKLY" value={`${weeklyScore}/60%`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
+                  <SummaryRow label="DAILY" value={`${dailyScore}/60%`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
+                  <SummaryRow label="4H SCORE" value={`${h4Score}/35%`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
+                  <SummaryRow label="ENTRY SCORE" value={`${entryScore}/25%`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
                   {riskCalc && (
                     <>
                       <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
-                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'emerald' : 'yellow'} />
-                      <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${checklist.risk_percent}%)`} color="red" />
+                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
+                      <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${checklist.risk_percent}%)`} color="rose" />
                     </>
                   )}
                 </div>
@@ -790,11 +790,11 @@ export default function ChecklistPage() {
               {/* Final Grade */}
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
                 className={cn("p-8 text-center rounded-2xl border-2",
-                  progress >= 100 ? "bg-emerald-500 border-emerald-400" :
-                  progress >= 90 ? "bg-emerald-400 border-emerald-300" :
+                  progress >= 100 ? "bg-teal-600 border-teal-500" :
+                  progress >= 90 ? "bg-teal-500 border-teal-400" :
                   progress >= 85 ? "bg-blue-500 border-blue-400" :
-                  progress >= 70 ? "bg-yellow-500 border-yellow-400" :
-                  "bg-zinc-900 border-red-500")}>
+                  progress >= 70 ? "bg-amber-500 border-amber-400" :
+                  "bg-zinc-900 border-rose-600")}>
                 <div className={cn("text-5xl font-bold mb-1", progress >= 70 ? "text-black" : "text-white")}>{gradeInfo.grade}</div>
                 <div className={cn("text-3xl tracking-widest mb-2", progress >= 70 ? "text-black/80" : "text-white")}>{progress}%</div>
                 {progress >= 85 ? (
@@ -874,7 +874,7 @@ export default function ChecklistPage() {
               <Button onClick={() => handleSave(false)} disabled={saving || !checklist.pair}
                 className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2",
                   isReady 
-                    ? "bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-500" 
+                    ? "bg-teal-600 hover:bg-teal-700 text-white border-teal-600" 
                     : darkMode ? "bg-white hover:bg-zinc-100 text-black border-white" : "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900")}>
                 <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
@@ -947,7 +947,7 @@ function ChecklistItem({ checked, onChange, label, score, description }) {
     <button onClick={onChange} className={cn(
       "w-full p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 transition-all text-left rounded-xl border-2",
       checked 
-        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/10" 
+        ? "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/10" 
         : darkMode 
           ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950 hover:bg-zinc-900"
           : "border-zinc-300 hover:border-zinc-400 bg-zinc-100 hover:bg-zinc-200"
@@ -956,14 +956,14 @@ function ChecklistItem({ checked, onChange, label, score, description }) {
         "w-6 h-6 sm:w-7 sm:h-7 border-2 flex items-center justify-center flex-shrink-0 rounded-lg transition-all",
         checked ? "border-white bg-white" : darkMode ? "border-zinc-700" : "border-zinc-400"
       )}>
-        {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" />}
+        {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600" />}
       </div>
       <div className="flex-1 min-w-0">
         <span className={cn("text-xs sm:text-sm tracking-wider block font-bold", checked ? "text-white" : darkMode ? "text-white" : "text-black")}>{label}</span>
         {description && <span className={cn("text-[10px] sm:text-xs font-sans block mt-0.5 line-clamp-1", checked ? "text-emerald-100" : darkMode ? "text-zinc-600" : "text-zinc-500")}>{description}</span>}
       </div>
       <div className={cn("px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex-shrink-0", 
-        checked ? "bg-white text-emerald-600" : darkMode ? "bg-zinc-800 text-zinc-500" : "bg-zinc-300 text-zinc-700")}>
+        checked ? "bg-white text-teal-600" : darkMode ? "bg-zinc-800 text-zinc-500" : "bg-zinc-300 text-zinc-700")}>
         +{score}%
       </div>
     </button>
@@ -1026,7 +1026,7 @@ function PatternSelector({ value, onChange, score, label, description }) {
           {description && <span className={`text-[10px] sm:text-xs hidden sm:block ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{description}</span>}
         </div>
         {value && value !== 'none' && (
-          <div className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-emerald-500 text-white flex-shrink-0">+{score}%</div>
+        <div className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-teal-600 text-white flex-shrink-0">+{score}%</div>
         )}
       </div>
       <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
@@ -1036,7 +1036,7 @@ function PatternSelector({ value, onChange, score, label, description }) {
               value === pattern.key
                 ? pattern.key === 'none' 
                   ? darkMode ? "bg-zinc-700 border-zinc-600 text-white" : "bg-zinc-400 border-zinc-400 text-white"
-                  : "bg-emerald-500 border-emerald-400 text-white"
+                  : "bg-teal-600 border-teal-500 text-white"
                 : darkMode 
                   ? "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white"
                   : "border-zinc-300 text-zinc-600 hover:border-zinc-400 bg-zinc-50 hover:text-black")}>
@@ -1054,9 +1054,9 @@ function PatternSelector({ value, onChange, score, label, description }) {
 function SummaryRow({ label, value, color }) {
   const { darkMode } = useLanguage();
   const colorClasses = {
-    emerald: 'text-emerald-400',
-    red: 'text-red-400',
-    yellow: 'text-yellow-400',
+    teal: 'text-teal-600',
+    rose: 'text-rose-600',
+    amber: 'text-amber-500',
     blue: 'text-blue-400'
   };
   

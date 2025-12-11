@@ -436,7 +436,7 @@ export default function AccountPage() {
             </Button>
             <Button 
               onClick={handleLogout} 
-              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest bg-red-500 hover:bg-red-600 text-white`}
+              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white`}
             >
               <LogOut className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               AUSLOGGEN

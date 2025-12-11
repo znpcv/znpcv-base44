@@ -89,7 +89,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2 sm:gap-3">
               <DarkModeToggle />
               <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
-                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <div className="w-1.5 h-1.5 bg-teal-600 rounded-full animate-pulse" />
                 <span className={`text-xs font-bold tracking-widest font-mono ${theme.text}`}>
                   {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                 </span>
@@ -125,10 +125,10 @@ export default function HomePage() {
               return (
                 <div key={session.name} className="flex items-center gap-2 flex-shrink-0">
                   <span className="text-base">{session.emoji}</span>
-                  <div className={`text-sm font-mono font-bold ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
+                  <div className={`text-sm font-mono font-bold ${isOpen ? 'text-teal-600' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
-                  <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-teal-600 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
@@ -143,7 +143,7 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-500 text-xs mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-xs mb-6">
             <Zap className="w-3.5 h-3.5" />
             <span className="tracking-widest">{t('tradingTools')}</span>
           </div>
@@ -183,7 +183,7 @@ export default function HomePage() {
                   darkMode ? "bg-black" : "bg-white")}>
                   <ClipboardCheck className={cn("w-6 h-6", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500 text-white text-xs rounded-full ml-auto">
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-teal-600 text-white text-xs rounded-full ml-auto">
                   <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                   START
                 </div>
@@ -271,7 +271,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className={`p-6 ${theme.bgSecondary} border ${theme.border} rounded-2xl hover:border-emerald-500/50 transition-all group`}
+                className={`p-6 ${theme.bgSecondary} border ${theme.border} rounded-2xl hover:border-teal-600/50 transition-all group`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
                   <item.icon className={`w-6 h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
@@ -326,16 +326,16 @@ export default function HomePage() {
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-5">
                 <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  <Lock className="w-3 h-3 text-emerald-500" />
+                  <div className="w-1.5 h-1.5 bg-teal-600 rounded-full animate-pulse" />
+                  <Lock className="w-3 h-3 text-teal-600" />
                   <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL</span>
                 </div>
                 <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                  <ShieldCheck className="w-3 h-3 text-teal-600" />
                   <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SECURE</span>
                 </div>
                 <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <Globe className="w-3 h-3 text-emerald-500" />
+                  <Globe className="w-3 h-3 text-teal-600" />
                   <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
                 </div>
               </div>
@@ -351,19 +351,19 @@ export default function HomePage() {
               <div className="space-y-2">
                 <button onClick={() => navigate(createPageUrl('Checklist'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <ClipboardCheck className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <ClipboardCheck className={`w-4 h-4 ${theme.textMuted} group-hover:text-teal-600 transition-colors`} />
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('newAnalysis')}</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
                 <button onClick={() => navigate(createPageUrl('Dashboard'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <BarChart3 className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <BarChart3 className={`w-4 h-4 ${theme.textMuted} group-hover:text-teal-600 transition-colors`} />
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('dashboard')}</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
                 <button onClick={() => navigate(createPageUrl('TradeHistory'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <Activity className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <Activity className={`w-4 h-4 ${theme.textMuted} group-hover:text-teal-600 transition-colors`} />
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Trade History</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
@@ -384,12 +384,12 @@ export default function HomePage() {
               </h4>
               <div className="space-y-2">
                 <a href="mailto:support@znpcv.com" className={`flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-emerald-500 text-xs sm:text-sm">@</span>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-teal-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-teal-600 text-xs sm:text-sm">@</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
-                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-emerald-500 transition-colors truncate`}>support@znpcv.com</div>
+                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-teal-600 transition-colors truncate`}>support@znpcv.com</div>
                   </div>
                 </a>
                 <button onClick={() => navigate(createPageUrl('FAQ'))} className={`w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>

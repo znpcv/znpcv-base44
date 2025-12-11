@@ -172,13 +172,13 @@ export default function TradeHistoryPage() {
                           {trade.outcome && (
                             <>
                               <div className={cn("text-lg font-bold",
-                                parseFloat(trade.pnl) > 0 ? 'text-emerald-500' :
-                                parseFloat(trade.pnl) < 0 ? 'text-red-500' : theme.text)}>
+                                parseFloat(trade.pnl) > 0 ? 'text-teal-600' :
+                                parseFloat(trade.pnl) < 0 ? 'text-rose-600' : theme.text)}>
                                 {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
                               </div>
                               <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
-                                trade.outcome === 'win' ? 'bg-emerald-500/20 text-emerald-500' :
-                                trade.outcome === 'loss' ? 'bg-red-500/20 text-red-500' : 'bg-zinc-600/20 text-zinc-400')}>
+                                trade.outcome === 'win' ? 'bg-teal-600/20 text-teal-600' :
+                                trade.outcome === 'loss' ? 'bg-rose-600/20 text-rose-600' : 'bg-zinc-600/20 text-zinc-400')}>
                                 {trade.outcome.toUpperCase()}
                               </div>
                             </>
