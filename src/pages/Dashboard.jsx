@@ -101,8 +101,8 @@ export default function DashboardPage() {
   }, [checklists]);
 
   const directionData = [
-    { name: t('long'), value: stats.longs, color: '#ffffff' },
-    { name: t('short'), value: stats.shorts, color: '#71717a' },
+    { name: t('long'), value: stats.longs, color: '#0d9488' },
+    { name: t('short'), value: stats.shorts, color: '#e11d48' },
   ].filter(d => d.value > 0);
 
   const monthStart = startOfMonth(calendarMonth);

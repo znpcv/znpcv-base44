@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
+import ForexFactoryCalendar from '@/components/ForexFactoryCalendar';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -234,6 +235,12 @@ export default function TradeHistoryPage() {
             </motion.div>
           </div>
         </div>
+
+        {/* Forex Factory Calendar */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-12 mb-8">
+          <h2 className={`text-2xl tracking-widest mb-4 ${theme.text}`}>WIRTSCHAFTSKALENDER</h2>
+          <ForexFactoryCalendar />
+        </motion.div>
 
         {/* Footer */}
         <footer className={`mt-16 pt-8 border-t ${theme.border}`}>

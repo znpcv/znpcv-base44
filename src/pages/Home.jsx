@@ -369,7 +369,7 @@ export default function HomePage() {
                 </button>
                 <button onClick={() => navigate(createPageUrl('FAQ'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <HelpCircle className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-500 transition-colors`} />
+                  <HelpCircle className={`w-4 h-4 ${theme.textMuted} group-hover:text-teal-600 transition-colors`} />
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>FAQ & Help</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>

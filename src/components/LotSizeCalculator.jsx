@@ -47,7 +47,9 @@ export default function LotSizeCalculator({
   const [accountSize, setAccountSize] = useState(initialData.account_size || '');
   const [customAccount, setCustomAccount] = useState('');
   const [riskPercent, setRiskPercent] = useState(initialData.risk_percent || '1');
-  const [leverage, setLeverage] = useState(100);
+  const [customRisk, setCustomRisk] = useState('');
+  const [leverage, setLeverage] = useState(initialData.leverage || '100');
+  const [customLeverage, setCustomLeverage] = useState('');
   const [entryPrice, setEntryPrice] = useState(initialData.entry_price || '');
   const [stopLoss, setStopLoss] = useState(initialData.stop_loss || '');
   const [takeProfit, setTakeProfit] = useState(initialData.take_profit || '');
@@ -152,7 +154,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
     
     // Position value and margin
     const positionValue = lotSize * contractSize * entry;
-    const marginRequired = positionValue / leverage;
+    const marginRequired = positionValue / parseFloat(leverage);
     
     // R:R ratio
     const rr = tpDistance > 0 ? tpDistance / slDistance : 0;
@@ -216,8 +218,8 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
                 <RefreshCw className="w-4 h-4 text-blue-400 animate-spin" />
               ) : (
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                  <span className="text-emerald-500 text-xs font-bold">LIVE</span>
+                  <div className="w-2 h-2 bg-teal-600 rounded-full animate-pulse" />
+                  <span className="text-teal-600 text-xs font-bold">LIVE</span>
                 </div>
               )}
             </div>
@@ -225,17 +227,17 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           
           {livePrice && (
             <div className="grid grid-cols-3 gap-2 text-center">
-              <div className={`p-2 rounded-lg ${darkMode ? 'bg-red-500/10' : 'bg-red-50'} border border-red-500/20`}>
-                <div className="text-[9px] text-red-400">BID</div>
-                <div className="text-sm font-bold text-red-400">{livePrice.bid?.toFixed(decimals)}</div>
+              <div className={`p-2 rounded-lg ${darkMode ? 'bg-rose-600/10' : 'bg-red-50'} border border-rose-600/20`}>
+                <div className="text-[9px] text-rose-600">BID</div>
+                <div className="text-sm font-bold text-rose-600">{livePrice.bid?.toFixed(decimals)}</div>
               </div>
               <div className={`p-2 rounded-lg ${theme.bg}`}>
                 <div className={`text-[9px] ${theme.textDim}`}>PREIS</div>
                 <div className={`text-sm font-bold ${theme.text}`}>{livePrice.price?.toFixed(decimals)}</div>
               </div>
-              <div className={`p-2 rounded-lg ${darkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'} border border-emerald-500/20`}>
-                <div className="text-[9px] text-emerald-400">ASK</div>
-                <div className="text-sm font-bold text-emerald-400">{livePrice.ask?.toFixed(decimals)}</div>
+              <div className={`p-2 rounded-lg ${darkMode ? 'bg-teal-600/10' : 'bg-teal-50'} border border-teal-600/20`}>
+                <div className="text-[9px] text-teal-600">ASK</div>
+                <div className="text-sm font-bold text-teal-600">{livePrice.ask?.toFixed(decimals)}</div>
               </div>
             </div>
           )}
@@ -266,8 +268,8 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
               className={cn(
                 "py-2 px-1 rounded-lg text-xs font-bold transition-all border",
                 accountSize === size.value
-                  ? "bg-emerald-500 text-white border-emerald-500"
-                  : `${theme.input} hover:border-emerald-500/50`
+                  ? "bg-teal-600 text-white border-teal-600"
+                  : `${theme.input} hover:border-teal-600/50`
               )}
             >
               {size.label.replace('$', '').replace(',000', 'K').replace(',', '')}
@@ -292,8 +294,8 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
         </div>
         
         {accountSize && (
-          <div className="text-center p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-            <span className="text-emerald-500 font-bold text-lg">${parseInt(accountSize).toLocaleString()}</span>
+          <div className="text-center p-2 bg-teal-600/10 border border-teal-600/20 rounded-lg">
+            <span className="text-teal-600 font-bold text-lg">${parseInt(accountSize).toLocaleString()}</span>
           </div>
         )}
       </div>
@@ -305,22 +307,35 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           HEBEL (LEVERAGE)
         </label>
         
-        <div className="grid grid-cols-4 gap-1.5">
-          {LEVERAGE_OPTIONS.map((lev) => (
+        <div className="grid grid-cols-4 gap-1.5 mb-2">
+          {[50, 100, 200, 500].map((lev) => (
             <button
-              key={lev.value}
-              onClick={() => setLeverage(lev.value)}
+              key={lev}
+              onClick={() => {
+                setLeverage(lev.toString());
+                setCustomLeverage('');
+              }}
               className={cn(
                 "py-2 px-1 rounded-lg text-xs font-bold transition-all border",
-                leverage === lev.value
+                leverage === lev.toString()
                   ? "bg-blue-500 text-white border-blue-500"
                   : `${theme.input} hover:border-blue-500/50`
               )}
             >
-              {lev.label}
+              1:{lev}
             </button>
           ))}
         </div>
+        <Input
+          type="number"
+          placeholder="Individuell (z.B. 300)"
+          value={customLeverage}
+          onChange={(e) => {
+            setCustomLeverage(e.target.value);
+            if (e.target.value) setLeverage(e.target.value);
+          }}
+          className={`${theme.input} text-sm text-center`}
+        />
       </div>
 
       {/* Risk Percent */}
@@ -330,18 +345,21 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           RISIKO PRO TRADE
         </label>
         
-        <div className="grid grid-cols-5 gap-1.5">
-          {RISK_PRESETS.map((risk) => (
+        <div className="grid grid-cols-5 gap-1.5 mb-2">
+          {['1', '2', '3', '4', '5'].map((risk) => (
             <button
               key={risk}
-              onClick={() => setRiskPercent(risk)}
+              onClick={() => {
+                setRiskPercent(risk);
+                setCustomRisk('');
+              }}
               className={cn(
                 "py-2.5 rounded-lg text-sm font-bold transition-all border",
                 riskPercent === risk
                   ? (risk === '3' || risk === '4' || risk === '5') 
-                    ? "bg-emerald-500 text-white border-emerald-500"
+                    ? "bg-teal-600 text-white border-teal-600"
                     : "bg-blue-500 text-white border-blue-500"
-                  : `${theme.input} hover:border-emerald-500/50`
+                  : `${theme.input} hover:border-teal-600/50`
               )}
             >
               {risk}%
@@ -349,8 +367,20 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           ))}
         </div>
         
+        <Input
+          type="number"
+          step="0.1"
+          placeholder="Individuell (z.B. 2.5)"
+          value={customRisk}
+          onChange={(e) => {
+            setCustomRisk(e.target.value);
+            if (e.target.value) setRiskPercent(e.target.value);
+          }}
+          className={`${theme.input} text-sm text-center mb-2`}
+        />
+        
         {/* Info: ZNPCV empfiehlt 3-5% */}
-        <div className={`mt-2 p-2 rounded-lg text-xs flex items-center gap-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20`}>
+        <div className={`p-2 rounded-lg text-xs flex items-center gap-2 bg-teal-600/10 text-teal-400 border border-teal-600/20`}>
           <Check className="w-3 h-3" />
           ZNPCV empfiehlt 3-5% Risiko pro Trade
         </div>
@@ -358,7 +388,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
         {accountSize && riskPercent && (
           <div className={`mt-2 text-center p-2 rounded-lg ${theme.bg}`}>
             <span className={`text-xs ${theme.textDim}`}>Risiko: </span>
-            <span className="font-bold text-emerald-400">
+            <span className="font-bold text-teal-400">
               ${(parseFloat(accountSize) * parseFloat(riskPercent) / 100).toFixed(2)}
             </span>
           </div>
@@ -373,7 +403,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
             TRADE LEVELS
           </label>
           {direction && (
-            <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${direction === 'long' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}`}>
+            <div className={`px-2 py-0.5 rounded text-[10px] font-bold ${direction === 'long' ? 'bg-teal-600 text-white' : 'bg-rose-600 text-white'}`}>
               {direction === 'long' ? '↑ LONG' : '↓ SHORT'}
             </div>
           )}
@@ -404,7 +434,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="flex items-center gap-1 text-[10px] text-red-400 mb-1">
+              <label className="flex items-center gap-1 text-[10px] text-rose-600 mb-1">
                 <Shield className="w-3 h-3" />
                 STOP LOSS
               </label>
@@ -414,11 +444,11 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
                 value={stopLoss} 
                 onChange={(e) => setStopLoss(e.target.value)}
                 placeholder="0.00000"
-                className="bg-red-500/10 border-red-500/30 text-center h-10 rounded-lg"
+                className="bg-rose-600/10 border-rose-600/30 text-center h-10 rounded-lg"
               />
             </div>
             <div>
-              <label className="flex items-center gap-1 text-[10px] text-emerald-400 mb-1">
+              <label className="flex items-center gap-1 text-[10px] text-teal-600 mb-1">
                 <TrendingUp className="w-3 h-3" />
                 TAKE PROFIT
               </label>
@@ -428,7 +458,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
                 value={takeProfit} 
                 onChange={(e) => setTakeProfit(e.target.value)}
                 placeholder="0.00000"
-                className="bg-emerald-500/10 border-emerald-500/30 text-center h-10 rounded-lg"
+                className="bg-teal-600/10 border-teal-600/30 text-center h-10 rounded-lg"
               />
             </div>
           </div>
@@ -440,10 +470,10 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
         <motion.div 
           initial={{ opacity: 0, y: 10 }} 
           animate={{ opacity: 1, y: 0 }}
-          className="border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 rounded-xl overflow-hidden"
+          className="border-2 border-teal-600/30 bg-gradient-to-br from-teal-600/10 to-teal-600/5 rounded-xl overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-emerald-500 text-white p-3 flex items-center justify-between">
+          <div className="bg-teal-600 text-white p-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Calculator className="w-5 h-5" />
               <span className="font-bold tracking-wider text-sm">BERECHNUNG</span>
@@ -495,8 +525,8 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
               <div className={`p-3 rounded-lg ${theme.bg}`}>
                 <div className={`text-[9px] ${theme.textDim}`}>R:R RATIO</div>
                 <div className={cn("text-lg font-bold", 
-                  parseFloat(calculation.rr) >= 2.5 ? "text-emerald-400" : 
-                  parseFloat(calculation.rr) >= 1.5 ? "text-yellow-500" : "text-red-500"
+                  parseFloat(calculation.rr) >= 2.5 ? "text-teal-600" : 
+                  parseFloat(calculation.rr) >= 1.5 ? "text-amber-500" : "text-rose-600"
                 )}>
                   1:{calculation.rr}
                 </div>
@@ -505,27 +535,27 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
             
             {/* Potential Profit */}
             {parseFloat(calculation.rr) > 0 && (
-              <div className="p-3 bg-emerald-500/20 border border-emerald-500/30 rounded-lg flex items-center justify-between">
+              <div className="p-3 bg-teal-600/20 border border-teal-600/30 rounded-lg flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-emerald-400" />
-                  <span className="text-emerald-400 text-xs font-bold">POTENZIELLER GEWINN</span>
+                  <TrendingUp className="w-4 h-4 text-teal-600" />
+                  <span className="text-teal-600 text-xs font-bold">POTENZIELLER GEWINN</span>
                 </div>
-                <span className="text-emerald-400 text-xl font-bold">${calculation.potentialProfit}</span>
+                <span className="text-teal-600 text-xl font-bold">${calculation.potentialProfit}</span>
               </div>
             )}
             
             {/* Warnings */}
             {parseFloat(calculation.rr) > 0 && parseFloat(calculation.rr) < 2.5 && (
-              <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-500/30 rounded-lg flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-yellow-500" />
-                <span className="text-yellow-500 text-xs">ZNPCV empfiehlt min. 1:2.5 R:R</span>
+              <div className="mt-2 p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
+                <span className="text-amber-500 text-xs">ZNPCV empfiehlt min. 1:2.5 R:R</span>
               </div>
             )}
             
             {parseFloat(calculation.rr) >= 2.5 && (
-              <div className="mt-2 p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-500" />
-                <span className="text-emerald-400 text-xs">Gutes Risk:Reward Verhältnis!</span>
+              <div className="mt-2 p-2 bg-teal-600/10 border border-teal-600/30 rounded-lg flex items-center gap-2">
+                <Check className="w-4 h-4 text-teal-600" />
+                <span className="text-teal-600 text-xs">Gutes Risk:Reward Verhältnis!</span>
               </div>
             )}
           </div>
