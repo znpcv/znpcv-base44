@@ -42,19 +42,19 @@ export default function PerformanceChart({ checklists, darkMode }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${darkMode ? 'bg-zinc-950' : 'bg-zinc-100'}`}
+      className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 md:p-7 ${darkMode ? 'bg-zinc-950' : 'bg-zinc-100'} mb-6 sm:mb-8`}
     >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className={`text-lg tracking-widest flex items-center gap-2 ${theme.text}`}>
+      <div className="flex items-center justify-between mb-5 sm:mb-6">
+        <h3 className={`text-lg sm:text-xl tracking-widest flex items-center gap-2 ${theme.text}`}>
           {isProfit ? <TrendingUp className="w-5 h-5 text-teal-600" /> : <TrendingDown className="w-5 h-5 text-rose-600" />}
           CUMULATIVE P&L (60 DAYS)
         </h3>
-        <div className={`px-3 py-1 rounded-full ${isProfit ? 'bg-teal-600' : 'bg-rose-600'} text-white text-xs font-bold`}>
+        <div className={`px-4 py-1.5 rounded-full ${isProfit ? 'bg-teal-600' : 'bg-rose-600'} text-white text-sm font-bold`}>
           {isProfit ? '+' : ''}${finalPnL.toFixed(2)}
         </div>
       </div>
       
-      <div className="h-64">
+      <div className="h-64 sm:h-72">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>

@@ -44,33 +44,33 @@ export default function QuickStats({ checklists, darkMode }) {
   };
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-4">
-      <motion.div className={`border ${theme.border} rounded-2xl p-3 sm:p-4 ${theme.bg}`}>
-        <Zap className={`w-4 h-4 mb-2 ${theme.text}`} />
-        <div className={`text-xl sm:text-2xl font-light mb-1 ${theme.text}`}>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+      <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <Zap className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>
           {stats.profitFactor > 10 ? '∞' : stats.profitFactor.toFixed(2)}
         </div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>PROFIT FACTOR</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FACTOR</div>
       </motion.div>
       
-      <motion.div className={`border ${theme.border} rounded-2xl p-3 sm:p-4 ${theme.bg}`}>
-        <Target className={`w-4 h-4 mb-2 ${theme.text}`} />
-        <div className={`text-xl sm:text-2xl font-light mb-1 ${theme.text}`}>1:{stats.avgRR.toFixed(2)}</div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>AVG R:R</div>
+      <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <Target className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>1:{stats.avgRR.toFixed(2)}</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>AVG R:R</div>
       </motion.div>
       
-      <motion.div className={`border ${theme.border} rounded-2xl p-3 sm:p-4 ${theme.bg}`}>
-        <TrendingUp className={`w-4 h-4 mb-2 text-teal-600`} />
-        <div className={`text-xl sm:text-2xl font-light mb-1 text-teal-600`}>
+      <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <TrendingUp className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 text-teal-600`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 text-teal-600`}>
           ${stats.bestTrade ? parseFloat(stats.bestTrade.actual_pnl).toFixed(0) : '0'}
         </div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>BEST TRADE</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>BEST TRADE</div>
       </motion.div>
       
-      <motion.div className={`border ${theme.border} rounded-2xl p-3 sm:p-4 ${theme.bg}`}>
-        <BarChart3 className={`w-4 h-4 mb-2 ${theme.text}`} />
-        <div className={`text-xl sm:text-2xl font-light mb-1 ${theme.text}`}>{stats.consistency}%</div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>CONSISTENCY (L10)</div>
+      <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <BarChart3 className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>{stats.consistency}%</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>CONSISTENCY (L10)</div>
       </motion.div>
     </div>
   );

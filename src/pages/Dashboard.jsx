@@ -165,15 +165,15 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6 md:mb-8">
-          <h1 className={`text-2xl sm:text-3xl md:text-4xl tracking-widest mb-2 ${theme.text}`}>{t('tradingDashboard')}</h1>
-          <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8 md:mb-10">
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 sm:mb-3 ${theme.text}`}>{t('tradingDashboard')}</h1>
+          <p className={`${theme.textMuted} tracking-wider text-sm sm:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
         {/* Stats */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, highlight: true },
@@ -183,14 +183,14 @@ export default function DashboardPage() {
             { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
           ].map((stat, index) => (
             <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 + index * 0.05 }}
-              className={cn("border rounded-2xl p-3 sm:p-4", 
+              className={cn("border-2 rounded-2xl p-4 sm:p-5 md:p-6", 
                 stat.highlight && stat.isProfit && stats.totalPnL > 0 ? "bg-teal-600 text-white border-teal-600" :
                 stat.highlight && stat.isProfit && stats.totalPnL < 0 ? "bg-rose-600 text-white border-rose-600" :
                 stat.highlight ? "bg-teal-600 text-white border-teal-600" : 
                 `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3", stat.highlight ? "text-white" : theme.text)} />
-              <div className={cn("text-2xl sm:text-3xl font-light mb-1", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-white/80" : theme.textMuted)}>{stat.label}</div>
+              <stat.icon className={cn("w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4", stat.highlight ? "text-white" : theme.text)} />
+              <div className={cn("text-2xl sm:text-3xl md:text-4xl font-light mb-1 sm:mb-2", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
+              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-white/90" : theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -201,18 +201,18 @@ export default function DashboardPage() {
         {/* Performance Chart */}
         <PerformanceChart checklists={checklists} darkMode={darkMode} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mt-6 sm:mt-8">
           {/* Left */}
-          <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6">
             {/* Trade History */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className={`border ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
-              <div className={`p-4 sm:p-5 border-b ${theme.border} flex items-center justify-between flex-wrap gap-2`}>
-                <h3 className={`text-base sm:text-lg tracking-widest ${theme.text}`}>TRADE HISTORY</h3>
-                <div className="flex gap-1.5 sm:gap-2">
+              className={`border-2 ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
+              <div className={`p-5 sm:p-6 border-b ${theme.border} flex items-center justify-between flex-wrap gap-3`}>
+                <h3 className={`text-lg sm:text-xl tracking-widest ${theme.text}`}>TRADE HISTORY</h3>
+                <div className="flex gap-2">
                   {['all', 'win', 'loss'].map((f) => (
                     <button key={f} onClick={() => setFilter(f)}
-                      className={cn("px-2 sm:px-3 py-1 text-[10px] sm:text-xs tracking-wider rounded-lg transition-all font-bold border-2",
+                      className={cn("px-3 sm:px-4 py-1.5 sm:py-2 text-xs tracking-wider rounded-xl transition-all font-bold border-2",
                         filter === f 
                           ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
                           : darkMode ? "bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700" : "bg-zinc-100 text-zinc-600 border-zinc-300 hover:text-black hover:border-zinc-400")}>
@@ -223,31 +223,31 @@ export default function DashboardPage() {
               </div>
 
               {isLoading ? (
-                <div className={`p-6 sm:p-8 text-center ${theme.textDimmed}`}>{t('loading')}</div>
+                <div className={`p-8 sm:p-10 text-center ${theme.textDimmed}`}>{t('loading')}</div>
               ) : recentTrades.length === 0 ? (
-                <div className="p-6 sm:p-8 text-center">
-                  <p className={`${theme.textDimmed} mb-4 text-sm sm:text-base`}>{t('noAnalyses')}</p>
-                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-xl border-2 font-bold ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                <div className="p-8 sm:p-10 text-center">
+                  <p className={`${theme.textDimmed} mb-5 text-sm sm:text-base`}>{t('noAnalyses')}</p>
+                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-xl border-2 font-bold px-6 py-3 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                     {t('startFirstAnalysis')}
                   </Button>
                 </div>
               ) : (
-                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[600px] overflow-y-auto`}>
+                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[650px] overflow-y-auto`}>
                   {recentTrades.filter(t => filter === 'all' || (filter === 'win' && t.outcome === 'win') || (filter === 'loss' && t.outcome === 'loss')).slice(0, 8).map((trade) => (
                     <div key={trade.id} 
-                      className={`p-4 sm:p-5 transition-all group cursor-pointer ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}
+                      className={`p-5 sm:p-6 transition-all group cursor-pointer ${darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70'}`}
                       onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2 sm:gap-3 flex-1">
-                          <div className={cn("w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl",
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3 sm:gap-4 flex-1">
+                          <div className={cn("w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl border-2",
                             trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                             trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 
                             trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
                             {(trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0) || (!trade.outcome && trade.direction === 'long') ? <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" /> : <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                           </div>
                           <div>
-                            <div className={`text-sm sm:text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
-                            <div className={`text-[10px] sm:text-xs ${theme.textDimmed}`}>
+                            <div className={`text-base sm:text-lg font-bold tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
+                            <div className={`text-xs ${theme.textMuted}`}>
                               {format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}
                             </div>
                           </div>
@@ -284,9 +284,9 @@ export default function DashboardPage() {
                           </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
-                        <span className={theme.textMuted}>Score: <span className={theme.text}>{Math.round(trade.completion_percentage || 0)}%</span></span>
-                        {trade.risk_percent && <span className={theme.textMuted}>Risk: <span className={theme.text}>{trade.risk_percent}%</span></span>}
+                      <div className="flex items-center gap-4 text-xs">
+                        <span className={theme.textMuted}>Score: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                        {trade.risk_percent && <span className={theme.textMuted}>Risk: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>}
                       </div>
                     </div>
                   ))}
@@ -296,11 +296,11 @@ export default function DashboardPage() {
           </div>
 
           {/* Right */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-6">
+          <div className="space-y-4 sm:space-y-5 md:space-y-6">
             {/* Performance Chart */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
                 <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="hidden sm:inline">{t('activity30Days')}</span>
                 <span className="sm:hidden text-sm">ACTIVITY</span>
@@ -325,8 +325,8 @@ export default function DashboardPage() {
 
             {/* Direction Pie */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
                 <PieChart className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('direction')}
               </h3>
@@ -354,16 +354,16 @@ export default function DashboardPage() {
 
             {/* Market Sessions */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
                 <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('marketSessions')}
               </h3>
-              <div className="space-y-2 sm:space-y-3">
+              <div className="space-y-3">
                 {SESSIONS.map((session) => {
                   const isOpen = isSessionOpen(session);
                   return (
-                    <div key={session.name} className={cn("flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all",
+                    <div key={session.name} className={cn("flex items-center justify-between p-4 border-2 rounded-xl transition-all",
                       isOpen ? "border-teal-600 bg-teal-600 text-white" : darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-300 bg-zinc-100")}>
                       <div className="flex items-center gap-2 sm:gap-3">
                         <span className="text-lg sm:text-xl">{session.emoji}</span>
@@ -385,9 +385,9 @@ export default function DashboardPage() {
 
             {/* Calendar */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
+              <div className="flex items-center justify-between mb-4 sm:mb-5">
+                <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 ${theme.text}`}>
                   <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   {t('calendar')}
                 </h3>
@@ -423,10 +423,10 @@ export default function DashboardPage() {
 
             {/* Avg Completion */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary} text-center`}>
-              <div className={`text-4xl sm:text-5xl md:text-6xl font-light mb-2 ${theme.text}`}>{stats.avgCompletion}%</div>
-              <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-2 sm:mb-3`}>{t('avgCompletion')}</div>
-              <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-8 ${theme.bgSecondary} text-center`}>
+              <div className={`text-5xl sm:text-6xl md:text-7xl font-light mb-3 ${theme.text}`}>{stats.avgCompletion}%</div>
+              <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-4`}>{t('avgCompletion')}</div>
+              <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                 <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: `${stats.avgCompletion}%` }} />
               </div>
             </motion.div>
@@ -434,12 +434,12 @@ export default function DashboardPage() {
         </div>
 
         {/* Quote */}
-        <div className="mt-8 sm:mt-12">
+        <div className="mt-10 sm:mt-14 md:mt-16">
           <TradingQuote variant="minimal" />
         </div>
 
         {/* Footer */}
-        <footer className={`mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
+        <footer className={`mt-10 sm:mt-14 md:mt-16 pt-8 border-t ${theme.border}`}>
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <img src={darkMode 
               ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"

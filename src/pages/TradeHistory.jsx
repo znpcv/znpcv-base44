@@ -123,10 +123,10 @@ export default function TradeHistoryPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className={`text-4xl tracking-widest mb-2 ${theme.text}`}>TRADE HISTORY</h1>
-          <p className={`${theme.textMuted} tracking-wider`}>Performance Analytics & Trade Log</p>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 sm:mb-10">
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 sm:mb-3 ${theme.text}`}>TRADE HISTORY</h1>
+          <p className={`${theme.textMuted} text-sm sm:text-base tracking-wider`}>Performance Analytics & Trade Log</p>
         </motion.div>
 
         {/* AI Analysis */}
@@ -139,45 +139,45 @@ export default function TradeHistoryPage() {
         <AdvancedMetrics checklists={checklists} darkMode={darkMode} />
 
         {/* Stats Grid */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
-          <div className={cn("border-2 rounded-2xl p-4 sm:p-6", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
-            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4" />
-            <div className="text-2xl sm:text-3xl font-light mb-1">${stats.totalPnL.toFixed(2)}</div>
-            <div className="text-[10px] sm:text-xs tracking-widest opacity-80">TOTAL P&L</div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className={cn("border-2 rounded-2xl p-5 sm:p-6 md:p-8", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
+            <TrendingUp className="w-6 h-6 sm:w-7 sm:h-7 mb-4" />
+            <div className="text-3xl sm:text-4xl font-light mb-2">${stats.totalPnL.toFixed(2)}</div>
+            <div className="text-xs tracking-widest opacity-90">TOTAL P&L</div>
           </div>
-          <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-            <Award className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
-            <div className={`text-2xl sm:text-3xl font-light mb-1 ${theme.text}`}>{stats.winRate}%</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>WIN RATE</div>
+          <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 md:p-8 ${theme.bgSecondary}`}>
+            <Award className={`w-6 h-6 sm:w-7 sm:h-7 mb-4 ${theme.text}`} />
+            <div className={`text-3xl sm:text-4xl font-light mb-2 ${theme.text}`}>{stats.winRate}%</div>
+            <div className={`text-xs tracking-widest ${theme.textMuted}`}>WIN RATE</div>
           </div>
-          <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-            <Target className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
-            <div className={`text-2xl sm:text-3xl font-light mb-1 ${theme.text}`}>{stats.wins}/{stats.losses}</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>W/L RATIO</div>
+          <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 md:p-8 ${theme.bgSecondary}`}>
+            <Target className={`w-6 h-6 sm:w-7 sm:h-7 mb-4 ${theme.text}`} />
+            <div className={`text-3xl sm:text-4xl font-light mb-2 ${theme.text}`}>{stats.wins}/{stats.losses}</div>
+            <div className={`text-xs tracking-widest ${theme.textMuted}`}>W/L RATIO</div>
           </div>
-          <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-            <Calendar className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
-            <div className={`text-2xl sm:text-3xl font-light mb-1 ${theme.text}`}>{stats.executedTrades.length}</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>TRADES</div>
+          <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 md:p-8 ${theme.bgSecondary}`}>
+            <Calendar className={`w-6 h-6 sm:w-7 sm:h-7 mb-4 ${theme.text}`} />
+            <div className={`text-3xl sm:text-4xl font-light mb-2 ${theme.text}`}>{stats.executedTrades.length}</div>
+            <div className={`text-xs tracking-widest ${theme.textMuted}`}>TRADES</div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
           {/* Trades List */}
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
-              <div className={`p-4 sm:p-5 border-b ${theme.border}`}>
-                <h3 className={`text-base sm:text-lg tracking-widest ${theme.text} mb-3`}>ALL TRADES</h3>
+              className={`border-2 ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
+              <div className={`p-5 sm:p-6 border-b ${theme.border}`}>
+                <h3 className={`text-lg sm:text-xl tracking-widest ${theme.text} mb-4`}>ALL TRADES</h3>
                 <TradeFilters filter={filter} setFilter={setFilter} darkMode={darkMode} stats={stats} />
               </div>
-              <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[700px] overflow-y-auto`}>
+              <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[750px] overflow-y-auto`}>
                 {filteredTrades.map((trade) => (
                   <div key={trade.id}
-                    className={`p-4 sm:p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
+                    className={`p-5 sm:p-6 transition-all group ${darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70'}`}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
-                        <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
+                      <div className="flex items-center gap-3 sm:gap-4 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
+                        <div className={cn("w-12 h-12 flex items-center justify-center rounded-xl border-2",
                           trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                           trade.outcome === 'loss' ? 'bg-rose-600 text-white' :
                           trade.outcome === 'breakeven' ? 'bg-zinc-600 text-white' :
@@ -185,9 +185,9 @@ export default function TradeHistoryPage() {
                           {(trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0) || (!trade.outcome && trade.direction === 'long') ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <div className={`text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
-                            <div className={`px-2 py-0.5 rounded text-[9px] font-bold ${
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className={`text-base sm:text-lg font-bold tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
+                            <div className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
                               trade.completion_percentage >= 85 ? 'bg-teal-600/20 text-teal-600' : 
                               trade.completion_percentage >= 70 ? 'bg-amber-500/20 text-amber-500' : 'bg-rose-600/20 text-rose-600'
                             }`}>
@@ -252,10 +252,10 @@ export default function TradeHistoryPage() {
           </div>
 
           {/* Charts */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-6">
+          <div className="space-y-4 sm:space-y-5 md:space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>WIN/LOSS</h3>
+              className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-7 ${theme.bgSecondary}`}>
+              <h3 className={`text-lg sm:text-xl tracking-widest mb-5 ${theme.text}`}>WIN/LOSS</h3>
               <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
@@ -273,19 +273,19 @@ export default function TradeHistoryPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>AVG WIN/LOSS</h3>
-              <div className="space-y-4">
+              className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-7 ${theme.bgSecondary}`}>
+              <h3 className={`text-lg sm:text-xl tracking-widest mb-5 ${theme.text}`}>AVG WIN/LOSS</h3>
+              <div className="space-y-5">
                 <div>
-                  <div className="flex justify-between mb-2"><span className={theme.textMuted}>AVG WIN</span><span className="text-teal-600 font-bold">${stats.avgWin}</span></div>
-                  <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                    <div className="h-full bg-teal-600" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
+                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>AVG WIN</span><span className="text-teal-600 text-lg font-bold">${stats.avgWin}</span></div>
+                  <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
+                    <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between mb-2"><span className={theme.textMuted}>AVG LOSS</span><span className="text-rose-600 font-bold">${stats.avgLoss}</span></div>
-                  <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                    <div className="h-full bg-rose-600" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
+                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>AVG LOSS</span><span className="text-rose-600 text-lg font-bold">${stats.avgLoss}</span></div>
+                  <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
+                    <div className="h-full bg-rose-600 rounded-full transition-all" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
                   </div>
                 </div>
               </div>
@@ -294,7 +294,7 @@ export default function TradeHistoryPage() {
         </div>
 
         {/* Footer */}
-        <footer className={`mt-12 sm:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
+        <footer className={`mt-12 sm:mt-16 md:mt-20 pt-8 border-t ${theme.border}`}>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
             <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Impressum

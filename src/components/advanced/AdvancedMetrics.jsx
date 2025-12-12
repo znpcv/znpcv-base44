@@ -79,27 +79,27 @@ export default function AdvancedMetrics({ checklists, darkMode }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-6"
+      className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8"
     >
-      <div className={`border ${theme.border} rounded-2xl p-4 ${theme.bg}`}>
-        <Zap className={`w-5 h-5 mb-2 ${theme.text}`} />
-        <div className={`text-2xl font-light mb-1 ${theme.text}`}>{metrics.profitFactor}</div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>PROFIT FACTOR</div>
+      <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <Zap className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>{metrics.profitFactor}</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FACTOR</div>
       </div>
-      <div className={`border ${theme.border} rounded-2xl p-4 ${theme.bg}`}>
-        <Target className={`w-5 h-5 mb-2 ${theme.text}`} />
-        <div className={`text-2xl font-light mb-1 ${theme.text}`}>1:{metrics.avgRR}</div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>AVG R:R</div>
+      <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <Target className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>1:{metrics.avgRR}</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>AVG R:R</div>
       </div>
-      <div className={`border ${theme.border} rounded-2xl p-4 ${theme.bg}`}>
-        <Award className={`w-5 h-5 mb-2 ${theme.text}`} />
-        <div className={`text-2xl font-light mb-1 ${theme.text}`}>{metrics.avgScore}%</div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>AVG SCORE</div>
+      <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <Award className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>{metrics.avgScore}%</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>AVG SCORE</div>
       </div>
-      <div className={`border ${theme.border} rounded-2xl p-4 ${theme.bg}`}>
-        <Activity className={`w-5 h-5 mb-2 ${theme.text}`} />
-        <div className={`text-2xl font-light mb-1 ${theme.text}`}>{metrics.roi}%</div>
-        <div className={`text-[10px] tracking-widest ${theme.textMuted}`}>ROI</div>
+      <div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
+        <Activity className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
+        <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>{metrics.roi}%</div>
+        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>ROI</div>
       </div>
     </motion.div>
   );
