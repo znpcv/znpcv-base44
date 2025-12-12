@@ -1,212 +1,158 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Calendar, DollarSign, TrendingUp, TrendingDown, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, Save, TrendingUp, TrendingDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useLanguage } from '@/components/LanguageContext';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import AssetSelector from '@/components/AssetSelector';
 
-export default function TradeEditModal({ trade, onClose, onSave }) {
-  const { darkMode } = useLanguage();
+export default function TradeEditModal({ trade, onClose, onSave, isCreating, darkMode }) {
   const [formData, setFormData] = useState({
+    pair: trade.pair || '',
+    direction: trade.direction || '',
     outcome: trade.outcome || 'pending',
     actual_pnl: trade.actual_pnl || '',
     exit_date: trade.exit_date || '',
-    entry_price: trade.entry_price || '',
-    stop_loss: trade.stop_loss || '',
-    take_profit: trade.take_profit || '',
     notes: trade.notes || '',
-    account_size: trade.account_size || '',
-    risk_percent: trade.risk_percent || '',
+    completion_percentage: trade.completion_percentage || 0,
+    status: trade.status || 'in_progress',
   });
 
   const theme = {
     bg: darkMode ? 'bg-zinc-950' : 'bg-white',
     text: darkMode ? 'text-white' : 'text-zinc-900',
-    textMuted: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
-    input: darkMode ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black',
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSave = () => {
     onSave(formData);
   };
 
-  const calculatePnL = () => {
-    const entry = parseFloat(formData.entry_price);
-    const exit = parseFloat(formData.stop_loss);
-    const account = parseFloat(formData.account_size);
-    const risk = parseFloat(formData.risk_percent);
-    
-    if (entry && exit && account && risk) {
-      const riskAmount = account * (risk / 100);
-      const pnl = formData.outcome === 'win' ? riskAmount * 2.5 : -riskAmount;
-      setFormData({ ...formData, actual_pnl: pnl.toFixed(2) });
-    }
-  };
-
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        />
-        
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className={`relative ${theme.bg} rounded-2xl border-2 ${theme.border} max-w-2xl w-full max-h-[90vh] overflow-y-auto`}
-        >
-          <div className={`sticky top-0 ${theme.bg} border-b ${theme.border} p-4 sm:p-6 flex items-center justify-between z-10`}>
-            <h2 className={`text-xl sm:text-2xl tracking-widest ${theme.text}`}>TRADE BEARBEITEN</h2>
-            <button onClick={onClose} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
-              <X className="w-6 h-6" />
-            </button>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className={`${theme.bg} border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto`}
+      >
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className={`text-lg sm:text-xl md:text-2xl tracking-widest ${theme.text}`}>
+            {isCreating ? 'NEUER TRADE' : 'TRADE BEARBEITEN'}
+          </h2>
+          <button onClick={onClose} className={theme.textSecondary}>
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        </div>
+
+        <div className="space-y-3 sm:space-y-4">
+          {/* Pair Selection */}
+          {isCreating && (
+            <div>
+              <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>PAAR</label>
+              <AssetSelector 
+                selectedPair={formData.pair} 
+                onSelect={(pair) => setFormData({...formData, pair})}
+              />
+            </div>
+          )}
+
+          {/* Direction */}
+          {isCreating && (
+            <div>
+              <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>RICHTUNG</label>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <button
+                  onClick={() => setFormData({...formData, direction: 'long'})}
+                  className={cn("p-3 sm:p-4 rounded-xl border-2 transition-all text-xs sm:text-sm font-bold",
+                    formData.direction === 'long' 
+                      ? 'bg-teal-600 text-white border-teal-600' 
+                      : `${theme.border} ${theme.text}`)}>
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1" />
+                  LONG
+                </button>
+                <button
+                  onClick={() => setFormData({...formData, direction: 'short'})}
+                  className={cn("p-3 sm:p-4 rounded-xl border-2 transition-all text-xs sm:text-sm font-bold",
+                    formData.direction === 'short' 
+                      ? 'bg-rose-600 text-white border-rose-600' 
+                      : `${theme.border} ${theme.text}`)}>
+                  <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1" />
+                  SHORT
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Outcome */}
+          <div>
+            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>ERGEBNIS</label>
+            <Select value={formData.outcome} onValueChange={(v) => setFormData({...formData, outcome: v})}>
+              <SelectTrigger className={`${theme.border} h-10 sm:h-11 text-sm`}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="win">Win</SelectItem>
+                <SelectItem value="loss">Loss</SelectItem>
+                <SelectItem value="breakeven">Breakeven</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
-            {/* Outcome */}
-            <div>
-              <label className={`text-xs ${theme.textMuted} mb-2 block tracking-wider`}>ERGEBNIS</label>
-              <div className="grid grid-cols-4 gap-2">
-                {['win', 'loss', 'breakeven', 'pending'].map((outcome) => (
-                  <button
-                    key={outcome}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, outcome })}
-                    className={cn("py-2 rounded-lg text-xs font-bold transition-all border-2",
-                      formData.outcome === outcome
-                        ? outcome === 'win' ? 'bg-teal-600 text-white border-teal-600' :
-                          outcome === 'loss' ? 'bg-rose-600 text-white border-rose-600' :
-                          outcome === 'breakeven' ? 'bg-zinc-600 text-white border-zinc-600' :
-                          'bg-blue-500 text-white border-blue-500'
-                        : `${theme.input} hover:border-teal-600/50`)}
-                  >
-                    {outcome.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
+          {/* P&L */}
+          <div>
+            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>P&L ($)</label>
+            <Input
+              type="number"
+              step="0.01"
+              value={formData.actual_pnl}
+              onChange={(e) => setFormData({...formData, actual_pnl: e.target.value})}
+              placeholder="z.B. 250.50 oder -150.00"
+              className={`${theme.border} h-10 sm:h-11 text-sm`}
+            />
+          </div>
 
-            {/* Trade Prices */}
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label className={`text-xs ${theme.textMuted} mb-2 block`}>ENTRY</label>
-                <Input
-                  type="number"
-                  step="0.00001"
-                  value={formData.entry_price}
-                  onChange={(e) => setFormData({ ...formData, entry_price: e.target.value })}
-                  className={theme.input}
-                />
-              </div>
-              <div>
-                <label className={`text-xs text-rose-600 mb-2 block`}>STOP LOSS</label>
-                <Input
-                  type="number"
-                  step="0.00001"
-                  value={formData.stop_loss}
-                  onChange={(e) => setFormData({ ...formData, stop_loss: e.target.value })}
-                  className="bg-rose-600/10 border-rose-600/30"
-                />
-              </div>
-              <div>
-                <label className={`text-xs text-teal-600 mb-2 block`}>TAKE PROFIT</label>
-                <Input
-                  type="number"
-                  step="0.00001"
-                  value={formData.take_profit}
-                  onChange={(e) => setFormData({ ...formData, take_profit: e.target.value })}
-                  className="bg-teal-600/10 border-teal-600/30"
-                />
-              </div>
-            </div>
+          {/* Exit Date */}
+          <div>
+            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>AUSSTIEGSDATUM</label>
+            <Input
+              type="date"
+              value={formData.exit_date}
+              onChange={(e) => setFormData({...formData, exit_date: e.target.value})}
+              className={`${theme.border} h-10 sm:h-11 text-sm`}
+            />
+          </div>
 
-            {/* Account & Risk */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className={`text-xs ${theme.textMuted} mb-2 block`}>ACCOUNT SIZE</label>
-                <Input
-                  type="number"
-                  value={formData.account_size}
-                  onChange={(e) => setFormData({ ...formData, account_size: e.target.value })}
-                  placeholder="10000"
-                  className={theme.input}
-                />
-              </div>
-              <div>
-                <label className={`text-xs ${theme.textMuted} mb-2 block`}>RISK %</label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  value={formData.risk_percent}
-                  onChange={(e) => setFormData({ ...formData, risk_percent: e.target.value })}
-                  placeholder="3"
-                  className={theme.input}
-                />
-              </div>
-            </div>
+          {/* Notes */}
+          <div>
+            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>NOTIZEN</label>
+            <Textarea
+              value={formData.notes}
+              onChange={(e) => setFormData({...formData, notes: e.target.value})}
+              placeholder="Trade Notizen..."
+              className={`${theme.border} min-h-[80px] sm:min-h-[100px] text-sm`}
+            />
+          </div>
 
-            {/* P&L */}
-            <div>
-              <label className={`text-xs ${theme.textMuted} mb-2 block flex items-center justify-between`}>
-                <span>PROFIT/LOSS (USD)</span>
-                <button type="button" onClick={calculatePnL} className="text-blue-400 text-[10px] hover:text-blue-300">
-                  Auto-Berechnen
-                </button>
-              </label>
-              <Input
-                type="number"
-                step="0.01"
-                value={formData.actual_pnl}
-                onChange={(e) => setFormData({ ...formData, actual_pnl: e.target.value })}
-                placeholder="0.00"
-                className={theme.input}
-              />
-            </div>
-
-            {/* Exit Date */}
-            <div>
-              <label className={`text-xs ${theme.textMuted} mb-2 block`}>EXIT DATUM</label>
-              <Input
-                type="date"
-                value={formData.exit_date}
-                onChange={(e) => setFormData({ ...formData, exit_date: e.target.value })}
-                className={theme.input}
-              />
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className={`text-xs ${theme.textMuted} mb-2 block`}>NOTIZEN</label>
-              <Textarea
-                value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Trade-Notizen, Beobachtungen..."
-                className={`${theme.input} min-h-[100px]`}
-              />
-            </div>
-
-            {/* Actions */}
-            <div className="flex gap-3 pt-4">
-              <Button type="button" onClick={onClose} variant="outline" className="flex-1">
-                Abbrechen
-              </Button>
-              <Button type="submit" className="flex-1 bg-teal-600 hover:bg-teal-700 text-white">
-                <Save className="w-4 h-4 mr-2" />
-                Speichern
-              </Button>
-            </div>
-          </form>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+          {/* Actions */}
+          <div className="flex gap-2 pt-2">
+            <Button onClick={onClose} variant="outline" className={`flex-1 h-10 sm:h-11 ${theme.border}`}>
+              ABBRECHEN
+            </Button>
+            <Button 
+              onClick={handleSave} 
+              disabled={!formData.pair || !formData.direction}
+              className={`flex-1 h-10 sm:h-11 font-bold ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+              <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              SPEICHERN
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
