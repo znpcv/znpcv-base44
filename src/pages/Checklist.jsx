@@ -1031,6 +1031,12 @@ function PatternSelector({ value, onChange, score, label, description }) {
     { key: 'none', label: t('none'), icon: 'none', desc: 'Kein Pattern' },
   ];
 
+  const theme = {
+    border: darkMode ? 'border-zinc-800' : 'border-zinc-300',
+    bgCard: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    textMuted: darkMode ? 'text-zinc-600' : 'text-zinc-500',
+  };
+
   const PatternIcon = ({ type, className }) => {
     const baseClass = cn("w-full h-full", className);
     
