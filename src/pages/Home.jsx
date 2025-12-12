@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
   Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
-  Activity, Award, HelpCircle, Calendar, History, Sparkles
+  Activity, Award, HelpCircle, Calendar, History
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
@@ -137,169 +137,110 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8 sm:py-12 md:py-16">
+      <main className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-10 md:py-14">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16 sm:mb-20 md:mb-24"
+          className="text-center mb-12"
         >
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-teal-600/10 border-2 border-teal-600/30 rounded-full text-teal-600 text-xs mb-8 shadow-lg shadow-teal-600/10">
-            <Zap className="w-4 h-4" />
-            <span className="tracking-[0.2em] font-bold">{t('tradingTools')}</span>
-          </motion.div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-xs mb-6">
+            <Zap className="w-3.5 h-3.5" />
+            <span className="tracking-widest">{t('tradingTools')}</span>
+          </div>
           
-          <motion.h1 
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.15em] mb-6 font-light relative">
-            <span className={cn("inline-block", darkMode ? "text-white" : "text-black")}>ZNPCV</span>
-            <motion.div 
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-24 h-1 bg-teal-600 rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: 96 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-            />
-          </motion.h1>
-          
-          <motion.h2 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className={`text-2xl md:text-3xl lg:text-4xl tracking-[0.25em] ${theme.textSecondary} mb-10`}>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
+            ZNPCV
+          </h1>
+          <h2 className={`text-xl md:text-2xl tracking-widest ${theme.textSecondary} mb-6`}>
             {t('ultimateChecklist')}
-          </motion.h2>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="max-w-3xl mx-auto">
-            <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xl md:text-2xl lg:text-3xl leading-relaxed font-sans italic mb-4`}>
-              "{t('disciplineQuote')}"
-            </p>
-            <p className={`${theme.textDimmed} text-sm tracking-[0.2em]`}>— {t('philosophy')}</p>
-          </motion.div>
+          </h2>
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic`}>
+            "{t('disciplineQuote')}"
+          </p>
+          <p className={`${theme.textDimmed} text-sm mt-3 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
-        {/* Main Actions - ULTRA ADVANCED */}
+        {/* Main Actions - BLACK & WHITE REDESIGN */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="grid md:grid-cols-2 gap-6 sm:gap-7 md:gap-8 mb-16 sm:mb-20 md:mb-24"
+          transition={{ delay: 0.2 }}
+          className="grid md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 mb-10 sm:mb-12 md:mb-16"
         >
-          {/* New Analysis - Premium Card */}
-          <motion.button
-            whileHover={{ scale: 1.02, y: -5 }}
-            whileTap={{ scale: 0.98 }}
+          {/* New Analysis */}
+          <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("group relative p-10 sm:p-12 rounded-3xl overflow-hidden shadow-2xl transition-all text-left border-2",
-              darkMode 
-                ? "bg-gradient-to-br from-white via-zinc-100 to-white text-black border-white/20" 
-                : "bg-gradient-to-br from-black via-zinc-900 to-black text-white border-black/20")}
+            className={cn("group relative p-8 rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
+              darkMode ? "bg-white text-black" : "bg-black text-white")}
           >
-            {/* Animated background */}
-            <div className="absolute inset-0 opacity-10">
-              <motion.div 
-                className="w-full h-full"
-                style={{backgroundImage: 'radial-gradient(circle, currentColor 2px, transparent 2px)', backgroundSize: '40px 40px'}}
-                animate={{ backgroundPosition: ['0px 0px', '40px 40px'] }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-
-            {/* Gradient orbs */}
-            <div className={cn("absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-32 translate-x-32 transition-all group-hover:scale-150",
-              darkMode ? "bg-teal-500/20" : "bg-teal-400/30")} />
-            <div className={cn("absolute bottom-0 left-0 w-56 h-56 rounded-full blur-3xl translate-y-28 -translate-x-28 transition-all group-hover:scale-150",
-              darkMode ? "bg-blue-500/20" : "bg-blue-400/30")} />
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-40 h-40 bg-black/5 rounded-full -translate-y-20 translate-x-20" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/5 rounded-full translate-y-16 -translate-x-16" />
             
             <div className="relative z-10">
-              <div className="flex items-start justify-between mb-8">
-                <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg border-2 transition-all group-hover:scale-110 group-hover:rotate-3",
-                  darkMode ? "bg-black border-black/50" : "bg-white border-white/50")}>
-                  <ClipboardCheck className={cn("w-8 h-8", darkMode ? "text-white" : "text-black")} />
+              <div className="flex items-center gap-2 mb-6">
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-black" : "bg-white")}>
+                  <ClipboardCheck className={cn("w-6 h-6", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white text-xs rounded-full shadow-lg">
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-teal-600 text-white text-xs rounded-full ml-auto">
                   <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                  <span className="font-bold tracking-widest">START</span>
+                  START
                 </div>
               </div>
               
-              <h2 className={cn("text-3xl sm:text-4xl tracking-[0.1em] mb-4 font-bold", darkMode ? "text-black" : "text-white")}>
-                {t('newAnalysis')}
-              </h2>
-              <p className={cn("text-base leading-relaxed mb-8 font-sans max-w-md", darkMode ? "text-zinc-700" : "text-zinc-300")}>
+              <h2 className={cn("text-3xl tracking-wider mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-sm leading-relaxed mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
                 {t('newAnalysisDesc')}
               </p>
 
-              <div className={cn("flex items-center gap-4 font-bold tracking-[0.15em]", darkMode ? "text-black" : "text-white")}>
-                <span className="text-xl">{t('startNow')}</span>
-                <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center group-hover:translate-x-3 transition-all shadow-lg border-2",
-                  darkMode ? "bg-black text-white border-black/50" : "bg-white text-black border-white/50")}>
-                  <ArrowRight className="w-6 h-6" />
+              <div className={cn("flex items-center gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
+                <span className="text-lg">{t('startNow')}</span>
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-black text-white" : "bg-white text-black")}>
+                  <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
             </div>
-          </motion.button>
+          </button>
 
-          {/* Dashboard - Premium Card */}
-          <motion.button
-            whileHover={{ scale: 1.02, y: -5 }}
-            whileTap={{ scale: 0.98 }}
+          {/* Dashboard */}
+          <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className={cn("group relative p-10 sm:p-12 rounded-3xl overflow-hidden shadow-2xl transition-all text-left border-2",
-              darkMode 
-                ? "bg-gradient-to-br from-black via-zinc-950 to-black text-white border-zinc-800" 
-                : "bg-gradient-to-br from-white via-zinc-50 to-white text-black border-zinc-300")}
+            className={cn("group relative p-8 rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+              darkMode ? "bg-black text-white border-zinc-800" : "bg-white text-black border-zinc-300")}
           >
-            {/* Grid pattern */}
-            <div className="absolute inset-0 opacity-[0.02]">
-              <div className="w-full h-full" style={{
-                backgroundImage: `linear-gradient(${darkMode ? 'white' : 'black'} 1px, transparent 1px), linear-gradient(90deg, ${darkMode ? 'white' : 'black'} 1px, transparent 1px)`, 
-                backgroundSize: '30px 30px'
-              }} />
+            {/* Decorative grid */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
             </div>
-
-            {/* Gradient orbs */}
-            <div className={cn("absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-32 translate-x-32 transition-all group-hover:scale-150",
-              darkMode ? "bg-blue-500/20" : "bg-blue-400/30")} />
-            <div className={cn("absolute bottom-0 left-0 w-56 h-56 rounded-full blur-3xl translate-y-28 -translate-x-28 transition-all group-hover:scale-150",
-              darkMode ? "bg-purple-500/20" : "bg-purple-400/30")} />
             
             <div className="relative z-10">
-              <div className="flex items-start justify-between mb-8">
-                <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg border-2 transition-all group-hover:scale-110 group-hover:rotate-3",
-                  darkMode ? "bg-white border-white/50" : "bg-black border-black/50")}>
-                  <BarChart3 className={cn("w-8 h-8", darkMode ? "text-black" : "text-white")} />
+              <div className="flex items-center gap-2 mb-6">
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-white" : "bg-black")}>
+                  <BarChart3 className={cn("w-6 h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-xs rounded-full shadow-lg">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                  <span className="font-bold tracking-widest">LIVE</span>
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full ml-auto">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                  LIVE
                 </div>
               </div>
               
-              <h2 className={cn("text-3xl sm:text-4xl tracking-[0.1em] mb-4 font-bold", darkMode ? "text-white" : "text-black")}>
-                {t('dashboard')}
-              </h2>
-              <p className={cn("text-base leading-relaxed mb-8 font-sans max-w-md", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+              <h2 className={cn("text-3xl tracking-wider mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-sm leading-relaxed mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 {t('dashboardDesc')}
               </p>
 
-              <div className={cn("flex items-center gap-4 font-bold tracking-[0.15em]", darkMode ? "text-white" : "text-black")}>
-                <span className="text-xl">{t('openDashboard')}</span>
-                <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center group-hover:translate-x-3 transition-all shadow-lg border-2",
-                  darkMode ? "bg-white text-black border-white/50" : "bg-black text-white border-black/50")}>
-                  <ArrowRight className="w-6 h-6" />
+              <div className={cn("flex items-center gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-white text-black" : "bg-black text-white")}>
+                  <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
             </div>
-          </motion.button>
+          </button>
         </motion.div>
 
         {/* Trading Quote */}
@@ -307,129 +248,59 @@ export default function HomePage() {
           <TradingQuote />
         </div>
 
-        {/* Features - Advanced Grid */}
+        {/* Features */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1 }}
-          className="mb-16 sm:mb-20 md:mb-24"
+          transition={{ delay: 0.4 }}
+          className="mb-8 sm:mb-12 md:mb-16"
         >
-          <div className="text-center mb-10 sm:mb-12">
-            <motion.h3 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2 }}
-              className={`text-2xl sm:text-3xl tracking-[0.2em] mb-3 ${theme.text}`}>
-              {t('features')}
-            </motion.h3>
-            <p className={`${theme.textDimmed} text-sm sm:text-base tracking-wider`}>{t('featuresDesc')}</p>
+          <div className="text-center mb-8">
+            <h3 className="text-xl tracking-widest mb-2">{t('features')}</h3>
+            <p className={`${theme.textDimmed} text-sm`}>{t('featuresDesc')}</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {[
-              { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc', color: 'teal' },
-              { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc', color: 'blue' },
-              { icon: Activity, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc', color: 'purple' },
+              { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
+              { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
+              { icon: Activity, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc' },
             ].map((item, index) => (
               <motion.div 
                 key={item.titleKey} 
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.3 + index * 0.15 }}
-                whileHover={{ y: -8 }}
-                className={cn("relative p-8 rounded-3xl border-2 transition-all group overflow-hidden",
-                  darkMode ? "bg-zinc-950 border-zinc-800 hover:border-zinc-700" : "bg-zinc-50 border-zinc-300 hover:border-zinc-400")}
+                transition={{ delay: 0.5 + index * 0.1 }}
+                className={`p-6 ${theme.bgSecondary} border ${theme.border} rounded-2xl hover:border-teal-600/50 transition-all group`}
               >
-                {/* Gradient overlay on hover */}
-                <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br",
-                  item.color === 'teal' ? "from-teal-600/5 to-transparent" :
-                  item.color === 'blue' ? "from-blue-600/5 to-transparent" :
-                  "from-purple-600/5 to-transparent")} />
-
-                <div className="relative z-10">
-                  <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-all group-hover:scale-110 shadow-lg border-2",
-                    darkMode ? "bg-white border-white/30" : "bg-zinc-900 border-black/30")}>
-                    <item.icon className={cn("w-8 h-8", darkMode ? "text-black" : "text-white")} />
-                  </div>
-                  <h3 className={`text-xl sm:text-2xl tracking-[0.1em] mb-3 ${theme.text}`}>{t(item.titleKey)}</h3>
-                  <p className={`text-sm sm:text-base ${theme.textMuted} leading-relaxed font-sans`}>{t(item.descKey)}</p>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                  <item.icon className={`w-6 h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
                 </div>
+                <h3 className={`text-lg tracking-wider mb-2 ${theme.text}`}>{t(item.titleKey)}</h3>
+                <p className={`text-sm ${theme.textMuted} leading-relaxed font-sans`}>{t(item.descKey)}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Stats - Premium Stats Grid */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6 }}
-          className="grid grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-16 sm:mb-20"
+          transition={{ delay: 0.6 }}
+          className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4"
         >
           {[
-            { value: '85%+', labelKey: 'znpcvStandard', icon: Award, gradient: 'from-teal-600 to-emerald-600' },
-            { value: '7', labelKey: 'stepChecklist', icon: CheckCircle2, gradient: 'from-blue-600 to-cyan-600' },
-            { value: '4', labelKey: 'chartPatterns', icon: Activity, gradient: 'from-purple-600 to-pink-600' },
-          ].map((stat, index) => (
-            <motion.div 
-              key={stat.labelKey}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.7 + index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className={cn("text-center p-6 sm:p-7 md:p-8 border-2 rounded-2xl relative overflow-hidden group",
-                darkMode ? "bg-zinc-950 border-zinc-800 hover:border-zinc-700" : "bg-white border-zinc-300 hover:border-zinc-400")}>
-              
-              {/* Gradient background on hover */}
-              <div className={cn("absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity", stat.gradient)} />
-              
-              <div className="relative z-10">
-                <div className={cn("w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-4 transition-all group-hover:scale-110 shadow-lg border-2",
-                  darkMode ? "bg-white border-white/30" : "bg-zinc-900 border-black/30")}>
-                  <stat.icon className={cn("w-7 h-7", darkMode ? "text-black" : "text-white")} />
-                </div>
-                <div className={`text-3xl sm:text-4xl md:text-5xl font-light mb-2 ${theme.text}`}>{stat.value}</div>
-                <div className={`text-xs tracking-[0.15em] ${theme.textDimmed}`}>{t(stat.labelKey)}</div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.9 }}
-          className={cn("text-center p-10 sm:p-12 md:p-16 rounded-3xl border-2 relative overflow-hidden mb-16 sm:mb-20",
-            darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-300")}>
-          
-          {/* Background elements */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, currentColor 2px, transparent 2px)', backgroundSize: '50px 50px'}} />
-          </div>
-
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600/20 border border-teal-600/30 rounded-full text-teal-600 text-xs mb-6">
-              <Sparkles className="w-4 h-4" />
-              <span className="tracking-widest font-bold">PROFESSIONAL TRADING</span>
+            { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
+            { value: '7', labelKey: 'stepChecklist', icon: CheckCircle2 },
+            { value: '4', labelKey: 'chartPatterns', icon: Activity },
+          ].map((stat) => (
+            <div key={stat.labelKey} className={`text-center p-5 md:p-6 border ${theme.border} rounded-2xl ${theme.bgSecondary}`}>
+              <stat.icon className={`w-6 h-6 mx-auto mb-3 ${theme.text}`} />
+              <div className={`text-2xl md:text-3xl font-light mb-1 ${theme.text}`}>{stat.value}</div>
+              <div className={`text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
             </div>
-            
-            <h3 className={`text-2xl sm:text-3xl md:text-4xl tracking-[0.1em] mb-4 ${theme.text}`}>
-              Ready to Trade with Discipline?
-            </h3>
-            <p className={`${theme.textMuted} text-base sm:text-lg mb-8 font-sans leading-relaxed`}>
-              Join professional traders using the ZNPCV Ultimate Checklist for structured, disciplined decision-making
-            </p>
-            
-            <button
-              onClick={() => navigate(createPageUrl('Checklist'))}
-              className={cn("inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold tracking-widest transition-all shadow-xl hover:shadow-2xl hover:scale-105",
-                darkMode ? "bg-white text-black hover:bg-zinc-100" : "bg-zinc-900 text-white hover:bg-black")}>
-              <ClipboardCheck className="w-5 h-5" />
-              <span>START YOUR ANALYSIS</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
+          ))}
         </motion.div>
       </main>
 
