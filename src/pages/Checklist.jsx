@@ -718,6 +718,18 @@ export default function ChecklistPage() {
             </div>
           )}
 
+          {/* Live Market Data */}
+          {formData.pair && (
+            <div className="grid md:grid-cols-2 gap-4">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                <MarketChart pair={formData.pair} darkMode={darkMode} />
+              </motion.div>
+            </div>
+          )}
+
           <AdvancedLotCalculator
             pair={formData.pair}
             direction={formData.direction}
