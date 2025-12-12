@@ -56,8 +56,8 @@ export default function DatenschutzPage() {
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>2. Verantwortliche Stelle</h2>
             <p>Verantwortlich für die Datenverarbeitung ist:</p>
-            <p className="mt-2">ZNPCV<br/>
-            Zainspective Group<br/>
+            <p className="mt-2"><strong>Zainspective Group</strong><br/>
+            Betreiber von ZNPCV<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>
@@ -145,9 +145,11 @@ export default function DatenschutzPage() {
             <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslage oder Änderungen unserer Leistungen anzupassen. Für neue Besuche gilt dann die neue Datenschutzerklärung.</p>
           </section>
 
-          <section className="pt-6 border-t border-zinc-800">
+          <section className={`pt-6 border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
             <p className="font-bold">Kontakt Datenschutz:</p>
-            <p>Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br/>
+            <p><strong>Zainspective Group</strong><br/>
+            Betreiber von ZNPCV<br/>
+            Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br/>
             E-Mail: support@znpcv.com</p>
           </section>
           </div>
@@ -157,15 +159,15 @@ export default function DatenschutzPage() {
           <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
           <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Datenschutz
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               AGB
             </button>
           </div>

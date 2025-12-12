@@ -47,15 +47,15 @@ export default function ImpressumPage() {
         <div className={`space-y-6 ${theme.textSecondary} font-sans leading-relaxed`}>
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Angaben gemäß § 5 TMG</h2>
-            <p>ZNPCV<br/>
-            Zainspective Group<br/>
+            <p><strong>Zainspective Group</strong><br/>
+            Inhaber: Zainspective Group<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Vertreten durch</h2>
-            <p>Zainspective Group</p>
+            <p>Zainspective Group (Inhaber und Betreiber von ZNPCV)</p>
           </section>
 
           <section>
@@ -105,15 +105,15 @@ export default function ImpressumPage() {
             <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
             <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Datenschutz
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               AGB
             </button>
             </div>

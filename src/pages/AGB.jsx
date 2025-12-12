@@ -49,7 +49,7 @@ export default function AGBPage() {
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>1. Geltungsbereich</h2>
-            <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen ZNPCV und den Nutzern über die Nutzung der Trading-Checklisten-Software. Die Software wird als digitales Produkt bereitgestellt.</p>
+            <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen der Zainspective Group (Betreiber von ZNPCV) und den Nutzern über die Nutzung der Trading-Checklisten-Software. Die Software wird als digitales Produkt bereitgestellt.</p>
           </section>
 
           <section>
@@ -59,7 +59,7 @@ export default function AGBPage() {
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>3. Leistungsumfang</h2>
-            <p>ZNPCV stellt eine webbasierte Trading-Checklisten-Software zur Verfügung, die folgende Funktionen umfasst:</p>
+            <p>Die Zainspective Group stellt über ZNPCV eine webbasierte Trading-Checklisten-Software zur Verfügung, die folgende Funktionen umfasst:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>Multi-Timeframe Analyse-Tools</li>
               <li>Strukturierte Trading-Checklisten</li>
@@ -97,23 +97,23 @@ export default function AGBPage() {
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>8. Haftung</h2>
-            <p>ZNPCV haftet nicht für Verluste oder Schäden, die durch Trading-Entscheidungen entstehen. Die Software dient ausschließlich als Analyse-Tool. Trading birgt erhebliche Risiken und kann zum Totalverlust führen. Der Nutzer trägt die volle Verantwortung für seine Trading-Entscheidungen.</p>
-            <p className="mt-2">Bei Vorsatz und grober Fahrlässigkeit haftet ZNPCV uneingeschränkt. Bei leichter Fahrlässigkeit haftet ZNPCV nur bei Verletzung wesentlicher Vertragspflichten. In diesem Fall ist die Haftung auf den vorhersehbaren, vertragstypischen Schaden begrenzt.</p>
+            <p>Die Zainspective Group haftet nicht für Verluste oder Schäden, die durch Trading-Entscheidungen entstehen. Die Software dient ausschließlich als Analyse-Tool. Trading birgt erhebliche Risiken und kann zum Totalverlust führen. Der Nutzer trägt die volle Verantwortung für seine Trading-Entscheidungen.</p>
+            <p className="mt-2">Bei Vorsatz und grober Fahrlässigkeit haftet die Zainspective Group uneingeschränkt. Bei leichter Fahrlässigkeit haftet die Zainspective Group nur bei Verletzung wesentlicher Vertragspflichten. In diesem Fall ist die Haftung auf den vorhersehbaren, vertragstypischen Schaden begrenzt.</p>
           </section>
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>9. Datenschutz</h2>
-            <p>Die Verarbeitung personenbezogener Daten erfolgt gemäß der Datenschutzerklärung von ZNPCV und den Bestimmungen der DSGVO.</p>
+            <p>Die Verarbeitung personenbezogener Daten erfolgt gemäß der Datenschutzerklärung der Zainspective Group und den Bestimmungen der DSGVO.</p>
           </section>
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>10. Sperrung und Kündigung</h2>
-            <p>ZNPCV behält sich das Recht vor, Nutzerkonten bei Verstößen gegen diese AGB zu sperren. Eine Rückerstattung erfolgt in diesem Fall nicht. Der Nutzer kann sein Konto jederzeit per E-Mail kündigen.</p>
+            <p>Die Zainspective Group behält sich das Recht vor, Nutzerkonten bei Verstößen gegen diese AGB zu sperren. Eine Rückerstattung erfolgt in diesem Fall nicht. Der Nutzer kann sein Konto jederzeit per E-Mail kündigen.</p>
           </section>
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>11. Änderungen der AGB</h2>
-            <p>ZNPCV behält sich vor, diese AGB jederzeit zu ändern. Nutzer werden per E-Mail über Änderungen informiert. Widerspricht der Nutzer nicht innerhalb von 4 Wochen, gelten die Änderungen als angenommen.</p>
+            <p>Die Zainspective Group behält sich vor, diese AGB jederzeit zu ändern. Nutzer werden per E-Mail über Änderungen informiert. Widerspricht der Nutzer nicht innerhalb von 4 Wochen, gelten die Änderungen als angenommen.</p>
           </section>
 
           <section>
@@ -121,10 +121,10 @@ export default function AGBPage() {
             <p>Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts. Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</p>
           </section>
 
-          <section className="pt-6 border-t border-zinc-800">
+          <section className={`pt-6 border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
             <p className="font-bold">Kontakt:</p>
-            <p>ZNPCV<br/>
-            Zainspective Group<br/>
+            <p><strong>Zainspective Group</strong><br/>
+            Betreiber von ZNPCV<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>
@@ -135,15 +135,15 @@ export default function AGBPage() {
           <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
           <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Datenschutz
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               AGB
             </button>
           </div>
