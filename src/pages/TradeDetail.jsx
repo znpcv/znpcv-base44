@@ -11,6 +11,7 @@ import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
+import TradeShareCard from '@/components/advanced/TradeShareCard';
 
 export default function TradeDetailPage() {
   const navigate = useNavigate();
@@ -421,6 +422,11 @@ export default function TradeDetailPage() {
                 <p className={`text-sm ${theme.text} leading-relaxed font-sans whitespace-pre-wrap`}>{trade.notes}</p>
               </motion.div>
             )}
+
+            {/* Share Card */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <TradeShareCard trade={trade} darkMode={darkMode} />
+            </motion.div>
           </div>
         </div>
       </main>
