@@ -38,7 +38,7 @@ export default function ChecklistPage() {
     direction: '',
     
     // Weekly Checklist (max 60%)
-    w_trend: '',               // bullish/bearish - NEW
+    w_trend: '',               // bullish/bearish
     w_at_aoi: false,           // 10%
     w_ema_touch: false,        // 5%
     w_candlestick: false,      // 10%
@@ -48,7 +48,7 @@ export default function ChecklistPage() {
     w_pattern: '',             // 10%
     
     // Daily Checklist (max 60%)
-    d_trend: '',               // bullish/bearish - NEW
+    d_trend: '',               // bullish/bearish
     d_at_aoi: false,           // 10%
     d_ema_touch: false,        // 5%
     d_candlestick: false,      // 10%
@@ -58,12 +58,12 @@ export default function ChecklistPage() {
     d_pattern: '',             // 10%
     
     // 4H Checklist (max 35%)
-    h4_trend: '',              // bullish/bearish - NEW
-    h4_ema_touch: false,        // 5%
-    h4_candlestick: false,      // 10%
-    h4_psp_rejection: false,    // 5%
-    h4_swing: false,            // 5%
-    h4_pattern: '',             // 10%
+    h4_trend: '',              // bullish/bearish
+    h4_at_aoi: false,          // 5%
+    h4_candlestick: false,     // 10%
+    h4_psp_rejection: false,   // 5%
+    h4_swing: false,           // 5%
+    h4_pattern: '',            // 10%
     
     // Entry Checklist (max 25%)
     entry_sos: false,           // 10%
@@ -108,18 +108,18 @@ export default function ChecklistPage() {
 
 
 
-  // Calculate scores
+  // Calculate scores - CORRECTED
   const weeklyScore = (formData.w_at_aoi ? 10 : 0) + (formData.w_ema_touch ? 5 : 0) + 
     (formData.w_candlestick ? 10 : 0) + (formData.w_psp_rejection ? 10 : 0) + 
-    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 5 : 0) + 
+    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 10 : 0) + 
     (formData.w_pattern && formData.w_pattern !== 'none' ? 10 : 0);
   
   const dailyScore = (formData.d_at_aoi ? 10 : 0) + (formData.d_ema_touch ? 5 : 0) + 
     (formData.d_candlestick ? 10 : 0) + (formData.d_psp_rejection ? 10 : 0) + 
-    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 5 : 0) + 
+    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 10 : 0) + 
     (formData.d_pattern && formData.d_pattern !== 'none' ? 10 : 0);
   
-  const h4Score = (formData.h4_ema_touch ? 5 : 0) + (formData.h4_candlestick ? 10 : 0) + 
+  const h4Score = (formData.h4_at_aoi ? 5 : 0) + (formData.h4_candlestick ? 10 : 0) + 
     (formData.h4_psp_rejection ? 5 : 0) + (formData.h4_swing ? 5 : 0) + 
     (formData.h4_pattern && formData.h4_pattern !== 'none' ? 10 : 0);
   
@@ -469,7 +469,7 @@ export default function ChecklistPage() {
                 description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={formData.w_swing} onChange={(checked) => update('w_swing', checked)} 
-                label={t('swingHighLow')} weight={5} 
+                label={t('swingHighLow')} weight={10} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -545,7 +545,7 @@ export default function ChecklistPage() {
                 description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={formData.d_swing} onChange={(checked) => update('d_swing', checked)} 
-                label={t('swingHighLow')} weight={5} 
+                label={t('swingHighLow')} weight={10} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -600,9 +600,9 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={formData.h4_ema_touch} onChange={(checked) => update('h4_ema_touch', checked)} 
-                label={t('touchingEma')} weight={5} 
-                description={t('touchingEmaDesc')} />
+              <ChecklistItem checked={formData.h4_at_aoi} onChange={(checked) => update('h4_at_aoi', checked)} 
+                label={t('atAoiRejected')} weight={5} 
+                description={t('atAoiDesc')} />
               
               <ChecklistItem checked={formData.h4_candlestick} onChange={(checked) => update('h4_candlestick', checked)} 
                 label={t('candlestickRejection')} weight={10} 
