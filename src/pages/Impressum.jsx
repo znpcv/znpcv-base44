@@ -46,15 +46,14 @@ export default function ImpressumPage() {
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Angaben gemäß § 5 TMG</h2>
             <p>ZNPCV<br/>
-            [Ihre vollständige Firmenbezeichnung]<br/>
-            [Straße und Hausnummer]<br/>
-            [PLZ und Ort]<br/>
-            Deutschland</p>
+            Zainspective Group<br/>
+            E-Mail: support@znpcv.com<br/>
+            Website: www.znpcv.com</p>
           </section>
 
           <section>
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Vertreten durch</h2>
-            <p>[Name des Geschäftsführers/Inhabers]</p>
+            <p>Zainspective Group</p>
           </section>
 
           <section>
@@ -64,12 +63,6 @@ export default function ImpressumPage() {
               <a href="mailto:support@znpcv.com" className="underline">support@znpcv.com</a>
             </div>
             <p className="mt-2">Website: <a href="https://www.znpcv.com" className="underline">www.znpcv.com</a></p>
-          </section>
-
-          <section>
-            <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Umsatzsteuer-ID</h2>
-            <p>Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:<br/>
-            [Ihre USt-IdNr.]</p>
           </section>
 
           <section>

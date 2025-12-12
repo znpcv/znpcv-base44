@@ -13,6 +13,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart a
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
+import ForexFactoryCalendar from '@/components/ForexFactoryCalendar';
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -79,19 +80,12 @@ export default function DashboardPage() {
     const longs = checklists.filter(c => c.direction === 'bullish' || c.direction === 'long').length;
     const shorts = checklists.filter(c => c.direction === 'bearish' || c.direction === 'short').length;
     const withConfluence = checklists.filter(c => 
-      c.weekly_trend && c.daily_trend && c.h4_trend &&
-      c.weekly_trend === c.daily_trend && c.daily_trend === c.h4_trend
+      c.w_trend && c.d_trend && c.h4_trend &&
+      c.w_trend === c.d_trend && c.d_trend === c.h4_trend
     ).length;
     const avgCompletion = total > 0 ? Math.round(checklists.reduce((acc, c) => acc + (c.completion_percentage || 0), 0) / total) : 0;
     
-    // Add mock outcomes for demo
-    const tradesWithOutcome = checklists.map(c => ({
-      ...c,
-      outcome: c.status === 'ready_to_trade' ? (Math.random() > 0.6 ? 'win' : Math.random() > 0.5 ? 'loss' : null) : null,
-      pnl: c.status === 'ready_to_trade' ? (Math.random() * 400 - 100).toFixed(2) : null
-    }));
-    
-    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion, tradesWithOutcome };
+    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion };
   }, [checklists]);
 
   const performanceData = useMemo(() => {
@@ -117,7 +111,7 @@ export default function DashboardPage() {
   const startDay = monthStart.getDay() === 0 ? 6 : monthStart.getDay() - 1;
   const getTradesForDay = (date) => checklists.filter(c => c.trade_date === format(date, 'yyyy-MM-dd'));
 
-  const recentTrades = stats.tradesWithOutcome.slice(0, 12);
+  const recentTrades = checklists.slice(0, 12);
   const locale = language === 'de' ? de : enUS;
 
   // Theme classes
@@ -252,11 +246,11 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[400px] sm:max-h-[500px] overflow-y-auto`}>
-                  {recentTrades.filter(t => filter === 'all' || t.outcome === filter).map((trade) => (
+                  {recentTrades.filter(t => filter === 'all' || (filter === 'win' && t.outcome === 'win') || (filter === 'loss' && t.outcome === 'loss')).map((trade) => (
                     <div key={trade.id} 
                       className={`p-4 sm:p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
                       <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
                           <div className={cn("w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl",
                             trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                             trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 
@@ -272,16 +266,16 @@ export default function DashboardPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-right">
-                            {trade.outcome && (
+                            {trade.outcome && trade.actual_pnl && (
                               <>
                                 <div className={cn("text-base sm:text-lg font-bold",
-                                  parseFloat(trade.pnl) > 0 ? 'text-emerald-500' :
-                                  parseFloat(trade.pnl) < 0 ? 'text-red-500' : theme.text)}>
-                                  {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
+                                  parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
+                                  parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
+                                  {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                                 </div>
                                 <div className={cn("text-[10px] sm:text-xs tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full",
-                                  trade.outcome === 'win' ? 'bg-emerald-500/20 text-emerald-500' :
-                                  trade.outcome === 'loss' ? 'bg-red-500/20 text-red-500' : 'bg-zinc-600/20 text-zinc-400')}>
+                                  trade.outcome === 'win' ? 'bg-teal-600/20 text-teal-600' :
+                                  trade.outcome === 'loss' ? 'bg-rose-600/20 text-rose-600' : 'bg-zinc-600/20 text-zinc-400')}>
                                   {trade.outcome.toUpperCase()}
                                 </div>
                               </>
@@ -293,12 +287,8 @@ export default function DashboardPage() {
                             )}
                           </div>
                           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}
-                              className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-zinc-800 text-zinc-400 hover:text-white' : 'hover:bg-zinc-300 text-zinc-600 hover:text-black'}`}>
-                              <Edit className="w-4 h-4" />
-                            </button>
                             <button onClick={(e) => handleDeleteTrade(e, trade.id)}
-                              className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-red-500/20 text-red-400 hover:text-red-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
+                              className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -425,6 +415,12 @@ export default function DashboardPage() {
             </motion.div>
           </div>
         </div>
+
+        {/* Forex Factory Calendar */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-12">
+          <h2 className={`text-2xl tracking-widest mb-4 ${theme.text}`}>WIRTSCHAFTSKALENDER</h2>
+          <ForexFactoryCalendar />
+        </motion.div>
 
         {/* Quote */}
         <div className="mt-12">

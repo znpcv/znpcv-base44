@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, XOctagon, Calculator, TrendingUp, TrendingDown, Shield, Target, DollarSign, Percent, Info, Layers } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, XOctagon, Calculator, TrendingUp, TrendingDown, Shield, Target, DollarSign, Percent, Info, Layers, Upload, Image as ImageIcon, X as XIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -74,6 +74,8 @@ export default function ChecklistPage() {
     take_profit: '',
     account_size: '',
     risk_percent: '1',
+    leverage: '100',
+    screenshots: [],
     
     // Final Rules
     confirms_rule: false,
@@ -678,6 +680,7 @@ export default function ChecklistPage() {
                 initialData={{
                   account_size: checklist.account_size,
                   risk_percent: checklist.risk_percent,
+                  leverage: checklist.leverage,
                   entry_price: checklist.entry_price,
                   stop_loss: checklist.stop_loss,
                   take_profit: checklist.take_profit
@@ -685,6 +688,7 @@ export default function ChecklistPage() {
                 onDataChange={(data) => {
                   if (data.account_size !== undefined) update('account_size', data.account_size);
                   if (data.risk_percent !== undefined) update('risk_percent', data.risk_percent);
+                  if (data.leverage !== undefined) update('leverage', data.leverage);
                   if (data.entry_price !== undefined) update('entry_price', data.entry_price);
                   if (data.stop_loss !== undefined) update('stop_loss', data.stop_loss);
                   if (data.take_profit !== undefined) update('take_profit', data.take_profit);
@@ -786,6 +790,22 @@ export default function ChecklistPage() {
                 <Textarea value={checklist.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
                   className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[80px] rounded-xl font-sans`} />
               </div>
+
+              {/* Screenshot Upload */}
+              <ScreenshotUpload 
+                screenshots={checklist.screenshots || []} 
+                onUpload={async (files) => {
+                  const uploadPromises = files.map(file => 
+                    base44.integrations.Core.UploadFile({ file })
+                  );
+                  const results = await Promise.all(uploadPromises);
+                  const newUrls = results.map(r => r.file_url);
+                  update('screenshots', [...(checklist.screenshots || []), ...newUrls]);
+                }}
+                onDelete={(url) => {
+                  update('screenshots', (checklist.screenshots || []).filter(s => s !== url));
+                }}
+              />
 
               {/* Final Grade */}
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
@@ -1064,6 +1084,71 @@ function SummaryRow({ label, value, color }) {
     <div className="flex justify-between items-center py-2">
       <span className={`text-xs tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{label}</span>
       <span className={cn("font-bold text-sm", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
+    </div>
+  );
+}
+
+function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
+  const { darkMode } = useLanguage();
+  const [uploading, setUploading] = useState(false);
+
+  const theme = {
+    border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
+    bgCard: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    text: darkMode ? 'text-white' : 'text-zinc-900',
+    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+  };
+
+  const handleFileChange = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    
+    setUploading(true);
+    try {
+      await onUpload(files);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  return (
+    <div>
+      <label className={`block ${theme.textSecondary} tracking-widest text-sm mb-3`}>
+        SCREENSHOTS (OPTIONAL)
+      </label>
+      
+      {screenshots && screenshots.length > 0 && (
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          {screenshots.map((url, index) => (
+            <div key={index} className="relative group">
+              <img src={url} alt={`Screenshot ${index + 1}`} className={`w-full h-32 object-cover rounded-xl border-2 ${theme.border}`} />
+              <button 
+                onClick={() => onDelete(url)}
+                className="absolute top-2 right-2 p-1.5 bg-rose-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <label className={cn("flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all",
+        uploading ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950" : "border-zinc-300 hover:border-zinc-400 bg-zinc-100")}>
+        <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploading} />
+        {uploading ? (
+          <>
+            <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mb-2" />
+            <span className={`text-sm ${theme.textSecondary}`}>Hochladen...</span>
+          </>
+        ) : (
+          <>
+            <Upload className={`w-8 h-8 mb-2 ${theme.textSecondary}`} />
+            <span className={`text-sm ${theme.text} font-bold tracking-wider`}>SCREENSHOTS HOCHLADEN</span>
+            <span className={`text-xs ${theme.textSecondary} mt-1`}>Chart-Screenshots vom Trade Setup</span>
+          </>
+        )}
+      </label>
     </div>
   );
 }

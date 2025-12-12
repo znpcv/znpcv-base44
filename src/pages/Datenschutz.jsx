@@ -55,6 +55,7 @@ export default function DatenschutzPage() {
             <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>2. Verantwortliche Stelle</h2>
             <p>Verantwortlich für die Datenverarbeitung ist:</p>
             <p className="mt-2">ZNPCV<br/>
+            Zainspective Group<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>

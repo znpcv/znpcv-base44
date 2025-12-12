@@ -122,6 +122,7 @@ export default function AGBPage() {
           <section className="pt-6 border-t border-zinc-800">
             <p className="font-bold">Kontakt:</p>
             <p>ZNPCV<br/>
+            Zainspective Group<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>

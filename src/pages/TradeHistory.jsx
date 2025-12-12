@@ -35,27 +35,21 @@ export default function TradeHistoryPage() {
   };
 
   const stats = useMemo(() => {
-    const tradesWithOutcome = checklists.map(c => ({
-      ...c,
-      outcome: c.status === 'ready_to_trade' ? (Math.random() > 0.6 ? 'win' : Math.random() > 0.5 ? 'loss' : 'breakeven') : null,
-      pnl: c.status === 'ready_to_trade' ? (Math.random() * 400 - 100).toFixed(2) : null
-    }));
-
-    const executedTrades = tradesWithOutcome.filter(t => t.outcome);
+    const executedTrades = checklists.filter(t => t.outcome && t.outcome !== 'pending');
     const wins = executedTrades.filter(t => t.outcome === 'win').length;
     const losses = executedTrades.filter(t => t.outcome === 'loss').length;
     const breakeven = executedTrades.filter(t => t.outcome === 'breakeven').length;
-    const totalPnL = executedTrades.reduce((sum, t) => sum + parseFloat(t.pnl || 0), 0);
+    const totalPnL = executedTrades.reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
     const winRate = executedTrades.length > 0 ? ((wins / executedTrades.length) * 100).toFixed(1) : 0;
-    const avgWin = wins > 0 ? (executedTrades.filter(t => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.pnl), 0) / wins).toFixed(2) : 0;
-    const avgLoss = losses > 0 ? Math.abs(executedTrades.filter(t => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.pnl), 0) / losses).toFixed(2) : 0;
+    const avgWin = wins > 0 ? (executedTrades.filter(t => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / wins).toFixed(2) : 0;
+    const avgLoss = losses > 0 ? Math.abs(executedTrades.filter(t => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / losses).toFixed(2) : 0;
 
-    return { tradesWithOutcome, wins, losses, breakeven, totalPnL, winRate, avgWin, avgLoss, executedTrades };
+    return { wins, losses, breakeven, totalPnL, winRate, avgWin, avgLoss, executedTrades };
   }, [checklists]);
 
   const filteredTrades = filter === 'all' 
-    ? stats.tradesWithOutcome 
-    : stats.tradesWithOutcome.filter(t => t.outcome === filter);
+    ? checklists 
+    : checklists.filter(t => t.outcome === filter);
 
   const pieData = [
     { name: 'Wins', value: stats.wins, color: '#0d9488' },
@@ -154,7 +148,7 @@ export default function TradeHistoryPage() {
                   <div key={trade.id}
                     className={`p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}>
+                      <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
                         <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
                           trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                           trade.outcome === 'loss' ? 'bg-rose-600 text-white' :
@@ -186,12 +180,8 @@ export default function TradeHistoryPage() {
                           {!trade.outcome && <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">PENDING</span>}
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button onClick={() => navigate(createPageUrl('Checklist') + `?id=${trade.id}`)}
-                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-zinc-800 text-zinc-400 hover:text-white' : 'hover:bg-zinc-300 text-zinc-600 hover:text-black'}`}>
-                            <Edit className="w-4 h-4" />
-                          </button>
                           <button onClick={(e) => handleDeleteTrade(e, trade.id)}
-                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-red-500/20 text-red-400 hover:text-red-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
+                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
