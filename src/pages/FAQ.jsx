@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Home, HelpCircle, ChevronDown, Mail, MessageCircle } from 'lucide-react';
+import { Home, HelpCircle, ChevronDown, Mail } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { cn } from "@/lib/utils";
@@ -187,21 +187,21 @@ export default function FAQPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <HelpCircle className={`w-10 h-10 ${theme.text}`} />
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 sm:mb-12">
+          <div className="flex items-center justify-center gap-4 mb-3 sm:mb-4">
+            <HelpCircle className={`w-8 sm:w-10 h-8 sm:h-10 ${theme.text}`} />
           </div>
-          <h1 className={`text-4xl md:text-5xl tracking-widest mb-4 ${theme.text}`}>FAQ & HILFE</h1>
-          <p className={`${theme.textMuted} text-lg max-w-2xl mx-auto font-sans`}>
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>FAQ & HILFE</h1>
+          <p className={`${theme.textMuted} text-base sm:text-lg max-w-2xl mx-auto font-sans px-4`}>
             Häufig gestellte Fragen zu ZNPCV, Trading Methodik und Features
           </p>
         </motion.div>
 
         {FAQ_DATA.map((category, catIndex) => (
           <motion.div key={catIndex} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: catIndex * 0.1 }}
-            className="mb-8">
-            <h2 className={`text-xl tracking-widest mb-4 ${theme.text}`}>{category.category}</h2>
+            className="mb-6 sm:mb-8">
+            <h2 className={`text-lg sm:text-xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>{category.category}</h2>
             <div className="space-y-3">
               {category.questions.map((item, qIndex) => {
                 const index = `${catIndex}-${qIndex}`;
@@ -209,15 +209,15 @@ export default function FAQPage() {
                 return (
                   <div key={qIndex} className={`border ${theme.border} rounded-xl overflow-hidden ${theme.bgCard}`}>
                     <button type="button" onClick={() => setOpenIndex(isOpen ? null : index)}
-                      className={`w-full p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-colors`}>
-                      <span className={`text-left font-bold tracking-wider ${theme.text}`}>{item.q}</span>
+                      className={`w-full p-4 sm:p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-colors`}>
+                      <span className={`text-left font-bold tracking-wider text-sm sm:text-base ${theme.text}`}>{item.q}</span>
                       <ChevronDown className={cn("w-5 h-5 transition-transform", isOpen && "rotate-180", theme.textMuted)} />
                     </button>
                     <AnimatePresence>
                       {isOpen && (
                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                           className={`border-t ${theme.border}`}>
-                          <div className={`p-5 ${theme.textSecondary} font-sans leading-relaxed`}>
+                          <div className={`p-4 sm:p-5 ${theme.textSecondary} text-sm sm:text-base font-sans leading-relaxed`}>
                             {item.a}
                           </div>
                         </motion.div>
@@ -232,27 +232,23 @@ export default function FAQPage() {
 
         {/* Contact Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-          className={`mt-16 p-8 border ${theme.border} rounded-2xl ${theme.bgCard} text-center`}>
-          <h3 className={`text-2xl tracking-widest mb-4 ${theme.text}`}>WEITERE FRAGEN?</h3>
-          <p className={`${theme.textMuted} mb-6 font-sans`}>
+          className={`mt-10 sm:mt-16 p-6 sm:p-8 border ${theme.border} rounded-2xl ${theme.bgCard} text-center`}>
+          <h3 className={`text-xl sm:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>WEITERE FRAGEN?</h3>
+          <p className={`${theme.textMuted} mb-5 sm:mb-6 text-sm sm:text-base font-sans px-4`}>
             Wenn du weitere Fragen hast, kontaktiere uns gerne direkt
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button type="button" className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 font-bold`}>
-              <Mail className="w-5 h-5 mr-2" />
+          <div className="flex justify-center">
+            <a href="mailto:support@znpcv.com" className={`inline-flex items-center gap-2 ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 py-2.5 font-bold transition-colors`}>
+              <Mail className="w-5 h-5" />
               support@znpcv.com
-            </Button>
-            <Button type="button" variant="outline" className={`${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'} rounded-xl px-6`}>
-              <MessageCircle className="w-5 h-5 mr-2" />
-              Live Chat
-            </Button>
+            </a>
           </div>
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className={`${theme.bg} border-t ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-6 py-6">
+      <footer className={`${theme.bg} border-t ${theme.border} mt-8 sm:mt-12`}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
             <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Impressum
