@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { cn } from "@/lib/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
-import AccountButton from '@/components/AccountButton';
 
 const FAQ_DATA = [
   {
@@ -208,7 +207,7 @@ export default function FAQPage() {
                 const isOpen = openIndex === index;
                 return (
                   <div key={qIndex} className={`border ${theme.border} rounded-xl overflow-hidden ${theme.bgCard}`}>
-                    <button type="button" onClick={() => setOpenIndex(isOpen ? null : index)}
+                    <button onClick={() => setOpenIndex(isOpen ? null : index)}
                       className={`w-full p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-colors`}>
                       <span className={`text-left font-bold tracking-wider ${theme.text}`}>{item.q}</span>
                       <ChevronDown className={cn("w-5 h-5 transition-transform", isOpen && "rotate-180", theme.textMuted)} />
@@ -238,11 +237,11 @@ export default function FAQPage() {
             Wenn du weitere Fragen hast, kontaktiere uns gerne direkt
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button type="button" className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 font-bold`}>
+            <Button className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 font-bold`}>
               <Mail className="w-5 h-5 mr-2" />
               support@znpcv.com
             </Button>
-            <Button type="button" variant="outline" className={`${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'} rounded-xl px-6`}>
+            <Button variant="outline" className={`${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900' : 'border-zinc-300 text-black hover:bg-zinc-100'} rounded-xl px-6`}>
               <MessageCircle className="w-5 h-5 mr-2" />
               Live Chat
             </Button>
