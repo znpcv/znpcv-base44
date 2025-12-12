@@ -113,9 +113,6 @@ export default function TradeHistoryPage() {
               </button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <Button onClick={() => navigate(createPageUrl('Dashboard'))} variant="outline" className={`px-4 py-2 rounded-xl tracking-widest font-bold ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:border-zinc-700' : 'border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400'}`}>
-                DASHBOARD
-              </Button>
               <LanguageToggle />
               <AccountButton />
             </div>
@@ -125,8 +122,8 @@ export default function TradeHistoryPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 sm:mb-10">
-          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 sm:mb-3 ${theme.text}`}>TRADE HISTORY</h1>
-          <p className={`${theme.textMuted} text-sm sm:text-base tracking-wider`}>Performance Analytics & Trade Log</p>
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 sm:mb-3 ${theme.text}`}>{t('tradeHistory')}</h1>
+          <p className={`${theme.textMuted} text-sm sm:text-base tracking-wider`}>{t('performanceAnalytics')}</p>
         </motion.div>
 
         {/* AI Analysis */}
@@ -168,7 +165,7 @@ export default function TradeHistoryPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-5 sm:p-6 border-b ${theme.border}`}>
-                <h3 className={`text-lg sm:text-xl tracking-widest ${theme.text} mb-4`}>ALL TRADES</h3>
+                <h3 className={`text-lg sm:text-xl tracking-widest ${theme.text} mb-4`}>{t('allTrades')}</h3>
                 <TradeFilters filter={filter} setFilter={setFilter} darkMode={darkMode} stats={stats} />
               </div>
               <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[750px] overflow-y-auto`}>
@@ -255,7 +252,7 @@ export default function TradeHistoryPage() {
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-7 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg sm:text-xl tracking-widest mb-5 ${theme.text}`}>WIN/LOSS</h3>
+              <h3 className={`text-lg sm:text-xl tracking-widest mb-5 ${theme.text}`}>{t('winLoss')}</h3>
               <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
@@ -274,16 +271,16 @@ export default function TradeHistoryPage() {
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-7 ${theme.bgSecondary}`}>
-              <h3 className={`text-lg sm:text-xl tracking-widest mb-5 ${theme.text}`}>AVG WIN/LOSS</h3>
+              <h3 className={`text-lg sm:text-xl tracking-widest mb-5 ${theme.text}`}>{t('avgWinLoss')}</h3>
               <div className="space-y-5">
                 <div>
-                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>AVG WIN</span><span className="text-teal-600 text-lg font-bold">${stats.avgWin}</span></div>
+                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>{t('avgWin')}</span><span className="text-teal-600 text-lg font-bold">${stats.avgWin}</span></div>
                   <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                     <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>AVG LOSS</span><span className="text-rose-600 text-lg font-bold">${stats.avgLoss}</span></div>
+                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>{t('avgLoss')}</span><span className="text-rose-600 text-lg font-bold">${stats.avgLoss}</span></div>
                   <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                     <div className="h-full bg-rose-600 rounded-full transition-all" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
                   </div>

@@ -233,9 +233,9 @@ export default function FAQPage() {
         {/* Contact Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
           className={`mt-10 sm:mt-16 p-6 sm:p-8 border ${theme.border} rounded-2xl ${theme.bgCard} text-center`}>
-          <h3 className={`text-xl sm:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>WEITERE FRAGEN?</h3>
+          <h3 className={`text-xl sm:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>{t('furtherQuestions')}</h3>
           <p className={`${theme.textMuted} mb-5 sm:mb-6 text-sm sm:text-base font-sans px-4`}>
-            Wenn du weitere Fragen hast, kontaktiere uns gerne direkt
+            {t('contactUs')}
           </p>
           <div className="flex justify-center">
             <a href="mailto:support@znpcv.com" className={`inline-flex items-center gap-2 ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 py-2.5 font-bold transition-colors`}>

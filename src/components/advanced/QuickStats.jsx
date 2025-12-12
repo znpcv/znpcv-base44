@@ -50,13 +50,13 @@ export default function QuickStats({ checklists, darkMode }) {
         <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>
           {stats.profitFactor > 10 ? '∞' : stats.profitFactor.toFixed(2)}
         </div>
-        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FACTOR</div>
+        <div className={`text-xs tracking-widest ${theme.textMuted}`}>PROFIT FACTOR</div>
       </motion.div>
       
       <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
         <Target className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
         <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>1:{stats.avgRR.toFixed(2)}</div>
-        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>AVG R:R</div>
+        <div className={`text-xs tracking-widest ${theme.textMuted}`}>AVG R:R</div>
       </motion.div>
       
       <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
@@ -64,13 +64,13 @@ export default function QuickStats({ checklists, darkMode }) {
         <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 text-teal-600`}>
           ${stats.bestTrade ? parseFloat(stats.bestTrade.actual_pnl).toFixed(0) : '0'}
         </div>
-        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>BEST TRADE</div>
+        <div className={`text-xs tracking-widest ${theme.textMuted}`}>BEST TRADE</div>
       </motion.div>
       
       <motion.div className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bg}`}>
         <BarChart3 className={`w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4 ${theme.text}`} />
         <div className={`text-2xl sm:text-3xl font-light mb-1 sm:mb-2 ${theme.text}`}>{stats.consistency}%</div>
-        <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>CONSISTENCY (L10)</div>
+        <div className={`text-xs tracking-widest ${theme.textMuted}`}>CONSISTENCY (L10)</div>
       </motion.div>
     </div>
   );
