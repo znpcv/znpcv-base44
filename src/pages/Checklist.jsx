@@ -377,8 +377,8 @@ export default function ChecklistPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={cn("p-4 sm:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden",
-                        checklist.direction === 'long' ? "bg-teal-600 text-white border-teal-600" : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
-                      {checklist.direction === 'long' && (
+                        formData.direction === 'long' ? "bg-teal-600 text-white border-teal-600" : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                      {formData.direction === 'long' && (
                         <div className="absolute inset-0 bg-white/10 animate-pulse" />
                       )}
                       <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
@@ -391,8 +391,8 @@ export default function ChecklistPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={cn("p-4 sm:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden",
-                        checklist.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
-                      {checklist.direction === 'short' && (
+                        formData.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
+                      {formData.direction === 'short' && (
                         <div className="absolute inset-0 bg-white/10 animate-pulse" />
                       )}
                       <TrendingDown className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
@@ -431,15 +431,15 @@ export default function ChecklistPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
-                        checklist.w_trend === trend 
+                        formData.w_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
                           : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
-                      {checklist.w_trend === trend && (
+                      {formData.w_trend === trend && (
                         <div className="absolute inset-0 bg-white/10" />
                       )}
                       {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
                       {trend.toUpperCase()}
-                      {checklist.w_trend === trend && (
+                      {formData.w_trend === trend && (
                         <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
                       )}
                     </motion.button>
@@ -447,32 +447,32 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.w_at_aoi} onChange={(checked) => update('w_at_aoi', checked)} 
+              <ChecklistItem checked={formData.w_at_aoi} onChange={(checked) => update('w_at_aoi', checked)} 
                 label={t('atAoiRejected')} weight={10} 
                 description={t('atAoiDesc')} />
               
-              <ChecklistItem checked={checklist.w_ema_touch} onChange={(checked) => update('w_ema_touch', checked)} 
+              <ChecklistItem checked={formData.w_ema_touch} onChange={(checked) => update('w_ema_touch', checked)} 
                 label={t('touchingEma')} weight={5} 
                 description={t('touchingEmaDesc')} />
               
-              <ChecklistItem checked={checklist.w_candlestick} onChange={(checked) => update('w_candlestick', checked)} 
+              <ChecklistItem checked={formData.w_candlestick} onChange={(checked) => update('w_candlestick', checked)} 
                 label={t('candlestickRejection')} weight={10} 
                 description={t('candlestickDesc')} />
               
-              <ChecklistItem checked={checklist.w_psp_rejection} onChange={(checked) => update('w_psp_rejection', checked)} 
+              <ChecklistItem checked={formData.w_psp_rejection} onChange={(checked) => update('w_psp_rejection', checked)} 
                 label={t('rejectionPsp')} weight={10} 
                 description={t('rejectionPspDesc')} />
               
-              <ChecklistItem checked={checklist.w_round_level} onChange={(checked) => update('w_round_level', checked)} 
+              <ChecklistItem checked={formData.w_round_level} onChange={(checked) => update('w_round_level', checked)} 
                 label={t('roundLevel')} weight={5} 
                 description={t('roundLevelDesc')} />
               
-              <ChecklistItem checked={checklist.w_swing} onChange={(checked) => update('w_swing', checked)} 
+              <ChecklistItem checked={formData.w_swing} onChange={(checked) => update('w_swing', checked)} 
                 label={t('swingHighLow')} weight={10} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
-                value={checklist.w_pattern} 
+                value={formData.w_pattern} 
                 onChange={(v) => update('w_pattern', v)} 
                 score={10}
                 label={t('patternWeekly')}
@@ -507,15 +507,15 @@ export default function ChecklistPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
-                        checklist.d_trend === trend 
+                        formData.d_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
                           : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
-                      {checklist.d_trend === trend && (
+                      {formData.d_trend === trend && (
                         <div className="absolute inset-0 bg-white/10" />
                       )}
                       {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
                       {trend.toUpperCase()}
-                      {checklist.d_trend === trend && (
+                      {formData.d_trend === trend && (
                         <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
                       )}
                     </motion.button>
@@ -523,32 +523,32 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.d_at_aoi} onChange={(checked) => update('d_at_aoi', checked)} 
+              <ChecklistItem checked={formData.d_at_aoi} onChange={(checked) => update('d_at_aoi', checked)} 
                 label={t('atAoiRejected')} weight={10} 
                 description={t('atAoiDesc')} />
               
-              <ChecklistItem checked={checklist.d_ema_touch} onChange={(checked) => update('d_ema_touch', checked)} 
+              <ChecklistItem checked={formData.d_ema_touch} onChange={(checked) => update('d_ema_touch', checked)} 
                 label={t('touchingEma')} weight={5} 
                 description={t('touchingEmaDesc')} />
               
-              <ChecklistItem checked={checklist.d_candlestick} onChange={(checked) => update('d_candlestick', checked)} 
+              <ChecklistItem checked={formData.d_candlestick} onChange={(checked) => update('d_candlestick', checked)} 
                 label={t('candlestickRejection')} weight={10} 
                 description={t('candlestickDesc')} />
               
-              <ChecklistItem checked={checklist.d_psp_rejection} onChange={(checked) => update('d_psp_rejection', checked)} 
+              <ChecklistItem checked={formData.d_psp_rejection} onChange={(checked) => update('d_psp_rejection', checked)} 
                 label={t('rejectionPsp')} weight={10} 
                 description={t('rejectionPspDesc')} />
               
-              <ChecklistItem checked={checklist.d_round_level} onChange={(checked) => update('d_round_level', checked)} 
+              <ChecklistItem checked={formData.d_round_level} onChange={(checked) => update('d_round_level', checked)} 
                 label={t('roundLevel')} weight={5} 
                 description={t('roundLevelDesc')} />
               
-              <ChecklistItem checked={checklist.d_swing} onChange={(checked) => update('d_swing', checked)} 
+              <ChecklistItem checked={formData.d_swing} onChange={(checked) => update('d_swing', checked)} 
                 label={t('swingHighLow')} weight={10} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
-                value={checklist.d_pattern} 
+                value={formData.d_pattern} 
                 onChange={(v) => update('d_pattern', v)} 
                 score={10}
                 label="PATTERN (DAILY)"
@@ -583,15 +583,15 @@ export default function ChecklistPage() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
-                        checklist.h4_trend === trend 
+                        formData.h4_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
                           : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
-                      {checklist.h4_trend === trend && (
+                      {formData.h4_trend === trend && (
                         <div className="absolute inset-0 bg-white/10" />
                       )}
                       {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
                       {trend.toUpperCase()}
-                      {checklist.h4_trend === trend && (
+                      {formData.h4_trend === trend && (
                         <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
                       )}
                     </motion.button>
@@ -599,24 +599,24 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.h4_ema_touch} onChange={(checked) => update('h4_ema_touch', checked)} 
+              <ChecklistItem checked={formData.h4_ema_touch} onChange={(checked) => update('h4_ema_touch', checked)} 
                 label={t('touchingEma')} weight={5} 
                 description={t('touchingEmaDesc')} />
               
-              <ChecklistItem checked={checklist.h4_candlestick} onChange={(checked) => update('h4_candlestick', checked)} 
+              <ChecklistItem checked={formData.h4_candlestick} onChange={(checked) => update('h4_candlestick', checked)} 
                 label={t('candlestickRejection')} weight={10} 
                 description={t('candlestickDesc')} />
               
-              <ChecklistItem checked={checklist.h4_psp_rejection} onChange={(checked) => update('h4_psp_rejection', checked)} 
+              <ChecklistItem checked={formData.h4_psp_rejection} onChange={(checked) => update('h4_psp_rejection', checked)} 
                 label={t('rejectionPsp')} weight={5} 
                 description={t('rejectionPspDesc')} />
               
-              <ChecklistItem checked={checklist.h4_swing} onChange={(checked) => update('h4_swing', checked)} 
+              <ChecklistItem checked={formData.h4_swing} onChange={(checked) => update('h4_swing', checked)} 
                 label={t('swingHighLow')} weight={5} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
-                value={checklist.h4_pattern} 
+                value={formData.h4_pattern} 
                 onChange={(v) => update('h4_pattern', v)} 
                 score={10}
                 label="CHART PATTERN (4H)"
@@ -650,16 +650,16 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.entry_sos} onChange={(checked) => update('entry_sos', checked)} 
+              <ChecklistItem checked={formData.entry_sos} onChange={(checked) => update('entry_sos', checked)} 
                 label={t('mssShift')} weight={10} 
                 description={t('mssDesc')} />
               
-              <ChecklistItem checked={checklist.entry_engulfing} onChange={(checked) => update('entry_engulfing', checked)} 
+              <ChecklistItem checked={formData.entry_engulfing} onChange={(checked) => update('entry_engulfing', checked)} 
                 label={t('engulfingCandle')} weight={10} 
                 description={t('engulfingDesc')} />
               
               <PatternSelector 
-                value={checklist.entry_pattern} 
+                value={formData.entry_pattern} 
                 onChange={(v) => update('entry_pattern', v)} 
                 score={5}
                 label={t('patternIfAny')}
@@ -672,7 +672,7 @@ export default function ChecklistPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button onClick={() => update('entry_type', 'pinbar')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.entry_type === 'pinbar' 
+                      formData.entry_type === 'pinbar' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
                     <div className="text-2xl mb-2">📍</div>
@@ -680,7 +680,7 @@ export default function ChecklistPage() {
                   </button>
                   <button onClick={() => update('entry_type', 'engulfing')}
                     className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.entry_type === 'engulfing' 
+                      formData.entry_type === 'engulfing' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
                     <div className="text-2xl mb-2">🕯️</div>
@@ -693,11 +693,31 @@ export default function ChecklistPage() {
 
           {/* STEP 5: Risk Management */}
           {currentStep === 5 && (
-            <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
-              <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
-              
+          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+          <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
 
-            </motion.div>
+          <AdvancedLotCalculator
+            pair={formData.pair}
+            direction={formData.direction}
+            onDataChange={(data) => {
+              if (data.account_size !== undefined) update('account_size', data.account_size);
+              if (data.risk_percent !== undefined) update('risk_percent', data.risk_percent);
+              if (data.leverage !== undefined) update('leverage', data.leverage);
+              if (data.entry_price !== undefined) update('entry_price', data.entry_price);
+              if (data.stop_loss !== undefined) update('stop_loss', data.stop_loss);
+              if (data.take_profit !== undefined) update('take_profit', data.take_profit);
+            }}
+            initialData={{
+              account_size: formData.account_size,
+              risk_percent: formData.risk_percent,
+              entry_price: formData.entry_price,
+              stop_loss: formData.stop_loss,
+              take_profit: formData.take_profit,
+              leverage: formData.leverage,
+            }}
+            darkMode={darkMode}
+          />
+          </motion.div>
           )}
 
           {/* STEP 6: Final */}
@@ -740,14 +760,14 @@ export default function ChecklistPage() {
                         ? "bg-rose-600 border-rose-500 text-white" 
                         : darkMode ? "border-zinc-700 hover:border-rose-600/50 bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
-                      checklist.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {checklist.confirms_rule && <Check className="w-4 h-4 text-rose-600" />}
+                      formData.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
+                      {formData.confirms_rule && <Check className="w-4 h-4 text-rose-600" />}
                     </div>
                     <div>
-                      <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                      <div className={cn("font-bold tracking-wider", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('sellInBelowAoi')}
                       </div>
-                      <div className={cn("text-sm", checklist.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
+                      <div className={cn("text-sm", formData.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
                         {t('notSellSupport')}
                       </div>
                     </div>
