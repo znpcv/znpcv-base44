@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Mail } from 'lucide-react';
+import { Home, Mail, ArrowLeft } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
+import { Button } from "@/components/ui/button";
 
 export default function ImpressumPage() {
   const navigate = useNavigate();
