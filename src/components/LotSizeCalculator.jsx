@@ -261,37 +261,35 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
         </label>
         
         <div className="grid grid-cols-4 gap-1.5 mb-2">
-          {ACCOUNT_SIZES.map((size) => (
+          {['1000', '5000', '10000', '50000'].map((size) => (
             <button
-              key={size.value}
-              onClick={() => setAccountSize(size.value)}
+              key={size}
+              onClick={() => {
+                setAccountSize(size);
+                setCustomAccount('');
+              }}
               className={cn(
                 "py-2 px-1 rounded-lg text-xs font-bold transition-all border",
-                accountSize === size.value
+                accountSize === size
                   ? "bg-teal-600 text-white border-teal-600"
                   : `${theme.input} hover:border-teal-600/50`
               )}
             >
-              {size.label.replace('$', '').replace(',000', 'K').replace(',', '')}
+              {size === '1000' ? '1K' : size === '5000' ? '5K' : size === '10000' ? '10K' : '50K'}
             </button>
           ))}
-          <button
-            onClick={() => {
-              const custom = prompt('Kontogröße in USD:');
-              if (custom && !isNaN(custom)) setAccountSize(custom);
-            }}
-            className={cn(
-              "py-2 px-1 rounded-lg text-xs font-bold transition-all border",
-              !ACCOUNT_SIZES.find(s => s.value === accountSize) && accountSize
-                ? "bg-emerald-500 text-white border-emerald-500"
-                : `${theme.input} hover:border-emerald-500/50`
-            )}
-          >
-            {!ACCOUNT_SIZES.find(s => s.value === accountSize) && accountSize 
-              ? `$${parseInt(accountSize).toLocaleString()}` 
-              : 'Andere'}
-          </button>
         </div>
+        
+        <Input
+          type="number"
+          placeholder="Individuelle Kontogröße (USD)"
+          value={customAccount}
+          onChange={(e) => {
+            setCustomAccount(e.target.value);
+            if (e.target.value) setAccountSize(e.target.value);
+          }}
+          className={`${theme.input} text-sm text-center mb-2`}
+        />
         
         {accountSize && (
           <div className="text-center p-2 bg-teal-600/10 border border-teal-600/20 rounded-lg">

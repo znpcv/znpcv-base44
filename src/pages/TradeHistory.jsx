@@ -177,12 +177,12 @@ export default function TradeHistoryPage() {
                       )}
                       <div className="flex items-center gap-3">
                         <div className="text-right">
-                          {trade.outcome && (
+                          {trade.outcome && trade.actual_pnl && (
                             <>
                               <div className={cn("text-lg font-bold",
-                                parseFloat(trade.pnl) > 0 ? 'text-teal-600' :
-                                parseFloat(trade.pnl) < 0 ? 'text-rose-600' : theme.text)}>
-                                {parseFloat(trade.pnl) > 0 ? '+' : ''}${trade.pnl}
+                                parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
+                                parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
+                                {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                               </div>
                               <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
                                 trade.outcome === 'win' ? 'bg-teal-600/20 text-teal-600' :

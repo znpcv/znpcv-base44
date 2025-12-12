@@ -309,7 +309,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10">
 
           {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-10">
 
             {/* Brand & Description */}
             <div className="md:col-span-4 text-center md:text-left">

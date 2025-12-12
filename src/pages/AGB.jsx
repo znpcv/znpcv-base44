@@ -19,7 +19,7 @@ export default function AGBPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
                 <DarkModeToggle />
@@ -133,7 +133,7 @@ export default function AGBPage() {
 
           {/* Footer */}
           <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
-          <div className="max-w-4xl mx-auto px-6 py-6 sm:py-8">
+          <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
