@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit } from 'lucide-react';
+import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, subMonths, addMonths } from 'date-fns';
@@ -76,6 +76,8 @@ export default function DashboardPage() {
     const total = checklists.length;
     const ready = checklists.filter(c => c.status === 'ready_to_trade').length;
     const inProgress = checklists.filter(c => c.status === 'in_progress').length;
+    const executed = checklists.filter(c => c.outcome && c.outcome !== 'pending');
+    const wins = executed.filter(c => c.outcome === 'win').length;
     const longs = checklists.filter(c => c.direction === 'bullish' || c.direction === 'long').length;
     const shorts = checklists.filter(c => c.direction === 'bearish' || c.direction === 'short').length;
     const withConfluence = checklists.filter(c => 
@@ -83,8 +85,10 @@ export default function DashboardPage() {
       c.w_trend === c.d_trend && c.d_trend === c.h4_trend
     ).length;
     const avgCompletion = total > 0 ? Math.round(checklists.reduce((acc, c) => acc + (c.completion_percentage || 0), 0) / total) : 0;
+    const winRate = executed.length > 0 ? ((wins / executed.length) * 100).toFixed(0) : 0;
+    const totalPnL = executed.reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
     
-    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion };
+    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion, winRate, totalPnL, executed: executed.length };
   }, [checklists]);
 
   const performanceData = useMemo(() => {
@@ -165,21 +169,24 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, highlight: true },
-            { label: t('inProgress'), value: stats.inProgress, icon: Clock },
-            { label: t('withConfluence'), value: stats.withConfluence, icon: BarChart3 },
+            { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3, highlight: stats.winRate >= 60 },
+            { label: 'P&L', value: `$${stats.totalPnL.toFixed(0)}`, icon: TrendingUp, highlight: stats.totalPnL > 0, isProfit: true },
+            { label: 'EXECUTED', value: stats.executed, icon: Activity },
+            { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
           ].map((stat, index) => (
             <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 + index * 0.05 }}
-              className={cn("border rounded-2xl p-4 sm:p-6", 
-                stat.highlight 
-                  ? "bg-teal-600 text-white border-teal-600" 
-                  : `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4", stat.highlight ? "text-white" : theme.text)} />
-              <div className={cn("text-3xl sm:text-4xl font-light mb-1", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-teal-100" : theme.textMuted)}>{stat.label}</div>
+              className={cn("border rounded-2xl p-3 sm:p-4", 
+                stat.highlight && stat.isProfit && stats.totalPnL > 0 ? "bg-teal-600 text-white border-teal-600" :
+                stat.highlight && stat.isProfit && stats.totalPnL < 0 ? "bg-rose-600 text-white border-rose-600" :
+                stat.highlight ? "bg-teal-600 text-white border-teal-600" : 
+                `${theme.border} ${theme.bgSecondary}`)}>
+              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3", stat.highlight ? "text-white" : theme.text)} />
+              <div className={cn("text-2xl sm:text-3xl font-light mb-1", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
+              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-white/80" : theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -216,11 +223,12 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[600px] overflow-y-auto`}>
-                  {recentTrades.filter(t => filter === 'all' || (filter === 'win' && t.outcome === 'win') || (filter === 'loss' && t.outcome === 'loss')).map((trade) => (
+                  {recentTrades.filter(t => filter === 'all' || (filter === 'win' && t.outcome === 'win') || (filter === 'loss' && t.outcome === 'loss')).slice(0, 8).map((trade) => (
                     <div key={trade.id} 
-                      className={`p-4 sm:p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
+                      className={`p-4 sm:p-5 transition-all group cursor-pointer ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}
+                      onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
                       <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-1">
                           <div className={cn("w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl",
                             trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                             trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 
@@ -256,16 +264,19 @@ export default function DashboardPage() {
                               </span>
                             )}
                           </div>
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={(e) => handleDeleteTrade(e, trade.id)}
-                              className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteTrade(e, trade.id);
+                            }}
+                            className={`p-2 rounded-lg transition-colors opacity-0 group-hover:opacity-100 ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 text-[10px] sm:text-xs">
+                      <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
                         <span className={theme.textMuted}>Score: <span className={theme.text}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                        {trade.risk_percent && <span className={theme.textMuted}>Risk: <span className={theme.text}>{trade.risk_percent}%</span></span>}
                       </div>
                     </div>
                   ))}

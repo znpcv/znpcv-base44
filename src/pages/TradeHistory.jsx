@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -11,27 +11,50 @@ import { cn } from "@/lib/utils";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
+import TradeEditModal from '@/components/advanced/TradeEditModal';
+import AdvancedMetrics from '@/components/advanced/AdvancedMetrics';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
   const { t, isRTL, darkMode } = useLanguage();
   const [filter, setFilter] = useState('all');
+  const [editingTrade, setEditingTrade] = useState(null);
+  const queryClient = useQueryClient();
 
-  const { data: checklists = [], isLoading, refetch } = useQuery({
+  const { data: checklists = [], isLoading } = useQuery({
     queryKey: ['checklists'],
     queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
+  });
+
+  const updateTradeMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.TradeChecklist.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      setEditingTrade(null);
+    },
+  });
+
+  const deleteTradeMutation = useMutation({
+    mutationFn: (id) => base44.entities.TradeChecklist.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['checklists'] });
+    },
   });
 
   const handleDeleteTrade = async (e, tradeId) => {
     e.stopPropagation();
     if (window.confirm('Trade wirklich löschen?')) {
-      try {
-        await base44.entities.TradeChecklist.delete(tradeId);
-        refetch();
-      } catch (error) {
-        console.error('Delete failed:', error);
-      }
+      deleteTradeMutation.mutate(tradeId);
     }
+  };
+
+  const handleEditTrade = (e, trade) => {
+    e.stopPropagation();
+    setEditingTrade(trade);
+  };
+
+  const handleSaveTrade = (data) => {
+    updateTradeMutation.mutate({ id: editingTrade.id, data });
   };
 
   const stats = useMemo(() => {
@@ -100,6 +123,9 @@ export default function TradeHistoryPage() {
           <p className={`${theme.textMuted} tracking-wider`}>Performance Analytics & Trade Log</p>
         </motion.div>
 
+        {/* Advanced Metrics */}
+        <AdvancedMetrics checklists={checklists} darkMode={darkMode} />
+
         {/* Stats Grid */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
           <div className={cn("border-2 rounded-2xl p-4 sm:p-6", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
@@ -143,12 +169,12 @@ export default function TradeHistoryPage() {
                   ))}
                 </div>
               </div>
-              <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[600px] overflow-y-auto`}>
+              <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[700px] overflow-y-auto`}>
                 {filteredTrades.map((trade) => (
                   <div key={trade.id}
-                    className={`p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
+                    className={`p-4 sm:p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
+                      <div className="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer" onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
                         <div className={cn("w-10 h-10 flex items-center justify-center rounded-xl",
                           trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                           trade.outcome === 'loss' ? 'bg-rose-600 text-white' :
@@ -194,6 +220,10 @@ export default function TradeHistoryPage() {
                           {!trade.outcome && <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">PENDING</span>}
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={(e) => handleEditTrade(e, trade)}
+                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-blue-600/20 text-blue-400 hover:text-blue-500' : 'hover:bg-blue-100 text-blue-600 hover:text-blue-700'}`}>
+                            <Edit className="w-4 h-4" />
+                          </button>
                           <button onClick={(e) => handleDeleteTrade(e, trade.id)}
                             className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
                             <Trash2 className="w-4 h-4" />
@@ -212,10 +242,10 @@ export default function TradeHistoryPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
               <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>WIN/LOSS</h3>
-              <div className="h-48">
+              <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={4} dataKey="value">
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={4} dataKey="value">
                       {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                     </Pie>
                     <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12 }} />
@@ -265,7 +295,16 @@ export default function TradeHistoryPage() {
             </button>
           </div>
         </footer>
-        </main>
-        </div>
-        );
-        }
+      </main>
+
+      {/* Edit Modal */}
+      {editingTrade && (
+        <TradeEditModal
+          trade={editingTrade}
+          onClose={() => setEditingTrade(null)}
+          onSave={handleSaveTrade}
+        />
+      )}
+    </div>
+  );
+}
