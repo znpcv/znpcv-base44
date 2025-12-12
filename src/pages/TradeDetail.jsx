@@ -131,7 +131,7 @@ export default function TradeDetailPage() {
     (trade.d_round_level ? 5 : 0) + (trade.d_swing ? 10 : 0) + 
     (trade.d_pattern && trade.d_pattern !== 'none' ? 10 : 0);
   
-  const h4Score = (trade.h4_ema_touch ? 5 : 0) + (trade.h4_candlestick ? 10 : 0) + 
+  const h4Score = (trade.h4_at_aoi ? 5 : 0) + (trade.h4_candlestick ? 10 : 0) + 
     (trade.h4_psp_rejection ? 5 : 0) + (trade.h4_swing ? 5 : 0) + 
     (trade.h4_pattern && trade.h4_pattern !== 'none' ? 10 : 0);
   
