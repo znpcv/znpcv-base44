@@ -155,11 +155,6 @@ export default function DashboardPage() {
               </button>
               <LanguageToggle />
               <AccountButton />
-              <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl tracking-widest font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
-                <Plus className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
-                <span className="hidden sm:inline">{t('newAnalysis').split(' ')[0]}</span>
-                <span className="sm:hidden">NEW</span>
-              </Button>
             </div>
           </div>
         </div>
