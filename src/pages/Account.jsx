@@ -126,7 +126,7 @@ export default function AccountPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 sm:gap-4">
               <DarkModeToggle />
@@ -152,7 +152,7 @@ export default function AccountPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-4xl tracking-widest mb-8">MEIN ACCOUNT</h1>
 
@@ -445,7 +445,7 @@ export default function AccountPage() {
         </motion.div>
 
         {/* Footer */}
-        <footer className={`mt-16 pt-8 border-t ${theme.border}`}>
+        <footer className={`mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum

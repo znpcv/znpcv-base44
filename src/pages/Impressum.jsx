@@ -20,12 +20,13 @@ export default function ImpressumPage() {
       <header className={`${theme.bg} border-b ${theme.border}`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <DarkModeToggle />
-              <button onClick={() => navigate(-1)} className={theme.textSecondary}>
-                <Home className="w-6 h-6" />
-              </button>
-            </div>
+            <div className="flex items-center gap-2 sm:gap-3">
+                <DarkModeToggle />
+                <Button onClick={() => navigate(-1)} variant="outline" size="sm" className={`${theme.border} gap-2`}>
+                  <ArrowLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">Zurück</span>
+                </Button>
+              </div>
             <img 
               src={darkMode 
                 ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
@@ -39,7 +40,7 @@ export default function ImpressumPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
         <h1 className="text-4xl tracking-widest mb-8">IMPRESSUM</h1>
         
         <div className={`space-y-6 ${theme.textSecondary} font-sans leading-relaxed`}>
@@ -95,9 +96,28 @@ export default function ImpressumPage() {
 
           <section className="pt-6 border-t border-zinc-800">
             <p className="text-sm">Quelle: Erstellt mit dem Impressum-Generator von eRecht24.</p>
-          </section>
-        </div>
-      </main>
-    </div>
-  );
-}
+            </section>
+            </div>
+            </main>
+
+            {/* Footer */}
+            <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
+            <div className="max-w-4xl mx-auto px-6 py-6 sm:py-8">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
+            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              Impressum
+            </button>
+            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              Datenschutz
+            </button>
+            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              AGB
+            </button>
+            </div>
+            </div>
+            </footer>
+            </div>
+            );
+            }

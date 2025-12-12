@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
-import ForexFactoryCalendar from '@/components/ForexFactoryCalendar';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -70,7 +69,7 @@ export default function TradeHistoryPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 sm:gap-4">
               <DarkModeToggle />
@@ -95,14 +94,14 @@ export default function TradeHistoryPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className={`text-4xl tracking-widest mb-2 ${theme.text}`}>TRADE HISTORY</h1>
           <p className={`${theme.textMuted} tracking-wider`}>Performance Analytics & Trade Log</p>
         </motion.div>
 
         {/* Stats Grid */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
           <div className={cn("border-2 rounded-2xl p-4 sm:p-6", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4" />
             <div className="text-2xl sm:text-3xl font-light mb-1">${stats.totalPnL.toFixed(2)}</div>
@@ -125,7 +124,7 @@ export default function TradeHistoryPage() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Trades List */}
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -209,7 +208,7 @@ export default function TradeHistoryPage() {
           </div>
 
           {/* Charts */}
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 md:space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
               <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>WIN/LOSS</h3>
@@ -250,14 +249,8 @@ export default function TradeHistoryPage() {
           </div>
         </div>
 
-        {/* Forex Factory Calendar */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-12 mb-8">
-          <h2 className={`text-2xl tracking-widest mb-4 ${theme.text}`}>WIRTSCHAFTSKALENDER</h2>
-          <ForexFactoryCalendar />
-        </motion.div>
-
         {/* Footer */}
-        <footer className={`mt-16 pt-8 border-t ${theme.border}`}>
+        <footer className={`mt-12 sm:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Impressum

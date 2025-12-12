@@ -13,7 +13,6 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart a
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
-import ForexFactoryCalendar from '@/components/ForexFactoryCalendar';
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -129,7 +128,7 @@ export default function DashboardPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 sm:gap-4">
               <DarkModeToggle />
@@ -144,10 +143,7 @@ export default function DashboardPage() {
               </button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <Button onClick={() => navigate(createPageUrl('TradeHistory'))} variant="outline" className={`hidden md:flex px-4 py-2 rounded-xl tracking-widest font-bold ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:border-zinc-700' : 'border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400'}`}>
-                <Activity className="w-5 h-5 mr-2" />
-                HISTORY
-              </Button>
+
 
               <LanguageToggle />
               <AccountButton />
@@ -161,15 +157,15 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
-          <h1 className={`text-3xl sm:text-4xl tracking-widest mb-2 ${theme.text}`}>{t('tradingDashboard')}</h1>
-          <p className={`${theme.textMuted} tracking-wider text-sm sm:text-base`}>{t('overviewStats')}</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6 md:mb-8">
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl tracking-widest mb-2 ${theme.text}`}>{t('tradingDashboard')}</h1>
+          <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
         {/* Stats */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, highlight: true },
@@ -188,36 +184,10 @@ export default function DashboardPage() {
           ))}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Left */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Chart */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3 ${theme.text}`}>
-                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">{t('activity30Days')}</span>
-                <span className="sm:hidden text-sm">ACTIVITY</span>
-              </h3>
-              <div className="h-40 sm:h-48">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={performanceData}>
-                    <defs>
-                      <linearGradient id="colorTrades" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
-                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
-                    <Area type="monotone" dataKey="trades" stroke={darkMode ? "#ffffff" : "#0d9488"} strokeWidth={2} fillOpacity={1} fill="url(#colorTrades)" />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-
-            {/* Trade History with Win/Loss */}
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
+            {/* Trade History */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
               className={`border ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-4 sm:p-5 border-b ${theme.border} flex items-center justify-between flex-wrap gap-2`}>
@@ -236,7 +206,7 @@ export default function DashboardPage() {
               </div>
 
               {isLoading ? (
-                <div className={`p-8 text-center ${theme.textDimmed}`}>{t('loading')}</div>
+                <div className={`p-6 sm:p-8 text-center ${theme.textDimmed}`}>{t('loading')}</div>
               ) : recentTrades.length === 0 ? (
                 <div className="p-6 sm:p-8 text-center">
                   <p className={`${theme.textDimmed} mb-4 text-sm sm:text-base`}>{t('noAnalyses')}</p>
@@ -245,7 +215,7 @@ export default function DashboardPage() {
                   </Button>
                 </div>
               ) : (
-                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[400px] sm:max-h-[500px] overflow-y-auto`}>
+                <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[600px] overflow-y-auto`}>
                   {recentTrades.filter(t => filter === 'all' || (filter === 'win' && t.outcome === 'win') || (filter === 'loss' && t.outcome === 'loss')).map((trade) => (
                     <div key={trade.id} 
                       className={`p-4 sm:p-5 transition-all group ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'}`}>
@@ -305,21 +275,47 @@ export default function DashboardPage() {
           </div>
 
           {/* Right */}
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-3 sm:space-y-4 md:space-y-6">
+            {/* Performance Chart */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
+                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">{t('activity30Days')}</span>
+                <span className="sm:hidden text-sm">ACTIVITY</span>
+              </h3>
+              <div className="h-32 sm:h-40">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={performanceData}>
+                    <defs>
+                      <linearGradient id="colorTrades" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
+                    <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
+                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
+                    <Area type="monotone" dataKey="trades" stroke={darkMode ? "#ffffff" : "#0d9488"} strokeWidth={2} fillOpacity={1} fill="url(#colorTrades)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </motion.div>
+
             {/* Direction Pie */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
               className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-4 flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
                 <PieChart className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('direction')}
               </h3>
-              <div className="h-40">
+              <div className="h-32 sm:h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
                     <Pie data={[
                       { name: t('long'), value: stats.longs, color: '#0d9488' },
                       { name: t('short'), value: stats.shorts, color: '#e11d48' },
-                    ].filter(d => d.value > 0)} cx="50%" cy="50%" innerRadius={40} outerRadius={60} paddingAngle={4} dataKey="value">
+                    ].filter(d => d.value > 0)} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={4} dataKey="value">
                       {[
                         { name: t('long'), value: stats.longs, color: '#0d9488' },
                         { name: t('short'), value: stats.shorts, color: '#e11d48' },
@@ -329,16 +325,16 @@ export default function DashboardPage() {
                   </RechartsPie>
                 </ResponsiveContainer>
               </div>
-              <div className="flex justify-center gap-6 mt-4">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>{t('long')} ({stats.longs})</span></div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>{t('short')} ({stats.shorts})</span></div>
+              <div className="flex justify-center gap-4 sm:gap-6 mt-3 sm:mt-4">
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-xs sm:text-sm ${theme.textMuted}`}>{t('long')} ({stats.longs})</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-xs sm:text-sm ${theme.textMuted}`}>{t('short')} ({stats.shorts})</span></div>
               </div>
             </motion.div>
 
             {/* Market Sessions */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
               className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-4 flex items-center gap-2 sm:gap-3 ${theme.text}`}>
+              <h3 className={`text-base sm:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
                 <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('marketSessions')}
               </h3>
@@ -369,7 +365,7 @@ export default function DashboardPage() {
             {/* Calendar */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
               className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary}`}>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 sm:gap-3 ${theme.text}`}>
                   <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   {t('calendar')}
@@ -407,8 +403,8 @@ export default function DashboardPage() {
             {/* Avg Completion */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
               className={`border ${theme.border} rounded-2xl p-4 sm:p-6 ${theme.bgSecondary} text-center`}>
-              <div className={`text-5xl sm:text-6xl font-light mb-2 ${theme.text}`}>{stats.avgCompletion}%</div>
-              <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-3 sm:mb-4`}>{t('avgCompletion')}</div>
+              <div className={`text-4xl sm:text-5xl md:text-6xl font-light mb-2 ${theme.text}`}>{stats.avgCompletion}%</div>
+              <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-2 sm:mb-3`}>{t('avgCompletion')}</div>
               <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                 <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: `${stats.avgCompletion}%` }} />
               </div>
@@ -416,27 +412,21 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Forex Factory Calendar */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-12">
-          <h2 className={`text-2xl tracking-widest mb-4 ${theme.text}`}>WIRTSCHAFTSKALENDER</h2>
-          <ForexFactoryCalendar />
-        </motion.div>
-
         {/* Quote */}
-        <div className="mt-12">
+        <div className="mt-8 sm:mt-12">
           <TradingQuote variant="minimal" />
         </div>
 
         {/* Footer */}
-        <footer className={`mt-16 pt-8 border-t ${theme.border}`}>
-          <div className="flex items-center justify-between mb-4">
+        <footer className={`mt-8 sm:mt-12 md:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             <img src={darkMode 
               ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
               : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
             } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 w-auto opacity-50 mx-auto" />
             <p className={`${theme.textDimmed} text-sm tracking-widest`}>WWW.ZNPCV.COM</p>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Impressum
             </button>

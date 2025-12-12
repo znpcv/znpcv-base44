@@ -349,7 +349,7 @@ export default function ChecklistPage() {
         </div>
       </div>
 
-      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8">
         <AnimatePresence mode="wait">
           
           {/* STEP 0: Asset & Direction */}
@@ -870,7 +870,7 @@ export default function ChecklistPage() {
         </AnimatePresence>
 
         {/* Navigation Buttons */}
-        <div className="mt-10 flex gap-3">
+        <div className="mt-6 sm:mt-8 md:mt-10 flex gap-2 sm:gap-3">
           {currentStep > 0 && (
             <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" 
               className={`rounded-xl tracking-widest px-5 h-12 ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:text-white' : 'border-zinc-300 text-black hover:bg-zinc-100'}`}>

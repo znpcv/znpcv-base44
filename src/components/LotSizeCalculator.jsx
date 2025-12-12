@@ -44,15 +44,15 @@ export default function LotSizeCalculator({
   const { darkMode, t } = useLanguage();
   
   // Form state
-  const [accountSize, setAccountSize] = useState(initialData.account_size || '');
+  const [accountSize, setAccountSize] = useState(initialData?.account_size || '');
   const [customAccount, setCustomAccount] = useState('');
-  const [riskPercent, setRiskPercent] = useState(initialData.risk_percent || '1');
+  const [riskPercent, setRiskPercent] = useState(initialData?.risk_percent || '1');
   const [customRisk, setCustomRisk] = useState('');
-  const [leverage, setLeverage] = useState(initialData.leverage || '100');
+  const [leverage, setLeverage] = useState(initialData?.leverage || '100');
   const [customLeverage, setCustomLeverage] = useState('');
-  const [entryPrice, setEntryPrice] = useState(initialData.entry_price || '');
-  const [stopLoss, setStopLoss] = useState(initialData.stop_loss || '');
-  const [takeProfit, setTakeProfit] = useState(initialData.take_profit || '');
+  const [entryPrice, setEntryPrice] = useState(initialData?.entry_price || '');
+  const [stopLoss, setStopLoss] = useState(initialData?.stop_loss || '');
+  const [takeProfit, setTakeProfit] = useState(initialData?.take_profit || '');
   
   // Live price state
   const [livePrice, setLivePrice] = useState(null);
@@ -154,7 +154,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
     
     // Position value and margin
     const positionValue = lotSize * contractSize * entry;
-    const marginRequired = positionValue / parseFloat(leverage);
+    const marginRequired = positionValue / (parseFloat(leverage) || 100);
     
     // R:R ratio
     const rr = tpDistance > 0 ? tpDistance / slDistance : 0;

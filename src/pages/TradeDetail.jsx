@@ -142,7 +142,7 @@ export default function TradeDetailPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <DarkModeToggle />
@@ -169,7 +169,7 @@ export default function TradeDetailPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
         {/* Trade Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center justify-between mb-4">

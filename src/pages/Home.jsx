@@ -11,7 +11,6 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
 import { cn } from "@/lib/utils";
-import ForexFactoryCalendar from '@/components/ForexFactoryCalendar';
 
 const SESSIONS = [
   { name: 'SYDNEY', timezone: 'Australia/Sydney', emoji: '🇦🇺', openHour: 7, closeHour: 16 },
@@ -85,7 +84,7 @@ export default function HomePage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <DarkModeToggle />
@@ -138,7 +137,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
+      <main className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-10 md:py-14">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -166,7 +165,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-6 mb-16"
+          className="grid md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 mb-10 sm:mb-12 md:mb-16"
         >
           {/* New Analysis */}
           <button
@@ -245,37 +244,23 @@ export default function HomePage() {
         </motion.div>
 
         {/* Trading Quote */}
-        <div className="mb-16">
+        <div className="mb-8 sm:mb-12 md:mb-16">
           <TradingQuote />
         </div>
-
-        {/* Forex Factory Calendar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-16"
-        >
-          <div className="text-center mb-6">
-            <h3 className="text-2xl tracking-widest mb-2">WIRTSCHAFTSKALENDER</h3>
-            <p className={`${theme.textDimmed} text-sm`}>Wichtige News & Events</p>
-          </div>
-          <ForexFactoryCalendar />
-        </motion.div>
 
         {/* Features */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mb-16"
+          className="mb-8 sm:mb-12 md:mb-16"
         >
           <div className="text-center mb-8">
             <h3 className="text-xl tracking-widest mb-2">{t('features')}</h3>
             <p className={`${theme.textDimmed} text-sm`}>{t('featuresDesc')}</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {[
               { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
               { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
@@ -303,7 +288,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-3 gap-3 md:gap-4"
+          className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4"
         >
           {[
             { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
@@ -321,7 +306,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className={`${theme.bgSecondary} border-t ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10">
 
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 mb-8 sm:mb-10">

@@ -164,7 +164,7 @@ export default function PaymentPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left - Info */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
