@@ -414,22 +414,22 @@ export default function ChecklistPage() {
 
           {/* STEP 1: Weekly */}
           {currentStep === 1 && (
-            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="02" title={t('weeklyAnalysis')} subtitle={t('weeklyConfirm')} />
               
-              {/* Current Score */}
-              <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
-                <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('weeklyScore')}</span>
-                <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", weeklyScore >= 40 ? "text-teal-600" : weeklyScore >= 25 ? "text-amber-500" : theme.text)}>{weeklyScore}</span>
-                  <span className={`${theme.textDimmed} text-sm`}>/60%</span>
+              {/* Current Score - Compact */}
+              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
+                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('weeklyScore')}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", weeklyScore >= 40 ? "text-teal-600" : weeklyScore >= 25 ? "text-amber-500" : theme.text)}>{weeklyScore}</span>
+                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/60</span>
                 </div>
               </div>
 
-              {/* Trend Selection */}
-              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('weeklyTrend')}</label>
-                <div className="grid grid-cols-2 gap-3 mb-4">
+              {/* Trend Selection - Compact */}
+              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 sm:mb-3 block`}>{t('weeklyTrend')}</label>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {['bullish', 'bearish'].map((trend) => (
                     <motion.button 
                       key={trend} 
@@ -437,18 +437,15 @@ export default function ChecklistPage() {
                       onClick={() => update('w_trend', trend)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
+                      className={cn("py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                         formData.w_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
                           : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
                       {formData.w_trend === trend && (
                         <div className="absolute inset-0 bg-white/10" />
                       )}
-                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
-                      <span className={trend === 'bullish' ? 'text-teal-100' : 'text-rose-100'}>{trend.toUpperCase()}</span>
-                      {formData.w_trend === trend && (
-                        <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
-                      )}
+                      {trend === 'bullish' ? <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-0.5 sm:mb-1" /> : <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-0.5 sm:mb-1" />}
+                      {trend.toUpperCase()}
                     </motion.button>
                   ))}
                 </div>
@@ -490,22 +487,22 @@ export default function ChecklistPage() {
 
           {/* STEP 2: Daily */}
           {currentStep === 2 && (
-            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="03" title={t('dailyAnalysis')} subtitle={t('dailyConfirm')} />
               
-              {/* Current Score */}
-              <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
-                <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('dailyScore')}</span>
-                <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", dailyScore >= 40 ? "text-teal-600" : dailyScore >= 25 ? "text-amber-500" : theme.text)}>{dailyScore}</span>
-                  <span className={`${theme.textDimmed} text-sm`}>/60%</span>
+              {/* Current Score - Compact */}
+              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
+                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('dailyScore')}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", dailyScore >= 40 ? "text-teal-600" : dailyScore >= 25 ? "text-amber-500" : theme.text)}>{dailyScore}</span>
+                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/60</span>
                 </div>
               </div>
 
-              {/* Trend Selection */}
-              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('dailyTrend')}</label>
-                <div className="grid grid-cols-2 gap-3">
+              {/* Trend Selection - Compact */}
+              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 sm:mb-3 block`}>{t('dailyTrend')}</label>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {['bullish', 'bearish'].map((trend) => (
                     <motion.button 
                       key={trend} 
@@ -513,18 +510,15 @@ export default function ChecklistPage() {
                       onClick={() => update('d_trend', trend)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
+                      className={cn("py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                         formData.d_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
                           : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
                       {formData.d_trend === trend && (
                         <div className="absolute inset-0 bg-white/10" />
                       )}
-                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
-                      <span className={trend === 'bullish' ? 'text-teal-100' : 'text-rose-100'}>{trend.toUpperCase()}</span>
-                      {formData.d_trend === trend && (
-                        <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
-                      )}
+                      {trend === 'bullish' ? <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-0.5 sm:mb-1" /> : <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-0.5 sm:mb-1" />}
+                      {trend.toUpperCase()}
                     </motion.button>
                   ))}
                 </div>
@@ -566,22 +560,22 @@ export default function ChecklistPage() {
 
           {/* STEP 3: 4H */}
           {currentStep === 3 && (
-            <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="04" title={t('h4Analysis')} subtitle={t('h4Confirm')} />
               
-              {/* Current Score */}
-              <div className={`flex items-center justify-between p-2.5 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
-                <span className={`${theme.textMuted} text-xs sm:text-sm`}>{t('h4Score')}</span>
-                <div className="flex items-center gap-2">
-                  <span className={cn("text-xl sm:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : theme.text)}>{h4Score}</span>
-                  <span className={`${theme.textDimmed} text-sm`}>/35%</span>
+              {/* Current Score - Compact */}
+              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
+                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('h4Score')}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : theme.text)}>{h4Score}</span>
+                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/35</span>
                 </div>
               </div>
 
-              {/* Trend Selection */}
-              <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('h4Trend')}</label>
-                <div className="grid grid-cols-2 gap-3">
+              {/* Trend Selection - Compact */}
+              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 sm:mb-3 block`}>{t('h4Trend')}</label>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {['bullish', 'bearish'].map((trend) => (
                     <motion.button 
                       key={trend} 
@@ -589,18 +583,15 @@ export default function ChecklistPage() {
                       onClick={() => update('h4_trend', trend)}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
+                      className={cn("py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                         formData.h4_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
                           : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
                       {formData.h4_trend === trend && (
                         <div className="absolute inset-0 bg-white/10" />
                       )}
-                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
-                      <span className={trend === 'bullish' ? 'text-teal-100' : 'text-rose-100'}>{trend.toUpperCase()}</span>
-                      {formData.h4_trend === trend && (
-                        <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
-                      )}
+                      {trend === 'bullish' ? <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-0.5 sm:mb-1" /> : <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-0.5 sm:mb-1" />}
+                      {trend.toUpperCase()}
                     </motion.button>
                   ))}
                 </div>
@@ -626,34 +617,34 @@ export default function ChecklistPage() {
                 value={formData.h4_pattern} 
                 onChange={(v) => update('h4_pattern', v)} 
                 score={10}
-                label="CHART PATTERN (4H)"
-                description="Patterns auf dem 4H Timeframe"
+                label="PATTERN (4H)"
+                description="4H Timeframe"
               />
             </motion.div>
           )}
 
           {/* STEP 4: Entry */}
           {currentStep === 4 && (
-            <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
-              {/* Entry Timeframe Info */}
-              <div className={`p-4 rounded-xl ${darkMode ? 'bg-blue-600/10 border border-blue-600/30' : 'bg-blue-500/10 border border-blue-500/30'}`}>
-                <div className="flex items-center gap-3">
-                  <Target className="w-5 h-5 text-blue-400" />
+              {/* Entry Timeframe Info - Compact */}
+              <div className={`p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl ${darkMode ? 'bg-blue-600/10 border border-blue-600/30' : 'bg-blue-500/10 border border-blue-500/30'}`}>
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <Target className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="text-blue-400 font-bold tracking-wider text-sm">{t('entryTimeframe')}</div>
-                    <div className={`text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>Wähle zwischen 30min oder 1H - je nach sauberster Struktur und präzisestem Entry. Wir sind Swing/Day Trader, keine Scalper.</div>
+                    <div className="text-blue-400 font-bold tracking-wider text-[10px] sm:text-xs md:text-sm">{t('entryTimeframe')}</div>
+                    <div className={`text-[10px] sm:text-xs md:text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} font-sans leading-tight mt-0.5`}>30min oder 1H TF</div>
                   </div>
                 </div>
               </div>
 
-              {/* Current Score */}
-              <div className={`flex items-center justify-between p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
-                <span className={`${theme.textMuted} text-sm`}>{t('entryScoreLabel')}</span>
-                <div className="flex items-center gap-2">
-                  <span className={cn("text-2xl font-bold", entryScore >= 20 ? "text-teal-600" : entryScore >= 10 ? "text-amber-500" : theme.text)}>{entryScore}</span>
-                  <span className={theme.textDimmed}>/25%</span>
+              {/* Current Score - Compact */}
+              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
+                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('entryScoreLabel')}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", entryScore >= 20 ? "text-teal-600" : entryScore >= 10 ? "text-amber-500" : theme.text)}>{entryScore}</span>
+                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/25</span>
                 </div>
               </div>
               
@@ -673,27 +664,27 @@ export default function ChecklistPage() {
                 description={t('patternIfAnyDesc')}
               />
               
-              {/* Entry Type - Advanced */}
-              <div className={`border ${theme.borderCard} rounded-2xl p-5 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-sm tracking-widest mb-4 block`}>{t('entryTrigger')}</label>
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              {/* Entry Type - Compact */}
+              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 sm:mb-3 block`}>{t('entryTrigger')}</label>
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <button type="button" onClick={() => update('entry_type', 'pinbar')}
-                    className={cn("p-4 sm:p-5 border-2 rounded-xl text-center transition-all group",
+                    className={cn("p-3 sm:p-4 md:p-5 border-2 rounded-lg sm:rounded-xl text-center transition-all",
                       formData.entry_type === 'pinbar' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-2xl sm:text-3xl mb-2">📍</div>
-                    <div className="font-bold tracking-wider text-xs sm:text-sm">PINBAR</div>
-                    <div className={cn("text-[9px] sm:text-[10px] mt-1 font-sans", formData.entry_type === 'pinbar' ? 'opacity-70' : theme.textMuted)}>Rejection Candle</div>
+                    <div className="text-xl sm:text-2xl md:text-3xl mb-1 sm:mb-2">📍</div>
+                    <div className="font-bold tracking-wider text-[10px] sm:text-xs md:text-sm">PINBAR</div>
+                    <div className={cn("text-[8px] sm:text-[9px] md:text-[10px] mt-0.5 sm:mt-1 font-sans", formData.entry_type === 'pinbar' ? 'opacity-70' : 'opacity-50')}>Rejection</div>
                   </button>
                   <button type="button" onClick={() => update('entry_type', 'engulfing')}
-                    className={cn("p-4 sm:p-5 border-2 rounded-xl text-center transition-all",
+                    className={cn("p-3 sm:p-4 md:p-5 border-2 rounded-lg sm:rounded-xl text-center transition-all",
                       formData.entry_type === 'engulfing' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-2xl sm:text-3xl mb-2">🕯️</div>
-                    <div className="font-bold tracking-wider text-xs sm:text-sm">ENGULFING</div>
-                    <div className={cn("text-[9px] sm:text-[10px] mt-1 font-sans", formData.entry_type === 'engulfing' ? 'opacity-70' : theme.textMuted)}>Reversal Pattern</div>
+                    <div className="text-xl sm:text-2xl md:text-3xl mb-1 sm:mb-2">🕯️</div>
+                    <div className="font-bold tracking-wider text-[10px] sm:text-xs md:text-sm">ENGULFING</div>
+                    <div className={cn("text-[8px] sm:text-[9px] md:text-[10px] mt-0.5 sm:mt-1 font-sans", formData.entry_type === 'engulfing' ? 'opacity-70' : 'opacity-50')}>Reversal</div>
                   </button>
                 </div>
               </div>
@@ -702,23 +693,23 @@ export default function ChecklistPage() {
 
           {/* STEP 5: Risk Management */}
           {currentStep === 5 && (
-          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
           <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
 
-          {/* Selected Pair Display */}
+          {/* Selected Pair Display - Compact */}
           {formData.pair && (
-            <div className={`border-2 rounded-2xl p-4 ${darkMode ? 'border-teal-600 bg-teal-600/10' : 'border-teal-500 bg-teal-500/10'}`}>
-              <div className="flex items-center gap-3">
-                <Target className="w-5 h-5 text-teal-600" />
+            <div className={`border-2 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${darkMode ? 'border-teal-600 bg-teal-600/10' : 'border-teal-500 bg-teal-500/10'}`}>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 flex-shrink-0" />
                 <div>
-                  <div className="text-xs text-teal-600 tracking-wider mb-0.5">AUSGEWÄHLTES PAAR</div>
-                  <div className={`text-2xl font-bold tracking-wider ${theme.text}`}>{formData.pair}</div>
+                  <div className="text-[10px] sm:text-xs text-teal-600 tracking-wider">PAIR</div>
+                  <div className={`text-lg sm:text-xl md:text-2xl font-bold tracking-wider ${theme.text}`}>{formData.pair}</div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Live Market Data - Price Only */}
+          {/* Live Market Data - Compact */}
           {formData.pair && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
@@ -751,40 +742,37 @@ export default function ChecklistPage() {
 
           {/* STEP 6: Final */}
           {currentStep === 6 && (
-            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
-              {/* Final Rule Confirmation - Enhanced */}
-              <div className={`border-2 rounded-2xl p-6 ${darkMode ? 'border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950' : 'border-zinc-300 bg-gradient-to-br from-zinc-100 to-zinc-50'}`}>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
-                    <Shield className={`w-7 h-7 ${darkMode ? 'text-black' : 'text-white'}`} />
+              {/* Final Rule Confirmation - Compact */}
+              <div className={`border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 ${darkMode ? 'border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950' : 'border-zinc-300 bg-gradient-to-br from-zinc-100 to-zinc-50'}`}>
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-5">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                    <Shield className={`w-4 h-4 sm:w-5 sm:h-5 md:w-7 md:h-7 ${darkMode ? 'text-black' : 'text-white'}`} />
                   </div>
                   <div>
-                    <div className={`${theme.text} font-bold tracking-widest text-lg`}>{t('confirmRule')}</div>
-                    <div className={`${theme.textMuted} text-xs font-sans`}>Bestätige die ZNPCV Goldene Regel</div>
+                    <div className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm md:text-base lg:text-lg`}>{t('confirmRule')}</div>
+                    <div className={`${theme.textMuted} text-[10px] sm:text-xs font-sans`}>ZNPCV Regel</div>
                   </div>
                 </div>
                 
                 {formData.direction === 'long' && (
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-5 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
+                    className={cn("w-full p-3 sm:p-4 md:p-5 border-2 rounded-lg sm:rounded-xl flex items-center gap-2.5 sm:gap-3 md:gap-4 transition-all text-left",
                       formData.confirms_rule 
                         ? "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/20" 
                         : darkMode ? "border-zinc-700 hover:border-teal-600/50 bg-zinc-900" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50")}>
-                    <div className={cn("w-8 h-8 border-2 flex items-center justify-center rounded-xl transition-all",
+                    <div className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 border-2 flex items-center justify-center rounded-lg sm:rounded-xl transition-all flex-shrink-0",
                       formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-5 h-5 text-teal-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-teal-600" strokeWidth={3} />}
                     </div>
-                    <div className="flex-1">
-                      <div className={cn("font-bold tracking-wider text-base mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                    <div className="flex-1 min-w-0">
+                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm md:text-base mb-0.5 sm:mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-xs font-sans", formData.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
+                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
                         ✓ {t('notBuyResistance')}
-                      </div>
-                      <div className={cn("text-xs font-sans mt-1", formData.confirms_rule ? "text-teal-100/70" : "text-zinc-500")}>
-                        ✓ Nur im Support-Bereich kaufen
                       </div>
                     </div>
                   </button>
@@ -792,65 +780,62 @@ export default function ChecklistPage() {
                 
                 {formData.direction === 'short' && (
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-5 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
+                    className={cn("w-full p-3 sm:p-4 md:p-5 border-2 rounded-lg sm:rounded-xl flex items-center gap-2.5 sm:gap-3 md:gap-4 transition-all text-left",
                       formData.confirms_rule 
                         ? "bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-600/20" 
                         : darkMode ? "border-zinc-700 hover:border-rose-600/50 bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50")}>
-                    <div className={cn("w-8 h-8 border-2 flex items-center justify-center rounded-xl transition-all",
+                    <div className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 border-2 flex items-center justify-center rounded-lg sm:rounded-xl transition-all flex-shrink-0",
                       formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-5 h-5 text-rose-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-rose-600" strokeWidth={3} />}
                     </div>
-                    <div className="flex-1">
-                      <div className={cn("font-bold tracking-wider text-base mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                    <div className="flex-1 min-w-0">
+                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm md:text-base mb-0.5 sm:mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('sellInBelowAoi')}
                       </div>
-                      <div className={cn("text-xs font-sans", formData.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
+                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
                         ✓ {t('notSellSupport')}
-                      </div>
-                      <div className={cn("text-xs font-sans mt-1", formData.confirms_rule ? "text-rose-100/70" : "text-zinc-500")}>
-                        ✓ Nur im Resistance-Bereich verkaufen
                       </div>
                     </div>
                   </button>
                 )}
 
                 {!formData.direction && (
-                  <div className={`${theme.textMuted} text-center py-8 font-sans`}>
-                    <Shield className={`w-12 h-12 mx-auto mb-3 ${theme.textMuted}`} />
-                    <div className="text-sm">{t('selectDirFirst')}</div>
+                  <div className={`${theme.textMuted} text-center py-6 sm:py-8 font-sans`}>
+                    <Shield className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-2 sm:mb-3 ${theme.textMuted}`} />
+                    <div className="text-xs sm:text-sm">{t('selectDirFirst')}</div>
                   </div>
                 )}
               </div>
 
-              {/* Trade Summary */}
-              <div className={`border ${theme.borderCard} rounded-2xl p-5 ${theme.bgSecondary}`}>
-                <h3 className={`${theme.text} font-bold tracking-widest mb-4`}>{t('tradeSummary')}</h3>
+              {/* Trade Summary - Compact */}
+              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 ${theme.bgSecondary}`}>
+                <h3 className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm md:text-base mb-3 sm:mb-4`}>{t('tradeSummary')}</h3>
                 
-                <div className="space-y-2">
-                  <SummaryRow label="PAAR" value={formData.pair || '-'} />
-                  <SummaryRow label="RICHTUNG" 
+                <div className="space-y-1.5 sm:space-y-2">
+                  <SummaryRow label="PAIR" value={formData.pair || '-'} />
+                  <SummaryRow label="DIR" 
                     value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
                     color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
-                  <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
-                  <SummaryRow label="WEEKLY" value={`${weeklyScore}/60%`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
-                  <SummaryRow label="DAILY" value={`${dailyScore}/60%`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
-                  <SummaryRow label="4H SCORE" value={`${h4Score}/35%`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
-                  <SummaryRow label="ENTRY SCORE" value={`${entryScore}/25%`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
+                  <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
+                  <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
+                  <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
+                  <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
+                  <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
                   {riskCalc && (
                     <>
-                      <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
-                      <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
-                      <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${formData.risk_percent}%)`} color="rose" />
+                      <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
+                      <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
+                      <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
                     </>
                   )}
                 </div>
               </div>
 
-              {/* Notes */}
+              {/* Notes - Compact */}
               <div>
-                <label className={`block ${theme.textMuted} tracking-widest text-sm mb-2`}>{t('notesOptional')}</label>
+                <label className={`block ${theme.textMuted} tracking-widest text-[10px] sm:text-xs mb-1.5 sm:mb-2`}>{t('notesOptional')}</label>
                 <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
-                  className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[80px] rounded-xl font-sans`} />
+                  className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[60px] sm:min-h-[80px] rounded-lg sm:rounded-xl font-sans text-xs sm:text-sm`} />
               </div>
 
               {/* Screenshot Upload */}
@@ -869,60 +854,60 @@ export default function ChecklistPage() {
                 }}
               />
 
-              {/* Final Grade */}
+              {/* Final Grade - Compact */}
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className={cn("p-8 text-center rounded-2xl border-2",
+                className={cn("p-5 sm:p-6 md:p-8 text-center rounded-lg sm:rounded-xl md:rounded-2xl border-2",
                   progress >= 100 ? "bg-teal-600 border-teal-500" :
                   progress >= 90 ? "bg-teal-500 border-teal-400" :
                   progress >= 85 ? "bg-blue-500 border-blue-400" :
                   progress >= 70 ? "bg-amber-500 border-amber-400" :
                   "bg-zinc-900 border-rose-600")}>
-                <div className={cn("text-5xl font-bold mb-1", progress >= 70 ? "text-black" : "text-white")}>{gradeInfo.grade}</div>
-                <div className={cn("text-3xl tracking-widest mb-2", progress >= 70 ? "text-black/80" : "text-white")}>{progress}%</div>
+                <div className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-1", progress >= 70 ? "text-black" : "text-white")}>{gradeInfo.grade}</div>
+                <div className={cn("text-xl sm:text-2xl md:text-3xl tracking-widest mb-1 sm:mb-2", progress >= 70 ? "text-black/80" : "text-white")}>{progress}%</div>
                 {progress >= 85 ? (
-                  <div className={cn("text-sm font-sans", progress >= 70 ? "text-black/60" : "text-white/60")}>✓ {t('readyToTradeLabel')}</div>
+                  <div className={cn("text-xs sm:text-sm font-sans", progress >= 70 ? "text-black/60" : "text-white/60")}>✓ {t('readyToTradeLabel')}</div>
                 ) : (
-                  <div className="text-sm font-sans text-white/80">
+                  <div className="text-xs sm:text-sm font-sans text-white/80">
                     {t('notRecommended')}
                   </div>
                 )}
               </motion.div>
 
-              {/* Score Breakdown */}
-              <div className={`p-3 sm:p-4 ${theme.bgSecondary} border ${theme.borderCard} rounded-xl`}>
-                <div className={`text-[10px] sm:text-xs ${theme.textDimmed} tracking-widest mb-2 sm:mb-3 text-center`}>{t('pointsBreakdown')}</div>
-                <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-center text-xs sm:text-sm">
-                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>WEEKLY</div>
-                    <div className={`${theme.text} font-bold`}>{weeklyScore}/60</div>
+              {/* Score Breakdown - Compact */}
+              <div className={`p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
+                <div className={`text-[9px] sm:text-[10px] md:text-xs ${theme.textDimmed} tracking-widest mb-2 text-center`}>{t('pointsBreakdown')}</div>
+                <div className="grid grid-cols-4 gap-1 sm:gap-1.5 md:gap-2 text-center">
+                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>W</div>
+                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{weeklyScore}/60</div>
                   </div>
-                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>DAILY</div>
-                    <div className={`${theme.text} font-bold`}>{dailyScore}/60</div>
+                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>D</div>
+                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{dailyScore}/60</div>
                   </div>
-                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>4H</div>
-                    <div className={`${theme.text} font-bold`}>{h4Score}/35</div>
+                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>4H</div>
+                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{h4Score}/35</div>
                   </div>
-                  <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px] sm:text-xs`}>ENTRY</div>
-                    <div className={`${theme.text} font-bold`}>{entryScore}/25</div>
+                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
+                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>E</div>
+                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{entryScore}/25</div>
                   </div>
                 </div>
-                <div className={`mt-2 p-1.5 sm:p-2 rounded-lg text-center font-bold text-sm sm:text-base ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                  {t('total')}: {progress}/180%
+                <div className={`mt-1.5 sm:mt-2 p-1.5 sm:p-2 rounded-md sm:rounded-lg text-center font-bold text-xs sm:text-sm md:text-base ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                  {t('total')}: {progress}/180
                 </div>
               </div>
 
-              {/* ZNPCV Logo */}
-            <div className="flex justify-center items-center my-8">
+              {/* ZNPCV Logo - Compact */}
+            <div className="flex justify-center items-center my-4 sm:my-6 md:my-8">
               <img 
                 src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-20 sm:h-24 md:h-28 w-auto opacity-30"
+                className="h-14 sm:h-20 md:h-24 lg:h-28 w-auto opacity-30"
               />
             </div>
 
@@ -931,48 +916,48 @@ export default function ChecklistPage() {
           )}
         </AnimatePresence>
 
-        {/* Navigation Buttons */}
-        <div className="mt-6 sm:mt-8 md:mt-10 flex gap-2 sm:gap-3">
+        {/* Navigation Buttons - Compact */}
+        <div className="mt-4 sm:mt-6 md:mt-8 flex gap-1.5 sm:gap-2 md:gap-3">
           {currentStep > 0 && (
             <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" 
-              className={`rounded-xl tracking-widest px-5 h-12 border-2 ${
+              className={`rounded-lg sm:rounded-xl tracking-widest px-3 sm:px-4 md:px-5 h-10 sm:h-11 md:h-12 border-2 text-xs sm:text-sm md:text-base ${
                 darkMode 
                   ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:border-zinc-700' 
                   : 'border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400'
               }`}>
-              <ChevronLeft className="w-4 h-4 mr-1" /> {t('back')}
+              <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" /> <span className="hidden sm:inline">{t('back')}</span>
             </Button>
           )}
           
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={() => setCurrentStep(prev => prev + 1)} 
-              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2 ${
+              className={`flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2 ${
                 darkMode 
                   ? 'bg-white hover:bg-zinc-200 text-black border-white' 
                   : 'bg-black hover:bg-zinc-800 text-white border-black'
               }`}>
-              {t('next')} <ChevronRight className="w-4 h-4 ml-1" />
+              {t('next')} <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
             </Button>
           ) : (
-            <div className="flex-1 flex gap-2">
+            <div className="flex-1 flex gap-1.5 sm:gap-2">
               {checklistId && (
                 <Button onClick={handleDelete} variant="outline" 
-                  className={`rounded-xl px-4 h-12 border-2 ${
+                  className={`rounded-lg sm:rounded-xl px-2.5 sm:px-3 md:px-4 h-10 sm:h-11 md:h-12 border-2 ${
                     darkMode 
                       ? 'border-rose-600 text-rose-400 hover:bg-rose-600/10' 
                       : 'border-red-600 text-red-600 hover:bg-red-50'
                   }`}>
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
               )}
               <Button onClick={() => handleSave(false)} disabled={saving || !formData.pair}
-                className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2",
+                className={cn("flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2",
                   isReady 
                     ? "bg-teal-600 hover:bg-teal-700 text-white border-teal-600" 
                     : darkMode 
                       ? "bg-white hover:bg-zinc-200 text-black border-white" 
                       : "bg-black hover:bg-zinc-800 text-white border-black")}>
-                <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
+                <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
             </div>
           )}
@@ -1029,10 +1014,10 @@ export default function ChecklistPage() {
 function StepHeader({ number, title, subtitle }) {
   const { darkMode } = useLanguage();
   return (
-    <div className="text-center mb-4 sm:mb-6">
-      <div className={`text-3xl sm:text-5xl font-light mb-1 ${darkMode ? 'text-zinc-800' : 'text-zinc-300'}`}>{number}</div>
-      <h2 className={`text-xl sm:text-2xl md:text-3xl tracking-widest mb-1 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
-      <p className={`text-xs sm:text-sm tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{subtitle}</p>
+    <div className="text-center mb-3 sm:mb-4 md:mb-6">
+      <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-0.5 sm:mb-1 ${darkMode ? 'text-zinc-800' : 'text-zinc-300'}`}>{number}</div>
+      <h2 className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl tracking-widest mb-0.5 sm:mb-1 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
+      <p className={`text-[10px] sm:text-xs md:text-sm tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'} px-2`}>{subtitle}</p>
     </div>
   );
 }
@@ -1144,9 +1129,9 @@ function SummaryRow({ label, value, color }) {
   };
   
   return (
-    <div className="flex justify-between items-center py-2">
-      <span className={`text-xs tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{label}</span>
-      <span className={cn("font-bold text-sm", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
+    <div className="flex justify-between items-center py-1 sm:py-1.5 md:py-2">
+      <span className={`text-[10px] sm:text-xs tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{label}</span>
+      <span className={cn("font-bold text-xs sm:text-sm", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
     </div>
   );
 }
@@ -1177,38 +1162,38 @@ function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
 
   return (
     <div>
-      <label className={`block ${theme.textSecondary} tracking-widest text-sm mb-3`}>
-        SCREENSHOTS (OPTIONAL)
+      <label className={`block ${theme.textSecondary} tracking-widest text-[10px] sm:text-xs mb-2 sm:mb-3`}>
+        SCREENSHOTS
       </label>
       
       {screenshots && screenshots.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 mb-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-2 sm:mb-3">
           {screenshots.map((url, index) => (
             <div key={index} className="relative group">
-              <img src={url} alt={`Screenshot ${index + 1}`} className={`w-full h-32 object-cover rounded-xl border-2 ${theme.border}`} />
+              <img src={url} alt={`Screenshot ${index + 1}`} className={`w-full h-24 sm:h-28 md:h-32 object-cover rounded-lg sm:rounded-xl border-2 ${theme.border}`} />
               <button 
                 onClick={() => onDelete(url)}
-                className="absolute top-2 right-2 p-1.5 bg-rose-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                <Trash2 className="w-3 h-3" />
+                className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 p-1 sm:p-1.5 bg-rose-600 text-white rounded-md sm:rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                <Trash2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
               </button>
             </div>
           ))}
         </div>
       )}
 
-      <label className={cn("flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all",
+      <label className={cn("flex flex-col items-center justify-center p-4 sm:p-5 md:p-6 border-2 border-dashed rounded-lg sm:rounded-xl cursor-pointer transition-all",
         uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950" : "border-zinc-300 hover:border-zinc-400 bg-zinc-100")}>
         <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploadingLocal} />
         {uploadingLocal ? (
           <>
-            <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mb-2" />
-            <span className={`text-sm ${theme.textSecondary}`}>Hochladen...</span>
+            <div className="animate-spin w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 border-2 border-white border-t-transparent rounded-full mb-1.5 sm:mb-2" />
+            <span className={`text-xs sm:text-sm ${theme.textSecondary}`}>Uploading...</span>
           </>
         ) : (
           <>
-            <Upload className={`w-8 h-8 mb-2 ${theme.textSecondary}`} />
-            <span className={`text-sm ${theme.text} font-bold tracking-wider`}>SCREENSHOTS HOCHLADEN</span>
-            <span className={`text-xs ${theme.textSecondary} mt-1`}>Chart-Screenshots vom Trade Setup</span>
+            <Upload className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mb-1.5 sm:mb-2 ${theme.textSecondary}`} />
+            <span className={`text-xs sm:text-sm font-bold tracking-wider ${theme.text}`}>UPLOAD</span>
+            <span className={`text-[10px] sm:text-xs ${theme.textSecondary} mt-0.5 sm:mt-1`}>Chart Screenshots</span>
           </>
         )}
       </label>
