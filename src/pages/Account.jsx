@@ -107,6 +107,20 @@ export default function AccountPage() {
     navigate(createPageUrl('Home'));
   };
 
+  const handleDeleteAccount = async () => {
+    if (window.confirm('WARNUNG: Möchten Sie Ihr Konto wirklich dauerhaft löschen? Alle Ihre Daten werden unwiderruflich gelöscht.')) {
+      if (window.confirm('Dies kann nicht rückgängig gemacht werden. Sind Sie absolut sicher?')) {
+        try {
+          await base44.asServiceRole.entities.User.delete(user.id);
+          await base44.auth.logout();
+          navigate(createPageUrl('Home'));
+        } catch (err) {
+          alert('Fehler beim Löschen des Kontos. Bitte kontaktieren Sie den Support.');
+        }
+      }
+    }
+  };
+
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
     bgCard: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
@@ -125,13 +139,13 @@ export default function AccountPage() {
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
-      <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 sm:gap-4">
+      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
+        <div className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
               <DarkModeToggle />
-              <button onClick={() => navigate(-1)} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                <Home className="w-6 h-6" />
+              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
+                <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </button>
               <button onClick={() => navigate(createPageUrl('Home'))}>
                 <img 
@@ -140,67 +154,66 @@ export default function AccountPage() {
                     : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
                   alt="ZNPCV" 
-                  className="h-10 sm:h-12 w-auto cursor-pointer"
+                  className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer"
                 />
               </button>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2">
               <LanguageToggle />
-              <AccountButton />
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+      <main className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-4xl tracking-widest mb-8">MEIN ACCOUNT</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-4 sm:mb-6 md:mb-8">ACCOUNT</h1>
 
           {/* Profile Header */}
-          <div className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-8 mb-6 ${theme.bgCard}`}>
-            <div className="flex flex-col sm:flex-row items-start gap-6 mb-6">
+          <div className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 mb-3 sm:mb-4 md:mb-6 ${theme.bgCard}`}>
+            <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6">
               {/* Profile Image */}
-              <div className="relative group">
-                <div className={`w-24 h-24 rounded-full flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+              <div className="relative group mx-auto sm:mx-0">
+                <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
                   {user.profile_image ? (
                     <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
-                    <User className={`w-12 h-12 ${darkMode ? 'text-black' : 'text-white'}`} />
+                    <User className={`w-10 h-10 sm:w-12 sm:h-12 ${darkMode ? 'text-black' : 'text-white'}`} />
                   )}
                 </div>
                 <label className={`absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer`}>
                   <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
                   {uploading ? (
-                    <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full" />
+                    <div className="animate-spin w-5 h-5 sm:w-6 sm:h-6 border-2 border-white border-t-transparent rounded-full" />
                   ) : (
-                    <Camera className="w-6 h-6 text-white" />
+                    <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   )}
                 </label>
               </div>
 
               {/* Name & Edit */}
               <div className="flex-1 w-full">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <div className={`text-xs tracking-wider ${theme.textSecondary} mb-2`}>VOLLSTÄNDIGER NAME</div>
+                <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1 sm:mb-2`}>NAME</div>
                     {editing ? (
                       <Input
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        className={`font-bold text-lg ${theme.border} mb-4`}
+                        className={`font-bold text-sm sm:text-base md:text-lg ${theme.border} mb-2 sm:mb-4 h-9 sm:h-10`}
                         placeholder="Dein Name"
                       />
                     ) : (
-                      <div className={`text-2xl font-bold ${theme.text} mb-1`}>{user.full_name || '-'}</div>
+                      <div className={`text-lg sm:text-xl md:text-2xl font-bold ${theme.text} mb-1 truncate`}>{user.full_name || '-'}</div>
                     )}
-                    <div className={`text-sm ${theme.textSecondary}`}>{user.email}</div>
+                    <div className={`text-xs sm:text-sm ${theme.textSecondary} truncate`}>{user.email}</div>
                   </div>
-                  <div className="flex gap-2 ml-4">
+                  <div className="flex gap-1 sm:gap-2 flex-shrink-0">
                     {editing ? (
                       <>
-                        <Button onClick={handleSave} disabled={saving} className={`${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
-                          <Save className="w-4 h-4 mr-2" />
-                          {saving ? 'SPEICHERN...' : 'SPEICHERN'}
+                        <Button onClick={handleSave} disabled={saving} size="sm" className={`h-8 sm:h-9 md:h-10 text-xs sm:text-sm ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                          <Save className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">{saving ? 'SAVE...' : 'SAVE'}</span>
                         </Button>
                         <Button onClick={() => { 
                           setEditing(false); 
@@ -213,14 +226,14 @@ export default function AccountPage() {
                           setAddressCity(user.address_city || '');
                           setAddressPostalCode(user.address_postal_code || '');
                           setAddressCountry(user.address_country || '');
-                        }} variant="outline" className={`${theme.border}`}>
-                          <X className="w-4 h-4" />
+                        }} variant="outline" size="sm" className={`${theme.border} h-8 sm:h-9 md:h-10`}>
+                          <X className="w-3 h-3 sm:w-4 sm:h-4" />
                         </Button>
                       </>
                     ) : (
-                      <Button onClick={() => setEditing(true)} variant="outline" className={`${theme.border}`}>
-                        <Edit2 className="w-4 h-4 mr-2" />
-                        BEARBEITEN
+                      <Button onClick={() => setEditing(true)} variant="outline" size="sm" className={`${theme.border} h-8 sm:h-9 md:h-10 text-xs sm:text-sm`}>
+                        <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+                        <span className="hidden sm:inline">EDIT</span>
                       </Button>
                     )}
                   </div>
@@ -228,43 +241,43 @@ export default function AccountPage() {
 
                 {/* Bio */}
                 {editing && (
-                  <div className="mb-4">
-                    <div className={`text-xs tracking-wider ${theme.textSecondary} mb-2`}>BIO</div>
+                  <div className="mb-3 sm:mb-4">
+                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1.5 sm:mb-2`}>BIO</div>
                     <Textarea
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       placeholder="Erzähl etwas über dich..."
-                      className={`${theme.border} h-20 resize-none`}
+                      className={`${theme.border} h-16 sm:h-20 resize-none text-xs sm:text-sm`}
                     />
                   </div>
                 )}
                 {!editing && bio && (
-                  <div className="mb-4">
-                    <div className={`text-xs tracking-wider ${theme.textSecondary} mb-1`}>BIO</div>
-                    <p className={`text-sm ${theme.text}`}>{bio}</p>
+                  <div className="mb-3 sm:mb-4">
+                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1`}>BIO</div>
+                    <p className={`text-xs sm:text-sm ${theme.text}`}>{bio}</p>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className={`p-4 border ${theme.border} rounded-xl`}>
-                <div className="flex items-center gap-3 mb-2">
-                  <Mail className={`w-5 h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>E-MAIL</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+              <div className={`p-3 sm:p-4 border ${theme.border} rounded-lg sm:rounded-xl`}>
+                <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
+                  <Mail className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>EMAIL</span>
                 </div>
-                <div className={`text-base ${theme.text} break-all`}>{user.email}</div>
+                <div className={`text-xs sm:text-sm md:text-base ${theme.text} break-all`}>{user.email}</div>
               </div>
 
-              <div className={`p-4 border ${theme.border} rounded-xl sm:col-span-2`}>
-                <div className="flex items-center gap-3 mb-2">
-                  <Phone className={`w-5 h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>TELEFON</span>
+              <div className={`p-3 sm:p-4 border ${theme.border} rounded-lg sm:rounded-xl sm:col-span-2`}>
+                <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
+                  <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>PHONE</span>
                 </div>
                 {editing ? (
                   <div className="flex gap-2">
                     <Select value={phoneCountryCode} onValueChange={setPhoneCountryCode}>
-                      <SelectTrigger className={`w-32 ${theme.border}`}>
+                      <SelectTrigger className={`w-24 sm:w-32 ${theme.border} h-9 sm:h-10 text-xs sm:text-sm`}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="max-h-[300px]">
@@ -279,11 +292,11 @@ export default function AccountPage() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
                       placeholder="123456789"
-                      className={`flex-1 ${theme.border} h-9`}
+                      className={`flex-1 ${theme.border} h-9 sm:h-10 text-xs sm:text-sm`}
                     />
                   </div>
                 ) : (
-                  <div className={`text-base ${theme.text}`}>
+                  <div className={`text-xs sm:text-sm md:text-base ${theme.text}`}>
                     {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
                   </div>
                 )}
@@ -338,10 +351,10 @@ export default function AccountPage() {
           </div>
 
           {/* Address Section (Optional) */}
-          <div className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-8 mb-6 ${theme.bgCard}`}>
-            <h3 className={`text-xl tracking-widest mb-4 ${theme.text} flex items-center gap-2`}>
-              <MapPin className="w-5 h-5" />
-              ADRESSE (OPTIONAL)
+          <div className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 mb-3 sm:mb-4 md:mb-6 ${theme.bgCard}`}>
+            <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest mb-3 sm:mb-4 ${theme.text} flex items-center gap-1.5 sm:gap-2`}>
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+              ADRESSE
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className={`sm:col-span-2`}>
@@ -418,28 +431,44 @@ export default function AccountPage() {
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
             <Button 
               onClick={() => navigate(createPageUrl('Home'))} 
               variant="outline" 
-              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest ${theme.border}`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
             >
-              <Home className="w-4 h-4 sm:w-5 sm:h-5 sm:mr-2" />
+              <Home className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 sm:mr-2" />
               <span className="hidden sm:inline">HOME</span>
             </Button>
             <Button 
               onClick={() => navigate(createPageUrl('Dashboard'))} 
               variant="outline" 
-              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest ${theme.border}`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
             >
               DASHBOARD
             </Button>
             <Button 
               onClick={handleLogout} 
-              className={`h-12 sm:h-14 text-sm sm:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white`}
             >
-              <LogOut className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              AUSLOGGEN
+              <LogOut className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">AUSLOGGEN</span>
+              <span className="xs:hidden">OUT</span>
+            </Button>
+          </div>
+
+          {/* Delete Account */}
+          <div className={`border-2 border-rose-600/30 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 bg-rose-600/5`}>
+            <h3 className="text-rose-600 text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 font-bold">GEFAHRENZONE</h3>
+            <p className={`${theme.textSecondary} text-xs sm:text-sm mb-3 sm:mb-4 font-sans`}>
+              Das Löschen Ihres Kontos ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden unwiderruflich gelöscht.
+            </p>
+            <Button 
+              onClick={handleDeleteAccount}
+              variant="outline"
+              className="border-2 border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold"
+            >
+              KONTO DAUERHAFT LÖSCHEN
             </Button>
           </div>
         </motion.div>
