@@ -13,6 +13,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart a
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
+import PerformanceChart from '@/components/advanced/PerformanceChart';
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -147,8 +148,10 @@ export default function DashboardPage() {
               </button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-
-
+              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all ${darkMode ? 'border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400'}`}>
+                <Activity className="w-4 h-4" />
+                <span className="text-xs tracking-wider font-bold">HISTORY</span>
+              </button>
               <LanguageToggle />
               <AccountButton />
               <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl tracking-widest font-bold ${darkMode ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-zinc-900 hover:bg-zinc-800 text-white'}`}>
@@ -191,7 +194,10 @@ export default function DashboardPage() {
           ))}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        {/* Performance Chart */}
+        <PerformanceChart checklists={checklists} darkMode={darkMode} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mt-6">
           {/* Left */}
           <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
             {/* Trade History */}

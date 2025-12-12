@@ -264,6 +264,7 @@ Return precise bid/ask prices. 5 decimals for standard pairs, 3 for JPY, 2 for G
           {['1000', '5000', '10000', '50000'].map((size) => (
             <button
               key={size}
+              type="button"
               onClick={() => {
                 setAccountSize(size);
                 setCustomAccount('');

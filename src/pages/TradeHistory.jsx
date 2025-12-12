@@ -13,6 +13,8 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import AccountButton from '@/components/AccountButton';
 import TradeEditModal from '@/components/advanced/TradeEditModal';
 import AdvancedMetrics from '@/components/advanced/AdvancedMetrics';
+import TradeFilters from '@/components/advanced/TradeFilters';
+import QuickStats from '@/components/advanced/QuickStats';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -59,6 +61,7 @@ export default function TradeHistoryPage() {
 
   const stats = useMemo(() => {
     const executedTrades = checklists.filter(t => t.outcome && t.outcome !== 'pending');
+    const pending = checklists.filter(t => !t.outcome || t.outcome === 'pending').length;
     const wins = executedTrades.filter(t => t.outcome === 'win').length;
     const losses = executedTrades.filter(t => t.outcome === 'loss').length;
     const breakeven = executedTrades.filter(t => t.outcome === 'breakeven').length;
@@ -67,11 +70,13 @@ export default function TradeHistoryPage() {
     const avgWin = wins > 0 ? (executedTrades.filter(t => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / wins).toFixed(2) : 0;
     const avgLoss = losses > 0 ? Math.abs(executedTrades.filter(t => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / losses).toFixed(2) : 0;
 
-    return { wins, losses, breakeven, totalPnL, winRate, avgWin, avgLoss, executedTrades };
+    return { wins, losses, breakeven, pending, totalPnL, winRate, avgWin, avgLoss, executedTrades };
   }, [checklists]);
 
   const filteredTrades = filter === 'all' 
     ? checklists 
+    : filter === 'pending'
+    ? checklists.filter(t => !t.outcome || t.outcome === 'pending')
     : checklists.filter(t => t.outcome === filter);
 
   const pieData = [
@@ -123,6 +128,9 @@ export default function TradeHistoryPage() {
           <p className={`${theme.textMuted} tracking-wider`}>Performance Analytics & Trade Log</p>
         </motion.div>
 
+        {/* Quick Stats */}
+        <QuickStats checklists={checklists} darkMode={darkMode} />
+
         {/* Advanced Metrics */}
         <AdvancedMetrics checklists={checklists} darkMode={darkMode} />
 
@@ -155,19 +163,9 @@ export default function TradeHistoryPage() {
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
-              <div className={`p-5 border-b ${theme.border} flex items-center justify-between`}>
-                <h3 className={`text-lg tracking-widest ${theme.text}`}>ALL TRADES</h3>
-                <div className="flex gap-2">
-                  {['all', 'win', 'loss', 'breakeven'].map((f) => (
-                    <button key={f} onClick={() => setFilter(f)}
-                      className={cn("px-3 py-1 text-xs tracking-wider rounded-lg transition-all",
-                        filter === f 
-                          ? darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
-                          : darkMode ? "bg-zinc-800 text-zinc-400 hover:text-white" : "bg-zinc-200 text-zinc-600 hover:text-black")}>
-                      {f.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
+              <div className={`p-4 sm:p-5 border-b ${theme.border}`}>
+                <h3 className={`text-base sm:text-lg tracking-widest ${theme.text} mb-3`}>ALL TRADES</h3>
+                <TradeFilters filter={filter} setFilter={setFilter} darkMode={darkMode} stats={stats} />
               </div>
               <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[700px] overflow-y-auto`}>
                 {filteredTrades.map((trade) => (
@@ -182,8 +180,16 @@ export default function TradeHistoryPage() {
                           trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
                           {(trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0) || (!trade.outcome && trade.direction === 'long') ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                         </div>
-                        <div>
-                          <div className={`text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <div className={`text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
+                            <div className={`px-2 py-0.5 rounded text-[9px] font-bold ${
+                              trade.completion_percentage >= 85 ? 'bg-teal-600/20 text-teal-600' : 
+                              trade.completion_percentage >= 70 ? 'bg-amber-500/20 text-amber-500' : 'bg-rose-600/20 text-rose-600'
+                            }`}>
+                              {Math.round(trade.completion_percentage || 0)}%
+                            </div>
+                          </div>
                           <div className={`text-xs ${theme.textMuted}`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</div>
                         </div>
                       </div>
@@ -201,23 +207,23 @@ export default function TradeHistoryPage() {
                           )}
                         </div>
                       )}
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <div className="text-right">
                           {trade.outcome && trade.actual_pnl && (
                             <>
-                              <div className={cn("text-lg font-bold",
+                              <div className={cn("text-base sm:text-lg font-bold",
                                 parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
                                 parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
                                 {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                               </div>
-                              <div className={cn("text-xs tracking-wider px-2 py-0.5 rounded-full",
+                              <div className={cn("text-[10px] sm:text-xs tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full",
                                 trade.outcome === 'win' ? 'bg-teal-600/20 text-teal-600' :
                                 trade.outcome === 'loss' ? 'bg-rose-600/20 text-rose-600' : 'bg-zinc-600/20 text-zinc-400')}>
                                 {trade.outcome.toUpperCase()}
                               </div>
                             </>
                           )}
-                          {!trade.outcome && <span className="px-3 py-1 bg-blue-500 text-white text-xs tracking-wider rounded-full">PENDING</span>}
+                          {!trade.outcome && <span className="px-2 sm:px-3 py-1 bg-blue-500 text-white text-[10px] sm:text-xs tracking-wider rounded-full font-bold">PENDING</span>}
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button onClick={(e) => handleEditTrade(e, trade)}
