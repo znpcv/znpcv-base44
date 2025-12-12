@@ -93,6 +93,7 @@ export default function PaymentPage() {
   const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const initPayment = async () => {
@@ -112,7 +113,7 @@ export default function PaymentPage() {
         // Demo mode: Create a test payment intent
         // In production, call your backend: const { clientSecret } = await base44.functions.createPaymentIntent({ amount: 9900 });
         
-        setErrorMessage('DEMO MODE: Configure Stripe backend integration to enable real payments');
+        setError('DEMO MODE: Configure Stripe backend integration to enable real payments');
         setClientSecret('demo_test_secret_placeholder');
       } catch (error) {
         console.error('Payment init error:', error);
@@ -165,6 +166,11 @@ export default function PaymentPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 text-sm text-center">
+            {error}
+          </div>
+        )}
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left - Info */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>

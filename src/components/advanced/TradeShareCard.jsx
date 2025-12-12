@@ -139,13 +139,13 @@ www.znpcv.com
 
   const shareToTikTok = async () => {
     await generateShareImage();
-    alert('Bild wurde heruntergeladen! Öffne TikTok und lade das Bild hoch.');
+    alert('✅ Screenshot gespeichert! Öffne TikTok → Erstellen → Bild hochladen');
   };
 
   const shareToInstagram = async () => {
     await generateShareImage();
     navigator.clipboard.writeText(shareTextInstagram);
-    alert('Bild heruntergeladen & Caption kopiert! Öffne Instagram und poste dein Trade Setup.');
+    alert('✅ Screenshot gespeichert & Caption kopiert!\n\nÖffne Instagram → Erstellen → Post → Bild hochladen → Caption einfügen');
   };
 
   return (
@@ -370,8 +370,10 @@ www.znpcv.com
         </button>
 
         {/* Tip */}
-        <div className={`mt-3 text-center text-[10px] ${theme.textSecondary}`}>
-          💡 Instagram/TikTok: Screenshot → Story/Post
+        <div className={`mt-3 p-3 rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'} text-center`}>
+          <div className={`text-[10px] ${theme.textSecondary} leading-relaxed`}>
+            💡 <strong>Tipp:</strong> Screenshot-Button nutzen für Instagram/TikTok Posts
+          </div>
         </div>
       </div>
     </div>
