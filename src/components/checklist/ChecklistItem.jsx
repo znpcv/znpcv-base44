@@ -3,57 +3,57 @@ import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
+import { useLanguage } from '@/components/LanguageContext';
+
 export default function ChecklistItem({ 
   label, 
   checked, 
   onChange, 
   description,
-  index 
+  weight
 }) {
+  const { darkMode } = useLanguage();
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.05 }}
+    <motion.button
+      type="button"
       onClick={() => onChange(!checked)}
+      whileTap={{ scale: 0.98 }}
       className={cn(
-        "group cursor-pointer p-4 border-b border-zinc-800/50 transition-all duration-300",
-        "hover:bg-zinc-900/50",
-        checked && "bg-[#4A5D23]/10"
+        "w-full p-4 rounded-xl border-2 transition-all text-left group relative overflow-hidden",
+        checked 
+          ? "bg-teal-600 border-teal-600" 
+          : darkMode 
+            ? "bg-zinc-900 border-zinc-800 hover:border-teal-600/50"
+            : "bg-white border-zinc-200 hover:border-teal-600/50"
       )}
     >
-      <div className="flex items-center gap-4">
-        <div 
-          className={cn(
-            "w-6 h-6 rounded border-2 flex items-center justify-center transition-all duration-300",
-            checked 
-              ? "bg-[#4A5D23] border-[#4A5D23]" 
-              : "border-zinc-600 group-hover:border-zinc-400"
-          )}
-        >
-          {checked && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 500 }}
-            >
-              <Check className="w-4 h-4 text-white" strokeWidth={3} />
-            </motion.div>
-          )}
+      {weight && (
+        <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold",
+          checked ? "bg-white/20 text-white" : "bg-teal-600/10 text-teal-600")}>
+          +{weight}%
         </div>
-        
+      )}
+      <div className="flex items-start gap-3">
+        <div className={cn(
+          "w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all",
+          checked ? "bg-white border-white" : darkMode ? "border-zinc-700" : "border-zinc-400"
+        )}>
+          {checked && <Check className="w-4 h-4 text-teal-600" strokeWidth={3} />}
+        </div>
         <div className="flex-1">
-          <p className={cn(
-            "font-medium transition-all duration-300",
-            checked ? "text-zinc-400 line-through" : "text-white"
-          )}>
+          <div className={cn("text-sm font-bold tracking-wider mb-1", 
+            checked ? "text-white" : darkMode ? "text-white" : "text-black")}>
             {label}
-          </p>
+          </div>
           {description && (
-            <p className="text-sm text-zinc-500 mt-1">{description}</p>
+            <div className={cn("text-xs leading-relaxed", 
+              checked ? "text-teal-100" : darkMode ? "text-zinc-500" : "text-zinc-600")}>
+              {description}
+            </div>
           )}
         </div>
       </div>
-    </motion.div>
+    </motion.button>
   );
 }
