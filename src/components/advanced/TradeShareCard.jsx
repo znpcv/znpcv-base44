@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Share2, Twitter, Send, Instagram, Copy, Download, Check, MessageCircle } from 'lucide-react';
+import { Share2, Twitter, Send, Instagram, Copy, Download, Check, MessageCircle, Sparkles, Award } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import html2canvas from 'html2canvas';
+import { format } from 'date-fns';
 
 export default function TradeShareCard({ trade, darkMode }) {
   const [copied, setCopied] = useState(false);
@@ -46,42 +47,74 @@ export default function TradeShareCard({ trade, darkMode }) {
       const element = shareCardRef.current;
       const canvas = await html2canvas(element, {
         backgroundColor: darkMode ? '#000000' : '#ffffff',
-        scale: 2,
+        scale: 3,
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
       });
       
-      const blob = await new Promise(resolve => canvas.toBlob(resolve));
-      const file = new File([blob], `znpcv-trade-${trade.pair}.png`, { type: 'image/png' });
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+      const file = new File([blob], `ZNPCV-${trade.pair}-${format(new Date(), 'yyyy-MM-dd')}.png`, { type: 'image/png' });
       
       if (navigator.share && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
-          title: `ZNPCV Trade: ${trade.pair}`,
-          text: `${trade.pair} • ${trade.direction?.toUpperCase()} • Score: ${scores.total}%\n\nZNPCV Trading Checklist`,
+          title: `ZNPCV Trade Analysis: ${trade.pair}`,
+          text: shareText,
         });
       } else {
-        const url = canvas.toDataURL();
+        const url = canvas.toDataURL('image/png', 1.0);
         const link = document.createElement('a');
-        link.download = `znpcv-trade-${trade.pair}.png`;
+        link.download = `ZNPCV-${trade.pair}-${format(new Date(), 'yyyy-MM-dd')}.png`;
         link.href = url;
         link.click();
       }
     } catch (error) {
       console.error('Share failed:', error);
+      alert('Screenshot konnte nicht erstellt werden. Bitte versuche es erneut.');
     } finally {
       setGenerating(false);
     }
   };
 
-  const shareText = `🎯 ZNPCV Trade Analysis
+  const shareText = `🎯 ZNPCV TRADE ANALYSIS
+
+━━━━━━━━━━━━━━━━━━━
+📊 ${trade.pair} • ${trade.direction?.toUpperCase()}
+━━━━━━━━━━━━━━━━━━━
+
+📈 MULTI-TIMEFRAME CONFLUENCE:
+   ├─ Weekly: ${scores.weekly}%
+   ├─ Daily: ${scores.daily}%
+   ├─ 4H: ${scores.h4}%
+   └─ Entry: ${scores.entry}%
+
+⚡ ZNPCV SCORE: ${scores.total}%
+${scores.total >= 85 ? '✅ A+++ TRADE SETUP' : '⚠️ BELOW A+++ STANDARD'}
+
+${trade.outcome ? `📊 OUTCOME: ${trade.outcome.toUpperCase()}` : '⏳ STATUS: PENDING'}
+${trade.actual_pnl ? `💰 P&L: ${parseFloat(trade.actual_pnl) > 0 ? '+' : ''}$${trade.actual_pnl}` : ''}
+${trade.entry_price ? `📍 Entry: ${trade.entry_price}` : ''}
+${trade.stop_loss ? `🛡️ SL: ${trade.stop_loss}` : ''}
+${trade.take_profit ? `🎯 TP: ${trade.take_profit}` : ''}
+
+━━━━━━━━━━━━━━━━━━━
+Discipline beats talent. Every day.
+
+🌐 www.znpcv.com
+#ZNPCV #TradingDiscipline #ForexTrading`;
+
+  const shareTextInstagram = `🎯 ZNPCV TRADE
 
 ${trade.pair} • ${trade.direction?.toUpperCase()}
-✅ Score: ${scores.total}%
+SCORE: ${scores.total}% ${scores.total >= 85 ? '✅' : '⚠️'}
 
-${trade.outcome ? `Result: ${trade.outcome.toUpperCase()}` : 'Status: PENDING'}
-${trade.actual_pnl ? `P&L: $${trade.actual_pnl}` : ''}
+${trade.outcome ? `${trade.outcome.toUpperCase()} ${trade.actual_pnl ? `• ${parseFloat(trade.actual_pnl) > 0 ? '+' : ''}$${trade.actual_pnl}` : ''}` : 'PENDING'}
 
-Trade with discipline. Trade with ZNPCV.
-www.znpcv.com`;
+Discipline beats talent.
+www.znpcv.com
+
+#ZNPCV #Trading #Forex #PriceAction #TechnicalAnalysis #DayTrading #SwingTrading #TradingStrategy #ForexTrader #A+++`;
 
   const handleCopyText = () => {
     navigator.clipboard.writeText(shareText);
@@ -100,127 +133,251 @@ www.znpcv.com`;
   };
 
   const shareToTelegram = () => {
-    const url = `https://t.me/share/url?url=www.znpcv.com&text=${encodeURIComponent(shareText)}`;
+    const url = `https://t.me/share/url?url=https://www.znpcv.com&text=${encodeURIComponent(shareText)}`;
     window.open(url, '_blank');
+  };
+
+  const shareToTikTok = async () => {
+    await generateShareImage();
+    alert('Bild wurde heruntergeladen! Öffne TikTok und lade das Bild hoch.');
+  };
+
+  const shareToInstagram = async () => {
+    await generateShareImage();
+    navigator.clipboard.writeText(shareTextInstagram);
+    alert('Bild heruntergeladen & Caption kopiert! Öffne Instagram und poste dein Trade Setup.');
   };
 
   return (
     <div className={`border-2 rounded-2xl overflow-hidden ${theme.border} ${theme.bgSecondary}`}>
-      {/* Share Card Preview */}
-      <div ref={shareCardRef} className={`p-8 ${darkMode ? 'bg-black' : 'bg-white'}`}>
-        <div className="flex items-center justify-between mb-6">
-          <img 
-            src={darkMode 
-              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-            }
-            alt="ZNPCV" 
-            className="h-12 w-auto"
-          />
-          <div className={`text-xs tracking-widest ${theme.textSecondary}`}>
-            {new Date(trade.created_date).toLocaleDateString('de-DE')}
+      {/* Share Card Preview - Optimized for Social Media */}
+      <div ref={shareCardRef} className={`relative p-10 ${darkMode ? 'bg-gradient-to-br from-black via-zinc-950 to-black' : 'bg-gradient-to-br from-white via-zinc-50 to-white'}`} style={{ width: '600px', maxWidth: '100%' }}>
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '30px 30px'}} />
+        </div>
+
+        {/* Header with Logo */}
+        <div className="relative z-10 flex items-start justify-between mb-8">
+          <div>
+            <img 
+              src={darkMode 
+                ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+              }
+              alt="ZNPCV" 
+              className="h-16 w-auto mb-2"
+            />
+            <div className={`text-xs tracking-[0.3em] ${theme.textSecondary}`}>ULTIMATE TRADING CHECKLIST</div>
+          </div>
+          <div className="text-right">
+            <div className={`text-xs tracking-widest mb-1 ${theme.textSecondary}`}>
+              {format(new Date(trade.created_date), 'dd.MM.yyyy')}
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-teal-600 text-white text-xs rounded-full">
+              <Award className="w-3 h-3" />
+              <span className="font-bold">VERIFIED</span>
+            </div>
           </div>
         </div>
 
-        <div className="mb-6">
-          <div className={`text-4xl tracking-wider font-bold mb-2 ${theme.text}`}>
+        {/* Main Trade Info */}
+        <div className="relative z-10 mb-8">
+          <div className={`text-6xl tracking-wider font-bold mb-4 ${theme.text}`}>
             {trade.pair}
           </div>
-          <div className="flex items-center gap-3">
-            <div className={cn("px-4 py-2 rounded-xl font-bold tracking-wider",
-              trade.direction === 'long' ? 'bg-teal-600 text-white' : 'bg-rose-600 text-white')}>
+          <div className="flex items-center gap-3 mb-4">
+            <div className={cn("px-6 py-3 rounded-xl font-bold tracking-[0.2em] text-lg border-2",
+              trade.direction === 'long' ? 'bg-teal-600 border-teal-500 text-white' : 'bg-rose-600 border-rose-500 text-white')}>
               {trade.direction?.toUpperCase()}
             </div>
             {trade.outcome && (
-              <div className={cn("px-4 py-2 rounded-xl font-bold tracking-wider",
-                trade.outcome === 'win' ? 'bg-teal-600 text-white' :
-                trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 'bg-zinc-600 text-white')}>
+              <div className={cn("px-6 py-3 rounded-xl font-bold tracking-[0.2em] text-lg border-2",
+                trade.outcome === 'win' ? 'bg-teal-600 border-teal-500 text-white' :
+                trade.outcome === 'loss' ? 'bg-rose-600 border-rose-500 text-white' : 'bg-zinc-600 border-zinc-500 text-white')}>
                 {trade.outcome.toUpperCase()}
+              </div>
+            )}
+            {trade.actual_pnl && (
+              <div className={cn("px-6 py-3 rounded-xl font-bold text-lg",
+                parseFloat(trade.actual_pnl) > 0 ? 'bg-teal-600/20 text-teal-600' : 'bg-rose-600/20 text-rose-600')}>
+                {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
               </div>
             )}
           </div>
         </div>
 
-        <div className={`grid grid-cols-4 gap-3 mb-6 p-4 rounded-xl ${darkMode ? 'bg-zinc-950' : 'bg-zinc-100'}`}>
-          <div>
-            <div className={`text-xs ${theme.textSecondary}`}>WEEKLY</div>
-            <div className={`text-lg font-bold ${theme.text}`}>{scores.weekly}%</div>
+        {/* Multi-Timeframe Analysis */}
+        <div className={`relative z-10 grid grid-cols-4 gap-4 mb-8 p-6 rounded-2xl border-2 ${theme.border} ${darkMode ? 'bg-zinc-950/50' : 'bg-zinc-100/50'}`}>
+          <div className="text-center">
+            <div className={`text-xs tracking-[0.15em] mb-2 ${theme.textSecondary}`}>WEEKLY</div>
+            <div className={`text-3xl font-bold ${theme.text}`}>{scores.weekly}</div>
+            <div className={`text-xs ${theme.textMuted}`}>/ 60</div>
           </div>
-          <div>
-            <div className={`text-xs ${theme.textSecondary}`}>DAILY</div>
-            <div className={`text-lg font-bold ${theme.text}`}>{scores.daily}%</div>
+          <div className="text-center">
+            <div className={`text-xs tracking-[0.15em] mb-2 ${theme.textSecondary}`}>DAILY</div>
+            <div className={`text-3xl font-bold ${theme.text}`}>{scores.daily}</div>
+            <div className={`text-xs ${theme.textMuted}`}>/ 60</div>
           </div>
-          <div>
-            <div className={`text-xs ${theme.textSecondary}`}>4H</div>
-            <div className={`text-lg font-bold ${theme.text}`}>{scores.h4}%</div>
+          <div className="text-center">
+            <div className={`text-xs tracking-[0.15em] mb-2 ${theme.textSecondary}`}>4H</div>
+            <div className={`text-3xl font-bold ${theme.text}`}>{scores.h4}</div>
+            <div className={`text-xs ${theme.textMuted}`}>/ 35</div>
           </div>
-          <div>
-            <div className={`text-xs ${theme.textSecondary}`}>ENTRY</div>
-            <div className={`text-lg font-bold ${theme.text}`}>{scores.entry}%</div>
-          </div>
-        </div>
-
-        <div className={cn("p-6 rounded-xl text-center border-2",
-          scores.total >= 85 ? "bg-teal-600 border-teal-500" : "bg-zinc-900 border-zinc-800")}>
-          <div className={`text-xs tracking-widest mb-1 ${scores.total >= 85 ? 'text-teal-100' : 'text-zinc-400'}`}>
-            ZNPCV SCORE
-          </div>
-          <div className="text-5xl font-bold text-white mb-2">{scores.total}%</div>
-          <div className="text-white/80 text-sm">
-            {scores.total >= 85 ? '✓ A+++ TRADE' : '⚠ UNDER 85%'}
+          <div className="text-center">
+            <div className={`text-xs tracking-[0.15em] mb-2 ${theme.textSecondary}`}>ENTRY</div>
+            <div className={`text-3xl font-bold ${theme.text}`}>{scores.entry}</div>
+            <div className={`text-xs ${theme.textMuted}`}>/ 25</div>
           </div>
         </div>
 
-        <div className={`mt-6 text-center text-xs ${theme.textSecondary}`}>
-          www.znpcv.com
+        {/* Total Score Badge */}
+        <div className={cn("relative z-10 p-8 rounded-2xl text-center border-4 shadow-2xl",
+          scores.total >= 85 
+            ? "bg-gradient-to-br from-teal-600 to-teal-700 border-teal-400" 
+            : "bg-gradient-to-br from-zinc-800 to-zinc-900 border-zinc-700")}>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Sparkles className="w-5 h-5 text-white" />
+            <div className={`text-sm tracking-[0.2em] ${scores.total >= 85 ? 'text-teal-100' : 'text-zinc-400'}`}>
+              ZNPCV SCORE
+            </div>
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+          <div className="text-7xl font-bold text-white mb-3" style={{ letterSpacing: '0.05em' }}>
+            {scores.total}%
+          </div>
+          <div className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold tracking-[0.15em] ${
+            scores.total >= 85 
+              ? 'bg-white text-teal-700' 
+              : 'bg-zinc-950 text-zinc-300'
+          }`}>
+            {scores.total >= 85 ? '✓ A+++ SETUP' : '⚠ BELOW 85%'}
+          </div>
+        </div>
+
+        {/* Trade Details */}
+        {(trade.entry_price || trade.stop_loss || trade.take_profit) && (
+          <div className={`relative z-10 mt-6 grid grid-cols-3 gap-4 p-5 rounded-xl border-2 ${theme.border} ${darkMode ? 'bg-zinc-950/30' : 'bg-zinc-100/30'}`}>
+            {trade.entry_price && (
+              <div className="text-center">
+                <div className={`text-xs tracking-wider mb-1 ${theme.textSecondary}`}>ENTRY</div>
+                <div className={`text-sm font-bold ${theme.text}`}>{trade.entry_price}</div>
+              </div>
+            )}
+            {trade.stop_loss && (
+              <div className="text-center">
+                <div className={`text-xs tracking-wider mb-1 ${theme.textSecondary}`}>STOP LOSS</div>
+                <div className={`text-sm font-bold text-rose-600`}>{trade.stop_loss}</div>
+              </div>
+            )}
+            {trade.take_profit && (
+              <div className="text-center">
+                <div className={`text-xs tracking-wider mb-1 ${theme.textSecondary}`}>TAKE PROFIT</div>
+                <div className={`text-sm font-bold text-teal-600`}>{trade.take_profit}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Footer Branding */}
+        <div className="relative z-10 mt-8 pt-6 border-t-2 border-zinc-800/20 text-center">
+          <div className={`text-sm tracking-[0.2em] mb-2 ${theme.text} font-light italic`}>
+            "Discipline beats talent. Every day."
+          </div>
+          <div className={`text-lg tracking-[0.3em] font-bold ${theme.text}`}>
+            WWW.ZNPCV.COM
+          </div>
         </div>
       </div>
 
       {/* Share Actions */}
-      <div className={`p-5 border-t-2 ${theme.border} ${theme.bg}`}>
-        <div className="flex items-center gap-2 mb-4">
-          <Share2 className={`w-5 h-5 ${theme.text}`} />
-          <span className={`font-bold tracking-widest text-sm ${theme.text}`}>TRADE TEILEN</span>
+      <div className={`p-6 sm:p-7 border-t-2 ${theme.border} ${theme.bg}`}>
+        <div className="flex items-center gap-3 mb-5">
+          <div className={`p-2 rounded-xl ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+            <Share2 className={`w-5 h-5 ${darkMode ? 'text-black' : 'text-white'}`} />
+          </div>
+          <div>
+            <div className={`font-bold tracking-widest text-base ${theme.text}`}>TRADE TEILEN</div>
+            <div className={`text-xs ${theme.textSecondary}`}>Teile deine Analyse auf Social Media</div>
+          </div>
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
           <button
             type="button"
             onClick={shareToWhatsApp}
-            className={cn("p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 group",
+            className={cn("p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2.5 group hover:scale-105",
               darkMode ? 'border-zinc-800 hover:border-green-500 bg-zinc-900 hover:bg-green-500/10' : 'border-zinc-300 hover:border-green-600 bg-zinc-50 hover:bg-green-50')}>
-            <MessageCircle className={cn("w-5 h-5", darkMode ? 'text-green-400 group-hover:text-green-500' : 'text-green-600')} />
-            <span className={`text-[10px] font-bold tracking-wider ${theme.text}`}>WHATSAPP</span>
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+              darkMode ? 'bg-green-500/20 group-hover:bg-green-500/30' : 'bg-green-100 group-hover:bg-green-200')}>
+              <MessageCircle className={cn("w-6 h-6", darkMode ? 'text-green-400' : 'text-green-600')} />
+            </div>
+            <span className={`text-xs font-bold tracking-wider ${theme.text}`}>WHATSAPP</span>
           </button>
 
           <button
             type="button"
             onClick={shareToTwitter}
-            className={cn("p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 group",
+            className={cn("p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2.5 group hover:scale-105",
               darkMode ? 'border-zinc-800 hover:border-blue-400 bg-zinc-900 hover:bg-blue-400/10' : 'border-zinc-300 hover:border-blue-500 bg-zinc-50 hover:bg-blue-50')}>
-            <Twitter className={cn("w-5 h-5", darkMode ? 'text-blue-400 group-hover:text-blue-500' : 'text-blue-500')} />
-            <span className={`text-[10px] font-bold tracking-wider ${theme.text}`}>TWITTER</span>
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+              darkMode ? 'bg-blue-500/20 group-hover:bg-blue-500/30' : 'bg-blue-100 group-hover:bg-blue-200')}>
+              <Twitter className={cn("w-6 h-6", darkMode ? 'text-blue-400' : 'text-blue-500')} />
+            </div>
+            <span className={`text-xs font-bold tracking-wider ${theme.text}`}>X / TWITTER</span>
           </button>
 
           <button
             type="button"
             onClick={shareToTelegram}
-            className={cn("p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 group",
+            className={cn("p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2.5 group hover:scale-105",
               darkMode ? 'border-zinc-800 hover:border-blue-500 bg-zinc-900 hover:bg-blue-500/10' : 'border-zinc-300 hover:border-blue-600 bg-zinc-50 hover:bg-blue-50')}>
-            <Send className={cn("w-5 h-5", darkMode ? 'text-blue-400 group-hover:text-blue-500' : 'text-blue-600')} />
-            <span className={`text-[10px] font-bold tracking-wider ${theme.text}`}>TELEGRAM</span>
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+              darkMode ? 'bg-blue-500/20 group-hover:bg-blue-500/30' : 'bg-blue-100 group-hover:bg-blue-200')}>
+              <Send className={cn("w-6 h-6", darkMode ? 'text-blue-400' : 'text-blue-600')} />
+            </div>
+            <span className={`text-xs font-bold tracking-wider ${theme.text}`}>TELEGRAM</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={shareToInstagram}
+            className={cn("p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2.5 group hover:scale-105",
+              darkMode ? 'border-zinc-800 hover:border-pink-500 bg-zinc-900 hover:bg-pink-500/10' : 'border-zinc-300 hover:border-pink-600 bg-zinc-50 hover:bg-pink-50')}>
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+              darkMode ? 'bg-gradient-to-br from-purple-500/20 to-pink-500/20 group-hover:from-purple-500/30 group-hover:to-pink-500/30' : 'bg-gradient-to-br from-purple-100 to-pink-100 group-hover:from-purple-200 group-hover:to-pink-200')}>
+              <Instagram className={cn("w-6 h-6", darkMode ? 'text-pink-400' : 'text-pink-600')} />
+            </div>
+            <span className={`text-xs font-bold tracking-wider ${theme.text}`}>INSTAGRAM</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={shareToTikTok}
+            className={cn("p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2.5 group hover:scale-105",
+              darkMode ? 'border-zinc-800 hover:border-white bg-zinc-900 hover:bg-white/10' : 'border-zinc-300 hover:border-black bg-zinc-50 hover:bg-zinc-100')}>
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+              darkMode ? 'bg-white/20 group-hover:bg-white/30' : 'bg-black/10 group-hover:bg-black/20')}>
+              <svg className={cn("w-6 h-6", darkMode ? 'text-white' : 'text-black')} viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+              </svg>
+            </div>
+            <span className={`text-xs font-bold tracking-wider ${theme.text}`}>TIKTOK</span>
           </button>
 
           <button
             type="button"
             onClick={handleCopyText}
-            className={cn("p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 group",
+            className={cn("p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2.5 group hover:scale-105",
               copied 
                 ? "bg-teal-600 border-teal-600 text-white"
                 : darkMode ? 'border-zinc-800 hover:border-zinc-600 bg-zinc-900' : 'border-zinc-300 hover:border-zinc-400 bg-zinc-50')}>
-            {copied ? <Check className="w-5 h-5" /> : <Copy className={cn("w-5 h-5", darkMode ? 'text-zinc-400 group-hover:text-white' : 'text-zinc-600')} />}
-            <span className={`text-[10px] font-bold tracking-wider ${copied ? 'text-white' : theme.text}`}>
-              {copied ? 'KOPIERT!' : 'TEXT'}
+            <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
+              copied ? 'bg-white/20' : darkMode ? 'bg-zinc-800 group-hover:bg-zinc-700' : 'bg-zinc-200 group-hover:bg-zinc-300')}>
+              {copied ? <Check className="w-6 h-6" /> : <Copy className={cn("w-6 h-6", darkMode ? 'text-zinc-400 group-hover:text-white' : 'text-zinc-600')} />}
+            </div>
+            <span className={`text-xs font-bold tracking-wider ${copied ? 'text-white' : theme.text}`}>
+              {copied ? '✓ KOPIERT' : 'TEXT KOPIEREN'}
             </span>
           </button>
         </div>
@@ -229,27 +386,29 @@ www.znpcv.com`;
           type="button"
           onClick={generateShareImage}
           disabled={generating}
-          className={cn("w-full p-4 rounded-xl border-2 transition-all font-bold tracking-widest text-sm flex items-center justify-center gap-2",
+          className={cn("w-full p-5 rounded-xl border-2 transition-all font-bold tracking-widest text-sm flex items-center justify-center gap-3 hover:scale-105",
             generating 
               ? darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-600' : 'bg-zinc-200 border-zinc-300 text-zinc-500'
               : darkMode 
-                ? 'bg-white border-white text-black hover:bg-zinc-200' 
-                : 'bg-black border-black text-white hover:bg-zinc-800')}>
+                ? 'bg-white border-white text-black hover:bg-zinc-100' 
+                : 'bg-black border-black text-white hover:bg-zinc-900')}>
           {generating ? (
             <>
-              <div className="w-4 h-4 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
-              <span>GENERIERE...</span>
+              <div className="w-5 h-5 border-3 border-zinc-500 border-t-transparent rounded-full animate-spin" />
+              <span>BILD WIRD ERSTELLT...</span>
             </>
           ) : (
             <>
               <Download className="w-5 h-5" />
-              <span>INSTAGRAM STORY ERSTELLEN</span>
+              <span>SCREENSHOT HERUNTERLADEN</span>
             </>
           )}
         </button>
 
-        <div className={`mt-3 text-center text-[10px] ${theme.textSecondary} font-sans`}>
-          Teile deinen Trade mit der Community
+        <div className={`mt-4 p-4 rounded-xl ${darkMode ? 'bg-zinc-950' : 'bg-zinc-100'}`}>
+          <div className={`text-xs ${theme.textSecondary} font-sans leading-relaxed text-center`}>
+            💡 <strong>Tipp:</strong> Für Instagram & TikTok - Screenshot herunterladen, dann als Story/Post hochladen
+          </div>
         </div>
       </div>
     </div>
