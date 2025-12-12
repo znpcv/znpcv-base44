@@ -5,7 +5,7 @@ import { User, LogOut, Settings } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage } from '@/components/LanguageContext';
 
-export default function AccountButton() {
+function AccountButton() {
   const navigate = useNavigate();
   const { darkMode } = useLanguage();
   const [user, setUser] = useState(null);
@@ -120,3 +120,5 @@ export default function AccountButton() {
     </div>
   );
 }
+
+export default AccountButton;
