@@ -31,7 +31,7 @@ export default function ChecklistPage() {
 
   const [uploading, setUploading] = useState(false);
 
-  const [checklist, setChecklist] = useState({
+  const [formData, setFormData] = useState({
     pair: '',
     trade_date: format(new Date(), 'yyyy-MM-dd'),
     direction: '',
@@ -98,53 +98,53 @@ export default function ChecklistPage() {
 
   const loadChecklist = async () => {
     const data = await base44.entities.TradeChecklist.filter({ id: checklistId });
-    if (data.length > 0) setChecklist(prev => ({ ...prev, ...data[0] }));
+    if (data.length > 0) setFormData(prev => ({ ...prev, ...data[0] }));
     setIsLoading(false);
   };
 
-  const update = (key, value) => setChecklist(prev => ({ ...prev, [key]: value }));
+  const update = (key, value) => setFormData(prev => ({ ...prev, [key]: value }));
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 
 
   // Calculate scores
-  const weeklyScore = (checklist.w_at_aoi ? 10 : 0) + (checklist.w_ema_touch ? 5 : 0) + 
-    (checklist.w_candlestick ? 10 : 0) + (checklist.w_psp_rejection ? 10 : 0) + 
-    (checklist.w_round_level ? 5 : 0) + (checklist.w_swing ? 10 : 0) + 
-    (checklist.w_pattern && checklist.w_pattern !== 'none' ? 10 : 0);
+  const weeklyScore = (formData.w_at_aoi ? 10 : 0) + (formData.w_ema_touch ? 5 : 0) + 
+    (formData.w_candlestick ? 10 : 0) + (formData.w_psp_rejection ? 10 : 0) + 
+    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 10 : 0) + 
+    (formData.w_pattern && formData.w_pattern !== 'none' ? 10 : 0);
   
-  const dailyScore = (checklist.d_at_aoi ? 10 : 0) + (checklist.d_ema_touch ? 5 : 0) + 
-    (checklist.d_candlestick ? 10 : 0) + (checklist.d_psp_rejection ? 10 : 0) + 
-    (checklist.d_round_level ? 5 : 0) + (checklist.d_swing ? 10 : 0) + 
-    (checklist.d_pattern && checklist.d_pattern !== 'none' ? 10 : 0);
+  const dailyScore = (formData.d_at_aoi ? 10 : 0) + (formData.d_ema_touch ? 5 : 0) + 
+    (formData.d_candlestick ? 10 : 0) + (formData.d_psp_rejection ? 10 : 0) + 
+    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 10 : 0) + 
+    (formData.d_pattern && formData.d_pattern !== 'none' ? 10 : 0);
   
-  const h4Score = (checklist.h4_ema_touch ? 5 : 0) + (checklist.h4_candlestick ? 10 : 0) + 
-    (checklist.h4_psp_rejection ? 5 : 0) + (checklist.h4_swing ? 5 : 0) + 
-    (checklist.h4_pattern && checklist.h4_pattern !== 'none' ? 10 : 0);
+  const h4Score = (formData.h4_ema_touch ? 5 : 0) + (formData.h4_candlestick ? 10 : 0) + 
+    (formData.h4_psp_rejection ? 5 : 0) + (formData.h4_swing ? 5 : 0) + 
+    (formData.h4_pattern && formData.h4_pattern !== 'none' ? 10 : 0);
   
-  const entryScore = (checklist.entry_sos ? 10 : 0) + (checklist.entry_engulfing ? 10 : 0) + 
-    (checklist.entry_pattern && checklist.entry_pattern !== 'none' ? 5 : 0);
+  const entryScore = (formData.entry_sos ? 10 : 0) + (formData.entry_engulfing ? 10 : 0) + 
+    (formData.entry_pattern && formData.entry_pattern !== 'none' ? 5 : 0);
 
   const progress = weeklyScore + dailyScore + h4Score + entryScore;
 
   // Risk calculations with Lot Size
   const calculateRisk = () => {
-    const entry = parseFloat(checklist.entry_price) || 0;
-    const sl = parseFloat(checklist.stop_loss) || 0;
-    const tp = parseFloat(checklist.take_profit) || 0;
-    const account = parseFloat(checklist.account_size) || 0;
-    const riskPct = parseFloat(checklist.risk_percent) || 1;
+    const entry = parseFloat(formData.entry_price) || 0;
+    const sl = parseFloat(formData.stop_loss) || 0;
+    const tp = parseFloat(formData.take_profit) || 0;
+    const account = parseFloat(formData.account_size) || 0;
+    const riskPct = parseFloat(formData.risk_percent) || 1;
     
     if (!entry || !sl) return null;
     
-    const isLong = checklist.direction === 'long';
+    const isLong = formData.direction === 'long';
     const slDistance = isLong ? entry - sl : sl - entry;
     const tpDistance = tp ? (isLong ? tp - entry : entry - tp) : 0;
     
     if (slDistance <= 0) return null;
     
     // Calculate pips based on pair type
-    const pair = checklist.pair?.toUpperCase() || '';
+    const pair = formData.pair?.toUpperCase() || '';
     const isJPY = pair.includes('JPY');
     const isGold = pair.includes('XAU') || pair.includes('GOLD');
     const isCrypto = pair.includes('BTC') || pair.includes('ETH');
@@ -211,7 +211,7 @@ export default function ChecklistPage() {
     
     setSaving(true);
     const data = { 
-      ...checklist, 
+      ...formData, 
       completion_percentage: progress, 
       status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
     };
@@ -357,42 +357,48 @@ export default function ChecklistPage() {
             <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <StepHeader number="01" title={t('assetDirection')} subtitle={t('selectPairDirection')} />
 
-              <AssetSelector selectedPair={checklist.pair} onSelect={(pair) => update('pair', pair)} />
+              <AssetSelector selectedPair={formData.pair} onSelect={(pair) => update('pair', pair)} />
 
-              {checklist.pair && (
+              {formData.pair && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <LivePriceDisplay pair={checklist.pair} darkMode={darkMode} />
+                  <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
                 </motion.div>
               )}
               
-              {checklist.pair && (
+              {formData.pair && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                   
                   {/* Direction Selection */}
                   <label className={`${theme.textMuted} text-sm tracking-widest block`}>{t('selectDirection')}</label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button onClick={() => update('direction', 'long')}
-                      className={cn("p-6 border-2 rounded-2xl text-center transition-all",
-                        checklist.direction === 'long' 
-                          ? "bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/20" 
-                          : "border-zinc-800 hover:border-emerald-500/50 bg-zinc-950 hover:bg-emerald-500/5")}>
-                      <TrendingUp className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'long' ? "text-white" : "text-teal-600")} />
-                      <div className={cn("text-xl tracking-wider font-bold", checklist.direction === 'long' ? "text-white" : "text-white")}>LONG</div>
-                      <div className={cn("text-sm mt-1", checklist.direction === 'long' ? "text-teal-100" : "text-zinc-500")}>
-                        {t('buyInAoi')}
-                      </div>
-                    </button>
-                    <button onClick={() => update('direction', 'short')}
-                      className={cn("p-6 border-2 rounded-2xl text-center transition-all",
-                        checklist.direction === 'short' 
-                          ? "bg-red-500 border-red-400 text-white shadow-lg shadow-red-500/20" 
-                          : "border-zinc-800 hover:border-red-500/50 bg-zinc-950 hover:bg-red-500/5")}>
-                      <TrendingDown className={cn("w-12 h-12 mx-auto mb-3", checklist.direction === 'short' ? "text-white" : "text-rose-600")} />
-                      <div className={cn("text-xl tracking-wider font-bold", checklist.direction === 'short' ? "text-white" : "text-white")}>SHORT</div>
-                      <div className={cn("text-sm mt-1", checklist.direction === 'short' ? "text-rose-100" : "text-zinc-500")}>
-                        {t('sellInAoi')}
-                      </div>
-                    </button>
+                  <div className="grid grid-cols-2 gap-3">
+                    <motion.button 
+                      type="button" 
+                      onClick={() => update('direction', 'long')}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn("p-4 sm:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden",
+                        checklist.direction === 'long' ? "bg-teal-600 text-white border-teal-600" : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                      {checklist.direction === 'long' && (
+                        <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                      )}
+                      <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
+                      LONG / BUY
+                      <div className="text-xs font-normal mt-1 opacity-80">{t('buyInAoi')}</div>
+                    </motion.button>
+                    <motion.button 
+                      type="button" 
+                      onClick={() => update('direction', 'short')}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn("p-4 sm:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden",
+                        checklist.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
+                      {checklist.direction === 'short' && (
+                        <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                      )}
+                      <TrendingDown className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
+                      SHORT / SELL
+                      <div className="text-xs font-normal mt-1 opacity-80">{t('sellInAoi')}</div>
+                    </motion.button>
                   </div>
                 </motion.div>
               )}
@@ -416,48 +422,53 @@ export default function ChecklistPage() {
               {/* Trend Selection */}
               <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
                 <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('weeklyTrend')}</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => update('w_trend', 'bullish')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.w_trend === 'bullish' 
-                        ? "bg-emerald-500 border-emerald-400 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-emerald-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-emerald-500/50 bg-zinc-50 text-black")}>
-                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bullish' ? "text-white" : "text-teal-600")} />
-                    <div className="font-bold tracking-wider text-sm">BULLISH</div>
-                  </button>
-                  <button onClick={() => update('w_trend', 'bearish')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.w_trend === 'bearish' 
-                        ? "bg-red-500 border-red-400 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-red-500/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-red-500/50 bg-zinc-50 text-black")}>
-                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.w_trend === 'bearish' ? "text-white" : "text-rose-600")} />
-                    <div className="font-bold tracking-wider text-sm">BEARISH</div>
-                  </button>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {['bullish', 'bearish'].map((trend) => (
+                    <motion.button 
+                      key={trend} 
+                      type="button" 
+                      onClick={() => update('w_trend', trend)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
+                        checklist.w_trend === trend 
+                          ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
+                          : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                      {checklist.w_trend === trend && (
+                        <div className="absolute inset-0 bg-white/10" />
+                      )}
+                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
+                      {trend.toUpperCase()}
+                      {checklist.w_trend === trend && (
+                        <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
+                      )}
+                    </motion.button>
+                  ))}
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.w_at_aoi} onChange={() => update('w_at_aoi', !checklist.w_at_aoi)} 
-                label={t('atAoiRejected')} score={10} 
+              <ChecklistItem checked={checklist.w_at_aoi} onChange={(checked) => update('w_at_aoi', checked)} 
+                label={t('atAoiRejected')} weight={10} 
                 description={t('atAoiDesc')} />
               
-              <ChecklistItem checked={checklist.w_ema_touch} onChange={() => update('w_ema_touch', !checklist.w_ema_touch)} 
-                label={t('touchingEma')} score={5} 
+              <ChecklistItem checked={checklist.w_ema_touch} onChange={(checked) => update('w_ema_touch', checked)} 
+                label={t('touchingEma')} weight={5} 
                 description={t('touchingEmaDesc')} />
               
-              <ChecklistItem checked={checklist.w_candlestick} onChange={() => update('w_candlestick', !checklist.w_candlestick)} 
-                label={t('candlestickRejection')} score={10} 
+              <ChecklistItem checked={checklist.w_candlestick} onChange={(checked) => update('w_candlestick', checked)} 
+                label={t('candlestickRejection')} weight={10} 
                 description={t('candlestickDesc')} />
               
-              <ChecklistItem checked={checklist.w_psp_rejection} onChange={() => update('w_psp_rejection', !checklist.w_psp_rejection)} 
-                label={t('rejectionPsp')} score={10} 
+              <ChecklistItem checked={checklist.w_psp_rejection} onChange={(checked) => update('w_psp_rejection', checked)} 
+                label={t('rejectionPsp')} weight={10} 
                 description={t('rejectionPspDesc')} />
               
-              <ChecklistItem checked={checklist.w_round_level} onChange={() => update('w_round_level', !checklist.w_round_level)} 
-                label={t('roundLevel')} score={5} 
+              <ChecklistItem checked={checklist.w_round_level} onChange={(checked) => update('w_round_level', checked)} 
+                label={t('roundLevel')} weight={5} 
                 description={t('roundLevelDesc')} />
               
-              <ChecklistItem checked={checklist.w_swing} onChange={() => update('w_swing', !checklist.w_swing)} 
-                label={t('swingHighLow')} score={10} 
+              <ChecklistItem checked={checklist.w_swing} onChange={(checked) => update('w_swing', checked)} 
+                label={t('swingHighLow')} weight={10} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -488,47 +499,52 @@ export default function ChecklistPage() {
               <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
                 <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('dailyTrend')}</label>
                 <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => update('d_trend', 'bullish')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.d_trend === 'bullish' 
-                        ? "bg-teal-600 border-teal-500 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50 text-black")}>
-                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bullish' ? "text-white" : "text-teal-600")} />
-                    <div className="font-bold tracking-wider text-sm">BULLISH</div>
-                  </button>
-                  <button onClick={() => update('d_trend', 'bearish')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.d_trend === 'bearish' 
-                        ? "bg-rose-600 border-rose-500 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50 text-black")}>
-                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.d_trend === 'bearish' ? "text-white" : "text-rose-600")} />
-                    <div className="font-bold tracking-wider text-sm">BEARISH</div>
-                  </button>
+                  {['bullish', 'bearish'].map((trend) => (
+                    <motion.button 
+                      key={trend} 
+                      type="button" 
+                      onClick={() => update('d_trend', trend)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
+                        checklist.d_trend === trend 
+                          ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
+                          : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                      {checklist.d_trend === trend && (
+                        <div className="absolute inset-0 bg-white/10" />
+                      )}
+                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
+                      {trend.toUpperCase()}
+                      {checklist.d_trend === trend && (
+                        <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
+                      )}
+                    </motion.button>
+                  ))}
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.d_at_aoi} onChange={() => update('d_at_aoi', !checklist.d_at_aoi)} 
-                label={t('atAoiRejected')} score={10} 
+              <ChecklistItem checked={checklist.d_at_aoi} onChange={(checked) => update('d_at_aoi', checked)} 
+                label={t('atAoiRejected')} weight={10} 
                 description={t('atAoiDesc')} />
               
-              <ChecklistItem checked={checklist.d_ema_touch} onChange={() => update('d_ema_touch', !checklist.d_ema_touch)} 
-                label={t('touchingEma')} score={5} 
+              <ChecklistItem checked={checklist.d_ema_touch} onChange={(checked) => update('d_ema_touch', checked)} 
+                label={t('touchingEma')} weight={5} 
                 description={t('touchingEmaDesc')} />
               
-              <ChecklistItem checked={checklist.d_candlestick} onChange={() => update('d_candlestick', !checklist.d_candlestick)} 
-                label={t('candlestickRejection')} score={10} 
+              <ChecklistItem checked={checklist.d_candlestick} onChange={(checked) => update('d_candlestick', checked)} 
+                label={t('candlestickRejection')} weight={10} 
                 description={t('candlestickDesc')} />
               
-              <ChecklistItem checked={checklist.d_psp_rejection} onChange={() => update('d_psp_rejection', !checklist.d_psp_rejection)} 
-                label={t('rejectionPsp')} score={10} 
+              <ChecklistItem checked={checklist.d_psp_rejection} onChange={(checked) => update('d_psp_rejection', checked)} 
+                label={t('rejectionPsp')} weight={10} 
                 description={t('rejectionPspDesc')} />
               
-              <ChecklistItem checked={checklist.d_round_level} onChange={() => update('d_round_level', !checklist.d_round_level)} 
-                label={t('roundLevel')} score={5} 
+              <ChecklistItem checked={checklist.d_round_level} onChange={(checked) => update('d_round_level', checked)} 
+                label={t('roundLevel')} weight={5} 
                 description={t('roundLevelDesc')} />
               
-              <ChecklistItem checked={checklist.d_swing} onChange={() => update('d_swing', !checklist.d_swing)} 
-                label={t('swingHighLow')} score={10} 
+              <ChecklistItem checked={checklist.d_swing} onChange={(checked) => update('d_swing', checked)} 
+                label={t('swingHighLow')} weight={10} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -559,39 +575,44 @@ export default function ChecklistPage() {
               <div className={`border ${theme.borderCard} rounded-2xl p-4 ${theme.bgSecondary}`}>
                 <label className={`${theme.textMuted} text-sm tracking-widest mb-3 block`}>{t('h4Trend')}</label>
                 <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => update('h4_trend', 'bullish')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.h4_trend === 'bullish' 
-                        ? "bg-teal-600 border-teal-500 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50 text-black")}>
-                    <TrendingUp className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bullish' ? "text-white" : "text-teal-600")} />
-                    <div className="font-bold tracking-wider text-sm">BULLISH</div>
-                  </button>
-                  <button onClick={() => update('h4_trend', 'bearish')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
-                      checklist.h4_trend === 'bearish' 
-                        ? "bg-rose-600 border-rose-500 text-white shadow-lg" 
-                        : darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-900 text-white" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50 text-black")}>
-                    <TrendingDown className={cn("w-8 h-8 mx-auto mb-2", checklist.h4_trend === 'bearish' ? "text-white" : "text-rose-600")} />
-                    <div className="font-bold tracking-wider text-sm">BEARISH</div>
-                  </button>
+                  {['bullish', 'bearish'].map((trend) => (
+                    <motion.button 
+                      key={trend} 
+                      type="button" 
+                      onClick={() => update('h4_trend', trend)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className={cn("py-3 sm:py-4 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
+                        checklist.h4_trend === trend 
+                          ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
+                          : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                      {checklist.h4_trend === trend && (
+                        <div className="absolute inset-0 bg-white/10" />
+                      )}
+                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
+                      {trend.toUpperCase()}
+                      {checklist.h4_trend === trend && (
+                        <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
+                      )}
+                    </motion.button>
+                  ))}
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.h4_ema_touch} onChange={() => update('h4_ema_touch', !checklist.h4_ema_touch)} 
-                label={t('touchingEma')} score={5} 
+              <ChecklistItem checked={checklist.h4_ema_touch} onChange={(checked) => update('h4_ema_touch', checked)} 
+                label={t('touchingEma')} weight={5} 
                 description={t('touchingEmaDesc')} />
               
-              <ChecklistItem checked={checklist.h4_candlestick} onChange={() => update('h4_candlestick', !checklist.h4_candlestick)} 
-                label={t('candlestickRejection')} score={10} 
+              <ChecklistItem checked={checklist.h4_candlestick} onChange={(checked) => update('h4_candlestick', checked)} 
+                label={t('candlestickRejection')} weight={10} 
                 description={t('candlestickDesc')} />
               
-              <ChecklistItem checked={checklist.h4_psp_rejection} onChange={() => update('h4_psp_rejection', !checklist.h4_psp_rejection)} 
-                label={t('rejectionPsp')} score={5} 
+              <ChecklistItem checked={checklist.h4_psp_rejection} onChange={(checked) => update('h4_psp_rejection', checked)} 
+                label={t('rejectionPsp')} weight={5} 
                 description={t('rejectionPspDesc')} />
               
-              <ChecklistItem checked={checklist.h4_swing} onChange={() => update('h4_swing', !checklist.h4_swing)} 
-                label={t('swingHighLow')} score={5} 
+              <ChecklistItem checked={checklist.h4_swing} onChange={(checked) => update('h4_swing', checked)} 
+                label={t('swingHighLow')} weight={5} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -610,12 +631,12 @@ export default function ChecklistPage() {
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
               {/* Entry Timeframe Info */}
-              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+              <div className={`p-4 rounded-xl ${darkMode ? 'bg-blue-600/10 border border-blue-600/30' : 'bg-blue-500/10 border border-blue-500/30'}`}>
                 <div className="flex items-center gap-3">
                   <Target className="w-5 h-5 text-blue-400" />
                   <div>
                     <div className="text-blue-400 font-bold tracking-wider text-sm">{t('entryTimeframe')}</div>
-                    <div className="text-zinc-400 text-sm">{t('entryTimeframeDesc')}</div>
+                    <div className={`text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>Wähle zwischen 30min oder 1H - je nach sauberster Struktur und präzisestem Entry. Wir sind Swing/Day Trader, keine Scalper.</div>
                   </div>
                 </div>
               </div>
@@ -629,12 +650,12 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={checklist.entry_sos} onChange={() => update('entry_sos', !checklist.entry_sos)} 
-                label={t('mssShift')} score={10} 
+              <ChecklistItem checked={checklist.entry_sos} onChange={(checked) => update('entry_sos', checked)} 
+                label={t('mssShift')} weight={10} 
                 description={t('mssDesc')} />
               
-              <ChecklistItem checked={checklist.entry_engulfing} onChange={() => update('entry_engulfing', !checklist.entry_engulfing)} 
-                label={t('engulfingCandle')} score={10} 
+              <ChecklistItem checked={checklist.entry_engulfing} onChange={(checked) => update('entry_engulfing', checked)} 
+                label={t('engulfingCandle')} weight={10} 
                 description={t('engulfingDesc')} />
               
               <PatternSelector 
@@ -675,27 +696,7 @@ export default function ChecklistPage() {
             <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
               
-              {/* Professional Lot Size Calculator */}
-              <LotSizeCalculator
-                pair={checklist.pair}
-                direction={checklist.direction}
-                initialData={{
-                  account_size: checklist.account_size,
-                  risk_percent: checklist.risk_percent,
-                  leverage: checklist.leverage,
-                  entry_price: checklist.entry_price,
-                  stop_loss: checklist.stop_loss,
-                  take_profit: checklist.take_profit
-                }}
-                onDataChange={(data) => {
-                  if (data.account_size !== undefined) update('account_size', data.account_size);
-                  if (data.risk_percent !== undefined) update('risk_percent', data.risk_percent);
-                  if (data.leverage !== undefined) update('leverage', data.leverage);
-                  if (data.entry_price !== undefined) update('entry_price', data.entry_price);
-                  if (data.stop_loss !== undefined) update('stop_loss', data.stop_loss);
-                  if (data.take_profit !== undefined) update('take_profit', data.take_profit);
-                }}
-              />
+
             </motion.div>
           )}
 
@@ -711,31 +712,31 @@ export default function ChecklistPage() {
                   <span className={`${theme.text} font-bold tracking-widest`}>{t('confirmRule')}</span>
                 </div>
                 
-                {checklist.direction === 'long' && (
-                  <button onClick={() => update('confirms_rule', !checklist.confirms_rule)}
+                {formData.direction === 'long' && (
+                  <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
                     className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
-                      checklist.confirms_rule 
+                      formData.confirms_rule 
                         ? "bg-teal-600 border-teal-500 text-white" 
                         : darkMode ? "border-zinc-700 hover:border-teal-600/50 bg-zinc-900" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
-                      checklist.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {checklist.confirms_rule && <Check className="w-4 h-4 text-teal-600" />}
+                      formData.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
+                      {formData.confirms_rule && <Check className="w-4 h-4 text-teal-600" />}
                     </div>
                     <div>
-                      <div className={cn("font-bold tracking-wider", checklist.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                      <div className={cn("font-bold tracking-wider", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-sm", checklist.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
+                      <div className={cn("text-sm", formData.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
                         {t('notBuyResistance')}
                       </div>
                     </div>
                   </button>
                 )}
                 
-                {checklist.direction === 'short' && (
-                  <button onClick={() => update('confirms_rule', !checklist.confirms_rule)}
+                {formData.direction === 'short' && (
+                  <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
                     className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
-                      checklist.confirms_rule 
+                      formData.confirms_rule 
                         ? "bg-rose-600 border-rose-500 text-white" 
                         : darkMode ? "border-zinc-700 hover:border-rose-600/50 bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50")}>
                     <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
@@ -753,7 +754,7 @@ export default function ChecklistPage() {
                   </button>
                 )}
 
-                {!checklist.direction && (
+                {!formData.direction && (
                   <div className={`${theme.textMuted} text-center py-4 font-sans`}>
                     {t('selectDirFirst')}
                   </div>
@@ -765,10 +766,10 @@ export default function ChecklistPage() {
                 <h3 className={`${theme.text} font-bold tracking-widest mb-4`}>{t('tradeSummary')}</h3>
                 
                 <div className="space-y-2">
-                  <SummaryRow label="PAAR" value={checklist.pair || '-'} />
+                  <SummaryRow label="PAAR" value={formData.pair || '-'} />
                   <SummaryRow label="RICHTUNG" 
-                    value={checklist.direction === 'long' ? '↑ LONG' : checklist.direction === 'short' ? '↓ SHORT' : '-'} 
-                    color={checklist.direction === 'long' ? 'teal' : checklist.direction === 'short' ? 'rose' : null} />
+                    value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
+                    color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
                   <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
                   <SummaryRow label="WEEKLY" value={`${weeklyScore}/60%`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
                   <SummaryRow label="DAILY" value={`${dailyScore}/60%`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
@@ -778,7 +779,7 @@ export default function ChecklistPage() {
                     <>
                       <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-3`} />
                       <SummaryRow label="R:R RATIO" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
-                      <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${checklist.risk_percent}%)`} color="rose" />
+                      <SummaryRow label="RISIKO" value={`$${riskCalc.riskAmount} (${formData.risk_percent}%)`} color="rose" />
                     </>
                   )}
                 </div>
@@ -787,23 +788,23 @@ export default function ChecklistPage() {
               {/* Notes */}
               <div>
                 <label className={`block ${theme.textMuted} tracking-widest text-sm mb-2`}>{t('notesOptional')}</label>
-                <Textarea value={checklist.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
+                <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
                   className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[80px] rounded-xl font-sans`} />
               </div>
 
               {/* Screenshot Upload */}
               <ScreenshotUpload 
-                screenshots={checklist.screenshots || []} 
+                screenshots={formData.screenshots || []} 
                 onUpload={async (files) => {
                   const uploadPromises = files.map(file => 
                     base44.integrations.Core.UploadFile({ file })
                   );
                   const results = await Promise.all(uploadPromises);
                   const newUrls = results.map(r => r.file_url);
-                  update('screenshots', [...(checklist.screenshots || []), ...newUrls]);
+                  update('screenshots', [...(formData.screenshots || []), ...newUrls]);
                 }}
                 onDelete={(url) => {
-                  update('screenshots', (checklist.screenshots || []).filter(s => s !== url));
+                  update('screenshots', (formData.screenshots || []).filter(s => s !== url));
                 }}
               />
 
@@ -891,7 +892,7 @@ export default function ChecklistPage() {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               )}
-              <Button onClick={() => handleSave(false)} disabled={saving || !checklist.pair}
+              <Button onClick={() => handleSave(false)} disabled={saving || !formData.pair}
                 className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2",
                   isReady 
                     ? "bg-teal-600 hover:bg-teal-700 text-white border-teal-600" 
@@ -961,34 +962,7 @@ function StepHeader({ number, title, subtitle }) {
   );
 }
 
-function ChecklistItem({ checked, onChange, label, score, description }) {
-  const { darkMode } = useLanguage();
-  return (
-    <button onClick={onChange} className={cn(
-      "w-full p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 transition-all text-left rounded-xl border-2",
-      checked 
-        ? "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/10" 
-        : darkMode 
-          ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950 hover:bg-zinc-900"
-          : "border-zinc-300 hover:border-zinc-400 bg-zinc-100 hover:bg-zinc-200"
-    )}>
-      <div className={cn(
-        "w-6 h-6 sm:w-7 sm:h-7 border-2 flex items-center justify-center flex-shrink-0 rounded-lg transition-all",
-        checked ? "border-white bg-white" : darkMode ? "border-zinc-700" : "border-zinc-400"
-      )}>
-        {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600" />}
-      </div>
-      <div className="flex-1 min-w-0">
-        <span className={cn("text-xs sm:text-sm tracking-wider block font-bold", checked ? "text-white" : darkMode ? "text-white" : "text-black")}>{label}</span>
-        {description && <span className={cn("text-[10px] sm:text-xs font-sans block mt-0.5 line-clamp-1", checked ? "text-emerald-100" : darkMode ? "text-zinc-600" : "text-zinc-500")}>{description}</span>}
-      </div>
-      <div className={cn("px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex-shrink-0", 
-        checked ? "bg-white text-teal-600" : darkMode ? "bg-zinc-800 text-zinc-500" : "bg-zinc-300 text-zinc-700")}>
-        +{score}%
-      </div>
-    </button>
-  );
-}
+
 
 function PatternSelector({ value, onChange, score, label, description }) {
   const { t, darkMode } = useLanguage();
