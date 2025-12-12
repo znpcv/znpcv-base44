@@ -111,12 +111,12 @@ export default function ChecklistPage() {
   // Calculate scores
   const weeklyScore = (formData.w_at_aoi ? 10 : 0) + (formData.w_ema_touch ? 5 : 0) + 
     (formData.w_candlestick ? 10 : 0) + (formData.w_psp_rejection ? 10 : 0) + 
-    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 10 : 0) + 
+    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 5 : 0) + 
     (formData.w_pattern && formData.w_pattern !== 'none' ? 10 : 0);
   
   const dailyScore = (formData.d_at_aoi ? 10 : 0) + (formData.d_ema_touch ? 5 : 0) + 
     (formData.d_candlestick ? 10 : 0) + (formData.d_psp_rejection ? 10 : 0) + 
-    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 10 : 0) + 
+    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 5 : 0) + 
     (formData.d_pattern && formData.d_pattern !== 'none' ? 10 : 0);
   
   const h4Score = (formData.h4_ema_touch ? 5 : 0) + (formData.h4_candlestick ? 10 : 0) + 
@@ -439,7 +439,7 @@ export default function ChecklistPage() {
                         <div className="absolute inset-0 bg-white/10" />
                       )}
                       {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
-                      {trend.toUpperCase()}
+                      <span className={trend === 'bullish' ? 'text-teal-100' : 'text-rose-100'}>{trend.toUpperCase()}</span>
                       {formData.w_trend === trend && (
                         <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
                       )}
@@ -469,7 +469,7 @@ export default function ChecklistPage() {
                 description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={formData.w_swing} onChange={(checked) => update('w_swing', checked)} 
-                label={t('swingHighLow')} weight={10} 
+                label={t('swingHighLow')} weight={5} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -515,7 +515,7 @@ export default function ChecklistPage() {
                         <div className="absolute inset-0 bg-white/10" />
                       )}
                       {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
-                      {trend.toUpperCase()}
+                      <span className={trend === 'bullish' ? 'text-teal-100' : 'text-rose-100'}>{trend.toUpperCase()}</span>
                       {formData.d_trend === trend && (
                         <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
                       )}
@@ -545,7 +545,7 @@ export default function ChecklistPage() {
                 description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={formData.d_swing} onChange={(checked) => update('d_swing', checked)} 
-                label={t('swingHighLow')} weight={10} 
+                label={t('swingHighLow')} weight={5} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -591,7 +591,7 @@ export default function ChecklistPage() {
                         <div className="absolute inset-0 bg-white/10" />
                       )}
                       {trend === 'bullish' ? <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1" />}
-                      {trend.toUpperCase()}
+                      <span className={trend === 'bullish' ? 'text-teal-100' : 'text-rose-100'}>{trend.toUpperCase()}</span>
                       {formData.h4_trend === trend && (
                         <div className="text-[10px] mt-1 opacity-80">SELECTED</div>
                       )}
@@ -667,25 +667,36 @@ export default function ChecklistPage() {
                 description={t('patternIfAnyDesc')}
               />
               
-              {/* Entry Type */}
+              {/* Entry Type - Advanced */}
               <div className={`border ${theme.borderCard} rounded-2xl p-5 ${theme.bgSecondary}`}>
                 <label className={`${theme.textMuted} text-sm tracking-widest mb-4 block`}>{t('entryTrigger')}</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => update('entry_type', 'pinbar')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  <button type="button" onClick={() => update('entry_type', 'pinbar')}
+                    className={cn("p-3 sm:p-4 border-2 rounded-xl text-center transition-all group",
                       formData.entry_type === 'pinbar' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-2xl mb-2">📍</div>
-                    <div className="font-bold tracking-wider text-sm">{t('pinbarRejection')}</div>
+                    <div className="text-xl sm:text-2xl mb-1">📍</div>
+                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">PINBAR</div>
+                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5", formData.entry_type === 'pinbar' ? 'opacity-70' : theme.textMuted)}>Rejection</div>
                   </button>
-                  <button onClick={() => update('entry_type', 'engulfing')}
-                    className={cn("p-4 border-2 rounded-xl text-center transition-all",
+                  <button type="button" onClick={() => update('entry_type', 'engulfing')}
+                    className={cn("p-3 sm:p-4 border-2 rounded-xl text-center transition-all",
                       formData.entry_type === 'engulfing' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-2xl mb-2">🕯️</div>
-                    <div className="font-bold tracking-wider text-sm">{t('engulfing')}</div>
+                    <div className="text-xl sm:text-2xl mb-1">🕯️</div>
+                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">ENGULFING</div>
+                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5", formData.entry_type === 'engulfing' ? 'opacity-70' : theme.textMuted)}>Reversal</div>
+                  </button>
+                  <button type="button" onClick={() => update('entry_type', 'breakout')}
+                    className={cn("p-3 sm:p-4 border-2 rounded-xl text-center transition-all",
+                      formData.entry_type === 'breakout' 
+                        ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
+                        : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
+                    <div className="text-xl sm:text-2xl mb-1">⚡</div>
+                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">BREAKOUT</div>
+                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5", formData.entry_type === 'breakout' ? 'opacity-70' : theme.textMuted)}>Structure</div>
                   </button>
                 </div>
               </div>
@@ -696,6 +707,19 @@ export default function ChecklistPage() {
           {currentStep === 5 && (
           <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
           <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
+
+          {/* Selected Pair Display */}
+          {formData.pair && (
+            <div className={`border-2 rounded-2xl p-4 ${darkMode ? 'border-teal-600 bg-teal-600/10' : 'border-teal-500 bg-teal-500/10'}`}>
+              <div className="flex items-center gap-3">
+                <Target className="w-5 h-5 text-teal-600" />
+                <div>
+                  <div className="text-xs text-teal-600 tracking-wider mb-0.5">AUSGEWÄHLTES PAAR</div>
+                  <div className={`text-2xl font-bold tracking-wider ${theme.text}`}>{formData.pair}</div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <AdvancedLotCalculator
             pair={formData.pair}
@@ -726,29 +750,37 @@ export default function ChecklistPage() {
             <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
-              {/* Final Rule Confirmation */}
-              <div className={`border-2 rounded-2xl p-5 ${darkMode ? 'border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950' : 'border-zinc-300 bg-gradient-to-br from-zinc-100 to-zinc-50'}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <Shield className={`w-6 h-6 ${theme.text}`} />
-                  <span className={`${theme.text} font-bold tracking-widest`}>{t('confirmRule')}</span>
+              {/* Final Rule Confirmation - Enhanced */}
+              <div className={`border-2 rounded-2xl p-6 ${darkMode ? 'border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950' : 'border-zinc-300 bg-gradient-to-br from-zinc-100 to-zinc-50'}`}>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                    <Shield className={`w-7 h-7 ${darkMode ? 'text-black' : 'text-white'}`} />
+                  </div>
+                  <div>
+                    <div className={`${theme.text} font-bold tracking-widest text-lg`}>{t('confirmRule')}</div>
+                    <div className={`${theme.textMuted} text-xs font-sans`}>Bestätige die ZNPCV Goldene Regel</div>
+                  </div>
                 </div>
                 
                 {formData.direction === 'long' && (
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
+                    className={cn("w-full p-5 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
                       formData.confirms_rule 
-                        ? "bg-teal-600 border-teal-500 text-white" 
+                        ? "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/20" 
                         : darkMode ? "border-zinc-700 hover:border-teal-600/50 bg-zinc-900" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50")}>
-                    <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
-                      formData.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-4 h-4 text-teal-600" />}
+                    <div className={cn("w-8 h-8 border-2 flex items-center justify-center rounded-xl transition-all",
+                      formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
+                      {formData.confirms_rule && <Check className="w-5 h-5 text-teal-600" strokeWidth={3} />}
                     </div>
-                    <div>
-                      <div className={cn("font-bold tracking-wider", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                    <div className="flex-1">
+                      <div className={cn("font-bold tracking-wider text-base mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-sm", formData.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
-                        {t('notBuyResistance')}
+                      <div className={cn("text-xs font-sans", formData.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
+                        ✓ {t('notBuyResistance')}
+                      </div>
+                      <div className={cn("text-xs font-sans mt-1", formData.confirms_rule ? "text-teal-100/70" : "text-zinc-500")}>
+                        ✓ Nur im Support-Bereich kaufen
                       </div>
                     </div>
                   </button>
@@ -756,28 +788,32 @@ export default function ChecklistPage() {
                 
                 {formData.direction === 'short' && (
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-4 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
+                    className={cn("w-full p-5 border-2 rounded-xl flex items-center gap-4 transition-all text-left",
                       formData.confirms_rule 
-                        ? "bg-rose-600 border-rose-500 text-white" 
+                        ? "bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-600/20" 
                         : darkMode ? "border-zinc-700 hover:border-rose-600/50 bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50")}>
-                    <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg",
-                      formData.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-4 h-4 text-rose-600" />}
+                    <div className={cn("w-8 h-8 border-2 flex items-center justify-center rounded-xl transition-all",
+                      formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
+                      {formData.confirms_rule && <Check className="w-5 h-5 text-rose-600" strokeWidth={3} />}
                     </div>
-                    <div>
-                      <div className={cn("font-bold tracking-wider", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                    <div className="flex-1">
+                      <div className={cn("font-bold tracking-wider text-base mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('sellInBelowAoi')}
                       </div>
-                      <div className={cn("text-sm", formData.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
-                        {t('notSellSupport')}
+                      <div className={cn("text-xs font-sans", formData.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
+                        ✓ {t('notSellSupport')}
+                      </div>
+                      <div className={cn("text-xs font-sans mt-1", formData.confirms_rule ? "text-rose-100/70" : "text-zinc-500")}>
+                        ✓ Nur im Resistance-Bereich verkaufen
                       </div>
                     </div>
                   </button>
                 )}
 
                 {!formData.direction && (
-                  <div className={`${theme.textMuted} text-center py-4 font-sans`}>
-                    {t('selectDirFirst')}
+                  <div className={`${theme.textMuted} text-center py-8 font-sans`}>
+                    <Shield className={`w-12 h-12 mx-auto mb-3 ${theme.textMuted}`} />
+                    <div className="text-sm">{t('selectDirFirst')}</div>
                   </div>
                 )}
               </div>
@@ -988,11 +1024,11 @@ function StepHeader({ number, title, subtitle }) {
 function PatternSelector({ value, onChange, score, label, description }) {
   const { t, darkMode } = useLanguage();
   const patterns = [
-    { key: 'double_top', label: t('dblTop'), icon: 'double_top' },
-    { key: 'double_bottom', label: t('dblBtm'), icon: 'double_bottom' },
-    { key: 'head_shoulders', label: t('hs'), icon: 'hs' },
-    { key: 'inv_head_shoulders', label: t('invHs'), icon: 'inv_hs' },
-    { key: 'none', label: t('none'), icon: 'none' },
+    { key: 'double_top', label: t('dblTop'), icon: 'double_top', desc: 'Bearish Reversal' },
+    { key: 'double_bottom', label: t('dblBtm'), icon: 'double_bottom', desc: 'Bullish Reversal' },
+    { key: 'head_shoulders', label: t('hs'), icon: 'hs', desc: 'Bearish Pattern' },
+    { key: 'inv_head_shoulders', label: t('invHs'), icon: 'inv_hs', desc: 'Bullish Pattern' },
+    { key: 'none', label: t('none'), icon: 'none', desc: 'Kein Pattern' },
   ];
 
   const PatternIcon = ({ type, className }) => {
@@ -1044,21 +1080,29 @@ function PatternSelector({ value, onChange, score, label, description }) {
         <div className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-teal-600 text-white flex-shrink-0">+{score}%</div>
         )}
       </div>
-      <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
         {patterns.map((pattern) => (
           <button key={pattern.key} type="button" onClick={() => onChange(pattern.key)}
-            className={cn("p-2 sm:p-3 border rounded-lg text-center transition-all flex flex-col items-center justify-center gap-1",
+            className={cn("p-2 sm:p-3 border-2 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-1 group relative",
               value === pattern.key
                 ? pattern.key === 'none' 
                   ? darkMode ? "bg-zinc-700 border-zinc-600 text-white" : "bg-zinc-400 border-zinc-400 text-white"
-                  : "bg-teal-600 border-teal-500 text-white"
+                  : "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/20"
                 : darkMode 
                   ? "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white"
                   : "border-zinc-300 text-zinc-600 hover:border-zinc-400 bg-zinc-50 hover:text-black")}>
-            <div className="w-6 h-4 sm:w-8 sm:h-5">
+            {value === pattern.key && pattern.key !== 'none' && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full flex items-center justify-center">
+                <Check className="w-2 h-2 text-teal-600" strokeWidth={4} />
+              </div>
+            )}
+            <div className="w-6 h-4 sm:w-8 sm:h-6">
               <PatternIcon type={pattern.icon} />
             </div>
-            <div className="text-[7px] sm:text-[8px] tracking-wider font-bold leading-tight">{pattern.label}</div>
+            <div className="text-[7px] sm:text-[9px] tracking-wider font-bold leading-tight">{pattern.label}</div>
+            <div className={cn("text-[6px] sm:text-[7px] opacity-70 font-sans", value === pattern.key && pattern.key !== 'none' ? 'text-white' : theme.textMuted)}>
+              {pattern.desc}
+            </div>
           </button>
         ))}
       </div>

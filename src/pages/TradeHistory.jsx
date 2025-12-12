@@ -230,11 +230,15 @@ export default function TradeHistoryPage() {
                           {!trade.outcome && <span className="px-2 sm:px-3 py-1 bg-blue-500 text-white text-[10px] sm:text-xs tracking-wider rounded-full font-bold">PENDING</span>}
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button onClick={(e) => handleEditTrade(e, trade)}
-                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-blue-600/20 text-blue-400 hover:text-blue-500' : 'hover:bg-blue-100 text-blue-600 hover:text-blue-700'}`}>
+                          <button type="button" onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(createPageUrl('Checklist') + `?id=${trade.id}`);
+                          }}
+                            className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-teal-600/20 text-teal-400 hover:text-teal-500' : 'hover:bg-teal-100 text-teal-600 hover:text-teal-700'}`}
+                            title="Checklist bearbeiten">
                             <Edit className="w-4 h-4" />
                           </button>
-                          <button onClick={(e) => handleDeleteTrade(e, trade.id)}
+                          <button type="button" onClick={(e) => handleDeleteTrade(e, trade.id)}
                             className={`p-2 rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -292,15 +296,15 @@ export default function TradeHistoryPage() {
         {/* Footer */}
         <footer className={`mt-12 sm:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Datenschutz
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
+            <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               AGB
             </button>
           </div>
