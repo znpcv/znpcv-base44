@@ -97,62 +97,62 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
   };
 
   return (
-    <div className="space-y-4">
-      {/* Account Size */}
-      <div className={`${theme.bgCard} border ${theme.border} rounded-xl p-4`}>
-        <label className={`flex items-center gap-2 ${theme.textMuted} text-xs tracking-wider mb-3`}>
-          <DollarSign className="w-4 h-4" />
-          KONTOGRÖSSE
+    <div className="space-y-2 sm:space-y-3 md:space-y-4">
+      {/* Account Size - Compact */}
+      <div className={`${theme.bgCard} border ${theme.border} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4`}>
+        <label className={`flex items-center gap-1.5 sm:gap-2 ${theme.textMuted} text-[10px] sm:text-xs tracking-wider mb-2 sm:mb-3`}>
+          <DollarSign className="w-3 h-3 sm:w-4 sm:h-4" />
+          ACCOUNT
         </label>
-        <div className="grid grid-cols-4 gap-1.5 mb-2">
+        <div className="grid grid-cols-4 gap-1 sm:gap-1.5 mb-1.5 sm:mb-2">
           {['1000', '5000', '10000', '50000'].map((size) => (
             <button key={size} type="button" onClick={() => { setAccountSize(size); setCustomAccount(''); }}
-              className={cn("py-2 rounded-lg text-xs font-bold border transition-all",
+              className={cn("py-1.5 sm:py-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold border transition-all",
                 accountSize === size ? "bg-teal-600 text-white border-teal-600" : `${theme.input} hover:border-teal-600/50`)}>
               {size === '1000' ? '1K' : size === '5000' ? '5K' : size === '10000' ? '10K' : '50K'}
             </button>
           ))}
         </div>
-        <Input type="number" placeholder="Individuelle Kontogröße (USD)" value={customAccount}
+        <Input type="number" placeholder="Custom (USD)" value={customAccount}
           onChange={(e) => { setCustomAccount(e.target.value); if (e.target.value) setAccountSize(e.target.value); }}
-          className={`${theme.input} text-sm text-center mb-2`} />
+          className={`${theme.input} text-xs sm:text-sm text-center mb-1.5 sm:mb-2 h-8 sm:h-9 md:h-10`} />
         {accountSize && (
-          <div className="text-center p-2 bg-teal-600/10 border border-teal-600/20 rounded-lg">
-            <span className="text-teal-600 font-bold text-lg">${parseInt(accountSize).toLocaleString()}</span>
+          <div className="text-center p-1.5 sm:p-2 bg-teal-600/10 border border-teal-600/20 rounded-md sm:rounded-lg">
+            <span className="text-teal-600 font-bold text-sm sm:text-base md:text-lg">${parseInt(accountSize).toLocaleString()}</span>
           </div>
         )}
       </div>
 
-      {/* Leverage */}
-      <div className={`${theme.bgCard} border ${theme.border} rounded-xl p-4`}>
-        <label className={`flex items-center gap-2 ${theme.textMuted} text-xs tracking-wider mb-3`}>
-          <Layers className="w-4 h-4" />
-          HEBEL
+      {/* Leverage - Compact */}
+      <div className={`${theme.bgCard} border ${theme.border} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4`}>
+        <label className={`flex items-center gap-1.5 sm:gap-2 ${theme.textMuted} text-[10px] sm:text-xs tracking-wider mb-2 sm:mb-3`}>
+          <Layers className="w-3 h-3 sm:w-4 sm:h-4" />
+          LEVERAGE
         </label>
-        <div className="grid grid-cols-4 gap-1.5 mb-2">
+        <div className="grid grid-cols-4 gap-1 sm:gap-1.5 mb-1.5 sm:mb-2">
           {['50', '100', '200', '500'].map((lev) => (
             <button key={lev} type="button" onClick={() => { setLeverage(lev); setCustomLeverage(''); }}
-              className={cn("py-2 rounded-lg text-xs font-bold border transition-all",
+              className={cn("py-1.5 sm:py-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold border transition-all",
                 leverage === lev ? "bg-blue-500 text-white border-blue-500" : `${theme.input} hover:border-blue-500/50`)}>
               1:{lev}
             </button>
           ))}
         </div>
-        <Input type="number" placeholder="Individuell (z.B. 300)" value={customLeverage}
+        <Input type="number" placeholder="Custom" value={customLeverage}
           onChange={(e) => { setCustomLeverage(e.target.value); if (e.target.value) setLeverage(e.target.value); }}
-          className={`${theme.input} text-sm text-center`} />
+          className={`${theme.input} text-xs sm:text-sm text-center h-8 sm:h-9 md:h-10`} />
       </div>
 
-      {/* Risk */}
-      <div className={`${theme.bgCard} border ${theme.border} rounded-xl p-4`}>
-        <label className={`flex items-center gap-2 ${theme.textMuted} text-xs tracking-wider mb-3`}>
-          <Target className="w-4 h-4" />
-          RISIKO PRO TRADE
+      {/* Risk - Compact */}
+      <div className={`${theme.bgCard} border ${theme.border} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4`}>
+        <label className={`flex items-center gap-1.5 sm:gap-2 ${theme.textMuted} text-[10px] sm:text-xs tracking-wider mb-2 sm:mb-3`}>
+          <Target className="w-3 h-3 sm:w-4 sm:h-4" />
+          RISK %
         </label>
-        <div className="grid grid-cols-5 gap-1.5 mb-2">
+        <div className="grid grid-cols-5 gap-1 sm:gap-1.5 mb-1.5 sm:mb-2">
           {['1', '2', '3', '4', '5'].map((r) => (
             <button key={r} type="button" onClick={() => { setRiskPercent(r); setCustomRisk(''); }}
-              className={cn("py-2 rounded-lg text-sm font-bold border transition-all",
+              className={cn("py-1.5 sm:py-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs md:text-sm font-bold border transition-all",
                 riskPercent === r 
                   ? (r === '3' || r === '4' || r === '5') ? "bg-teal-600 text-white border-teal-600" : "bg-blue-500 text-white border-blue-500"
                   : `${theme.input} hover:border-teal-600/50`)}>
@@ -160,90 +160,90 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
             </button>
           ))}
         </div>
-        <Input type="number" step="0.1" placeholder="Individuell (z.B. 2.5)" value={customRisk}
+        <Input type="number" step="0.1" placeholder="Custom" value={customRisk}
           onChange={(e) => { setCustomRisk(e.target.value); if (e.target.value) setRiskPercent(e.target.value); }}
-          className={`${theme.input} text-sm text-center mb-2`} />
-        <div className="p-2 rounded-lg text-xs flex items-center gap-2 bg-teal-600/10 text-teal-400 border border-teal-600/20">
-          <Check className="w-3 h-3" />
-          ZNPCV empfiehlt 3-5%
+          className={`${theme.input} text-xs sm:text-sm text-center mb-1.5 sm:mb-2 h-8 sm:h-9 md:h-10`} />
+        <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs flex items-center gap-1.5 sm:gap-2 bg-teal-600/10 text-teal-400 border border-teal-600/20">
+          <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+          ZNPCV: 3-5%
         </div>
       </div>
 
-      {/* Trade Levels */}
-      <div className={`${theme.bgCard} border ${theme.border} rounded-xl p-4`}>
-        <label className={`flex items-center gap-2 ${theme.textMuted} text-xs tracking-wider mb-3`}>
-          <Target className="w-4 h-4" />
-          TRADE LEVELS
+      {/* Trade Levels - Compact */}
+      <div className={`${theme.bgCard} border ${theme.border} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4`}>
+        <label className={`flex items-center gap-1.5 sm:gap-2 ${theme.textMuted} text-[10px] sm:text-xs tracking-wider mb-2 sm:mb-3`}>
+          <Target className="w-3 h-3 sm:w-4 sm:h-4" />
+          LEVELS
         </label>
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <div>
-            <label className={`text-[10px] ${theme.textMuted} mb-1 block`}>ENTRY</label>
+            <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-1 block`}>ENTRY</label>
             <Input type="number" step="0.00001" value={entryPrice} onChange={(e) => setEntryPrice(e.target.value)}
-              placeholder="0.00000" className={`${theme.input} text-center`} />
+              placeholder="0.00000" className={`${theme.input} text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10`} />
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
             <div>
-              <label className="text-[10px] text-rose-600 mb-1 block">STOP LOSS</label>
+              <label className="text-[9px] sm:text-[10px] text-rose-600 mb-1 block">SL</label>
               <Input type="number" step="0.00001" value={stopLoss} onChange={(e) => setStopLoss(e.target.value)}
-                placeholder="0.00000" className="bg-rose-600/10 border-rose-600/30 text-center" />
+                placeholder="0.00000" className="bg-rose-600/10 border-rose-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
             </div>
             <div>
-              <label className="text-[10px] text-teal-600 mb-1 block">TAKE PROFIT</label>
+              <label className="text-[9px] sm:text-[10px] text-teal-600 mb-1 block">TP</label>
               <Input type="number" step="0.00001" value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)}
-                placeholder="0.00000" className="bg-teal-600/10 border-teal-600/30 text-center" />
+                placeholder="0.00000" className="bg-teal-600/10 border-teal-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
             </div>
           </div>
-          <details className="mt-2">
-            <summary className={`text-[10px] ${theme.textMuted} cursor-pointer hover:text-teal-600`}>+ Weitere TP Levels</summary>
-            <div className="grid grid-cols-2 gap-2 mt-2">
+          <details className="mt-1.5 sm:mt-2">
+            <summary className={`text-[9px] sm:text-[10px] ${theme.textMuted} cursor-pointer hover:text-teal-600`}>+ TP2/TP3</summary>
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-1.5 sm:mt-2">
               <Input type="number" step="0.00001" value={takeProfit2} onChange={(e) => setTakeProfit2(e.target.value)}
-                placeholder="TP2" className={`${theme.input} text-xs text-center`} />
+                placeholder="TP2" className={`${theme.input} text-[10px] sm:text-xs text-center h-7 sm:h-8`} />
               <Input type="number" step="0.00001" value={takeProfit3} onChange={(e) => setTakeProfit3(e.target.value)}
-                placeholder="TP3" className={`${theme.input} text-xs text-center`} />
+                placeholder="TP3" className={`${theme.input} text-[10px] sm:text-xs text-center h-7 sm:h-8`} />
             </div>
           </details>
         </div>
       </div>
 
-      {/* Results */}
+      {/* Results - Compact */}
       {calculation?.isValid && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-          className="border-2 border-teal-600/30 bg-gradient-to-br from-teal-600/10 to-teal-600/5 rounded-xl overflow-hidden">
-          <div className="bg-teal-600 text-white p-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Calculator className="w-5 h-5" />
-              <span className="font-bold tracking-wider text-sm">ADVANCED CALCULATION</span>
+          className="border-2 border-teal-600/30 bg-gradient-to-br from-teal-600/10 to-teal-600/5 rounded-lg sm:rounded-xl overflow-hidden">
+          <div className="bg-teal-600 text-white p-2 sm:p-2.5 md:p-3 flex items-center justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+              <span className="font-bold tracking-wider text-[10px] sm:text-xs md:text-sm">CALCULATION</span>
             </div>
-            <Zap className="w-4 h-4" />
+            <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
           </div>
           
-          <div className="p-4 space-y-3">
-            <div className={`text-center p-4 rounded-xl ${darkMode ? 'bg-black/30' : 'bg-white'}`}>
-              <div className={`text-[10px] tracking-widest mb-1 ${theme.textMuted}`}>LOT SIZE</div>
-              <div className={`text-4xl font-bold ${theme.text}`}>{calculation.lotSize}</div>
-              <div className="grid grid-cols-3 gap-2 mt-3 text-xs">
+          <div className="p-2.5 sm:p-3 md:p-4 space-y-2 sm:space-y-3">
+            <div className={`text-center p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl ${darkMode ? 'bg-black/30' : 'bg-white'}`}>
+              <div className={`text-[9px] sm:text-[10px] tracking-widest mb-0.5 sm:mb-1 ${theme.textMuted}`}>LOT SIZE</div>
+              <div className={`text-2xl sm:text-3xl md:text-4xl font-bold ${theme.text}`}>{calculation.lotSize}</div>
+              <div className="grid grid-cols-3 gap-1 sm:gap-2 mt-2 sm:mt-3 text-[10px] sm:text-xs">
                 <div><span className={theme.textMuted}>Mini:</span> <span className="font-bold">{calculation.miniLots}</span></div>
                 <div><span className={theme.textMuted}>Micro:</span> <span className="font-bold">{calculation.microLots}</span></div>
                 <div><span className={theme.textMuted}>Units:</span> <span className="font-bold">{calculation.units}</span></div>
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-2">
-              <div className={`p-3 rounded-lg ${theme.bg}`}>
-                <div className={`text-[9px] ${theme.textMuted}`}>RISIKO</div>
-                <div className="text-lg font-bold text-rose-600">${calculation.riskAmount}</div>
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+              <div className={`p-2 sm:p-2.5 md:p-3 rounded-md sm:rounded-lg ${theme.bg}`}>
+                <div className={`text-[8px] sm:text-[9px] ${theme.textMuted}`}>RISK</div>
+                <div className="text-sm sm:text-base md:text-lg font-bold text-rose-600">${calculation.riskAmount}</div>
               </div>
-              <div className={`p-3 rounded-lg ${theme.bg}`}>
-                <div className={`text-[9px] ${theme.textMuted}`}>MARGIN ({calculation.marginPercent}%)</div>
-                <div className={`text-lg font-bold ${theme.text}`}>${calculation.marginRequired}</div>
+              <div className={`p-2 sm:p-2.5 md:p-3 rounded-md sm:rounded-lg ${theme.bg}`}>
+                <div className={`text-[8px] sm:text-[9px] ${theme.textMuted}`}>MARGIN</div>
+                <div className={`text-sm sm:text-base md:text-lg font-bold ${theme.text}`}>${calculation.marginRequired}</div>
               </div>
-              <div className={`p-3 rounded-lg ${theme.bg}`}>
-                <div className={`text-[9px] ${theme.textMuted}`}>SL PIPS</div>
-                <div className={`text-lg font-bold ${theme.text}`}>{calculation.slPips}</div>
+              <div className={`p-2 sm:p-2.5 md:p-3 rounded-md sm:rounded-lg ${theme.bg}`}>
+                <div className={`text-[8px] sm:text-[9px] ${theme.textMuted}`}>SL PIPS</div>
+                <div className={`text-sm sm:text-base md:text-lg font-bold ${theme.text}`}>{calculation.slPips}</div>
               </div>
-              <div className={`p-3 rounded-lg ${theme.bg}`}>
-                <div className={`text-[9px] ${theme.textMuted}`}>R:R</div>
-                <div className={cn("text-lg font-bold", 
+              <div className={`p-2 sm:p-2.5 md:p-3 rounded-md sm:rounded-lg ${theme.bg}`}>
+                <div className={`text-[8px] sm:text-[9px] ${theme.textMuted}`}>R:R</div>
+                <div className={cn("text-sm sm:text-base md:text-lg font-bold", 
                   parseFloat(calculation.rr) >= 2.5 ? "text-teal-600" : 
                   parseFloat(calculation.rr) >= 1.5 ? "text-amber-500" : "text-rose-600")}>
                   1:{calculation.rr}
@@ -252,20 +252,20 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
             </div>
             
             {parseFloat(calculation.rr) > 0 && (
-              <div className="space-y-2">
-                <div className="p-3 bg-teal-600/20 border border-teal-600/30 rounded-lg flex items-center justify-between">
-                  <span className="text-teal-600 text-xs font-bold">TP1 PROFIT</span>
-                  <span className="text-teal-600 text-xl font-bold">${calculation.potentialProfit}</span>
+              <div className="space-y-1.5 sm:space-y-2">
+                <div className="p-2 sm:p-2.5 md:p-3 bg-teal-600/20 border border-teal-600/30 rounded-md sm:rounded-lg flex items-center justify-between">
+                  <span className="text-teal-600 text-[10px] sm:text-xs font-bold">TP1</span>
+                  <span className="text-teal-600 text-base sm:text-lg md:text-xl font-bold">${calculation.potentialProfit}</span>
                 </div>
                 {takeProfit2 && parseFloat(calculation.tp2Profit) > 0 && (
-                  <div className="p-2 bg-teal-600/10 rounded-lg flex justify-between text-xs">
-                    <span className="text-teal-600">TP2 PROFIT</span>
+                  <div className="p-1.5 sm:p-2 bg-teal-600/10 rounded-md sm:rounded-lg flex justify-between text-[10px] sm:text-xs">
+                    <span className="text-teal-600">TP2</span>
                     <span className="text-teal-600 font-bold">${calculation.tp2Profit}</span>
                   </div>
                 )}
                 {takeProfit3 && parseFloat(calculation.tp3Profit) > 0 && (
-                  <div className="p-2 bg-teal-600/10 rounded-lg flex justify-between text-xs">
-                    <span className="text-teal-600">TP3 PROFIT</span>
+                  <div className="p-1.5 sm:p-2 bg-teal-600/10 rounded-md sm:rounded-lg flex justify-between text-[10px] sm:text-xs">
+                    <span className="text-teal-600">TP3</span>
                     <span className="text-teal-600 font-bold">${calculation.tp3Profit}</span>
                   </div>
                 )}
@@ -273,9 +273,9 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
             )}
             
             {parseFloat(calculation.rr) < 2.5 && parseFloat(calculation.rr) > 0 && (
-              <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-500" />
-                <span className="text-amber-500 text-xs">ZNPCV empfiehlt min. 1:2.5 R:R</span>
+              <div className="p-1.5 sm:p-2 bg-amber-500/10 border border-amber-500/30 rounded-md sm:rounded-lg flex items-center gap-1.5 sm:gap-2">
+                <AlertTriangle className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-amber-500 flex-shrink-0" />
+                <span className="text-amber-500 text-[9px] sm:text-[10px] md:text-xs">Min. 1:2.5 R:R</span>
               </div>
             )}
           </div>

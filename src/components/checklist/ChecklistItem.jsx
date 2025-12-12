@@ -20,7 +20,7 @@ export default function ChecklistItem({
       onClick={() => onChange(!checked)}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        "w-full p-4 rounded-xl border-2 transition-all text-left group relative overflow-hidden",
+        "w-full p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all text-left group relative overflow-hidden",
         checked 
           ? "bg-teal-600 border-teal-600" 
           : darkMode 
@@ -29,25 +29,25 @@ export default function ChecklistItem({
       )}
     >
       {weight && (
-        <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold",
+        <div className={cn("absolute top-1.5 sm:top-2 right-1.5 sm:right-2 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold",
           checked ? "bg-white/20 text-white" : "bg-teal-600/10 text-teal-600")}>
           +{weight}%
         </div>
       )}
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2 sm:gap-2.5 md:gap-3">
         <div className={cn(
-          "w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all",
+          "w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all",
           checked ? "bg-white border-white" : darkMode ? "border-zinc-700" : "border-zinc-400"
         )}>
-          {checked && <Check className="w-4 h-4 text-teal-600" strokeWidth={3} />}
+          {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600" strokeWidth={3} />}
         </div>
-        <div className="flex-1">
-          <div className={cn("text-sm font-bold tracking-wider mb-1", 
+        <div className="flex-1 min-w-0">
+          <div className={cn("text-xs sm:text-sm font-bold tracking-wider mb-0.5 sm:mb-1", 
             checked ? "text-white" : darkMode ? "text-white" : "text-black")}>
             {label}
           </div>
           {description && (
-            <div className={cn("text-xs leading-relaxed", 
+            <div className={cn("text-[10px] sm:text-xs leading-relaxed font-sans", 
               checked ? "text-teal-100" : darkMode ? "text-zinc-500" : "text-zinc-600")}>
               {description}
             </div>
