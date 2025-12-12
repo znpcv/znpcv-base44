@@ -1046,7 +1046,7 @@ function PatternSelector({ value, onChange, score, label, description }) {
       </div>
       <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
         {patterns.map((pattern) => (
-          <button key={pattern.key} onClick={() => onChange(pattern.key)}
+          <button key={pattern.key} type="button" onClick={() => onChange(pattern.key)}
             className={cn("p-2 sm:p-3 border rounded-lg text-center transition-all flex flex-col items-center justify-center gap-1",
               value === pattern.key
                 ? pattern.key === 'none' 
