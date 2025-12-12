@@ -123,12 +123,12 @@ export default function TradeDetailPage() {
 
   const weeklyScore = (trade.w_at_aoi ? 10 : 0) + (trade.w_ema_touch ? 5 : 0) + 
     (trade.w_candlestick ? 10 : 0) + (trade.w_psp_rejection ? 10 : 0) + 
-    (trade.w_round_level ? 5 : 0) + (trade.w_swing ? 10 : 0) + 
+    (trade.w_round_level ? 5 : 0) + (trade.w_swing ? 5 : 0) + 
     (trade.w_pattern && trade.w_pattern !== 'none' ? 10 : 0);
   
   const dailyScore = (trade.d_at_aoi ? 10 : 0) + (trade.d_ema_touch ? 5 : 0) + 
     (trade.d_candlestick ? 10 : 0) + (trade.d_psp_rejection ? 10 : 0) + 
-    (trade.d_round_level ? 5 : 0) + (trade.d_swing ? 10 : 0) + 
+    (trade.d_round_level ? 5 : 0) + (trade.d_swing ? 5 : 0) + 
     (trade.d_pattern && trade.d_pattern !== 'none' ? 10 : 0);
   
   const h4Score = (trade.h4_at_aoi ? 5 : 0) + (trade.h4_candlestick ? 10 : 0) + 

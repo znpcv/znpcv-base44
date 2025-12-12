@@ -108,15 +108,15 @@ export default function ChecklistPage() {
 
 
 
-  // Calculate scores - CORRECTED
+  // Calculate scores - FINAL CORRECTED
   const weeklyScore = (formData.w_at_aoi ? 10 : 0) + (formData.w_ema_touch ? 5 : 0) + 
     (formData.w_candlestick ? 10 : 0) + (formData.w_psp_rejection ? 10 : 0) + 
-    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 10 : 0) + 
+    (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 5 : 0) + 
     (formData.w_pattern && formData.w_pattern !== 'none' ? 10 : 0);
   
   const dailyScore = (formData.d_at_aoi ? 10 : 0) + (formData.d_ema_touch ? 5 : 0) + 
     (formData.d_candlestick ? 10 : 0) + (formData.d_psp_rejection ? 10 : 0) + 
-    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 10 : 0) + 
+    (formData.d_round_level ? 5 : 0) + (formData.d_swing ? 5 : 0) + 
     (formData.d_pattern && formData.d_pattern !== 'none' ? 10 : 0);
   
   const h4Score = (formData.h4_at_aoi ? 5 : 0) + (formData.h4_candlestick ? 10 : 0) + 
@@ -469,7 +469,7 @@ export default function ChecklistPage() {
                 description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={formData.w_swing} onChange={(checked) => update('w_swing', checked)} 
-                label={t('swingHighLow')} weight={10} 
+                label={t('swingHighLow')} weight={5} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
@@ -545,7 +545,7 @@ export default function ChecklistPage() {
                 description={t('roundLevelDesc')} />
               
               <ChecklistItem checked={formData.d_swing} onChange={(checked) => update('d_swing', checked)} 
-                label={t('swingHighLow')} weight={10} 
+                label={t('swingHighLow')} weight={5} 
                 description={t('swingDesc')} />
               
               <PatternSelector 
