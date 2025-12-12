@@ -11,6 +11,7 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
 import { cn } from "@/lib/utils";
+import ForexFactoryCalendar from '@/components/ForexFactoryCalendar';
 
 const SESSIONS = [
   { name: 'SYDNEY', timezone: 'Australia/Sydney', emoji: '🇦🇺', openHour: 7, closeHour: 16 },
@@ -247,6 +248,20 @@ export default function HomePage() {
         <div className="mb-16">
           <TradingQuote />
         </div>
+
+        {/* Forex Factory Calendar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-16"
+        >
+          <div className="text-center mb-6">
+            <h3 className="text-2xl tracking-widest mb-2">WIRTSCHAFTSKALENDER</h3>
+            <p className={`${theme.textDimmed} text-sm`}>Wichtige News & Events</p>
+          </div>
+          <ForexFactoryCalendar />
+        </motion.div>
 
         {/* Features */}
         <motion.div

@@ -111,11 +111,11 @@ export default function LivePriceDisplay({ pair, darkMode }) {
       </div>
       <div className="flex items-center gap-1">
         {isPositive ? (
-          <TrendingUp className="w-4 h-4 text-emerald-500" />
+          <TrendingUp className="w-4 h-4 text-teal-600" />
         ) : (
-          <TrendingDown className="w-4 h-4 text-red-500" />
+          <TrendingDown className="w-4 h-4 text-rose-600" />
         )}
-        <span className={cn("text-sm font-bold", isPositive ? "text-emerald-500" : "text-red-500")}>
+        <span className={cn("text-sm font-bold", isPositive ? "text-teal-600" : "text-rose-600")}>
           {isPositive ? '+' : ''}{change}%
         </span>
       </div>

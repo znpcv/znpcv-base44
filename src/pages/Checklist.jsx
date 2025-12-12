@@ -29,6 +29,8 @@ export default function ChecklistPage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
 
+  const [uploading, setUploading] = useState(false);
+
   const [checklist, setChecklist] = useState({
     pair: '',
     trade_date: format(new Date(), 'yyyy-MM-dd'),
@@ -694,8 +696,6 @@ export default function ChecklistPage() {
                   if (data.take_profit !== undefined) update('take_profit', data.take_profit);
                 }}
               />
-
-
             </motion.div>
           )}
 
@@ -1090,7 +1090,7 @@ function SummaryRow({ label, value, color }) {
 
 function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
   const { darkMode } = useLanguage();
-  const [uploading, setUploading] = useState(false);
+  const [uploadingLocal, setUploadingLocal] = useState(false);
 
   const theme = {
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
@@ -1103,11 +1103,11 @@ function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
     
-    setUploading(true);
+    setUploadingLocal(true);
     try {
       await onUpload(files);
     } finally {
-      setUploading(false);
+      setUploadingLocal(false);
       e.target.value = '';
     }
   };
@@ -1134,9 +1134,9 @@ function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
       )}
 
       <label className={cn("flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all",
-        uploading ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950" : "border-zinc-300 hover:border-zinc-400 bg-zinc-100")}>
-        <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploading} />
-        {uploading ? (
+        uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950" : "border-zinc-300 hover:border-zinc-400 bg-zinc-100")}>
+        <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploadingLocal} />
+        {uploadingLocal ? (
           <>
             <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mb-2" />
             <span className={`text-sm ${theme.textSecondary}`}>Hochladen...</span>

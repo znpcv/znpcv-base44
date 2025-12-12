@@ -155,13 +155,27 @@ export default function TradeHistoryPage() {
                           trade.outcome === 'loss' ? 'bg-rose-600 text-white' :
                           trade.outcome === 'breakeven' ? 'bg-zinc-600 text-white' :
                           trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
-                          {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                          {(trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0) || (!trade.outcome && trade.direction === 'long') ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                         </div>
                         <div>
                           <div className={`text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
                           <div className={`text-xs ${theme.textMuted}`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</div>
                         </div>
                       </div>
+                      {trade.screenshots && trade.screenshots.length > 0 && (
+                        <div className="flex gap-1 mr-3">
+                          {trade.screenshots.slice(0, 2).map((url, i) => (
+                            <div key={i} className={`w-8 h-8 rounded border ${theme.border} overflow-hidden`}>
+                              <img src={url} alt="" className="w-full h-full object-cover" />
+                            </div>
+                          ))}
+                          {trade.screenshots.length > 2 && (
+                            <div className={`w-8 h-8 rounded ${theme.bgCard} border ${theme.border} flex items-center justify-center text-xs ${theme.textSecondary}`}>
+                              +{trade.screenshots.length - 2}
+                            </div>
+                          )}
+                        </div>
+                      )}
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           {trade.outcome && (

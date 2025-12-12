@@ -255,7 +255,7 @@ export default function DashboardPage() {
                             trade.outcome === 'win' ? 'bg-teal-600 text-white' :
                             trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 
                             trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
-                            {trade.outcome === 'win' || trade.direction === 'long' ? <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" /> : <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5" />}
+                            {(trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0) || (!trade.outcome && trade.direction === 'long') ? <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" /> : <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                           </div>
                           <div>
                             <div className={`text-sm sm:text-base tracking-wider ${theme.text}`}>{trade.pair || '-'}</div>
