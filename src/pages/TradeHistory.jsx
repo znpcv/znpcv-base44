@@ -15,6 +15,7 @@ import TradeEditModal from '@/components/advanced/TradeEditModal';
 import AdvancedMetrics from '@/components/advanced/AdvancedMetrics';
 import TradeFilters from '@/components/advanced/TradeFilters';
 import QuickStats from '@/components/advanced/QuickStats';
+import AIPerformanceAnalysis from '@/components/advanced/AIPerformanceAnalysis';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -127,6 +128,9 @@ export default function TradeHistoryPage() {
           <h1 className={`text-4xl tracking-widest mb-2 ${theme.text}`}>TRADE HISTORY</h1>
           <p className={`${theme.textMuted} tracking-wider`}>Performance Analytics & Trade Log</p>
         </motion.div>
+
+        {/* AI Analysis */}
+        <AIPerformanceAnalysis checklists={checklists} darkMode={darkMode} />
 
         {/* Quick Stats */}
         <QuickStats checklists={checklists} darkMode={darkMode} />

@@ -14,6 +14,7 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
 import PerformanceChart from '@/components/advanced/PerformanceChart';
+import AIPerformanceAnalysis from '@/components/advanced/AIPerformanceAnalysis';
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -148,7 +149,7 @@ export default function DashboardPage() {
               </button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all ${darkMode ? 'border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400'}`}>
+              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl border-2 transition-all ${darkMode ? 'border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400'}`}>
                 <Activity className="w-4 h-4" />
                 <span className="text-xs tracking-wider font-bold">HISTORY</span>
               </button>
@@ -193,6 +194,9 @@ export default function DashboardPage() {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* AI Performance Analysis */}
+        <AIPerformanceAnalysis checklists={checklists} darkMode={darkMode} />
 
         {/* Performance Chart */}
         <PerformanceChart checklists={checklists} darkMode={darkMode} />
