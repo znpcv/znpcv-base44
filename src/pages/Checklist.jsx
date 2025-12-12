@@ -362,7 +362,7 @@ export default function ChecklistPage() {
               <AssetSelector selectedPair={formData.pair} onSelect={(pair) => update('pair', pair)} />
 
               {formData.pair && (
-                <div className="mt-6 grid md:grid-cols-2 gap-4">
+                <div className="mt-4 sm:mt-6 grid gap-3 sm:gap-4">
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                     <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
                   </motion.div>
@@ -376,35 +376,35 @@ export default function ChecklistPage() {
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                   
                   {/* Direction Selection */}
-                  <label className={`${theme.textMuted} text-sm tracking-widest block`}>{t('selectDirection')}</label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <label className={`${theme.textMuted} text-xs sm:text-sm tracking-widest block`}>{t('selectDirection')}</label>
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <motion.button 
                       type="button" 
                       onClick={() => update('direction', 'long')}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={cn("p-4 sm:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden",
+                      className={cn("p-3 sm:p-4 md:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
                         formData.direction === 'long' ? "bg-teal-600 text-white border-teal-600" : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
                       {formData.direction === 'long' && (
                         <div className="absolute inset-0 bg-white/10 animate-pulse" />
                       )}
-                      <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
+                      <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 mx-auto mb-1 sm:mb-2" />
                       LONG / BUY
-                      <div className="text-xs font-normal mt-1 opacity-80">{t('buyInAoi')}</div>
+                      <div className="text-[10px] sm:text-xs font-normal mt-0.5 sm:mt-1 opacity-80">{t('buyInAoi')}</div>
                     </motion.button>
                     <motion.button 
                       type="button" 
                       onClick={() => update('direction', 'short')}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className={cn("p-4 sm:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden",
+                      className={cn("p-3 sm:p-4 md:p-5 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
                         formData.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
                       {formData.direction === 'short' && (
                         <div className="absolute inset-0 bg-white/10 animate-pulse" />
                       )}
-                      <TrendingDown className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
+                      <TrendingDown className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 mx-auto mb-1 sm:mb-2" />
                       SHORT / SELL
-                      <div className="text-xs font-normal mt-1 opacity-80">{t('sellInAoi')}</div>
+                      <div className="text-[10px] sm:text-xs font-normal mt-0.5 sm:mt-1 opacity-80">{t('sellInAoi')}</div>
                     </motion.button>
                   </div>
                 </motion.div>
@@ -718,16 +718,11 @@ export default function ChecklistPage() {
             </div>
           )}
 
-          {/* Live Market Data */}
+          {/* Live Market Data - Price Only */}
           {formData.pair && (
-            <div className="grid md:grid-cols-2 gap-4">
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
-              </motion.div>
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-                <MarketChart pair={formData.pair} darkMode={darkMode} />
-              </motion.div>
-            </div>
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+              <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
+            </motion.div>
           )}
 
           <AdvancedLotCalculator

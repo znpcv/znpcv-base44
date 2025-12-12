@@ -164,9 +164,10 @@ export default function TradeDetailPage() {
               alt="ZNPCV" 
               className="h-10 w-auto"
             />
-            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} variant="outline" className={theme.border}>
-              <Edit className="w-4 h-4 mr-2" />
-              BEARBEITEN
+            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} variant="outline" size="sm" className={`${theme.border} gap-1 sm:gap-2`}>
+              <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">BEARBEITEN</span>
+              <span className="sm:hidden text-xs">EDIT</span>
             </Button>
           </div>
         </div>
@@ -174,13 +175,13 @@ export default function TradeDetailPage() {
 
       <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
         {/* Trade Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl tracking-widest mb-2">{trade.pair}</h1>
-              <p className={theme.textSecondary}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-4">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-1 sm:mb-2 truncate">{trade.pair}</h1>
+              <p className={`${theme.textSecondary} text-xs sm:text-sm`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</p>
             </div>
-            <div className={cn("px-6 py-3 rounded-xl text-2xl font-bold",
+            <div className={cn("px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 rounded-lg sm:rounded-xl text-sm sm:text-xl md:text-2xl font-bold whitespace-nowrap flex-shrink-0",
               trade.direction === 'long' ? 'bg-teal-600 text-white' : 'bg-rose-600 text-white')}>
               {trade.direction === 'long' ? '↑ LONG' : '↓ SHORT'}
             </div>
@@ -188,68 +189,69 @@ export default function TradeDetailPage() {
         </motion.div>
 
         {/* Live Market Data */}
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
+        <div className="grid gap-3 sm:gap-4 mb-4 sm:mb-6">
           <LivePriceDisplay pair={trade.pair} darkMode={darkMode} />
           <MarketChart pair={trade.pair} darkMode={darkMode} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Left Column - Screenshots */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
             {/* Screenshots Section */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgCard}`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl tracking-widest flex items-center gap-2">
-                  <ImageIcon className="w-5 h-5" />
-                  SCREENSHOTS
+              className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+              <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                <h2 className="text-sm sm:text-lg md:text-xl tracking-widest flex items-center gap-1.5 sm:gap-2">
+                  <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden xs:inline">SCREENSHOTS</span>
+                  <span className="xs:hidden">SCREENS</span>
                 </h2>
-                <label className={`px-4 py-2 rounded-xl border-2 cursor-pointer transition-all ${
+                <label className={`px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all text-xs sm:text-sm font-bold ${
                   darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'
                 } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
-                  <Upload className="w-4 h-4 inline mr-2" />
-                  {uploading ? 'HOCHLADEN...' : 'HOCHLADEN'}
+                  <Upload className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
+                  {uploading ? 'UP...' : 'UP'}
                 </label>
               </div>
               
               {trade.screenshots && trade.screenshots.length > 0 ? (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                   {trade.screenshots.map((url, index) => (
                     <div key={index} className="relative group">
-                      <img src={url} alt={`Screenshot ${index + 1}`} className="w-full h-48 object-cover rounded-xl border-2 border-zinc-800" />
+                      <img src={url} alt={`Screenshot ${index + 1}`} className={`w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg sm:rounded-xl border-2 ${theme.border}`} />
                       <button onClick={() => handleDeleteImage(url)}
-                        className="absolute top-2 right-2 p-2 bg-rose-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Trash2 className="w-4 h-4" />
+                        className="absolute top-1 right-1 sm:top-2 sm:right-2 p-1 sm:p-1.5 md:p-2 bg-rose-600 text-white rounded-md sm:rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className={`border-2 border-dashed ${theme.border} rounded-xl p-12 text-center`}>
-                  <ImageIcon className={`w-12 h-12 mx-auto mb-3 ${theme.textSecondary}`} />
-                  <p className={theme.textSecondary}>Keine Screenshots hochgeladen</p>
+                <div className={`border-2 border-dashed ${theme.border} rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center`}>
+                  <ImageIcon className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-2 sm:mb-3 ${theme.textSecondary}`} />
+                  <p className={`${theme.textSecondary} text-xs sm:text-sm`}>Keine Screenshots</p>
                 </div>
               )}
             </motion.div>
 
             {/* Trade Outcome */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgCard}`}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl tracking-widest">TRADE ERGEBNIS</h2>
+              className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+              <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                <h2 className="text-sm sm:text-lg md:text-xl tracking-widest">ERGEBNIS</h2>
                 {!editing && (
-                  <Button onClick={() => setEditing(true)} variant="outline" className={theme.border}>
-                    <Edit className="w-4 h-4 mr-2" />
-                    BEARBEITEN
+                  <Button onClick={() => setEditing(true)} variant="outline" size="sm" className={`${theme.border} gap-1`}>
+                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline text-xs">EDIT</span>
                   </Button>
                 )}
               </div>
 
               {editing ? (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className={`block text-sm ${theme.textSecondary} mb-2`}>ERGEBNIS</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>ERGEBNIS</label>
                     <Select value={editData.outcome} onValueChange={(v) => setEditData({...editData, outcome: v})}>
                       <SelectTrigger className={theme.border}>
                         <SelectValue />
@@ -264,69 +266,69 @@ export default function TradeDetailPage() {
                   </div>
 
                   <div>
-                    <label className={`block text-sm ${theme.textSecondary} mb-2`}>TATSÄCHLICHER P&L ($)</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>P&L ($)</label>
                     <Input 
                       type="number" 
                       step="0.01"
                       value={editData.actual_pnl} 
                       onChange={(e) => setEditData({...editData, actual_pnl: e.target.value})}
-                      placeholder="z.B. 250.50 oder -150.00"
-                      className={theme.border}
+                      placeholder="z.B. 250.50"
+                      className={`${theme.border} h-10 sm:h-11`}
                     />
                   </div>
 
                   <div>
-                    <label className={`block text-sm ${theme.textSecondary} mb-2`}>AUSSTIEGSDATUM</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>DATUM</label>
                     <Input 
                       type="date"
                       value={editData.exit_date} 
                       onChange={(e) => setEditData({...editData, exit_date: e.target.value})}
-                      className={theme.border}
+                      className={`${theme.border} h-10 sm:h-11`}
                     />
                   </div>
 
                   <div>
-                    <label className={`block text-sm ${theme.textSecondary} mb-2`}>NOTIZEN</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>NOTIZEN</label>
                     <Textarea 
                       value={editData.notes} 
                       onChange={(e) => setEditData({...editData, notes: e.target.value})}
-                      placeholder="Zusätzliche Notizen zum Trade..."
-                      className={`${theme.border} min-h-[100px]`}
+                      placeholder="Trade Notizen..."
+                      className={`${theme.border} min-h-[80px] sm:min-h-[100px] text-sm`}
                     />
                   </div>
 
                   <div className="flex gap-2">
-                    <Button onClick={handleSaveOutcome} className={`flex-1 ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
-                      <Save className="w-4 h-4 mr-2" />
-                      SPEICHERN
+                    <Button onClick={handleSaveOutcome} className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                      <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                      SAVE
                     </Button>
-                    <Button onClick={() => setEditing(false)} variant="outline" className={theme.border}>
+                    <Button onClick={() => setEditing(false)} variant="outline" size="sm" className={theme.border}>
                       <X className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <div className={`flex items-center justify-between p-4 rounded-xl border-2 ${
+                <div className="space-y-2 sm:space-y-3 md:space-y-4">
+                  <div className={`flex items-center justify-between p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${
                     trade.outcome === 'win' ? 'bg-teal-600 border-teal-500 text-white' :
                     trade.outcome === 'loss' ? 'bg-rose-600 border-rose-500 text-white' :
                     trade.outcome === 'breakeven' ? 'bg-amber-500 border-amber-400 text-white' :
                     `${theme.border} ${theme.bgCard}`
                   }`}>
-                    <span className="tracking-wider">STATUS</span>
-                    <span className="font-bold text-lg">{
-                      trade.outcome === 'win' ? 'GEWINN' :
-                      trade.outcome === 'loss' ? 'VERLUST' :
-                      trade.outcome === 'breakeven' ? 'BREAKEVEN' :
-                      'AUSSTEHEND'
+                    <span className="tracking-wider text-xs sm:text-sm">STATUS</span>
+                    <span className="font-bold text-sm sm:text-base md:text-lg">{
+                      trade.outcome === 'win' ? 'WIN' :
+                      trade.outcome === 'loss' ? 'LOSS' :
+                      trade.outcome === 'breakeven' ? 'BE' :
+                      'PENDING'
                     }</span>
                   </div>
 
                   {trade.actual_pnl && (
-                    <div className={`p-4 rounded-xl border-2 ${theme.border}`}>
-                      <div className="flex items-center justify-between">
-                        <span className={theme.textSecondary}>TATSÄCHLICHER P&L</span>
-                        <span className={cn("text-2xl font-bold",
+                    <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>P&L</span>
+                        <span className={cn("text-lg sm:text-xl md:text-2xl font-bold",
                           parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
                           parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
                           {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
@@ -336,10 +338,10 @@ export default function TradeDetailPage() {
                   )}
 
                   {trade.exit_date && (
-                    <div className={`p-4 rounded-xl border-2 ${theme.border}`}>
-                      <div className="flex items-center justify-between">
-                        <span className={theme.textSecondary}>AUSSTIEGSDATUM</span>
-                        <span className={theme.text}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
+                    <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>EXIT</span>
+                        <span className={`${theme.text} text-xs sm:text-sm`}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
                       </div>
                     </div>
                   )}
@@ -349,26 +351,26 @@ export default function TradeDetailPage() {
           </div>
 
           {/* Right Column - Trade Details */}
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 md:space-y-6">
             {/* Score Summary */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgCard} text-center`}>
-              <div className="text-5xl font-light mb-2">{totalScore}%</div>
-              <div className={`text-sm ${theme.textSecondary} tracking-widest mb-4`}>GESAMT SCORE</div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
+              className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgCard} text-center`}>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-light mb-1 sm:mb-2">{totalScore}%</div>
+              <div className={`text-xs sm:text-sm ${theme.textSecondary} tracking-widest mb-3 sm:mb-4`}>SCORE</div>
+              <div className="space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className={theme.textSecondary}>Weekly</span>
                   <span className={theme.text}>{weeklyScore}/60</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className={theme.textSecondary}>Daily</span>
                   <span className={theme.text}>{dailyScore}/60</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className={theme.textSecondary}>4H</span>
                   <span className={theme.text}>{h4Score}/35</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-xs sm:text-sm">
                   <span className={theme.textSecondary}>Entry</span>
                   <span className={theme.text}>{entryScore}/25</span>
                 </div>
@@ -377,43 +379,43 @@ export default function TradeDetailPage() {
 
             {/* Trade Setup */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgCard}`}>
-              <h3 className="text-lg tracking-widest mb-4">TRADE SETUP</h3>
-              <div className="space-y-3">
+              className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+              <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4">SETUP</h3>
+              <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 {trade.entry_price && (
-                  <div className="flex justify-between">
-                    <span className={theme.textSecondary}>Entry</span>
-                    <span className={theme.text}>{trade.entry_price}</span>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Entry</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>{trade.entry_price}</span>
                   </div>
                 )}
                 {trade.stop_loss && (
-                  <div className="flex justify-between">
-                    <span className={theme.textSecondary}>Stop Loss</span>
-                    <span className="text-rose-600">{trade.stop_loss}</span>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>SL</span>
+                    <span className="text-rose-600 text-xs sm:text-sm font-mono">{trade.stop_loss}</span>
                   </div>
                 )}
                 {trade.take_profit && (
-                  <div className="flex justify-between">
-                    <span className={theme.textSecondary}>Take Profit</span>
-                    <span className="text-teal-600">{trade.take_profit}</span>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>TP</span>
+                    <span className="text-teal-600 text-xs sm:text-sm font-mono">{trade.take_profit}</span>
                   </div>
                 )}
                 {trade.account_size && (
-                  <div className="flex justify-between">
-                    <span className={theme.textSecondary}>Account Size</span>
-                    <span className={theme.text}>${trade.account_size}</span>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Account</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>${trade.account_size}</span>
                   </div>
                 )}
                 {trade.risk_percent && (
-                  <div className="flex justify-between">
-                    <span className={theme.textSecondary}>Risiko</span>
-                    <span className={theme.text}>{trade.risk_percent}%</span>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Risk</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>{trade.risk_percent}%</span>
                   </div>
                 )}
                 {trade.leverage && (
-                  <div className="flex justify-between">
-                    <span className={theme.textSecondary}>Hebel</span>
-                    <span className={theme.text}>1:{trade.leverage}</span>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Hebel</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>1:{trade.leverage}</span>
                   </div>
                 )}
               </div>
@@ -422,12 +424,12 @@ export default function TradeDetailPage() {
             {/* Notes */}
             {trade.notes && !editing && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgCard}`}>
-                <h3 className="text-lg tracking-widest mb-3 flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  NOTIZEN
+                className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+                <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
+                  <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+                  NOTES
                 </h3>
-                <p className={`text-sm ${theme.text} leading-relaxed font-sans whitespace-pre-wrap`}>{trade.notes}</p>
+                <p className={`text-xs sm:text-sm ${theme.text} leading-relaxed font-sans whitespace-pre-wrap`}>{trade.notes}</p>
               </motion.div>
             )}
 

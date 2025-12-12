@@ -129,13 +129,13 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
 
   if (loading) {
     return (
-      <div className={cn("rounded-2xl border-2 p-6", theme.border, theme.bg)}>
-        <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5 animate-pulse" />
-          <span className="text-sm tracking-widest">LIVE CHART</span>
+      <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
+        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">CHART</span>
         </div>
-        <div className="h-48 flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full" />
+        <div className="h-32 sm:h-40 md:h-48 flex items-center justify-center">
+          <div className="animate-spin w-6 h-6 sm:w-8 sm:h-8 border-2 border-teal-600 border-t-transparent rounded-full" />
         </div>
       </div>
     );
@@ -143,12 +143,12 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
 
   if (error || chartData.length === 0) {
     return (
-      <div className={cn("rounded-2xl border-2 p-6", theme.border, theme.bg)}>
-        <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5" />
-          <span className="text-sm tracking-widest">LIVE CHART</span>
+      <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
+        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">CHART</span>
         </div>
-        <p className={theme.textSecondary}>Chart-Daten nicht verfügbar</p>
+        <p className={`${theme.textSecondary} text-xs sm:text-sm`}>Keine Chart-Daten</p>
       </div>
     );
   }
@@ -160,26 +160,26 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className={cn("rounded-2xl border-2 p-6", theme.border, theme.bg)}
+      className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-teal-600 rounded-full animate-pulse" />
-          <span className="text-sm tracking-widest">LIVE CHART</span>
+      <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse" />
+          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">CHART</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {isPositive ? (
-            <TrendingUp className="w-4 h-4 text-teal-600" />
+            <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600" />
           ) : (
-            <TrendingDown className="w-4 h-4 text-rose-600" />
+            <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-600" />
           )}
-          <span className={cn("text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
+          <span className={cn("text-xs sm:text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
             {isPositive ? '+' : ''}{priceChange.toFixed(2)}%
           </span>
         </div>
       </div>
 
-      <div className="h-48">
+      <div className="h-32 sm:h-40 md:h-48">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
@@ -224,10 +224,10 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
         </ResponsiveContainer>
       </div>
 
-      <div className={cn("mt-3 pt-3 border-t text-xs flex items-center justify-between", theme.border)}>
+      <div className={cn("mt-2 sm:mt-3 pt-2 sm:pt-3 border-t text-[9px] sm:text-xs flex items-center justify-between", theme.border)}>
         <div className={cn("flex items-center gap-1", theme.textSecondary)}>
-          <div className="w-1.5 h-1.5 bg-teal-600 rounded-full animate-pulse" />
-          Aktualisiert jede Minute
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
+          Update: 1min
         </div>
         <span className={theme.textSecondary}>24h</span>
       </div>

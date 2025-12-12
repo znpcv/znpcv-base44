@@ -112,14 +112,14 @@ export default function LivePriceDisplay({ pair, darkMode }) {
 
   if (loading) {
     return (
-      <div className={cn("rounded-2xl border-2 p-6", theme.border, theme.bg)}>
-        <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5 animate-pulse" />
-          <span className="text-sm tracking-widest">LIVE PRICE</span>
+      <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
+        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+          <span className="text-xs sm:text-sm tracking-widest font-bold">LIVE</span>
         </div>
         <div className="animate-pulse space-y-2">
-          <div className={cn("h-8 rounded", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
-          <div className={cn("h-4 rounded w-1/2", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
+          <div className={cn("h-6 sm:h-8 rounded", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
+          <div className={cn("h-3 sm:h-4 rounded w-1/2", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
         </div>
       </div>
     );
@@ -127,12 +127,12 @@ export default function LivePriceDisplay({ pair, darkMode }) {
 
   if (error || !priceData) {
     return (
-      <div className={cn("rounded-2xl border-2 p-6", theme.border, theme.bg)}>
-        <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5" />
-          <span className="text-sm tracking-widest">LIVE PRICE</span>
+      <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
+        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-xs sm:text-sm tracking-widest font-bold">LIVE</span>
         </div>
-        <p className={theme.textSecondary}>Preisdaten nicht verfügbar</p>
+        <p className={`${theme.textSecondary} text-xs sm:text-sm`}>Keine Daten</p>
       </div>
     );
   }
@@ -140,60 +140,60 @@ export default function LivePriceDisplay({ pair, darkMode }) {
   const isPositive = parseFloat(priceData.change24h) >= 0;
 
   return (
-    <div className={cn("rounded-2xl border-2 p-6", theme.border, theme.bg)}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-teal-600 rounded-full animate-pulse" />
-          <span className="text-sm tracking-widest">LIVE PRICE</span>
+    <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
+      <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse" />
+          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">LIVE</span>
         </div>
-        <span className={cn("text-xs", theme.textSecondary)}>{pair}</span>
+        <span className={cn("text-[10px] sm:text-xs font-mono", theme.textSecondary)}>{pair}</span>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-end justify-between">
-          <div>
-            <div className={cn("text-3xl font-light", theme.text)}>
+      <div className="space-y-2 sm:space-y-3">
+        <div className="flex items-end justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <div className={cn("text-2xl sm:text-3xl md:text-3xl font-light truncate", theme.text)}>
               {priceData.price}
             </div>
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-1.5 sm:gap-2 mt-1">
               {isPositive ? (
-                <TrendingUp className="w-4 h-4 text-teal-600" />
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600 flex-shrink-0" />
               ) : (
-                <TrendingDown className="w-4 h-4 text-rose-600" />
+                <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-600 flex-shrink-0" />
               )}
-              <span className={cn("text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
+              <span className={cn("text-xs sm:text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
                 {isPositive ? '+' : ''}{priceData.change24h}%
               </span>
-              <span className={cn("text-xs", theme.textSecondary)}>24h</span>
+              <span className={cn("text-[10px] sm:text-xs", theme.textSecondary)}>24h</span>
             </div>
           </div>
         </div>
 
         {priceData.high24h && priceData.low24h && (
-          <div className={cn("pt-3 border-t", theme.border)}>
-            <div className="grid grid-cols-2 gap-3 text-xs">
+          <div className={cn("pt-2 sm:pt-3 border-t", theme.border)}>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs">
               <div>
-                <div className={theme.textSecondary}>24h HIGH</div>
-                <div className={theme.text}>{priceData.high24h}</div>
+                <div className={`${theme.textSecondary} text-[10px] sm:text-xs`}>HIGH</div>
+                <div className={`${theme.text} text-xs sm:text-sm font-mono`}>{priceData.high24h}</div>
               </div>
               <div>
-                <div className={theme.textSecondary}>24h LOW</div>
-                <div className={theme.text}>{priceData.low24h}</div>
+                <div className={`${theme.textSecondary} text-[10px] sm:text-xs`}>LOW</div>
+                <div className={`${theme.text} text-xs sm:text-sm font-mono`}>{priceData.low24h}</div>
               </div>
             </div>
           </div>
         )}
 
         {priceData.volume && (
-          <div className={cn("pt-2 text-xs", theme.textSecondary)}>
-            Volume: {parseFloat(priceData.volume).toLocaleString()}
+          <div className={cn("pt-1.5 sm:pt-2 text-[10px] sm:text-xs", theme.textSecondary)}>
+            Vol: {parseFloat(priceData.volume).toLocaleString()}
           </div>
         )}
       </div>
 
-      <div className={cn("mt-3 pt-3 border-t text-xs flex items-center gap-1", theme.border, theme.textSecondary)}>
-        <div className="w-1.5 h-1.5 bg-teal-600 rounded-full animate-pulse" />
-        Aktualisiert alle 10 Sekunden
+      <div className={cn("mt-2 sm:mt-3 pt-2 sm:pt-3 border-t text-[9px] sm:text-xs flex items-center gap-1", theme.border, theme.textSecondary)}>
+        <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
+        Update: 10s
       </div>
     </div>
   );
