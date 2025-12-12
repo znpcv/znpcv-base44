@@ -185,6 +185,12 @@ export default function TradeDetailPage() {
           </div>
         </motion.div>
 
+        {/* Live Market Data */}
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          <LivePriceDisplay pair={trade.pair} darkMode={darkMode} />
+          <MarketChart pair={trade.pair} darkMode={darkMode} />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Screenshots */}
           <div className="lg:col-span-2 space-y-6">
