@@ -670,33 +670,24 @@ export default function ChecklistPage() {
               {/* Entry Type - Advanced */}
               <div className={`border ${theme.borderCard} rounded-2xl p-5 ${theme.bgSecondary}`}>
                 <label className={`${theme.textMuted} text-sm tracking-widest mb-4 block`}>{t('entryTrigger')}</label>
-                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <button type="button" onClick={() => update('entry_type', 'pinbar')}
-                    className={cn("p-3 sm:p-4 border-2 rounded-xl text-center transition-all group",
+                    className={cn("p-4 sm:p-5 border-2 rounded-xl text-center transition-all group",
                       formData.entry_type === 'pinbar' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-xl sm:text-2xl mb-1">📍</div>
-                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">PINBAR</div>
-                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5", formData.entry_type === 'pinbar' ? 'opacity-70' : theme.textMuted)}>Rejection</div>
+                    <div className="text-2xl sm:text-3xl mb-2">📍</div>
+                    <div className="font-bold tracking-wider text-xs sm:text-sm">PINBAR</div>
+                    <div className={cn("text-[9px] sm:text-[10px] mt-1 font-sans", formData.entry_type === 'pinbar' ? 'opacity-70' : theme.textMuted)}>Rejection Candle</div>
                   </button>
                   <button type="button" onClick={() => update('entry_type', 'engulfing')}
-                    className={cn("p-3 sm:p-4 border-2 rounded-xl text-center transition-all",
+                    className={cn("p-4 sm:p-5 border-2 rounded-xl text-center transition-all",
                       formData.entry_type === 'engulfing' 
                         ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
                         : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-xl sm:text-2xl mb-1">🕯️</div>
-                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">ENGULFING</div>
-                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5", formData.entry_type === 'engulfing' ? 'opacity-70' : theme.textMuted)}>Reversal</div>
-                  </button>
-                  <button type="button" onClick={() => update('entry_type', 'breakout')}
-                    className={cn("p-3 sm:p-4 border-2 rounded-xl text-center transition-all",
-                      formData.entry_type === 'breakout' 
-                        ? darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white"
-                        : darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-xl sm:text-2xl mb-1">⚡</div>
-                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">BREAKOUT</div>
-                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5", formData.entry_type === 'breakout' ? 'opacity-70' : theme.textMuted)}>Structure</div>
+                    <div className="text-2xl sm:text-3xl mb-2">🕯️</div>
+                    <div className="font-bold tracking-wider text-xs sm:text-sm">ENGULFING</div>
+                    <div className={cn("text-[9px] sm:text-[10px] mt-1 font-sans", formData.entry_type === 'engulfing' ? 'opacity-70' : theme.textMuted)}>Reversal Pattern</div>
                   </button>
                 </div>
               </div>
@@ -931,21 +922,33 @@ export default function ChecklistPage() {
         <div className="mt-6 sm:mt-8 md:mt-10 flex gap-2 sm:gap-3">
           {currentStep > 0 && (
             <Button onClick={() => setCurrentStep(prev => prev - 1)} variant="outline" 
-              className={`rounded-xl tracking-widest px-5 h-12 ${darkMode ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:text-white' : 'border-zinc-300 text-black hover:bg-zinc-100'}`}>
+              className={`rounded-xl tracking-widest px-5 h-12 border-2 ${
+                darkMode 
+                  ? 'border-zinc-800 text-white hover:bg-zinc-900 hover:border-zinc-700' 
+                  : 'border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400'
+              }`}>
               <ChevronLeft className="w-4 h-4 mr-1" /> {t('back')}
             </Button>
           )}
           
           {currentStep < STEPS.length - 1 ? (
             <Button onClick={() => setCurrentStep(prev => prev + 1)} 
-              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2 ${darkMode ? 'bg-white hover:bg-zinc-100 text-black border-white' : 'bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900'}`}>
+              className={`flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2 ${
+                darkMode 
+                  ? 'bg-white hover:bg-zinc-200 text-black border-white' 
+                  : 'bg-black hover:bg-zinc-800 text-white border-black'
+              }`}>
               {t('next')} <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           ) : (
             <div className="flex-1 flex gap-2">
               {checklistId && (
                 <Button onClick={handleDelete} variant="outline" 
-                  className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-xl px-4 h-12">
+                  className={`rounded-xl px-4 h-12 border-2 ${
+                    darkMode 
+                      ? 'border-rose-600 text-rose-400 hover:bg-rose-600/10' 
+                      : 'border-red-600 text-red-600 hover:bg-red-50'
+                  }`}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               )}
@@ -953,7 +956,9 @@ export default function ChecklistPage() {
                 className={cn("flex-1 rounded-xl tracking-widest text-base h-12 font-bold border-2",
                   isReady 
                     ? "bg-teal-600 hover:bg-teal-700 text-white border-teal-600" 
-                    : darkMode ? "bg-white hover:bg-zinc-100 text-black border-white" : "bg-zinc-900 hover:bg-zinc-800 text-white border-zinc-900")}>
+                    : darkMode 
+                      ? "bg-white hover:bg-zinc-200 text-black border-white" 
+                      : "bg-black hover:bg-zinc-800 text-white border-black")}>
                 <Save className="w-4 h-4 mr-2" /> {saving ? t('saving') : t('saveTrade')}
               </Button>
             </div>
