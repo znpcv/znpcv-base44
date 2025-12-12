@@ -114,7 +114,7 @@ const ASSET_CATEGORIES = {
   }
 };
 
-export default function AssetSelector({ selectedPair, onSelect }) {
+export default function AssetSelector({ selectedPair, onSelect, darkMode = true }) {
   const [activeCategory, setActiveCategory] = useState('forex');
 
   const getSelectedPairData = () => {
@@ -128,10 +128,18 @@ export default function AssetSelector({ selectedPair, onSelect }) {
   const selectedData = getSelectedPairData();
   const isForex = activeCategory === 'forex';
 
+  const theme = {
+    bg: darkMode ? 'bg-zinc-950' : 'bg-white',
+    bgSecondary: darkMode ? 'bg-zinc-900' : 'bg-zinc-100',
+    border: darkMode ? 'border-zinc-800/50' : 'border-zinc-300',
+    text: darkMode ? 'text-white' : 'text-zinc-900',
+    textMuted: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-3 sm:space-y-4 md:space-y-6">
       {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2">
         {Object.entries(ASSET_CATEGORIES).map(([key, cat]) => {
           const Icon = cat.icon;
           return (
@@ -139,14 +147,14 @@ export default function AssetSelector({ selectedPair, onSelect }) {
               key={key}
               onClick={() => setActiveCategory(key)}
               className={cn(
-                "px-4 py-2.5 text-sm tracking-widest transition-all rounded-xl flex items-center gap-2",
+                "px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 text-[10px] sm:text-xs md:text-sm tracking-widest transition-all rounded-lg sm:rounded-xl flex items-center gap-1 sm:gap-2 font-bold",
                 activeCategory === key
-                  ? "bg-white text-black"
-                  : "bg-zinc-950 border border-zinc-800/50 text-zinc-500 hover:border-zinc-600 hover:text-white"
+                  ? darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
+                  : `${theme.bg} border ${theme.border} ${theme.textMuted} hover:${theme.text}`
               )}
             >
-              <Icon className="w-4 h-4" />
-              {cat.label}
+              <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">{cat.label}</span>
             </button>
           );
         })}
@@ -157,7 +165,7 @@ export default function AssetSelector({ selectedPair, onSelect }) {
         key={activeCategory}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
+        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1.5 sm:gap-2 md:gap-3"
       >
         {ASSET_CATEGORIES[activeCategory].pairs.map((pair) => {
           const Icon = ASSET_CATEGORIES[activeCategory].icon;
@@ -166,23 +174,25 @@ export default function AssetSelector({ selectedPair, onSelect }) {
               key={pair.symbol}
               onClick={() => onSelect(pair.symbol)}
               className={cn(
-                "py-4 px-3 border rounded-2xl text-center transition-all",
+                "py-2 sm:py-3 md:py-4 px-1.5 sm:px-2 md:px-3 border rounded-lg sm:rounded-xl md:rounded-2xl text-center transition-all",
                 selectedPair === pair.symbol
-                  ? "bg-white border-white text-black"
-                  : "border-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-white bg-zinc-950"
+                  ? darkMode ? "bg-white border-white text-black" : "bg-zinc-900 border-zinc-900 text-white"
+                  : `border-zinc-800/50 ${theme.textMuted} hover:border-zinc-600 hover:${theme.text} ${theme.bg}`
               )}
             >
               {isForex && pair.flags ? (
-                <div className="text-2xl mb-2 tracking-wider">{pair.flags}</div>
+                <div className="text-base sm:text-xl md:text-2xl mb-1 sm:mb-2 tracking-wider">{pair.flags}</div>
               ) : (
                 <div className={cn(
-                  "w-10 h-10 mx-auto mb-2 rounded-lg flex items-center justify-center",
-                  selectedPair === pair.symbol ? "bg-black/10" : "bg-zinc-800"
+                  "w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 mx-auto mb-1 sm:mb-2 rounded-md sm:rounded-lg flex items-center justify-center",
+                  selectedPair === pair.symbol 
+                    ? darkMode ? "bg-black/10" : "bg-white/10"
+                    : "bg-zinc-800"
                 )}>
-                  <Icon className={cn("w-5 h-5", selectedPair === pair.symbol ? "text-black" : "text-zinc-400")} />
+                  <Icon className={cn("w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5", selectedPair === pair.symbol ? (darkMode ? "text-black" : "text-white") : "text-zinc-400")} />
                 </div>
               )}
-              <div className="text-sm tracking-wider font-bold">{pair.symbol}</div>
+              <div className="text-[10px] sm:text-xs md:text-sm tracking-wider font-bold">{pair.symbol}</div>
             </button>
           );
         })}
@@ -193,18 +203,24 @@ export default function AssetSelector({ selectedPair, onSelect }) {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-5 p-6 bg-white text-black rounded-2xl"
+          className={cn("flex items-center gap-3 sm:gap-4 md:gap-5 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl",
+            darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
+          )}
         >
           {selectedData.flags ? (
-            <div className="text-4xl">{selectedData.flags}</div>
+            <div className="text-2xl sm:text-3xl md:text-4xl">{selectedData.flags}</div>
           ) : (
-            <div className="w-14 h-14 bg-black/10 rounded-xl flex items-center justify-center">
-              {React.createElement(ASSET_CATEGORIES[selectedData.category].icon, { className: "w-7 h-7 text-black" })}
+            <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl flex items-center justify-center",
+              darkMode ? "bg-black/10" : "bg-white/10"
+            )}>
+              {React.createElement(ASSET_CATEGORIES[selectedData.category].icon, { 
+                className: cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7", darkMode ? "text-black" : "text-white")
+              })}
             </div>
           )}
           <div>
-            <div className="text-xs text-zinc-500 tracking-widest mb-1">SELECTED</div>
-            <div className="text-2xl tracking-wider font-bold">{selectedPair}</div>
+            <div className={cn("text-[10px] sm:text-xs tracking-widest mb-0.5 sm:mb-1", darkMode ? "text-zinc-500" : "text-zinc-400")}>SELECTED</div>
+            <div className="text-lg sm:text-xl md:text-2xl tracking-wider font-bold">{selectedPair}</div>
           </div>
         </motion.div>
       )}

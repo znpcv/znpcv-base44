@@ -56,6 +56,7 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
               <AssetSelector 
                 selectedPair={formData.pair} 
                 onSelect={(pair) => setFormData({...formData, pair})}
+                darkMode={darkMode}
               />
             </div>
           )}
