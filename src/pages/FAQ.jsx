@@ -149,7 +149,7 @@ const FAQ_DATA = [
 
 export default function FAQPage() {
   const navigate = useNavigate();
-  const { isRTL, darkMode } = useLanguage();
+  const { t, isRTL, darkMode } = useLanguage();
   const [openIndex, setOpenIndex] = useState(null);
 
   const theme = {
@@ -164,22 +164,22 @@ export default function FAQPage() {
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
-      <header className={`${theme.bg} border-b ${theme.border}`}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 sm:gap-4">
+      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
+        <div className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
               <DarkModeToggle />
-              <button onClick={() => navigate(-1)} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                <Home className="w-6 h-6" />
+              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
+                <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </button>
               <button onClick={() => navigate(createPageUrl('Home'))}>
                 <img src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                } alt="ZNPCV" className="h-10 sm:h-12 w-auto cursor-pointer hover:opacity-80" />
+                } alt="ZNPCV" className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer hover:opacity-80" />
               </button>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2">
               <LanguageToggle />
               <AccountButton />
             </div>
@@ -187,37 +187,37 @@ export default function FAQPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 sm:mb-12">
-          <div className="flex items-center justify-center gap-4 mb-3 sm:mb-4">
-            <HelpCircle className={`w-8 sm:w-10 h-8 sm:h-10 ${theme.text}`} />
+      <main className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6 sm:mb-8 md:mb-12">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-2 sm:mb-3 md:mb-4">
+            <HelpCircle className={`w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 ${theme.text}`} />
           </div>
-          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>FAQ & HILFE</h1>
-          <p className={`${theme.textMuted} text-base sm:text-lg max-w-2xl mx-auto font-sans px-4`}>
-            Häufig gestellte Fragen zu ZNPCV, Trading Methodik und Features
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>FAQ</h1>
+          <p className={`${theme.textMuted} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto font-sans px-3 sm:px-4`}>
+            Häufig gestellte Fragen zu ZNPCV
           </p>
         </motion.div>
 
         {FAQ_DATA.map((category, catIndex) => (
           <motion.div key={catIndex} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: catIndex * 0.1 }}
-            className="mb-6 sm:mb-8">
-            <h2 className={`text-lg sm:text-xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>{category.category}</h2>
-            <div className="space-y-3">
+            className="mb-4 sm:mb-6 md:mb-8">
+            <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>{category.category}</h2>
+            <div className="space-y-2 sm:space-y-3">
               {category.questions.map((item, qIndex) => {
                 const index = `${catIndex}-${qIndex}`;
                 const isOpen = openIndex === index;
                 return (
-                  <div key={qIndex} className={`border ${theme.border} rounded-xl overflow-hidden ${theme.bgCard}`}>
+                  <div key={qIndex} className={`border ${theme.border} rounded-lg sm:rounded-xl overflow-hidden ${theme.bgCard}`}>
                     <button type="button" onClick={() => setOpenIndex(isOpen ? null : index)}
-                      className={`w-full p-4 sm:p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-colors`}>
-                      <span className={`text-left font-bold tracking-wider text-sm sm:text-base ${theme.text}`}>{item.q}</span>
-                      <ChevronDown className={cn("w-5 h-5 transition-transform", isOpen && "rotate-180", theme.textMuted)} />
+                      className={`w-full p-3 sm:p-4 md:p-5 flex items-center justify-between gap-2 ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-colors`}>
+                      <span className={`text-left font-bold tracking-wider text-xs sm:text-sm md:text-base ${theme.text}`}>{item.q}</span>
+                      <ChevronDown className={cn("w-4 h-4 sm:w-5 sm:h-5 transition-transform flex-shrink-0", isOpen && "rotate-180", theme.textMuted)} />
                     </button>
                     <AnimatePresence>
                       {isOpen && (
                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                           className={`border-t ${theme.border}`}>
-                          <div className={`p-4 sm:p-5 ${theme.textSecondary} text-sm sm:text-base font-sans leading-relaxed`}>
+                          <div className={`p-3 sm:p-4 md:p-5 ${theme.textSecondary} text-xs sm:text-sm md:text-base font-sans leading-relaxed`}>
                             {item.a}
                           </div>
                         </motion.div>
@@ -232,24 +232,25 @@ export default function FAQPage() {
 
         {/* Contact Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-          className={`mt-10 sm:mt-16 p-6 sm:p-8 border ${theme.border} rounded-2xl ${theme.bgCard} text-center`}>
-          <h3 className={`text-xl sm:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>{t('furtherQuestions')}</h3>
-          <p className={`${theme.textMuted} mb-5 sm:mb-6 text-sm sm:text-base font-sans px-4`}>
-            {t('contactUs')}
+          className={`mt-6 sm:mt-10 md:mt-16 p-4 sm:p-6 md:p-8 border ${theme.border} rounded-xl sm:rounded-2xl ${theme.bgCard} text-center`}>
+          <h3 className={`text-base sm:text-lg md:text-xl lg:text-2xl tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>WEITERE FRAGEN?</h3>
+          <p className={`${theme.textMuted} mb-4 sm:mb-5 md:mb-6 text-xs sm:text-sm md:text-base font-sans px-2 sm:px-4`}>
+            Kontaktiere uns direkt per E-Mail
           </p>
           <div className="flex justify-center">
-            <a href="mailto:support@znpcv.com" className={`inline-flex items-center gap-2 ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-6 py-2.5 font-bold transition-colors`}>
-              <Mail className="w-5 h-5" />
-              support@znpcv.com
+            <a href="mailto:support@znpcv.com" className={`inline-flex items-center gap-1.5 sm:gap-2 ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-lg sm:rounded-xl px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-2.5 text-xs sm:text-sm md:text-base font-bold transition-colors`}>
+              <Mail className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+              <span className="hidden xs:inline">support@znpcv.com</span>
+              <span className="xs:hidden">EMAIL</span>
             </a>
           </div>
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className={`${theme.bg} border-t ${theme.border} mt-8 sm:mt-12`}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
+      <footer className={`${theme.bg} border-t ${theme.border} mt-6 sm:mt-8 md:mt-12`}>
+        <div className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 text-[10px] sm:text-xs">
             <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
