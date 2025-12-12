@@ -3,8 +3,6 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import FAQ from './pages/FAQ';
 import TradeHistory from './pages/TradeHistory';
-import Payment from './pages/Payment';
-import PaymentSuccess from './pages/PaymentSuccess';
 import Register from './pages/Register';
 import AGB from './pages/AGB';
 import Datenschutz from './pages/Datenschutz';
@@ -20,8 +18,6 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "FAQ": FAQ,
     "TradeHistory": TradeHistory,
-    "Payment": Payment,
-    "PaymentSuccess": PaymentSuccess,
     "Register": Register,
     "AGB": AGB,
     "Datenschutz": Datenschutz,
