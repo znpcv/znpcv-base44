@@ -15,44 +15,10 @@ import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
 
 
-const SESSIONS = [
-  { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
-  { name: 'LONDON', timezone: 'Europe/London', emoji: '🇬🇧', openHour: 8, closeHour: 17 },
-  { name: 'NEW YORK', timezone: 'America/New_York', emoji: '🇺🇸', openHour: 9, closeHour: 17 },
-];
-
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { t, language, isRTL, darkMode } = useLanguage();
   const [calendarMonth, setCalendarMonth] = useState(new Date());
-  const [times, setTimes] = useState({});
-
-  React.useEffect(() => {
-    const updateTimes = () => {
-      const now = new Date();
-      const newTimes = {};
-      SESSIONS.forEach(session => {
-        newTimes[session.name] = now.toLocaleTimeString('de-DE', {
-          timeZone: session.timezone,
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-      });
-      setTimes(newTimes);
-    };
-    updateTimes();
-    const interval = setInterval(updateTimes, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const isSessionOpen = (session) => {
-    const now = new Date();
-    const localTime = new Date(now.toLocaleString('en-US', { timeZone: session.timezone }));
-    const hour = localTime.getHours();
-    const day = localTime.getDay();
-    if (day === 0 || day === 6) return false;
-    return hour >= session.openHour && hour < session.closeHour;
-  };
 
   const { data: checklists = [], isLoading, refetch } = useQuery({
     queryKey: ['checklists'],
@@ -526,56 +492,6 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 ))}
-              </div>
-            </motion.div>
-
-            {/* Market Sessions - Kompakt für Mobile */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgSecondary} overflow-hidden`}>
-              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
-                <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">{t('marketSessions')}</span>
-                <span className="sm:hidden">SESSIONS</span>
-              </h3>
-              <div className="space-y-2 sm:space-y-3">
-                {SESSIONS.map((session, idx) => {
-                  const isOpen = isSessionOpen(session);
-                  return (
-                    <motion.div 
-                      key={session.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.35 + idx * 0.1 }}
-                      className={cn("relative flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all overflow-hidden",
-                        isOpen ? "border-teal-600 bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg shadow-teal-600/30" : 
-                        darkMode ? "border-zinc-800 bg-zinc-900/50 hover:border-zinc-700" : "border-zinc-300 bg-zinc-100/50 hover:border-zinc-400")}>
-                      
-                      {isOpen && <div className="absolute inset-0 bg-teal-400/20 blur-xl" />}
-                      
-                      <div className="relative z-10 flex items-center gap-2 sm:gap-3">
-                        <div className={cn("w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center text-base sm:text-lg border-2",
-                          isOpen ? "bg-white/20 border-white/30" : darkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-zinc-300")}>
-                          {session.emoji}
-                        </div>
-                        <div>
-                          <div className={cn("text-xs sm:text-sm font-black tracking-wider flex items-center gap-1.5", isOpen ? "text-white" : theme.text)}>
-                            <span className="hidden sm:inline">{session.name}</span>
-                            <span className="sm:hidden">{session.name.slice(0, 3)}</span>
-                            {isOpen && <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />}
-                          </div>
-                          <div className={cn("text-[9px] sm:text-xs font-bold", isOpen ? "text-white/90" : theme.textDimmed)}>
-                            {isOpen ? '● LIVE' : '○ CLOSED'}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="relative z-10">
-                        <div className={cn("text-lg sm:text-xl md:text-2xl font-mono font-black", isOpen ? "text-white" : theme.text)}>
-                          {times[session.name]?.slice(0, 5) || '--:--'}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
               </div>
             </motion.div>
 
