@@ -355,39 +355,19 @@ export default function HomePage() {
               <p className={`${theme.textMuted} text-xs sm:text-sm font-sans leading-relaxed mb-4 sm:mb-5`}>
                 {t('footerDesc')}
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 sm:gap-2 mb-5">
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-5">
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <div className="w-1.5 h-1.5 bg-teal-600 rounded-full animate-pulse" />
                   <Lock className="w-3 h-3 text-teal-600" />
                   <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL</span>
                 </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>GDPR</span>
-                </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <Globe className="w-3 h-3 text-blue-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
-                </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <CheckCircle2 className="w-3 h-3 text-purple-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>VERIFIED</span>
-                </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <Award className="w-3 h-3 text-amber-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>ISO</span>
-                </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <Target className="w-3 h-3 text-rose-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>PRO</span>
-                </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <Zap className="w-3 h-3 text-orange-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>FAST</span>
-                </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <ShieldCheck className="w-3 h-3 text-cyan-600" />
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <ShieldCheck className="w-3 h-3 text-teal-600" />
                   <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SECURE</span>
+                </div>
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <Globe className="w-3 h-3 text-teal-600" />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
                 </div>
               </div>
 
