@@ -437,8 +437,8 @@ export default function AccountPage() {
               variant="outline" 
               className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
             >
-              <Home className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 sm:mr-2" />
-              <span className="hidden sm:inline">HOME</span>
+              <Home className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
+              <span>HOME</span>
             </Button>
             <Button 
               onClick={() => navigate(createPageUrl('Dashboard'))} 

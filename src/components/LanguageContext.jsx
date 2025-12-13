@@ -2198,16 +2198,16 @@ export function LanguageToggle() {
   const [isOpen, setIsOpen] = React.useState(false);
   
   const languages = [
-    { code: 'de', label: 'DE' },
-    { code: 'en', label: 'EN' },
-    { code: 'zh', label: 'ZH' },
-    { code: 'es', label: 'ES' },
-    { code: 'fr', label: 'FR' },
-    { code: 'pt', label: 'PT' },
-    { code: 'hi', label: 'HI' },
-    { code: 'ja', label: 'JA' },
-    { code: 'ar', label: 'AR' },
-    { code: 'fa', label: 'FA' }
+    { code: 'de', label: 'DE', flag: '🇩🇪' },
+    { code: 'en', label: 'EN', flag: '🇬🇧' },
+    { code: 'zh', label: 'ZH', flag: '🇨🇳' },
+    { code: 'es', label: 'ES', flag: '🇪🇸' },
+    { code: 'fr', label: 'FR', flag: '🇫🇷' },
+    { code: 'pt', label: 'PT', flag: '🇵🇹' },
+    { code: 'hi', label: 'HI', flag: '🇮🇳' },
+    { code: 'ja', label: 'JA', flag: '🇯🇵' },
+    { code: 'ar', label: 'AR', flag: '🇸🇦' },
+    { code: 'fa', label: 'FA', flag: '🇮🇷' }
   ];
   
   const currentLang = languages.find(l => l.code === language) || languages[0];
@@ -2216,20 +2216,18 @@ export function LanguageToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl border-2 transition-all w-full h-full ${
-          darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
+        className={`flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl border-2 transition-all ${
+          darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'
         }`}
       >
-        <span className="text-xs font-bold tracking-widest">{currentLang.label}</span>
-        <svg className={`w-2.5 h-2.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <span className="text-base">{currentLang.flag}</span>
+        <span className={`text-xs font-bold tracking-widest ${darkMode ? 'text-white' : 'text-black'}`}>{currentLang.label}</span>
       </button>
       
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className={`absolute right-0 mt-2 w-40 rounded-xl border-2 shadow-2xl z-20 overflow-hidden ${
+          <div className={`absolute right-0 mt-2 w-48 rounded-xl border-2 shadow-2xl z-20 overflow-hidden ${
             darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
           }`}>
             <div className="grid grid-cols-2 gap-1 p-2">
@@ -2240,7 +2238,7 @@ export function LanguageToggle() {
                     setLanguage(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`px-3 py-2 rounded-lg transition-all text-xs font-bold tracking-widest ${
+                  className={`px-3 py-2 rounded-lg transition-all text-xs font-bold tracking-widest flex items-center justify-center gap-1.5 ${
                     language === lang.code 
                       ? darkMode 
                         ? 'bg-white text-black' 
@@ -2250,6 +2248,7 @@ export function LanguageToggle() {
                         : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
                   }`}
                 >
+                  <span className="text-sm">{lang.flag}</span>
                   {lang.label}
                 </button>
               ))}

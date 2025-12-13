@@ -35,7 +35,7 @@ export default function AccountButton() {
     return (
       <button
         onClick={() => base44.auth.redirectToLogin()}
-        className={`flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-lg sm:rounded-xl border-2 transition-all font-bold text-xs sm:text-sm ${
+        className={`flex items-center justify-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-lg sm:rounded-xl border-2 transition-all font-bold text-xs sm:text-sm ${
           darkMode 
             ? 'bg-white text-black border-white hover:bg-zinc-200' 
             : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'
