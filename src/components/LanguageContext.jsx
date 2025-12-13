@@ -2216,7 +2216,7 @@ export function LanguageToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-xl border-2 transition-all ${
+        className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl border-2 transition-all w-full h-full ${
           darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
         }`}
       >
@@ -2267,10 +2267,10 @@ export function DarkModeToggle() {
   return (
     <button
       onClick={toggleDarkMode}
-      className={`p-2 rounded-lg transition-colors ${
+      className={`p-2 rounded-xl border-2 transition-all flex items-center justify-center w-full h-full ${
         darkMode 
-          ? 'bg-zinc-800 text-yellow-400 hover:bg-zinc-700' 
-          : 'bg-zinc-200 text-zinc-700 hover:bg-zinc-300'
+          ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-yellow-400' 
+          : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-zinc-700'
       }`}
       title={darkMode ? 'Light Mode' : 'Dark Mode'}
     >

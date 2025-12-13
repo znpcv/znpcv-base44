@@ -23,7 +23,7 @@ export default function ImpressumPage() {
           <div className="flex items-center gap-3 sm:gap-4">
             <DarkModeToggle />
             <button 
-              onClick={() => navigate(-1)}
+              onClick={() => navigate(createPageUrl('Home'))}
               className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 transition-all flex-shrink-0 group`}>
               <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
             </button>
