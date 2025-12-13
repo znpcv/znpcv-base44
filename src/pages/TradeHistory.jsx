@@ -12,10 +12,7 @@ import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip } from
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
 import TradeEditModal from '@/components/advanced/TradeEditModal';
-import AdvancedMetrics from '@/components/advanced/AdvancedMetrics';
 import TradeFilters from '@/components/advanced/TradeFilters';
-import QuickStats from '@/components/advanced/QuickStats';
-import AIPerformanceAnalysis from '@/components/advanced/AIPerformanceAnalysis';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -166,15 +163,6 @@ export default function TradeHistoryPage() {
           </div>
         </motion.div>
 
-        {/* AI Analysis */}
-        <AIPerformanceAnalysis checklists={checklists} darkMode={darkMode} />
-
-        {/* Quick Stats */}
-        <QuickStats checklists={checklists} darkMode={darkMode} />
-
-        {/* Advanced Metrics */}
-        <AdvancedMetrics checklists={checklists} darkMode={darkMode} />
-
         {/* Stats Grid - Wichtigste Metriken */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
           <div className={cn("border-2 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
@@ -310,24 +298,7 @@ export default function TradeHistoryPage() {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>AVG</h3>
-              <div className="space-y-3 sm:space-y-4 md:space-y-5">
-                <div>
-                  <div className="flex justify-between mb-2 sm:mb-2.5 md:mb-3"><span className={`text-xs sm:text-sm ${theme.textMuted}`}>Win</span><span className="text-teal-600 text-sm sm:text-base md:text-lg font-bold">${stats.avgWin}</span></div>
-                  <div className={`h-2 sm:h-2.5 md:h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                    <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-2 sm:mb-2.5 md:mb-3"><span className={`text-xs sm:text-sm ${theme.textMuted}`}>Loss</span><span className="text-rose-600 text-sm sm:text-base md:text-lg font-bold">${stats.avgLoss}</span></div>
-                  <div className={`h-2 sm:h-2.5 md:h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
-                    <div className="h-full bg-rose-600 rounded-full transition-all" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+
           </div>
         </div>
 

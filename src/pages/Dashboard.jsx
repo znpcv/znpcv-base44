@@ -13,8 +13,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart a
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
-import PerformanceChart from '@/components/advanced/PerformanceChart';
-import AIPerformanceAnalysis from '@/components/advanced/AIPerformanceAnalysis';
+
 
 const SESSIONS = [
   { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
@@ -233,13 +232,12 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats - Einheitlich */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
             { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3 },
             { label: 'EXECUTED', value: stats.executed, icon: Activity },
-            { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
           ].map((stat, index) => (
             <motion.div key={stat.label} 
               initial={{ opacity: 0, scale: 0.95 }} 
@@ -253,12 +251,6 @@ export default function DashboardPage() {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* AI Performance Analysis */}
-        <AIPerformanceAnalysis checklists={checklists} darkMode={darkMode} />
-
-        {/* Performance Chart */}
-        <PerformanceChart checklists={checklists} darkMode={darkMode} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mt-6 sm:mt-8">
           {/* Left */}
@@ -725,11 +717,6 @@ export default function DashboardPage() {
               </div>
             </motion.div>
           </div>
-        </div>
-
-        {/* Quote */}
-        <div className="mt-10 sm:mt-14 md:mt-16">
-          <TradingQuote variant="minimal" />
         </div>
 
         {/* Footer */}
