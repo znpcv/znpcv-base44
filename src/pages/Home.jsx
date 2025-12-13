@@ -160,37 +160,86 @@ export default function HomePage() {
           <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
-        {/* Main Actions - Ultra Compact */}
+        {/* Main Actions - Compact for Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-10"
+          className="grid md:grid-cols-2 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
         >
-          {/* New Analysis - Minimal */}
+          {/* New Analysis - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("group relative p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl hover:shadow-xl transition-all text-center",
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
               darkMode ? "bg-white text-black" : "bg-black text-white")}
           >
-            <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3",
-              darkMode ? "bg-black" : "bg-white")}>
-              <ClipboardCheck className={cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7", darkMode ? "text-white" : "text-black")} />
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-black/5 rounded-full -translate-y-12 sm:-translate-y-16 md:-translate-y-20 translate-x-12 sm:translate-x-16 md:translate-x-20" />
+            <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-black/5 rounded-full translate-y-10 sm:translate-y-12 md:translate-y-16 -translate-x-10 sm:-translate-x-12 md:-translate-x-16" />
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-black" : "bg-white")}>
+                  <ClipboardCheck className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-white" : "text-black")} />
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-teal-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
+                  START
+                </div>
+              </div>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
+                {t('newAnalysisDesc')}
+              </p>
+
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('startNow')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-black text-white" : "bg-white text-black")}>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </div>
             </div>
-            <h2 className={cn("text-sm sm:text-base md:text-lg tracking-wider font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
           </button>
 
-          {/* Dashboard - Minimal */}
+          {/* Dashboard - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className={cn("group relative p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl hover:shadow-xl transition-all text-center border-2",
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
               darkMode ? "bg-black text-white border-zinc-800" : "bg-white text-black border-zinc-300")}
           >
-            <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3",
-              darkMode ? "bg-white" : "bg-black")}>
-              <BarChart3 className={cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7", darkMode ? "text-black" : "text-white")} />
+            {/* Decorative grid */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
             </div>
-            <h2 className={cn("text-sm sm:text-base md:text-lg tracking-wider font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-white" : "bg-black")}>
+                  <BarChart3 className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-zinc-800 text-zinc-300 text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse" />
+                  LIVE
+                </div>
+              </div>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('dashboardDesc')}
+              </p>
+
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-white text-black" : "bg-black text-white")}>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </div>
+            </div>
           </button>
         </motion.div>
 
