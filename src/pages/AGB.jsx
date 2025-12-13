@@ -47,13 +47,13 @@ export default function AGBPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-16">
         <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-100/50'} rounded-2xl p-6 sm:p-8 md:p-10 mb-8 border-2 ${theme.border}`}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">AGB</h1>
-          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Stand: Dezember 2024</p>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Stand: Januar 2025</p>
         </div>
         
-        <div className={`space-y-8 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
+        <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>1. Geltungsbereich</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>1. Geltungsbereich</h2>
             <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen der Zainspective Group (Betreiber von ZNPCV) und den Nutzern über die Nutzung der Trading-Checklisten-Software. Die Software wird als digitales Produkt bereitgestellt.</p>
           </section>
 

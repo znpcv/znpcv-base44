@@ -49,17 +49,17 @@ export default function ImpressumPage() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">IMPRESSUM</h1>
         </div>
         
-        <div className={`space-y-8 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Angaben gemäß § 5 TMG</h2>
+        <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Angaben gemäß § 5 TMG</h2>
             <p><strong>Zainspective Group</strong><br/>
             Inhaber: Zainspective Group<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>
 
-          <section>
-            <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Vertreten durch</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Vertreten durch</h2>
             <p>Zainspective Group (Inhaber und Betreiber von ZNPCV)</p>
           </section>
 
@@ -79,8 +79,8 @@ export default function ImpressumPage() {
             Unsere E-Mail-Adresse finden Sie oben im Impressum.</p>
           </section>
 
-          <section>
-            <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>Verbraucherstreitbeilegung/Universalschlichtungsstelle</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Verbraucherstreitbeilegung/Universalschlichtungsstelle</h2>
             <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
           </section>
 
@@ -100,9 +100,7 @@ export default function ImpressumPage() {
             <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
           </section>
 
-          <section className="pt-6 border-t border-zinc-800">
-            <p className="text-sm">Quelle: Erstellt mit dem Impressum-Generator von eRecht24.</p>
-            </section>
+
             </div>
             </main>
 

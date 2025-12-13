@@ -47,13 +47,13 @@ export default function DatenschutzPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-16">
         <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-100/50'} rounded-2xl p-6 sm:p-8 md:p-10 mb-8 border-2 ${theme.border}`}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">DATENSCHUTZ</h1>
-          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Stand: Dezember 2024</p>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Stand: Januar 2025</p>
         </div>
         
-        <div className={`space-y-8 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
+        <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>1. Datenschutz auf einen Blick</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>1. Datenschutz auf einen Blick</h2>
             <h3 className={`text-lg ${theme.text} mb-2`}>Allgemeine Hinweise</h3>
             <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Software nutzen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
           </section>
@@ -101,8 +101,8 @@ export default function DatenschutzPage() {
             </ul>
           </section>
 
-          <section>
-            <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>6. Datenweitergabe</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>6. Datenweitergabe</h2>
             <p>Ihre Daten werden nur weitergegeben an:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li><strong>Stripe:</strong> Zur Abwicklung von Zahlungen (Stripe ist PCI-DSS zertifiziert)</li>
@@ -135,13 +135,13 @@ export default function DatenschutzPage() {
             <p>Wir verwenden SSL/TLS-Verschlüsselung für die Datenübertragung. Passwörter werden mit modernen Hashing-Verfahren gespeichert. Unsere Server sind gegen unbefugten Zugriff geschützt.</p>
           </section>
 
-          <section>
-            <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>10. Cookies und Tracking</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>10. Cookies und Tracking</h2>
             <p>Unsere Software verwendet technisch notwendige Cookies für die Funktionalität (z.B. Session-Management, Login). Marketing- oder Tracking-Cookies setzen wir nicht ein.</p>
           </section>
 
-          <section>
-            <h2 className={`text-xl tracking-wider ${theme.text} mb-3`}>11. Stripe-Zahlungsabwicklung</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>11. Stripe-Zahlungsabwicklung</h2>
             <p>Für die Zahlungsabwicklung nutzen wir Stripe. Bei der Zahlung werden Ihre Daten direkt an Stripe übermittelt. Die Datenschutzerklärung von Stripe finden Sie unter: <a href="https://stripe.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">stripe.com/privacy</a></p>
           </section>
 
@@ -150,8 +150,8 @@ export default function DatenschutzPage() {
             <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslage oder Änderungen unserer Leistungen anzupassen. Für neue Besuche gilt dann die neue Datenschutzerklärung.</p>
           </section>
 
-          <section className={`pt-6 border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
-            <p className="font-bold">Kontakt Datenschutz:</p>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <p className="font-bold mb-3">Kontakt Datenschutz:</p>
             <p><strong>Zainspective Group</strong><br/>
             Betreiber von ZNPCV<br/>
             Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br/>
