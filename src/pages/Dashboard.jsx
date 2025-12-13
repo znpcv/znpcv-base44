@@ -206,7 +206,7 @@ export default function DashboardPage() {
                 darkMode ? "bg-black" : "bg-white shadow-lg")}>
                 <Plus className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8", darkMode ? "text-white" : "text-black")} />
               </div>
-              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider mb-1", darkMode ? "text-black" : "text-white")}>NEW ANALYSIS</div>
+              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider", darkMode ? "text-black" : "text-white")}>NEW ANALYSIS</div>
               <div className={cn("text-xs sm:text-sm", darkMode ? "text-black/60" : "text-white/70")}>Start professional setup</div>
               <div className="flex items-center gap-2 mt-3 sm:mt-4">
                 <div className={cn("px-2.5 py-1 rounded-lg text-[10px] font-bold", darkMode ? "bg-black text-white" : "bg-white/20 text-white")}>
