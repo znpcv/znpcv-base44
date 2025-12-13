@@ -228,33 +228,68 @@ export default function DashboardPage() {
               </div>
               <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider mb-1", darkMode ? "text-white" : "text-black")}>TRADE JOURNAL</div>
               <div className={cn("text-xs sm:text-sm", darkMode ? "text-zinc-400" : "text-zinc-600")}>Performance & Analytics</div>
-              <div className="flex items-center gap-2 mt-3 sm:mt-4">
-                <div className={cn("px-2.5 py-1 rounded-lg text-[10px] font-bold", darkMode ? "bg-white text-black" : "bg-zinc-900 text-white")}>
-                  {stats.executed} TRADES
-                </div>
-              </div>
             </div>
           </button>
         </motion.div>
 
-        {/* Stats - Einheitlich */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
+        {/* Stats - Modern & Advanced */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5 mb-6 sm:mb-8 md:mb-10">
           {[
-            { label: t('totalAnalyses'), value: stats.total, icon: Target },
-            { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
-            { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3 },
-            { label: 'EXECUTED', value: stats.executed, icon: Activity },
-            { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
+            { label: t('totalAnalyses'), value: stats.total, icon: Target, gradient: 'from-blue-600 to-cyan-600' },
+            { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, gradient: 'from-teal-600 to-emerald-600' },
+            { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3, gradient: stats.winRate >= 60 ? 'from-teal-600 to-green-600' : 'from-amber-600 to-orange-600' },
+            { label: 'EXECUTED', value: stats.executed, icon: Activity, gradient: 'from-purple-600 to-pink-600' },
+            { label: t('withConfluence'), value: stats.withConfluence, icon: Target, gradient: 'from-violet-600 to-fuchsia-600' },
           ].map((stat, index) => (
             <motion.div key={stat.label} 
-              initial={{ opacity: 0, scale: 0.95 }} 
-              animate={{ opacity: 1, scale: 1 }} 
-              transition={{ delay: 0.15 + index * 0.05 }}
-              className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6",
-                `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", theme.text)} />
-              <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", theme.text)}>{stat.value}</div>
-              <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-widest", theme.textMuted)}>{stat.label}</div>
+              initial={{ opacity: 0, scale: 0.9, y: 20 }} 
+              animate={{ opacity: 1, scale: 1, y: 0 }} 
+              transition={{ delay: 0.15 + index * 0.08, type: "spring", stiffness: 300 }}
+              whileHover={{ scale: 1.05, y: -8 }}
+              className={cn("relative group cursor-pointer overflow-hidden",
+                "rounded-2xl p-4 sm:p-5 md:p-6",
+                darkMode ? "bg-zinc-900/50 backdrop-blur-xl border-2 border-zinc-800/50 hover:border-zinc-700" : "bg-white/80 backdrop-blur-xl border-2 border-zinc-200/50 hover:border-zinc-300")}>
+              
+              {/* Animated gradient background */}
+              <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-br", stat.gradient)} />
+              
+              {/* Glow effect */}
+              <div className={cn("absolute -inset-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl bg-gradient-to-br rounded-2xl", stat.gradient)} style={{ zIndex: -1 }} />
+              
+              {/* Icon container */}
+              <div className="relative z-10 mb-3 sm:mb-4">
+                <motion.div 
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  className={cn("w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center",
+                    darkMode ? "bg-zinc-800/80" : "bg-zinc-100/80",
+                    "group-hover:shadow-2xl transition-shadow")}>
+                  <div className={cn("absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br", stat.gradient)} />
+                  <stat.icon className={cn("w-6 h-6 sm:w-7 sm:h-7 relative z-10 transition-colors", 
+                    darkMode ? "text-zinc-400 group-hover:text-white" : "text-zinc-600 group-hover:text-white")} />
+                </motion.div>
+              </div>
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className={cn("text-3xl sm:text-4xl md:text-5xl font-black mb-2 transition-all",
+                    darkMode ? "text-white" : "text-zinc-900",
+                    "bg-gradient-to-br bg-clip-text group-hover:text-transparent", stat.gradient)}>
+                  {stat.value}
+                </motion.div>
+                <div className={cn("text-[10px] sm:text-xs tracking-widest font-bold",
+                  darkMode ? "text-zinc-500 group-hover:text-zinc-400" : "text-zinc-500 group-hover:text-zinc-600",
+                  "transition-colors")}>
+                  {stat.label}
+                </div>
+              </div>
+              
+              {/* Decorative corner */}
+              <div className={cn("absolute top-0 right-0 w-20 h-20 opacity-10 group-hover:opacity-20 transition-opacity bg-gradient-to-br rounded-bl-full", stat.gradient)} />
             </motion.div>
           ))}
         </motion.div>
