@@ -149,12 +149,20 @@ export default function TradeHistoryPage() {
 
       <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
-          <div className="flex items-center justify-between gap-2 sm:gap-4 mb-2 sm:mb-3">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
+            <button 
+              onClick={() => navigate(createPageUrl('Dashboard'))}
+              className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 transition-all flex-shrink-0`}
+              title="Zurück zum Dashboard">
+              <svg className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
             <div className="min-w-0 flex-1">
               <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-5xl tracking-widest mb-1 sm:mb-2 ${theme.text}`}>HISTORY</h1>
               <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
             </div>
-            <Button onClick={handleCreateNew} className={`${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'} gap-1 sm:gap-2 h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold px-3 sm:px-4`}>
+            <Button onClick={handleCreateNew} className={`${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'} gap-1 sm:gap-2 h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold px-3 sm:px-4 flex-shrink-0`}>
               <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">TRADE</span>
               <span className="sm:hidden">NEW</span>

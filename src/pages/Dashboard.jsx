@@ -95,26 +95,55 @@ export default function DashboardPage() {
 
   const performanceData = useMemo(() => {
     const last30Days = [];
+    let cumulativePnL = 0;
     for (let i = 29; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateStr = format(date, 'yyyy-MM-dd');
-      const dayTrades = checklists.filter(c => c.trade_date === dateStr || format(new Date(c.created_date), 'yyyy-MM-dd') === dateStr);
-      last30Days.push({ date: format(date, 'dd.MM'), trades: dayTrades.length });
+      const dayTrades = checklists.filter(c => {
+        const tradeDate = c.trade_date || format(new Date(c.created_date), 'yyyy-MM-dd');
+        return tradeDate === dateStr;
+      });
+      const dayPnL = dayTrades
+        .filter(t => t.outcome && t.outcome !== 'pending' && t.actual_pnl)
+        .reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+      cumulativePnL += dayPnL;
+      last30Days.push({ 
+        date: format(date, 'dd.MM'), 
+        trades: dayTrades.length,
+        pnl: dayPnL,
+        cumulative: cumulativePnL
+      });
     }
     return last30Days;
   }, [checklists]);
 
-  const directionData = [
-    { name: t('long'), value: stats.longs, color: '#0d9488' },
-    { name: t('short'), value: stats.shorts, color: '#e11d48' },
-  ].filter(d => d.value > 0);
+  const directionData = useMemo(() => {
+    const longTrades = checklists.filter(c => 
+      c.direction === 'long' || c.direction === 'bullish' || 
+      (c.d_trend === 'bullish' && c.w_trend === 'bullish')
+    ).length;
+    const shortTrades = checklists.filter(c => 
+      c.direction === 'short' || c.direction === 'bearish' || 
+      (c.d_trend === 'bearish' && c.w_trend === 'bearish')
+    ).length;
+    return [
+      { name: t('long'), value: longTrades, color: '#0d9488' },
+      { name: t('short'), value: shortTrades, color: '#e11d48' },
+    ].filter(d => d.value > 0);
+  }, [checklists, t]);
 
   const monthStart = startOfMonth(calendarMonth);
   const monthEnd = endOfMonth(calendarMonth);
   const calendarDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
   const startDay = monthStart.getDay() === 0 ? 6 : monthStart.getDay() - 1;
-  const getTradesForDay = (date) => checklists.filter(c => c.trade_date === format(date, 'yyyy-MM-dd'));
+  const getTradesForDay = (date) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    return checklists.filter(c => {
+      const tradeDate = c.trade_date || format(new Date(c.created_date), 'yyyy-MM-dd');
+      return tradeDate === dateStr;
+    });
+  };
 
   const recentTrades = checklists.slice(0, 12);
   const locale = language === 'de' ? de : enUS;
@@ -309,7 +338,7 @@ export default function DashboardPage() {
 
           {/* Right */}
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
-            {/* Performance Chart */}
+            {/* Performance Chart with Cumulative */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
               <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
@@ -321,21 +350,34 @@ export default function DashboardPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={performanceData}>
                     <defs>
-                      <linearGradient id="colorTrades" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor={darkMode ? "#ffffff" : "#0d9488"} stopOpacity={0}/>
+                      <linearGradient id="colorCumulative" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
                     <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
-                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
-                    <Area type="monotone" dataKey="trades" stroke={darkMode ? "#ffffff" : "#0d9488"} strokeWidth={2} fillOpacity={1} fill="url(#colorTrades)" />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000', fontSize: '11px' }}
+                      formatter={(value, name) => {
+                        if (name === 'cumulative') return [`$${value.toFixed(2)}`, 'Cumulative P&L'];
+                        if (name === 'pnl') return [`$${value.toFixed(2)}`, 'Daily P&L'];
+                        return [value, 'Trades'];
+                      }}
+                    />
+                    <Area type="monotone" dataKey="cumulative" stroke={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} strokeWidth={2} fillOpacity={1} fill="url(#colorCumulative)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
+              <div className={`mt-3 text-xs ${theme.textMuted} flex justify-between`}>
+                <span>Cumulative P&L</span>
+                <span className={performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-teal-600' : 'text-rose-600'}>
+                  ${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}
+                </span>
+              </div>
             </motion.div>
 
-            {/* Direction Pie */}
+            {/* Direction Pie - Advanced Analysis */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
               className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
               <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
@@ -345,22 +387,23 @@ export default function DashboardPage() {
               <div className="h-32 sm:h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
-                    <Pie data={[
-                      { name: t('long'), value: stats.longs, color: '#0d9488' },
-                      { name: t('short'), value: stats.shorts, color: '#e11d48' },
-                    ].filter(d => d.value > 0)} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={4} dataKey="value">
-                      {[
-                        { name: t('long'), value: stats.longs, color: '#0d9488' },
-                        { name: t('short'), value: stats.shorts, color: '#e11d48' },
-                      ].filter(d => d.value > 0).map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+                    <Pie data={directionData} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={4} dataKey="value">
+                      {directionData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000', fontSize: '11px' }}
+                      formatter={(value, name) => [value, name]}
+                    />
                   </RechartsPie>
                 </ResponsiveContainer>
               </div>
               <div className="flex justify-center gap-4 sm:gap-6 mt-3 sm:mt-4">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-xs sm:text-sm ${theme.textMuted}`}>{t('long')} ({stats.longs})</span></div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-xs sm:text-sm ${theme.textMuted}`}>{t('short')} ({stats.shorts})</span></div>
+                {directionData.map((item) => (
+                  <div key={item.name} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded" style={{ backgroundColor: item.color }} />
+                    <span className={`text-xs sm:text-sm ${theme.textMuted}`}>{item.name} ({item.value})</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
 
