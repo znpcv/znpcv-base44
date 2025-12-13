@@ -307,6 +307,195 @@ export default function HomePage() {
             </div>
           </button>
         </motion.div>
+        </div>
+
+        {/* How It Works - 3 Steps */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-8 sm:mb-12 md:mb-16 lg:mb-20"
+        >
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl tracking-widest mb-2 sm:mb-3">WIE ES FUNKTIONIERT</h3>
+            <p className={`${theme.textDimmed} text-xs sm:text-sm md:text-base`}>3 Einfache Schritte zum Trading-Erfolg</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            {[
+              { num: '01', title: 'ANALYSIERE', desc: 'Nutze die W-D-4H Methode für Multi-Timeframe Analyse', icon: Target },
+              { num: '02', title: 'VALIDIERE', desc: 'Checke alle Confluences und erreiche 85%+ Score', icon: CheckCircle2 },
+              { num: '03', title: 'TRADE', desc: 'Führe deinen perfekt geplanten Trade mit Disziplin aus', icon: TrendingUp },
+            ].map((step, idx) => (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + idx * 0.1 }}
+                className={`relative p-6 sm:p-8 rounded-2xl border-2 ${theme.border} ${theme.bgSecondary} overflow-hidden group hover:border-teal-600 transition-all`}
+              >
+                <div className={`absolute top-0 right-0 text-8xl sm:text-9xl font-black opacity-5 ${theme.text} -mr-4 -mt-8`}>
+                  {step.num}
+                </div>
+                <div className="relative z-10">
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center mb-4 sm:mb-6 ${darkMode ? 'bg-white' : 'bg-black'} group-hover:scale-110 transition-transform`}>
+                    <step.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${darkMode ? 'text-black' : 'text-white'}`} />
+                  </div>
+                  <h4 className={`text-lg sm:text-xl tracking-wider mb-2 sm:mb-3 ${theme.text}`}>{step.title}</h4>
+                  <p className={`${theme.textMuted} text-sm sm:text-base leading-relaxed font-sans`}>{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Pricing Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="mb-8 sm:mb-12 md:mb-16 lg:mb-20"
+        >
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl tracking-widest mb-2 sm:mb-3">PRICING</h3>
+            <p className={`${theme.textDimmed} text-xs sm:text-sm md:text-base`}>Einmalzahlung • Lifetime Access • Keine versteckten Kosten</p>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className={cn("relative p-8 sm:p-10 md:p-12 rounded-3xl border-4 overflow-hidden",
+                darkMode ? "bg-gradient-to-br from-zinc-900 to-zinc-950 border-teal-600" : "bg-gradient-to-br from-white to-zinc-50 border-teal-600")}
+            >
+              <div className="absolute top-0 right-0 px-4 py-1 bg-teal-600 text-white text-xs font-bold tracking-widest rounded-bl-xl">
+                LIFETIME
+              </div>
+
+              <div className="text-center mb-6">
+                <div className={`text-5xl sm:text-6xl md:text-7xl font-black mb-2 ${theme.text}`}>
+                  $99
+                </div>
+                <div className={`${theme.textMuted} text-sm sm:text-base tracking-widest`}>EINMALZAHLUNG</div>
+              </div>
+
+              <div className="space-y-3 sm:space-y-4 mb-8">
+                {[
+                  'Multi-Timeframe Analyse Tools',
+                  'ZNPCV Checklist System',
+                  'Performance Dashboard',
+                  'Trade History & Analytics',
+                  'Lifetime Updates',
+                  'Premium Support',
+                ].map((feature, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.8 + idx * 0.05 }}
+                    className="flex items-center gap-3"
+                  >
+                    <CheckCircle2 className="w-5 h-5 text-teal-600 flex-shrink-0" />
+                    <span className={`${theme.text} text-sm sm:text-base`}>{feature}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => base44.auth.redirectToLogin()}
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl text-base sm:text-lg tracking-widest transition-all transform hover:scale-105"
+              >
+                JETZT STARTEN
+              </button>
+
+              <p className={`text-center ${theme.textDimmed} text-xs sm:text-sm mt-4`}>
+                🔒 Sichere Zahlung via Stripe • 14 Tage Geld-zurück-Garantie
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Screenshot Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mb-8 sm:mb-12 md:mb-16 lg:mb-20"
+        >
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl tracking-widest mb-2 sm:mb-3">SCREENSHOTS</h3>
+            <p className={`${theme.textDimmed} text-xs sm:text-sm md:text-base`}>Erlebe die Power der ZNPCV Checkliste</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className={`rounded-2xl border-2 ${theme.border} overflow-hidden ${theme.bgSecondary} p-4`}
+            >
+              <div className={`aspect-video rounded-xl ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'} flex items-center justify-center`}>
+                <div className="text-center">
+                  <ClipboardCheck className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 ${theme.textMuted}`} />
+                  <p className={`${theme.textMuted} text-sm sm:text-base tracking-wider`}>CHECKLIST PREVIEW</p>
+                </div>
+              </div>
+              <p className={`${theme.text} text-sm sm:text-base mt-3 text-center tracking-wider`}>Multi-Timeframe Analyse</p>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className={`rounded-2xl border-2 ${theme.border} overflow-hidden ${theme.bgSecondary} p-4`}
+            >
+              <div className={`aspect-video rounded-xl ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'} flex items-center justify-center`}>
+                <div className="text-center">
+                  <BarChart3 className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 ${theme.textMuted}`} />
+                  <p className={`${theme.textMuted} text-sm sm:text-base tracking-wider`}>DASHBOARD PREVIEW</p>
+                </div>
+              </div>
+              <p className={`${theme.text} text-sm sm:text-base mt-3 text-center tracking-wider`}>Performance Analytics</p>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Social Proof Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mb-8 sm:mb-12 md:mb-16 lg:mb-20"
+        >
+          <div className="text-center mb-6 sm:mb-8 md:mb-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl tracking-widest mb-2 sm:mb-3">WAS TRADER SAGEN</h3>
+            <p className={`${theme.textDimmed} text-xs sm:text-sm md:text-base`}>Echte Ergebnisse von echten Tradern</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              { name: 'Michael K.', role: 'Day Trader', text: 'ZNPCV hat meine Trading-Disziplin komplett verändert. Endlich trade ich nach einem System!', rating: 5 },
+              { name: 'Sarah L.', role: 'Swing Trader', text: 'Die Multi-Timeframe Analyse ist genial. Seitdem ich ZNPCV nutze, sind meine Trades deutlich profitabler.', rating: 5 },
+              { name: 'Thomas M.', role: 'Forex Trader', text: 'Beste 99$ die ich je investiert habe. Das Tool hat sich nach 2 Trades bezahlt gemacht.', rating: 5 },
+            ].map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 + idx * 0.1 }}
+                className={`p-6 sm:p-8 rounded-2xl border-2 ${theme.border} ${theme.bgSecondary}`}
+              >
+                <div className="flex gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <span key={i} className="text-yellow-500 text-lg">★</span>
+                  ))}
+                </div>
+                <p className={`${theme.text} text-sm sm:text-base mb-4 font-sans italic leading-relaxed`}>
+                  "{testimonial.text}"
+                </p>
+                <div>
+                  <p className={`${theme.text} font-bold text-sm sm:text-base`}>{testimonial.name}</p>
+                  <p className={`${theme.textMuted} text-xs sm:text-sm`}>{testimonial.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Features - Compact */}
         <motion.div
