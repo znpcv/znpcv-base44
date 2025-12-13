@@ -137,25 +137,21 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
-              <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
-                <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-              </button>
-              <button onClick={() => navigate(createPageUrl('Home'))}>
-                <img src={darkMode 
-              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-            } alt="ZNPCV" className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80" />
-              </button>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl border-2 transition-all ${darkMode ? 'border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400'}`}>
-                <Activity className="w-4 h-4" />
-                <span className="text-xs tracking-wider font-bold">HISTORY</span>
-              </button>
-              <LanguageToggle />
-              <AccountButton />
-            </div>
+                <DarkModeToggle />
+                <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
+                  <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                </button>
+                <button onClick={() => navigate(createPageUrl('Home'))}>
+                  <img src={darkMode 
+                ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+              } alt="ZNPCV" className="h-10 sm:h-12 md:h-14 w-auto cursor-pointer hover:opacity-80" />
+                </button>
+              </div>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <LanguageToggle />
+                <AccountButton />
+              </div>
           </div>
         </div>
       </header>
@@ -167,8 +163,29 @@ export default function DashboardPage() {
           <p className={`${theme.textMuted} tracking-wider text-sm sm:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
+        {/* Quick Actions - Prominent */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <button onClick={() => navigate(createPageUrl('Checklist'))}
+            className={cn("group relative p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left",
+              darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black")}>
+            <div className="absolute top-0 right-0 w-20 h-20 bg-black/5 rounded-full -translate-y-10 translate-x-10" />
+            <Plus className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mb-2 sm:mb-3", darkMode ? "text-black" : "text-white")} />
+            <div className={cn("text-base sm:text-lg md:text-xl font-bold tracking-wider", darkMode ? "text-black" : "text-white")}>NEW ANALYSIS</div>
+            <div className={cn("text-[10px] sm:text-xs mt-1", darkMode ? "text-black/60" : "text-white/60")}>Start Checklist</div>
+          </button>
+
+          <button onClick={() => navigate(createPageUrl('TradeHistory'))}
+            className={cn("group relative p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left",
+              darkMode ? "bg-zinc-900 text-white border-zinc-800 hover:border-zinc-700" : "bg-zinc-100 text-black border-zinc-300 hover:border-zinc-400")}>
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-8 -translate-x-8" />
+            <Activity className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mb-2 sm:mb-3", darkMode ? "text-white" : "text-black")} />
+            <div className={cn("text-base sm:text-lg md:text-xl font-bold tracking-wider", darkMode ? "text-white" : "text-black")}>TRADE HISTORY</div>
+            <div className={cn("text-[10px] sm:text-xs mt-1", darkMode ? "text-zinc-400" : "text-zinc-600")}>Full Journal</div>
+          </button>
+        </motion.div>
+
         {/* Stats */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, highlight: true },
@@ -177,15 +194,15 @@ export default function DashboardPage() {
             { label: 'EXECUTED', value: stats.executed, icon: Activity },
             { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
           ].map((stat, index) => (
-            <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 + index * 0.05 }}
-              className={cn("border-2 rounded-2xl p-4 sm:p-5 md:p-6", 
+            <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 + index * 0.05 }}
+              className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6", 
                 stat.highlight && stat.isProfit && stats.totalPnL > 0 ? "bg-teal-600 text-white border-teal-600" :
                 stat.highlight && stat.isProfit && stats.totalPnL < 0 ? "bg-rose-600 text-white border-rose-600" :
                 stat.highlight ? "bg-teal-600 text-white border-teal-600" : 
                 `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-5 h-5 sm:w-6 sm:h-6 mb-3 sm:mb-4", stat.highlight ? "text-white" : theme.text)} />
-              <div className={cn("text-2xl sm:text-3xl md:text-4xl font-light mb-1 sm:mb-2", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-[10px] sm:text-xs tracking-widest", stat.highlight ? "text-white/90" : theme.textMuted)}>{stat.label}</div>
+              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", stat.highlight ? "text-white" : theme.text)} />
+              <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
+              <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-widest", stat.highlight ? "text-white/90" : theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
