@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
-import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
 import { cn } from "@/lib/utils";
 
@@ -165,7 +164,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
+          className="grid md:grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
         >
           {/* New Analysis - Compact */}
           <button
@@ -241,12 +240,44 @@ export default function HomePage() {
               </div>
             </div>
           </button>
-        </motion.div>
 
-        {/* Trading Quote */}
-        <div className="mb-8 sm:mb-12 md:mb-16">
-          <TradingQuote />
-        </div>
+          {/* Trade History */}
+          <button
+            onClick={() => navigate(createPageUrl('TradeHistory'))}
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+              darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}
+          >
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full" style={{backgroundImage: 'linear-gradient(45deg, currentColor 25%, transparent 25%, transparent 75%, currentColor 75%, currentColor), linear-gradient(45deg, currentColor 25%, transparent 25%, transparent 75%, currentColor 75%, currentColor)', backgroundSize: '10px 10px', backgroundPosition: '0 0, 5px 5px'}} />
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-white" : "bg-black")}>
+                  <History className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-purple-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
+                  LOG
+                </div>
+              </div>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('performanceAnalytics')}
+              </p>
+
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-white text-black" : "bg-black text-white")}>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </div>
+            </div>
+          </button>
+        </motion.div>
 
         {/* Features - Compact */}
         <motion.div
