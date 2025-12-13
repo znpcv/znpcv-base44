@@ -229,40 +229,40 @@ export default function TradeHistoryPage() {
             </motion.div>
           </div>
 
-          {/* Charts - Kompakt für Seitenleiste */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-5">
+          {/* Charts */}
+          <div className="space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4 ${theme.text}`}>WIN/LOSS</h3>
-              <div className="h-36 sm:h-40 md:h-44">
+              className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>WIN/LOSS</h3>
+              <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={4} dataKey="value">
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={4} dataKey="value">
                       {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, fontSize: '12px' }} />
+                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12 }} />
                   </RechartsPie>
                 </ResponsiveContainer>
               </div>
-              <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-3 sm:mt-4">
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-xs sm:text-sm ${theme.textMuted}`}>W ({stats.wins})</span></div>
-                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-xs sm:text-sm ${theme.textMuted}`}>L ({stats.losses})</span></div>
+              <div className="flex justify-center gap-4 mt-4">
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-teal-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>Wins ({stats.wins})</span></div>
+                <div className="flex items-center gap-2"><div className="w-3 h-3 bg-rose-600 rounded" /><span className={`text-sm ${theme.textMuted}`}>Losses ({stats.losses})</span></div>
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4 ${theme.text}`}>AVERAGE</h3>
-              <div className="space-y-4 sm:space-y-5">
+              className={`border-2 ${theme.border} rounded-2xl p-6 ${theme.bgSecondary}`}>
+              <h3 className={`text-lg tracking-widest mb-4 ${theme.text}`}>AVERAGE</h3>
+              <div className="space-y-5">
                 <div>
-                  <div className="flex justify-between mb-2 sm:mb-3 gap-2"><span className={`text-xs sm:text-sm ${theme.textMuted}`}>Win</span><span className="text-teal-600 text-base sm:text-lg md:text-xl font-bold">${stats.avgWin}</span></div>
-                  <div className={`h-2.5 sm:h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
+                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>Win</span><span className="text-teal-600 text-lg font-bold">${stats.avgWin}</span></div>
+                  <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                     <div className="h-full bg-teal-600 rounded-full transition-all" style={{ width: stats.avgWin > 0 ? '70%' : '0%' }} />
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between mb-2 sm:mb-3 gap-2"><span className={`text-xs sm:text-sm ${theme.textMuted}`}>Loss</span><span className="text-rose-600 text-base sm:text-lg md:text-xl font-bold">${stats.avgLoss}</span></div>
-                  <div className={`h-2.5 sm:h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
+                  <div className="flex justify-between mb-3"><span className={`text-sm ${theme.textMuted}`}>Loss</span><span className="text-rose-600 text-lg font-bold">${stats.avgLoss}</span></div>
+                  <div className={`h-3 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-900' : 'bg-zinc-300'}`}>
                     <div className="h-full bg-rose-600 rounded-full transition-all" style={{ width: stats.avgLoss > 0 ? '50%' : '0%' }} />
                   </div>
                 </div>
