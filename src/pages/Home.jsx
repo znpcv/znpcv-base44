@@ -6,6 +6,7 @@ import {
   Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
   Activity, Award, HelpCircle, Calendar, History
 } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
@@ -87,13 +88,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-4">
             <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
               <DarkModeToggle />
-              <div className={`flex items-center gap-0.5 sm:gap-1 md:gap-2 px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 rounded-md sm:rounded-lg md:rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
-                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
-                <span className={`text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
-                  {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                </span>
-              </div>
-              </div>
+            </div>
 
               <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img 
@@ -135,37 +130,65 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero Section - Compact for Mobile */}
-      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-8 lg:py-12">
+      {/* Hero Section - Animated Background */}
+      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-8 lg:py-12 relative">
+        {/* Animated Gradient Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className={`absolute top-0 -left-4 w-72 h-72 ${darkMode ? 'bg-teal-600/10' : 'bg-teal-600/20'} rounded-full mix-blend-multiply filter blur-3xl animate-blob`} />
+          <div className={`absolute top-0 -right-4 w-72 h-72 ${darkMode ? 'bg-purple-600/10' : 'bg-purple-600/20'} rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000`} />
+          <div className={`absolute -bottom-8 left-20 w-72 h-72 ${darkMode ? 'bg-blue-600/10' : 'bg-blue-600/20'} rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000`} />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-4 sm:mb-6 md:mb-10"
+          className="text-center mb-4 sm:mb-6 md:mb-10 relative z-10"
         >
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-[10px] sm:text-xs mb-2 sm:mb-3 md:mb-5">
-            <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5" />
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-[10px] sm:text-xs mb-2 sm:mb-3 md:mb-5 backdrop-blur-sm">
+            <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 animate-pulse" />
             <span className="tracking-widest">{t('tradingTools')}</span>
-          </div>
+          </motion.div>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider mb-1.5 sm:mb-2 md:mb-3 font-light">
+          <motion.h1 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider mb-1.5 sm:mb-2 md:mb-3 font-light">
             ZNPCV
-          </h1>
-          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.textSecondary} mb-2 sm:mb-3 md:mb-5`}>
+          </motion.h1>
+          <motion.h2 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.textSecondary} mb-2 sm:mb-3 md:mb-5`}>
             {t('ultimateChecklist')}
-          </h2>
-          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
+          </motion.h2>
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
             "{t('disciplineQuote')}"
-          </p>
-          <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</p>
+          </motion.p>
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</motion.p>
         </motion.div>
 
-        {/* Main Actions - Compact for Mobile */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
-        >
+        {/* Main Actions - 2+1 Layout */}
+        <div className="mb-4 sm:mb-6 md:mb-10 lg:mb-14 space-y-3 sm:space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="grid md:grid-cols-2 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6"
+          >
           {/* New Analysis - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
@@ -240,8 +263,14 @@ export default function HomePage() {
               </div>
             </div>
           </button>
+        </motion.div>
 
-          {/* Trade History */}
+        {/* Trade History - Full Width */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
           <button
             onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
@@ -359,15 +388,19 @@ export default function HomePage() {
                 <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <div className="w-1.5 h-1.5 bg-teal-600 rounded-full animate-pulse" />
                   <Lock className="w-3 h-3 text-teal-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL ENCRYPTED</span>
                 </div>
                 <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <ShieldCheck className="w-3 h-3 text-teal-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SECURE</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>DSGVO</span>
                 </div>
                 <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
                   <Globe className="w-3 h-3 text-teal-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>CLOUD BACKUP</span>
+                </div>
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <Award className="w-3 h-3 text-teal-600" />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>PREMIUM</span>
                 </div>
               </div>
 
