@@ -28,14 +28,16 @@ export default function DatenschutzPage() {
                   <span className="hidden sm:inline">Zurück</span>
                 </Button>
               </div>
-            <img 
-              src={darkMode 
-                ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-              }
-              alt="ZNPCV" 
-              className="h-10 w-auto"
-            />
+            <button onClick={() => navigate(createPageUrl('Home'))}>
+              <img 
+                src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                }
+                alt="ZNPCV" 
+                className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </button>
             <div className="w-12" />
           </div>
         </div>
