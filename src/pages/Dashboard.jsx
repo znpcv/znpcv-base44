@@ -238,12 +238,11 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats - Einheitlich */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
             { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3 },
-            { label: 'P&L', value: `$${stats.totalPnL.toFixed(0)}`, icon: TrendingUp },
             { label: 'EXECUTED', value: stats.executed, icon: Activity },
             { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
           ].map((stat, index) => (
