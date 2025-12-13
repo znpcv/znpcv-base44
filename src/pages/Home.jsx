@@ -82,15 +82,15 @@ export default function HomePage() {
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Header */}
+      {/* Header - Ultra Compact */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
-          <div className="flex items-center justify-between gap-2 sm:gap-4">
-            <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-4">
+            <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
               <DarkModeToggle />
-              <div className={`flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+              <div className={`flex items-center gap-0.5 sm:gap-1 md:gap-2 px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 rounded-md sm:rounded-lg md:rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
                 <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
-                <span className={`text-[10px] sm:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
+                <span className={`text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
                   {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                 </span>
               </div>
@@ -103,11 +103,11 @@ export default function HomePage() {
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-7 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
               </button>
 
-              <div className="flex items-center gap-1 sm:gap-2">
+              <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
               <LanguageToggle />
               <AccountButton />
               </div>
@@ -115,17 +115,17 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Market Sessions Bar */}
+      {/* Market Sessions Bar - Compact */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-2 sm:py-3">
-          <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-6 overflow-x-auto scrollbar-hide">
-            <Globe className={`w-4 h-4 flex-shrink-0 ${theme.textMuted}`} />
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide">
+            <Globe className={`w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0 ${theme.textMuted}`} />
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
-                  <span className="text-sm sm:text-base">{session.emoji}</span>
-                  <div className={`text-[10px] sm:text-xs md:text-sm font-mono font-bold ${isOpen ? 'text-teal-600' : theme.textMuted}`}>
+                <div key={session.name} className="flex items-center gap-0.5 sm:gap-1 md:gap-1.5 lg:gap-2 flex-shrink-0">
+                  <span className="text-xs sm:text-sm md:text-base">{session.emoji}</span>
+                  <div className={`text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-mono font-bold ${isOpen ? 'text-teal-600' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
                   <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isOpen ? 'bg-teal-600 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
@@ -136,107 +136,107 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-10 md:py-14">
+      {/* Hero Section - Compact for Mobile */}
+      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-10 lg:py-14">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-xs mb-6">
-            <Zap className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-[10px] sm:text-xs mb-3 sm:mb-4 md:mb-6">
+            <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5" />
             <span className="tracking-widest">{t('tradingTools')}</span>
           </div>
-          
-          <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4 font-light">
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider mb-2 sm:mb-3 md:mb-4 font-light">
             ZNPCV
           </h1>
-          <h2 className={`text-xl md:text-2xl tracking-widest ${theme.textSecondary} mb-6`}>
+          <h2 className={`text-base sm:text-lg md:text-xl lg:text-2xl tracking-widest ${theme.textSecondary} mb-3 sm:mb-4 md:mb-6`}>
             {t('ultimateChecklist')}
           </h2>
-          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic`}>
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
             "{t('disciplineQuote')}"
           </p>
-          <p className={`${theme.textDimmed} text-sm mt-3 tracking-widest`}>— {t('philosophy')}</p>
+          <p className={`${theme.textDimmed} text-xs sm:text-sm mt-2 sm:mt-3 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
-        {/* Main Actions - BLACK & WHITE REDESIGN */}
+        {/* Main Actions - Ultra Compact for Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 mb-10 sm:mb-12 md:mb-16"
+          className="grid md:grid-cols-2 gap-2.5 sm:gap-3 md:gap-4 lg:gap-6 mb-6 sm:mb-8 md:mb-12 lg:mb-16"
         >
-          {/* New Analysis */}
+          {/* New Analysis - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("group relative p-8 rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
               darkMode ? "bg-white text-black" : "bg-black text-white")}
           >
             {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-black/5 rounded-full -translate-y-20 translate-x-20" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/5 rounded-full translate-y-16 -translate-x-16" />
-            
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-black/5 rounded-full -translate-y-12 sm:-translate-y-16 md:-translate-y-20 translate-x-12 sm:translate-x-16 md:translate-x-20" />
+            <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-black/5 rounded-full translate-y-10 sm:translate-y-12 md:translate-y-16 -translate-x-10 sm:-translate-x-12 md:-translate-x-16" />
+
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-6">
-                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center",
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
                   darkMode ? "bg-black" : "bg-white")}>
-                  <ClipboardCheck className={cn("w-6 h-6", darkMode ? "text-white" : "text-black")} />
+                  <ClipboardCheck className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-teal-600 text-white text-xs rounded-full ml-auto">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-teal-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
                   START
                 </div>
               </div>
-              
-              <h2 className={cn("text-3xl tracking-wider mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
-              <p className={cn("text-sm leading-relaxed mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
                 {t('newAnalysisDesc')}
               </p>
 
-              <div className={cn("flex items-center gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
-                <span className="text-lg">{t('startNow')}</span>
-                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('startNow')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
                   darkMode ? "bg-black text-white" : "bg-white text-black")}>
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
           </button>
 
-          {/* Dashboard */}
+          {/* Dashboard - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className={cn("group relative p-8 rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
               darkMode ? "bg-black text-white border-zinc-800" : "bg-white text-black border-zinc-300")}
           >
             {/* Decorative grid */}
             <div className="absolute inset-0 opacity-5">
               <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
             </div>
-            
+
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-6">
-                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center",
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
                   darkMode ? "bg-white" : "bg-black")}>
-                  <BarChart3 className={cn("w-6 h-6", darkMode ? "text-black" : "text-white")} />
+                  <BarChart3 className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-zinc-800 text-zinc-300 text-xs rounded-full ml-auto">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-zinc-800 text-zinc-300 text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse" />
                   LIVE
                 </div>
               </div>
-              
-              <h2 className={cn("text-3xl tracking-wider mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
-              <p className={cn("text-sm leading-relaxed mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 {t('dashboardDesc')}
               </p>
 
-              <div className={cn("flex items-center gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-lg">{t('openDashboard')}</span>
-                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
                   darkMode ? "bg-white text-black" : "bg-black text-white")}>
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
@@ -248,19 +248,19 @@ export default function HomePage() {
           <TradingQuote />
         </div>
 
-        {/* Features */}
+        {/* Features - Compact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mb-8 sm:mb-12 md:mb-16"
+          className="mb-6 sm:mb-8 md:mb-12 lg:mb-16"
         >
-          <div className="text-center mb-8">
-            <h3 className="text-xl tracking-widest mb-2">{t('features')}</h3>
-            <p className={`${theme.textDimmed} text-sm`}>{t('featuresDesc')}</p>
+          <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <h3 className="text-base sm:text-lg md:text-xl tracking-widest mb-1 sm:mb-2">{t('features')}</h3>
+            <p className={`${theme.textDimmed} text-xs sm:text-sm`}>{t('featuresDesc')}</p>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
             {[
               { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
               { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
@@ -271,34 +271,34 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                className={`p-6 ${theme.bgSecondary} border ${theme.border} rounded-2xl hover:border-teal-600/50 transition-all group`}
+                className={`p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary} border ${theme.border} rounded-xl sm:rounded-2xl hover:border-teal-600/50 transition-all group`}
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
-                  <item.icon className={`w-6 h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                  <item.icon className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
                 </div>
-                <h3 className={`text-lg tracking-wider mb-2 ${theme.text}`}>{t(item.titleKey)}</h3>
-                <p className={`text-sm ${theme.textMuted} leading-relaxed font-sans`}>{t(item.descKey)}</p>
+                <h3 className={`text-sm sm:text-base md:text-lg tracking-wider mb-1 sm:mb-2 ${theme.text}`}>{t(item.titleKey)}</h3>
+                <p className={`text-xs sm:text-sm ${theme.textMuted} leading-relaxed font-sans`}>{t(item.descKey)}</p>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats - Compact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4"
+          className="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3 lg:gap-4"
         >
           {[
             { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
             { value: '7', labelKey: 'stepChecklist', icon: CheckCircle2 },
             { value: '4', labelKey: 'chartPatterns', icon: Activity },
           ].map((stat) => (
-            <div key={stat.labelKey} className={`text-center p-5 md:p-6 border ${theme.border} rounded-2xl ${theme.bgSecondary}`}>
-              <stat.icon className={`w-6 h-6 mx-auto mb-3 ${theme.text}`} />
-              <div className={`text-2xl md:text-3xl font-light mb-1 ${theme.text}`}>{stat.value}</div>
-              <div className={`text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
+            <div key={stat.labelKey} className={`text-center p-3 sm:p-4 md:p-5 lg:p-6 border ${theme.border} rounded-xl sm:rounded-2xl ${theme.bgSecondary}`}>
+              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-2 sm:mb-3 ${theme.text}`} />
+              <div className={`text-xl sm:text-2xl md:text-3xl font-light mb-0.5 sm:mb-1 ${theme.text}`}>{stat.value}</div>
+              <div className={`text-[9px] sm:text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
             </div>
           ))}
         </motion.div>

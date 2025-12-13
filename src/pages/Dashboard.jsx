@@ -157,30 +157,30 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
-        {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8 md:mb-10">
-          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 sm:mb-3 ${theme.text}`}>{t('tradingDashboard')}</h1>
-          <p className={`${theme.textMuted} tracking-wider text-sm sm:text-base`}>{t('overviewStats')}</p>
+        {/* Title - Compact */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 md:mb-3 ${theme.text}`}>DASHBOARD</h1>
+          <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
-        {/* Quick Actions - Prominent */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+        {/* Quick Actions - Ultra Compact for Mobile */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-6">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left",
+            className={cn("group relative p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 text-left",
               darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black")}>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-black/5 rounded-full -translate-y-10 translate-x-10" />
-            <Plus className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mb-2 sm:mb-3", darkMode ? "text-black" : "text-white")} />
-            <div className={cn("text-base sm:text-lg md:text-xl font-bold tracking-wider", darkMode ? "text-black" : "text-white")}>NEW ANALYSIS</div>
-            <div className={cn("text-[10px] sm:text-xs mt-1", darkMode ? "text-black/60" : "text-white/60")}>Start Checklist</div>
+            <div className="absolute top-0 right-0 w-16 h-16 sm:w-20 sm:h-20 bg-black/5 rounded-full -translate-y-8 sm:-translate-y-10 translate-x-8 sm:translate-x-10" />
+            <Plus className={cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-1.5 sm:mb-2 md:mb-3", darkMode ? "text-black" : "text-white")} />
+            <div className={cn("text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-wider", darkMode ? "text-black" : "text-white")}>NEW</div>
+            <div className={cn("text-[9px] sm:text-[10px] md:text-xs mt-0.5 sm:mt-1", darkMode ? "text-black/60" : "text-white/60")}>Analysis</div>
           </button>
 
           <button onClick={() => navigate(createPageUrl('TradeHistory'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left",
+            className={cn("group relative p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden border-2 text-left",
               darkMode ? "bg-zinc-900 text-white border-zinc-800 hover:border-zinc-700" : "bg-zinc-100 text-black border-zinc-300 hover:border-zinc-400")}>
-            <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-8 -translate-x-8" />
-            <Activity className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mb-2 sm:mb-3", darkMode ? "text-white" : "text-black")} />
-            <div className={cn("text-base sm:text-lg md:text-xl font-bold tracking-wider", darkMode ? "text-white" : "text-black")}>TRADE HISTORY</div>
-            <div className={cn("text-[10px] sm:text-xs mt-1", darkMode ? "text-zinc-400" : "text-zinc-600")}>Full Journal</div>
+            <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 bg-white/5 rounded-full translate-y-6 sm:translate-y-8 -translate-x-6 sm:-translate-x-8" />
+            <Activity className={cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-1.5 sm:mb-2 md:mb-3", darkMode ? "text-white" : "text-black")} />
+            <div className={cn("text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-wider", darkMode ? "text-white" : "text-black")}>HISTORY</div>
+            <div className={cn("text-[9px] sm:text-[10px] md:text-xs mt-0.5 sm:mt-1", darkMode ? "text-zinc-400" : "text-zinc-600")}>Journal</div>
           </button>
         </motion.div>
 
