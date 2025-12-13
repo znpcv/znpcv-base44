@@ -465,14 +465,24 @@ export default function DashboardPage() {
                   const trades = getTradesForDay(day);
                   const hasReady = trades.some(t => t.status === 'ready_to_trade');
                   return (
-                    <div key={day.toISOString()} className={cn(
-                      "aspect-square flex items-center justify-center text-sm relative rounded-lg",
-                      isToday(day) && (darkMode ? "bg-white text-black" : "bg-zinc-900 text-white") + " font-bold",
-                      trades.length > 0 && !isToday(day) && (darkMode ? "bg-zinc-900" : "bg-zinc-200")
-                    )}>
+                    <button
+                      type="button"
+                      key={day.toISOString()}
+                      onClick={() => trades.length > 0 && navigate(createPageUrl('TradeDetail') + `?id=${trades[0].id}`)}
+                      className={cn(
+                        "aspect-square flex items-center justify-center text-sm relative rounded-lg transition-all",
+                        isToday(day) && (darkMode ? "bg-white text-black" : "bg-zinc-900 text-white") + " font-bold",
+                        trades.length > 0 && !isToday(day) && (darkMode ? "bg-zinc-900 hover:bg-zinc-800" : "bg-zinc-200 hover:bg-zinc-300") + " cursor-pointer",
+                        trades.length === 0 && "cursor-default"
+                      )}>
                       {format(day, 'd')}
                       {hasReady && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-teal-600 rounded-full" />}
-                    </div>
+                      {trades.length > 1 && (
+                        <div className="absolute top-0.5 right-0.5 w-3 h-3 bg-teal-600 text-white text-[8px] rounded-full flex items-center justify-center font-bold">
+                          {trades.length}
+                        </div>
+                      )}
+                    </button>
                   );
                 })}
               </div>

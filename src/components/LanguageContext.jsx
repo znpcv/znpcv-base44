@@ -2216,12 +2216,12 @@ export function LanguageToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
+        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-xl border-2 transition-all ${
           darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
         }`}
       >
         <span className="text-xs font-bold tracking-widest">{currentLang.label}</span>
-        <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className={`w-2.5 h-2.5 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>

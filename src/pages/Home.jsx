@@ -117,18 +117,18 @@ export default function HomePage() {
 
       {/* Market Sessions Bar - Compact */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
-          <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide">
-            <Globe className={`w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0 ${theme.textMuted}`} />
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-2.5 md:py-3">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-x-auto scrollbar-hide">
+            <Globe className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 flex-shrink-0 ${theme.textMuted}`} />
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-0.5 sm:gap-1 md:gap-1.5 lg:gap-2 flex-shrink-0">
-                  <span className="text-xs sm:text-sm md:text-base">{session.emoji}</span>
-                  <div className={`text-[9px] sm:text-[10px] md:text-xs lg:text-sm font-mono font-bold ${isOpen ? 'text-teal-600' : theme.textMuted}`}>
+                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
+                  <span className="text-sm sm:text-base md:text-base">{session.emoji}</span>
+                  <div className={`text-xs sm:text-sm md:text-sm lg:text-sm font-mono font-bold ${isOpen ? 'text-teal-600' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
-                  <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isOpen ? 'bg-teal-600 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                  <div className={`w-1.5 h-1.5 sm:w-1.5 sm:h-1.5 rounded-full ${isOpen ? 'bg-teal-600 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
@@ -137,27 +137,27 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section - Compact for Mobile */}
-      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-10 lg:py-14">
+      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-8 lg:py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-6 sm:mb-8 md:mb-12"
+          className="text-center mb-4 sm:mb-6 md:mb-10"
         >
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-[10px] sm:text-xs mb-3 sm:mb-4 md:mb-6">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-[10px] sm:text-xs mb-2 sm:mb-3 md:mb-5">
             <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5" />
             <span className="tracking-widest">{t('tradingTools')}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-wider mb-2 sm:mb-3 md:mb-4 font-light">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider mb-1.5 sm:mb-2 md:mb-3 font-light">
             ZNPCV
           </h1>
-          <h2 className={`text-base sm:text-lg md:text-xl lg:text-2xl tracking-widest ${theme.textSecondary} mb-3 sm:mb-4 md:mb-6`}>
+          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.textSecondary} mb-2 sm:mb-3 md:mb-5`}>
             {t('ultimateChecklist')}
           </h2>
-          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
             "{t('disciplineQuote')}"
           </p>
-          <p className={`${theme.textDimmed} text-xs sm:text-sm mt-2 sm:mt-3 tracking-widest`}>— {t('philosophy')}</p>
+          <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
         {/* Main Actions - Ultra Compact for Mobile */}
@@ -165,7 +165,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-2.5 sm:gap-3 md:gap-4 lg:gap-6 mb-6 sm:mb-8 md:mb-12 lg:mb-16"
+          className="grid md:grid-cols-2 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
         >
           {/* New Analysis - Compact */}
           <button
@@ -253,11 +253,11 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mb-6 sm:mb-8 md:mb-12 lg:mb-16"
+          className="mb-4 sm:mb-6 md:mb-10 lg:mb-14"
         >
-          <div className="text-center mb-4 sm:mb-6 md:mb-8">
-            <h3 className="text-base sm:text-lg md:text-xl tracking-widest mb-1 sm:mb-2">{t('features')}</h3>
-            <p className={`${theme.textDimmed} text-xs sm:text-sm`}>{t('featuresDesc')}</p>
+          <div className="text-center mb-3 sm:mb-4 md:mb-6">
+            <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-1 sm:mb-1.5">{t('features')}</h3>
+            <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm`}>{t('featuresDesc')}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
@@ -288,16 +288,16 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3 lg:gap-4"
+          className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-3 lg:gap-4"
         >
           {[
             { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
             { value: '7', labelKey: 'stepChecklist', icon: CheckCircle2 },
             { value: '4', labelKey: 'chartPatterns', icon: Activity },
           ].map((stat) => (
-            <div key={stat.labelKey} className={`text-center p-3 sm:p-4 md:p-5 lg:p-6 border ${theme.border} rounded-xl sm:rounded-2xl ${theme.bgSecondary}`}>
-              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-2 sm:mb-3 ${theme.text}`} />
-              <div className={`text-xl sm:text-2xl md:text-3xl font-light mb-0.5 sm:mb-1 ${theme.text}`}>{stat.value}</div>
+            <div key={stat.labelKey} className={`text-center p-2.5 sm:p-3 md:p-4 lg:p-5 border ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary}`}>
+              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-1.5 sm:mb-2 md:mb-3 ${theme.text}`} />
+              <div className={`text-lg sm:text-xl md:text-2xl font-light mb-0.5 sm:mb-1 ${theme.text}`}>{stat.value}</div>
               <div className={`text-[9px] sm:text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
             </div>
           ))}
