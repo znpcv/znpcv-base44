@@ -58,8 +58,8 @@ export default function DatenschutzPage() {
             <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Software nutzen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>2. Verantwortliche Stelle</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>2. Verantwortliche Stelle</h2>
             <p>Verantwortlich für die Datenverarbeitung ist:</p>
             <p className="mt-2"><strong>Zainspective Group</strong><br/>
             Betreiber von ZNPCV<br/>
@@ -67,8 +67,8 @@ export default function DatenschutzPage() {
             Website: www.znpcv.com</p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>3. Datenerfassung</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>3. Datenerfassung</h2>
             <h3 className={`text-lg ${theme.text} mb-2`}>Welche Daten erfassen wir?</h3>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Registrierungsdaten:</strong> Name, E-Mail-Adresse, Passwort (verschlüsselt)</li>
@@ -78,8 +78,8 @@ export default function DatenschutzPage() {
             </ul>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>4. Zweck der Datenverarbeitung</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>4. Zweck der Datenverarbeitung</h2>
             <p>Ihre Daten werden verarbeitet für:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>Bereitstellung und Betrieb der Software</li>
@@ -91,8 +91,8 @@ export default function DatenschutzPage() {
             </ul>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>5. Rechtsgrundlage</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>5. Rechtsgrundlage</h2>
             <p>Die Verarbeitung erfolgt auf Grundlage von:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</li>
@@ -111,13 +111,13 @@ export default function DatenschutzPage() {
             <p className="mt-2">Eine darüber hinausgehende Weitergabe erfolgt nicht, es sei denn, wir sind gesetzlich dazu verpflichtet.</p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>7. Speicherdauer</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>7. Speicherdauer</h2>
             <p>Ihre Daten werden gespeichert, solange Sie ein aktives Benutzerkonto haben. Nach Löschung Ihres Kontos werden Ihre personenbezogenen Daten innerhalb von 30 Tagen gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.</p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>8. Ihre Rechte</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>8. Ihre Rechte</h2>
             <p>Sie haben folgende Rechte:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li><strong>Auskunft:</strong> Sie können Auskunft über Ihre gespeicherten Daten verlangen</li>
@@ -130,8 +130,8 @@ export default function DatenschutzPage() {
             </ul>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>9. Datensicherheit</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>9. Datensicherheit</h2>
             <p>Wir verwenden SSL/TLS-Verschlüsselung für die Datenübertragung. Passwörter werden mit modernen Hashing-Verfahren gespeichert. Unsere Server sind gegen unbefugten Zugriff geschützt.</p>
           </section>
 
@@ -145,8 +145,8 @@ export default function DatenschutzPage() {
             <p>Für die Zahlungsabwicklung nutzen wir Stripe. Bei der Zahlung werden Ihre Daten direkt an Stripe übermittelt. Die Datenschutzerklärung von Stripe finden Sie unter: <a href="https://stripe.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">stripe.com/privacy</a></p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>12. Änderungen der Datenschutzerklärung</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>12. Änderungen der Datenschutzerklärung</h2>
             <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslage oder Änderungen unserer Leistungen anzupassen. Für neue Besuche gilt dann die neue Datenschutzerklärung.</p>
           </section>
 
@@ -161,22 +161,29 @@ export default function DatenschutzPage() {
           </main>
 
           {/* Footer */}
-          <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
-          <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-            <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              Impressum
-            </button>
-            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              Datenschutz
-            </button>
-            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              AGB
-            </button>
-          </div>
-          </div>
+          <footer className={`mt-12 sm:mt-16 md:mt-20 lg:mt-24 border-t ${theme.border}`}>
+            <div className="py-6 sm:py-8 md:py-10">
+              <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
+                <img src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto opacity-40" />
+                <p className={`${theme.textDimmed} text-xs sm:text-sm tracking-widest`}>© {new Date().getFullYear()} ZNPCV</p>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
+                <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                  Impressum
+                </button>
+                <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                  Datenschutz
+                </button>
+                <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                  AGB
+                </button>
+              </div>
+            </div>
           </footer>
           </div>
           );

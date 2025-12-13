@@ -63,8 +63,8 @@ export default function ImpressumPage() {
             <p>Zainspective Group (Inhaber und Betreiber von ZNPCV)</p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Kontakt</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Kontakt</h2>
             <div className="flex items-center gap-2">
               <Mail className="w-5 h-5" />
               <a href="mailto:support@znpcv.com" className="underline">support@znpcv.com</a>
@@ -72,8 +72,8 @@ export default function ImpressumPage() {
             <p className="mt-2">Website: <a href="https://www.znpcv.com" className="underline">www.znpcv.com</a></p>
           </section>
 
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>EU-Streitschlichtung</h2>
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>EU-Streitschlichtung</h2>
             <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:<br/>
             <a href="https://ec.europa.eu/consumers/odr" className="underline" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr</a><br/>
             Unsere E-Mail-Adresse finden Sie oben im Impressum.</p>
@@ -105,22 +105,29 @@ export default function ImpressumPage() {
             </main>
 
             {/* Footer */}
-            <footer className={`mt-12 sm:mt-16 border-t ${theme.border}`}>
-            <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-            <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              Impressum
-            </button>
-            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              Datenschutz
-            </button>
-            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-            <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              AGB
-            </button>
-            </div>
-            </div>
+            <footer className={`mt-12 sm:mt-16 md:mt-20 lg:mt-24 border-t ${theme.border}`}>
+              <div className="py-6 sm:py-8 md:py-10">
+                <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
+                  <img src={darkMode 
+                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                  } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto opacity-40" />
+                  <p className={`${theme.textDimmed} text-xs sm:text-sm tracking-widest`}>© {new Date().getFullYear()} ZNPCV</p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
+                  <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                    Impressum
+                  </button>
+                  <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                  <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                    Datenschutz
+                  </button>
+                  <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                  <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+                    AGB
+                  </button>
+                </div>
+              </div>
             </footer>
             </div>
             );
