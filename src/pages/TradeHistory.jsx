@@ -126,19 +126,21 @@ export default function TradeHistoryPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
         <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
-          <div className="flex items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 relative">
             <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
               <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
                 <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </button>
-              <button onClick={() => navigate(createPageUrl('Home'))}>
-                <img src={darkMode 
-                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                } alt="ZNPCV" className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer hover:opacity-80" />
-              </button>
             </div>
+
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
+              <img src={darkMode 
+                ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+              } alt="ZNPCV" className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
+            </button>
+
             <div className="flex items-center gap-1 sm:gap-2">
               <LanguageToggle />
               <AccountButton />
@@ -148,26 +150,19 @@ export default function TradeHistoryPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-10">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
-            <button 
-              onClick={() => navigate(createPageUrl('Dashboard'))}
-              className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 transition-all flex-shrink-0`}
-              title="Zurück zum Dashboard">
-              <svg className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <div className="min-w-0 flex-1">
-              <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-5xl tracking-widest mb-1 sm:mb-2 ${theme.text}`}>HISTORY</h1>
-              <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
-            </div>
-            <Button onClick={handleCreateNew} className={`${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'} gap-1 sm:gap-2 h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold px-3 sm:px-4 flex-shrink-0`}>
-              <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">TRADE</span>
-              <span className="sm:hidden">NEW</span>
-            </Button>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+          <div className="min-w-0">
+            <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-5xl tracking-widest mb-1 sm:mb-2 ${theme.text}`}>HISTORY</h1>
+            <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
           </div>
+        </motion.div>
+
+        {/* Quick Action */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-3 sm:mb-4 md:mb-6">
+          <Button onClick={handleCreateNew} className={`w-full ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'} gap-2 h-10 sm:h-11 md:h-12 text-sm sm:text-base font-bold`}>
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+            NEW TRADE
+          </Button>
         </motion.div>
 
         {/* AI Analysis */}
