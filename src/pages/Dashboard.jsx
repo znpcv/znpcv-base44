@@ -237,44 +237,25 @@ export default function DashboardPage() {
           </button>
         </motion.div>
 
-        {/* Stats - Advanced Glass Morphism */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
+        {/* Stats - Einheitlich */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
-            { label: t('totalAnalyses'), value: stats.total, icon: Target, color: 'blue' },
-            { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, color: 'teal', highlight: true },
-            { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3, color: stats.winRate >= 60 ? 'teal' : 'rose', highlight: stats.winRate >= 60 },
-            { label: 'P&L', value: `$${stats.totalPnL.toFixed(0)}`, icon: TrendingUp, color: stats.totalPnL >= 0 ? 'teal' : 'rose', highlight: true, isProfit: true },
-            { label: 'EXECUTED', value: stats.executed, icon: Activity, color: 'purple' },
-            { label: t('withConfluence'), value: stats.withConfluence, icon: Target, color: 'amber' },
+            { label: t('totalAnalyses'), value: stats.total, icon: Target },
+            { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
+            { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3 },
+            { label: 'P&L', value: `$${stats.totalPnL.toFixed(0)}`, icon: TrendingUp },
+            { label: 'EXECUTED', value: stats.executed, icon: Activity },
+            { label: t('withConfluence'), value: stats.withConfluence, icon: Target },
           ].map((stat, index) => (
             <motion.div key={stat.label} 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }} 
-              animate={{ opacity: 1, scale: 1, y: 0 }} 
-              transition={{ delay: 0.15 + index * 0.05, type: "spring", stiffness: 300 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className={cn("relative rounded-2xl p-4 sm:p-5 md:p-6 backdrop-blur-sm border-2 overflow-hidden group cursor-pointer",
-                stat.highlight && stat.isProfit && stats.totalPnL > 0 ? "bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500 shadow-lg shadow-teal-600/30" :
-                stat.highlight && stat.isProfit && stats.totalPnL < 0 ? "bg-gradient-to-br from-rose-600 to-red-600 border-rose-500 shadow-lg shadow-rose-600/30" :
-                stat.highlight ? "bg-gradient-to-br from-teal-600 to-teal-700 border-teal-500 shadow-lg shadow-teal-600/30" : 
-                darkMode ? "bg-zinc-900/70 border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900" : "bg-zinc-100/70 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-200")}>
-              
-              {/* Glow Effect */}
-              <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity blur-xl",
-                stat.color === 'teal' && "bg-teal-600/20",
-                stat.color === 'rose' && "bg-rose-600/20",
-                stat.color === 'blue' && "bg-blue-600/20",
-                stat.color === 'purple' && "bg-purple-600/20",
-                stat.color === 'amber' && "bg-amber-600/20"
-              )} />
-              
-              <div className="relative z-10">
-                <div className={cn("w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
-                  stat.highlight ? "bg-white/20" : darkMode ? "bg-zinc-800" : "bg-white")}>
-                  <stat.icon className={cn("w-5 h-5 sm:w-6 sm:h-6", stat.highlight ? "text-white" : theme.text)} />
-                </div>
-                <div className={cn("text-2xl sm:text-3xl md:text-4xl font-bold mb-2 tracking-tight", stat.highlight ? "text-white" : theme.text)}>{stat.value}</div>
-                <div className={cn("text-[10px] sm:text-xs tracking-widest font-bold", stat.highlight ? "text-white/90" : theme.textMuted)}>{stat.label}</div>
-              </div>
+              initial={{ opacity: 0, scale: 0.95 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              transition={{ delay: 0.15 + index * 0.05 }}
+              className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6",
+                `${theme.border} ${theme.bgSecondary}`)}>
+              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", theme.text)} />
+              <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", theme.text)}>{stat.value}</div>
+              <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-widest", theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -562,14 +543,15 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Market Sessions - Advanced */}
+            {/* Market Sessions - Kompakt für Mobile */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgSecondary} overflow-hidden`}>
+              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4 flex items-center gap-2 ${theme.text}`}>
                 <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
-                {t('marketSessions')}
+                <span className="hidden sm:inline">{t('marketSessions')}</span>
+                <span className="sm:hidden">SESSIONS</span>
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {SESSIONS.map((session, idx) => {
                   const isOpen = isSessionOpen(session);
                   return (
@@ -578,34 +560,31 @@ export default function DashboardPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.35 + idx * 0.1 }}
-                      className={cn("relative flex items-center justify-between p-4 border-2 rounded-xl transition-all overflow-hidden group",
+                      className={cn("relative flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all overflow-hidden",
                         isOpen ? "border-teal-600 bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg shadow-teal-600/30" : 
                         darkMode ? "border-zinc-800 bg-zinc-900/50 hover:border-zinc-700" : "border-zinc-300 bg-zinc-100/50 hover:border-zinc-400")}>
                       
-                      {/* Glow Effect when Open */}
                       {isOpen && <div className="absolute inset-0 bg-teal-400/20 blur-xl" />}
                       
-                      <div className="relative z-10 flex items-center gap-3">
-                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center text-xl border-2",
+                      <div className="relative z-10 flex items-center gap-2 sm:gap-3">
+                        <div className={cn("w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center text-base sm:text-lg border-2",
                           isOpen ? "bg-white/20 border-white/30" : darkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-zinc-300")}>
                           {session.emoji}
                         </div>
                         <div>
-                          <div className={cn("text-sm font-black tracking-wider flex items-center gap-2", isOpen ? "text-white" : theme.text)}>
-                            {session.name}
-                            {isOpen && <div className="w-2 h-2 bg-white rounded-full animate-pulse" />}
+                          <div className={cn("text-xs sm:text-sm font-black tracking-wider flex items-center gap-1.5", isOpen ? "text-white" : theme.text)}>
+                            <span className="hidden sm:inline">{session.name}</span>
+                            <span className="sm:hidden">{session.name.slice(0, 3)}</span>
+                            {isOpen && <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />}
                           </div>
-                          <div className={cn("text-xs font-bold", isOpen ? "text-white/90" : theme.textDimmed)}>
-                            {isOpen ? '● LIVE TRADING' : '○ MARKET CLOSED'}
+                          <div className={cn("text-[9px] sm:text-xs font-bold", isOpen ? "text-white/90" : theme.textDimmed)}>
+                            {isOpen ? '● LIVE' : '○ CLOSED'}
                           </div>
                         </div>
                       </div>
-                      <div className="relative z-10 text-right">
-                        <div className={cn("text-2xl font-mono font-black", isOpen ? "text-white" : theme.text)}>
+                      <div className="relative z-10">
+                        <div className={cn("text-lg sm:text-xl md:text-2xl font-mono font-black", isOpen ? "text-white" : theme.text)}>
                           {times[session.name]?.slice(0, 5) || '--:--'}
-                        </div>
-                        <div className={cn("text-[10px] tracking-wider", isOpen ? "text-white/70" : theme.textMuted)}>
-                          {session.timezone.split('/')[1]}
                         </div>
                       </div>
                     </motion.div>
@@ -702,50 +681,52 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Avg Completion - Advanced */}
+            {/* Avg Completion - Kompakt für Mobile */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-              className={`border-2 ${theme.border} rounded-2xl p-6 sm:p-8 ${theme.bgSecondary} text-center overflow-hidden relative group`}>
+              className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 md:p-8 ${theme.bgSecondary} text-center overflow-hidden relative`}>
               
-              {/* Animated Background */}
               <div className="absolute inset-0 opacity-5">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-teal-600 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-600 rounded-full blur-3xl" />
+                <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-teal-600 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600 rounded-full blur-3xl" />
               </div>
               
               <div className="relative z-10">
-                <div className={`text-6xl sm:text-7xl md:text-8xl font-black mb-2 bg-gradient-to-br ${stats.avgCompletion >= 85 ? 'from-teal-600 to-emerald-600' : 'from-zinc-500 to-zinc-600'} bg-clip-text text-transparent`}>
+                <div className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-2 bg-gradient-to-br ${stats.avgCompletion >= 85 ? 'from-teal-600 to-emerald-600' : 'from-zinc-500 to-zinc-600'} bg-clip-text text-transparent`}>
                   {stats.avgCompletion}%
                 </div>
-                <div className={`text-xs sm:text-sm ${theme.textMuted} tracking-widest mb-5 font-bold`}>{t('avgCompletion')}</div>
+                <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textMuted} tracking-widest mb-4 sm:mb-5 font-bold`}>
+                  <span className="hidden sm:inline">{t('avgCompletion')}</span>
+                  <span className="sm:hidden">AVG SCORE</span>
+                </div>
                 
-                {/* Circular Progress */}
-                <div className="relative w-32 h-32 mx-auto mb-4">
-                  <svg className="transform -rotate-90 w-32 h-32">
-                    <circle cx="64" cy="64" r="56" stroke={darkMode ? "#27272a" : "#e4e4e7"} strokeWidth="8" fill="none" />
+                {/* Circular Progress - Kompakt */}
+                <div className="relative w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-3 sm:mb-4">
+                  <svg className="transform -rotate-90 w-24 h-24 sm:w-32 sm:h-32">
+                    <circle cx={window.innerWidth < 640 ? "48" : "64"} cy={window.innerWidth < 640 ? "48" : "64"} r={window.innerWidth < 640 ? "40" : "56"} stroke={darkMode ? "#27272a" : "#e4e4e7"} strokeWidth={window.innerWidth < 640 ? "6" : "8"} fill="none" />
                     <circle 
-                      cx="64" 
-                      cy="64" 
-                      r="56" 
+                      cx={window.innerWidth < 640 ? "48" : "64"}
+                      cy={window.innerWidth < 640 ? "48" : "64"}
+                      r={window.innerWidth < 640 ? "40" : "56"}
                       stroke={stats.avgCompletion >= 85 ? "#0d9488" : "#6b7280"}
-                      strokeWidth="8" 
+                      strokeWidth={window.innerWidth < 640 ? "6" : "8"}
                       fill="none"
-                      strokeDasharray={`${2 * Math.PI * 56}`}
-                      strokeDashoffset={`${2 * Math.PI * 56 * (1 - stats.avgCompletion / 100)}`}
+                      strokeDasharray={`${2 * Math.PI * (window.innerWidth < 640 ? 40 : 56)}`}
+                      strokeDashoffset={`${2 * Math.PI * (window.innerWidth < 640 ? 40 : 56) * (1 - stats.avgCompletion / 100)}`}
                       strokeLinecap="round"
                       className="transition-all duration-1000"
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
                     {stats.avgCompletion >= 85 ? (
-                      <CheckCircle className="w-8 h-8 text-teal-600" />
+                      <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-teal-600" />
                     ) : (
-                      <Target className="w-8 h-8 text-zinc-500" />
+                      <Target className="w-6 h-6 sm:w-8 sm:h-8 text-zinc-500" />
                     )}
                   </div>
                 </div>
                 
-                <div className={`text-xs ${theme.textMuted} font-sans`}>
-                  {stats.avgCompletion >= 85 ? '✓ ZNPCV STANDARD ERREICHT' : 'Ziel: 85%+ für A+++ Trades'}
+                <div className={`text-[9px] sm:text-xs ${theme.textMuted} font-sans px-2`}>
+                  {stats.avgCompletion >= 85 ? '✓ STANDARD' : 'Ziel: 85%+'}
                 </div>
               </div>
             </motion.div>
