@@ -20,15 +20,14 @@ export default function AGBPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border}`}>
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-                <DarkModeToggle />
-                <Button onClick={() => navigate(-1)} variant="outline" size="sm" className={`${theme.border} gap-2`}>
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="hidden sm:inline">Zurück</span>
-                </Button>
-              </div>
-            <button onClick={() => navigate(createPageUrl('Home'))}>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <DarkModeToggle />
+            <button 
+              onClick={() => navigate(-1)}
+              className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 transition-all flex-shrink-0 group`}>
+              <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
+            </button>
+            <button onClick={() => navigate(createPageUrl('Home'))} className="mx-auto">
               <img 
                 src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
@@ -38,7 +37,6 @@ export default function AGBPage() {
                 className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </button>
-            <div className="w-12" />
           </div>
         </div>
       </header>
