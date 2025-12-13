@@ -51,7 +51,7 @@ export default function AccountButton() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${
+        className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl border-2 transition-all w-full h-full ${
           darkMode 
             ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-white' 
             : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-black'
