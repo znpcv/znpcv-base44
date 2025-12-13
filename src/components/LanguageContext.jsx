@@ -2216,18 +2216,15 @@ export function LanguageToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl border-2 transition-all ${
-          darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'
-        }`}
+        className="flex items-center justify-center px-2.5 py-2 transition-all"
       >
-        <span className="text-base">{currentLang.flag}</span>
-        <span className={`text-xs font-bold tracking-widest ${darkMode ? 'text-white' : 'text-black'}`}>{currentLang.label}</span>
+        <span className="text-2xl">{currentLang.flag}</span>
       </button>
       
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className={`absolute right-0 mt-2 w-48 rounded-xl border-2 shadow-2xl z-20 overflow-hidden ${
+          <div className={`absolute right-0 mt-2 w-48 rounded-xl border-2 z-20 overflow-hidden ${
             darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
           }`}>
             <div className="grid grid-cols-2 gap-1 p-2">
@@ -2238,7 +2235,7 @@ export function LanguageToggle() {
                     setLanguage(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`px-3 py-2 rounded-lg transition-all text-xs font-bold tracking-widest flex items-center justify-center gap-1.5 ${
+                  className={`px-3 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     language === lang.code 
                       ? darkMode 
                         ? 'bg-white text-black' 
@@ -2248,8 +2245,7 @@ export function LanguageToggle() {
                         : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
                   }`}
                 >
-                  <span className="text-sm">{lang.flag}</span>
-                  {lang.label}
+                  <span className="text-lg">{lang.flag}</span>
                 </button>
               ))}
             </div>

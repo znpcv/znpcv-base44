@@ -144,20 +144,17 @@ export default function AccountPage() {
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
               <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
-                <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-              </button>
-              <button onClick={() => navigate(createPageUrl('Home'))}>
-                <img 
-                  src={darkMode 
-                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                  }
-                  alt="ZNPCV" 
-                  className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer"
-                />
-              </button>
             </div>
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
+              <img 
+                src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                }
+                alt="ZNPCV" 
+                className="h-8 sm:h-10 md:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </button>
             <div className="flex items-center gap-1 sm:gap-2">
               <LanguageToggle />
             </div>
