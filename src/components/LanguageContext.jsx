@@ -2216,15 +2216,16 @@ export function LanguageToggle() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center px-2 py-2 transition-all"
+        className="flex items-center justify-center gap-1 px-2 py-2 transition-all"
       >
-        <span className="text-base sm:text-lg">{currentLang.flag}</span>
+        <span className={`text-[10px] font-bold tracking-widest ${darkMode ? 'text-white' : 'text-black'}`}>{currentLang.label}</span>
+        <span className="text-sm">{currentLang.flag}</span>
       </button>
       
       {isOpen && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className={`absolute right-0 mt-2 w-40 rounded-xl border-2 z-20 overflow-hidden ${
+          <div className={`absolute right-0 mt-2 w-44 rounded-xl border-2 z-20 overflow-hidden ${
             darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
           }`}>
             <div className="grid grid-cols-2 gap-1 p-2">
@@ -2235,7 +2236,7 @@ export function LanguageToggle() {
                     setLanguage(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`px-2 py-2 rounded-lg transition-all flex items-center justify-center ${
+                  className={`px-2 py-2 rounded-lg transition-all flex items-center justify-center gap-1 text-[10px] font-bold tracking-widest ${
                     language === lang.code 
                       ? darkMode 
                         ? 'bg-white text-black' 
@@ -2245,7 +2246,8 @@ export function LanguageToggle() {
                         : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
                   }`}
                 >
-                  <span className="text-base">{lang.flag}</span>
+                  {lang.label}
+                  <span className="text-sm">{lang.flag}</span>
                 </button>
               ))}
             </div>
