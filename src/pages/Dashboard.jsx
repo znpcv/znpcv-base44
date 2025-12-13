@@ -340,70 +340,143 @@ export default function DashboardPage() {
 
           {/* Right */}
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
-            {/* Performance Chart with Cumulative */}
+            {/* Performance Chart - Advanced */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
-                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">{t('activity30Days')}</span>
-                <span className="sm:hidden text-sm">ACTIVITY</span>
-              </h3>
-              <div className="h-32 sm:h-40">
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
+              <div className="flex items-center justify-between mb-4 sm:mb-5">
+                <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 ${theme.text}`}>
+                  <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">CUMULATIVE P&L</span>
+                  <span className="sm:hidden text-sm">P&L</span>
+                </h3>
+                <div className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg ${performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'bg-teal-600/20 text-teal-600' : 'bg-rose-600/20 text-rose-600'} text-[10px] sm:text-xs font-bold`}>
+                  {performanceData[performanceData.length - 1]?.cumulative >= 0 ? '+' : ''}${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}
+                </div>
+              </div>
+              <div className="h-40 sm:h-48 relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={performanceData}>
                     <defs>
                       <linearGradient id="colorCumulative" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} stopOpacity={0.3}/>
+                        <stop offset="5%" stopColor={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} stopOpacity={0.4}/>
                         <stop offset="95%" stopColor={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} stopOpacity={0}/>
                       </linearGradient>
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
                     </defs>
-                    <XAxis dataKey="date" stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
-                    <YAxis stroke={darkMode ? "#3f3f46" : "#a1a1aa"} fontSize={9} tickLine={false} axisLine={false} />
+                    <XAxis dataKey="date" stroke={darkMode ? "#52525b" : "#a1a1aa"} fontSize={10} tickLine={false} axisLine={false} />
+                    <YAxis stroke={darkMode ? "#52525b" : "#a1a1aa"} fontSize={10} tickLine={false} axisLine={false} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000', fontSize: '11px' }}
+                      contentStyle={{ 
+                        backgroundColor: darkMode ? '#09090b' : '#ffffff', 
+                        border: `2px solid ${performanceData[performanceData.length - 1]?.cumulative >= 0 ? '#0d9488' : '#e11d48'}`, 
+                        borderRadius: 16, 
+                        padding: '12px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                      }}
+                      labelStyle={{ color: darkMode ? '#fff' : '#000', fontWeight: 'bold', fontSize: '11px', marginBottom: '4px' }}
                       formatter={(value, name) => {
-                        if (name === 'cumulative') return [`$${value.toFixed(2)}`, 'Cumulative P&L'];
-                        if (name === 'pnl') return [`$${value.toFixed(2)}`, 'Daily P&L'];
+                        if (name === 'cumulative') return [`$${value.toFixed(2)}`, 'Total P&L'];
+                        if (name === 'pnl') return [`$${value.toFixed(2)}`, 'Day P&L'];
                         return [value, 'Trades'];
                       }}
                     />
-                    <Area type="monotone" dataKey="cumulative" stroke={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} strokeWidth={2} fillOpacity={1} fill="url(#colorCumulative)" />
+                    <Area 
+                      type="monotone" 
+                      dataKey="cumulative" 
+                      stroke={performanceData[performanceData.length - 1]?.cumulative >= 0 ? "#0d9488" : "#e11d48"} 
+                      strokeWidth={3} 
+                      fillOpacity={1} 
+                      fill="url(#colorCumulative)"
+                      filter="url(#glow)"
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-              <div className={`mt-3 text-xs ${theme.textMuted} flex justify-between`}>
-                <span>Cumulative P&L</span>
-                <span className={performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-teal-600' : 'text-rose-600'}>
-                  ${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}
-                </span>
+              <div className={`mt-4 pt-4 border-t ${theme.border} grid grid-cols-3 gap-3`}>
+                <div className="text-center">
+                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>START</div>
+                  <div className={`text-xs sm:text-sm font-bold ${theme.text}`}>$0.00</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>PEAK</div>
+                  <div className="text-xs sm:text-sm font-bold text-teal-600">
+                    ${Math.max(...performanceData.map(d => d.cumulative), 0).toFixed(2)}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>NOW</div>
+                  <div className={`text-xs sm:text-sm font-bold ${performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-teal-600' : 'text-rose-600'}`}>
+                    ${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}
+                  </div>
+                </div>
               </div>
             </motion.div>
 
-            {/* Direction Pie - Advanced Analysis */}
+            {/* Direction Analysis - Advanced */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
               <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
                 <PieChart className="w-4 h-4 sm:w-5 sm:h-5" />
                 {t('direction')}
               </h3>
-              <div className="h-32 sm:h-40">
+              <div className="h-40 sm:h-48 relative">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
-                    <Pie data={directionData} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={4} dataKey="value">
+                    <defs>
+                      <filter id="shadow">
+                        <feDropShadow dx="0" dy="2" stdDeviation="4" floodOpacity="0.3"/>
+                      </filter>
+                    </defs>
+                    <Pie 
+                      data={directionData} 
+                      cx="50%" 
+                      cy="50%" 
+                      innerRadius={35} 
+                      outerRadius={60} 
+                      paddingAngle={5} 
+                      dataKey="value"
+                      filter="url(#shadow)"
+                      label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
                       {directionData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, color: darkMode ? '#fff' : '#000', fontSize: '11px' }}
+                      contentStyle={{ 
+                        backgroundColor: darkMode ? '#09090b' : '#ffffff', 
+                        border: `2px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, 
+                        borderRadius: 16, 
+                        padding: '12px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                      }}
                       formatter={(value, name) => [value, name]}
                     />
                   </RechartsPie>
                 </ResponsiveContainer>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="text-center">
+                    <div className={`text-xs ${theme.textMuted}`}>TOTAL</div>
+                    <div className={`text-2xl font-bold ${theme.text}`}>{stats.longs + stats.shorts}</div>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-center gap-4 sm:gap-6 mt-3 sm:mt-4">
+              <div className="grid grid-cols-2 gap-3 mt-4 sm:mt-5">
                 {directionData.map((item) => (
-                  <div key={item.name} className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded" style={{ backgroundColor: item.color }} />
-                    <span className={`text-xs sm:text-sm ${theme.textMuted}`}>{item.name} ({item.value})</span>
+                  <div key={item.name} className={`p-3 sm:p-4 rounded-xl border-2 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-300'} text-center`}>
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                      <span className={`text-xs font-bold tracking-wider ${theme.text}`}>{item.name.toUpperCase()}</span>
+                    </div>
+                    <div className={`text-xl sm:text-2xl font-bold ${theme.text}`}>{item.value}</div>
+                    <div className={`text-[10px] ${theme.textMuted} mt-1`}>
+                      {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}% OF TRADES
+                    </div>
                   </div>
                 ))}
               </div>
@@ -440,51 +513,91 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Calendar */}
+            {/* Calendar - Advanced */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary}`}>
+              className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
               <div className="flex items-center justify-between mb-4 sm:mb-5">
                 <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 ${theme.text}`}>
                   <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
                   {t('calendar')}
                 </h3>
-                <div className="flex gap-3">
-                  <button onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))} className={`${theme.textDimmed} hover:${theme.text} transition-colors`}>←</button>
-                  <span className={`text-sm tracking-wider ${theme.textSecondary}`}>{format(calendarMonth, 'MMM yyyy', { locale }).toUpperCase()}</span>
-                  <button onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))} className={`${theme.textDimmed} hover:${theme.text} transition-colors`}>→</button>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <button onClick={() => setCalendarMonth(subMonths(calendarMonth, 1))} 
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${theme.border} ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-all flex items-center justify-center`}>
+                    <span className={theme.text}>←</span>
+                  </button>
+                  <span className={`text-xs sm:text-sm tracking-wider font-bold ${theme.text} min-w-[90px] sm:min-w-[100px] text-center`}>
+                    {format(calendarMonth, 'MMM yyyy', { locale }).toUpperCase()}
+                  </span>
+                  <button onClick={() => setCalendarMonth(addMonths(calendarMonth, 1))} 
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 ${theme.border} ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-200'} transition-all flex items-center justify-center`}>
+                    <span className={theme.text}>→</span>
+                  </button>
                 </div>
               </div>
               
-              <div className={`grid grid-cols-7 gap-1 text-center text-xs ${theme.textDimmed} mb-2`}>
-                {(language === 'de' ? ['MO', 'DI', 'MI', 'DO', 'FR', 'SA', 'SO'] : language === 'fa' ? ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'] : ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']).map(d => <div key={d}>{d}</div>)}
+              <div className={`grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold ${theme.textMuted} mb-3`}>
+                {(language === 'de' ? ['MO', 'DI', 'MI', 'DO', 'FR', 'SA', 'SO'] : language === 'fa' ? ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'] : ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']).map(d => <div key={d} className="py-1">{d}</div>)}
               </div>
               
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-1.5">
                 {Array.from({ length: startDay }).map((_, i) => <div key={`empty-${i}`} />)}
                 {calendarDays.map((day) => {
                   const trades = getTradesForDay(day);
+                  const dayPnL = trades.filter(t => t.actual_pnl).reduce((sum, t) => sum + parseFloat(t.actual_pnl), 0);
+                  const hasWins = trades.some(t => t.outcome === 'win');
+                  const hasLosses = trades.some(t => t.outcome === 'loss');
                   const hasReady = trades.some(t => t.status === 'ready_to_trade');
+                  
                   return (
                     <button
                       type="button"
                       key={day.toISOString()}
                       onClick={() => trades.length > 0 && navigate(createPageUrl('TradeDetail') + `?id=${trades[0].id}`)}
                       className={cn(
-                        "aspect-square flex items-center justify-center text-sm relative rounded-lg transition-all",
-                        isToday(day) && (darkMode ? "bg-white text-black" : "bg-zinc-900 text-white") + " font-bold",
-                        trades.length > 0 && !isToday(day) && (darkMode ? "bg-zinc-900 hover:bg-zinc-800" : "bg-zinc-200 hover:bg-zinc-300") + " cursor-pointer",
-                        trades.length === 0 && "cursor-default"
+                        "aspect-square flex flex-col items-center justify-center text-sm relative rounded-xl transition-all group",
+                        isToday(day) && "ring-2 ring-offset-2 ring-teal-600 font-bold scale-105",
+                        isToday(day) && darkMode && "ring-offset-black",
+                        isToday(day) && !darkMode && "ring-offset-white",
+                        trades.length > 0 && hasWins && !hasLosses && (darkMode ? "bg-teal-600/30 hover:bg-teal-600/50 border-2 border-teal-600/50" : "bg-teal-100 hover:bg-teal-200 border-2 border-teal-300"),
+                        trades.length > 0 && hasLosses && !hasWins && (darkMode ? "bg-rose-600/30 hover:bg-rose-600/50 border-2 border-rose-600/50" : "bg-rose-100 hover:bg-rose-200 border-2 border-rose-300"),
+                        trades.length > 0 && hasWins && hasLosses && (darkMode ? "bg-zinc-700 hover:bg-zinc-600 border-2 border-zinc-600" : "bg-zinc-300 hover:bg-zinc-400 border-2 border-zinc-400"),
+                        trades.length > 0 && !hasWins && !hasLosses && (darkMode ? "bg-zinc-900 hover:bg-zinc-800 border-2 border-zinc-800" : "bg-zinc-200 hover:bg-zinc-300 border-2 border-zinc-300"),
+                        trades.length > 0 && "cursor-pointer",
+                        trades.length === 0 && (darkMode ? "hover:bg-zinc-900/30" : "hover:bg-zinc-100")
                       )}>
-                      {format(day, 'd')}
-                      {hasReady && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-teal-600 rounded-full" />}
+                      <span className={cn("text-xs sm:text-sm", isToday(day) ? "text-teal-600 font-black" : theme.text)}>
+                        {format(day, 'd')}
+                      </span>
+                      {trades.length > 0 && dayPnL !== 0 && (
+                        <span className={cn("text-[8px] font-bold mt-0.5", dayPnL > 0 ? "text-teal-600" : "text-rose-600")}>
+                          {dayPnL > 0 ? '+' : ''}{dayPnL.toFixed(0)}
+                        </span>
+                      )}
                       {trades.length > 1 && (
-                        <div className="absolute top-0.5 right-0.5 w-3 h-3 bg-teal-600 text-white text-[8px] rounded-full flex items-center justify-center font-bold">
+                        <div className="absolute top-1 right-1 w-4 h-4 bg-teal-600 text-white text-[9px] rounded-full flex items-center justify-center font-bold shadow-md">
                           {trades.length}
                         </div>
                       )}
                     </button>
                   );
                 })}
+              </div>
+              
+              {/* Legend */}
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 pt-4 border-t ${theme.border}">
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-3 h-3 rounded ${darkMode ? 'bg-teal-600/30 border border-teal-600/50' : 'bg-teal-100 border border-teal-300'}`} />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>WIN</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-3 h-3 rounded ${darkMode ? 'bg-rose-600/30 border border-rose-600/50' : 'bg-rose-100 border border-rose-300'}`} />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>LOSS</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded bg-teal-600" />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>TODAY</span>
+                </div>
               </div>
             </motion.div>
 
