@@ -72,7 +72,6 @@ export default function DatenschutzPage() {
             <h3 className={`text-lg ${theme.text} mb-2`}>Welche Daten erfassen wir?</h3>
             <ul className="list-disc pl-6 space-y-2">
               <li><strong>Registrierungsdaten:</strong> Name, E-Mail-Adresse, Passwort (verschlüsselt)</li>
-              <li><strong>Zahlungsdaten:</strong> Verarbeitet über Stripe (Kreditkartendaten werden nicht auf unseren Servern gespeichert)</li>
               <li><strong>Nutzungsdaten:</strong> Trading-Analysen, Checklisten, Notizen, Dashboard-Statistiken</li>
               <li><strong>Technische Daten:</strong> IP-Adresse, Browser-Typ, Zugriffszeiten</li>
             </ul>
@@ -84,7 +83,6 @@ export default function DatenschutzPage() {
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>Bereitstellung und Betrieb der Software</li>
               <li>Verwaltung Ihres Benutzerkontos</li>
-              <li>Abwicklung der Zahlung</li>
               <li>Speicherung Ihrer Trading-Analysen</li>
               <li>Technische Verbesserungen und Fehlerbehebung</li>
               <li>Kommunikation mit Ihnen (z.B. Support, Updates)</li>
@@ -105,7 +103,6 @@ export default function DatenschutzPage() {
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>6. Datenweitergabe</h2>
             <p>Ihre Daten werden nur weitergegeben an:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
-              <li><strong>Stripe:</strong> Zur Abwicklung von Zahlungen (Stripe ist PCI-DSS zertifiziert)</li>
               <li><strong>Hosting-Provider:</strong> Zum Betrieb der Software-Infrastruktur</li>
             </ul>
             <p className="mt-2">Eine darüber hinausgehende Weitergabe erfolgt nicht, es sei denn, wir sind gesetzlich dazu verpflichtet.</p>
@@ -141,12 +138,7 @@ export default function DatenschutzPage() {
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>11. Stripe-Zahlungsabwicklung</h2>
-            <p>Für die Zahlungsabwicklung nutzen wir Stripe. Bei der Zahlung werden Ihre Daten direkt an Stripe übermittelt. Die Datenschutzerklärung von Stripe finden Sie unter: <a href="https://stripe.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">stripe.com/privacy</a></p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>12. Änderungen der Datenschutzerklärung</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>11. Änderungen der Datenschutzerklärung</h2>
             <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslage oder Änderungen unserer Leistungen anzupassen. Für neue Besuche gilt dann die neue Datenschutzerklärung.</p>
           </section>
 

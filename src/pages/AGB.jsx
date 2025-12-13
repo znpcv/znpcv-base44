@@ -59,7 +59,7 @@ export default function AGBPage() {
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>2. Vertragsschluss</h2>
-            <p>Der Vertrag kommt durch die Registrierung und die einmalige Zahlung von 99 USD zustande. Mit der Zahlung erwirbt der Nutzer eine lebenslange, nicht übertragbare Lizenz zur Nutzung der Software.</p>
+            <p>Der Vertrag kommt durch die Registrierung zustande. Mit der Registrierung erwirbt der Nutzer eine nicht übertragbare Lizenz zur Nutzung der Software.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
@@ -75,22 +75,12 @@ export default function AGBPage() {
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>4. Zahlung und Preise</h2>
-            <p>Die Nutzung der Software erfordert eine einmalige Zahlung von 99 USD. Die Zahlung erfolgt über Stripe und kann per Kreditkarte, Apple Pay oder Google Pay getätigt werden. Der Preis versteht sich als Endpreis.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>5. Widerrufsrecht</h2>
-            <p><strong>Da es sich um digitale Inhalte handelt, die sofort nach Zahlung freigeschaltet werden, erlischt das Widerrufsrecht gemäß § 356 Abs. 5 BGB mit Beginn der Vertragserfüllung.</strong> Mit der Registrierung und Zahlung erklärt der Nutzer sich ausdrücklich damit einverstanden, dass die Leistung sofort beginnt und nimmt zur Kenntnis, dass er dadurch sein Widerrufsrecht verliert.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>6. Nutzungsrechte</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>4. Nutzungsrechte</h2>
             <p>Der Nutzer erhält ein nicht-exklusives, nicht übertragbares, zeitlich unbegrenztes Recht zur Nutzung der Software für persönliche Trading-Zwecke. Die Weitergabe der Zugangsdaten an Dritte ist untersagt.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>7. Pflichten des Nutzers</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>5. Pflichten des Nutzers</h2>
             <p>Der Nutzer ist verpflichtet:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>Wahrheitsgemäße Angaben bei der Registrierung zu machen</li>
@@ -101,28 +91,28 @@ export default function AGBPage() {
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>8. Haftung</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>6. Haftung</h2>
             <p>Die Zainspective Group haftet nicht für Verluste oder Schäden, die durch Trading-Entscheidungen entstehen. Die Software dient ausschließlich als Analyse-Tool. Trading birgt erhebliche Risiken und kann zum Totalverlust führen. Der Nutzer trägt die volle Verantwortung für seine Trading-Entscheidungen.</p>
             <p className="mt-2">Bei Vorsatz und grober Fahrlässigkeit haftet die Zainspective Group uneingeschränkt. Bei leichter Fahrlässigkeit haftet die Zainspective Group nur bei Verletzung wesentlicher Vertragspflichten. In diesem Fall ist die Haftung auf den vorhersehbaren, vertragstypischen Schaden begrenzt.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>9. Datenschutz</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>7. Datenschutz</h2>
             <p>Die Verarbeitung personenbezogener Daten erfolgt gemäß der Datenschutzerklärung der Zainspective Group und den Bestimmungen der DSGVO.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>10. Sperrung und Kündigung</h2>
-            <p>Die Zainspective Group behält sich das Recht vor, Nutzerkonten bei Verstößen gegen diese AGB zu sperren. Eine Rückerstattung erfolgt in diesem Fall nicht. Der Nutzer kann sein Konto jederzeit per E-Mail kündigen.</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>8. Sperrung und Kündigung</h2>
+            <p>Die Zainspective Group behält sich das Recht vor, Nutzerkonten bei Verstößen gegen diese AGB zu sperren. Der Nutzer kann sein Konto jederzeit per E-Mail kündigen.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>11. Änderungen der AGB</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>9. Änderungen der AGB</h2>
             <p>Die Zainspective Group behält sich vor, diese AGB jederzeit zu ändern. Nutzer werden per E-Mail über Änderungen informiert. Widerspricht der Nutzer nicht innerhalb von 4 Wochen, gelten die Änderungen als angenommen.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>12. Schlussbestimmungen</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>10. Schlussbestimmungen</h2>
             <p>Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts. Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</p>
           </section>
 
