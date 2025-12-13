@@ -537,7 +537,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-3 lg:gap-4"
+          className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 mb-8 sm:mb-12 md:mb-16"
         >
           {[
             { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
@@ -550,6 +550,29 @@ export default function HomePage() {
               <div className={`text-[9px] sm:text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
             </div>
           ))}
+        </motion.div>
+      
+        {/* Final CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className={cn("text-center p-8 sm:p-10 md:p-12 rounded-3xl border-2 mb-8 sm:mb-12 md:mb-16",
+            darkMode ? "bg-gradient-to-br from-teal-900/20 to-purple-900/20 border-teal-600" : "bg-gradient-to-br from-teal-50 to-purple-50 border-teal-600")}
+        >
+          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-widest mb-3 sm:mb-4">
+            BEREIT DEINE TRADING-DISZIPLIN ZU MAXIMIEREN?
+          </h3>
+          <p className={`${theme.textMuted} text-sm sm:text-base md:text-lg mb-6 sm:mb-8`}>
+            Schließe dich professionellen Tradern an und starte noch heute
+          </p>
+          <button
+            onClick={() => base44.auth.redirectToLogin()}
+            className="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 sm:px-10 py-4 rounded-xl text-base sm:text-lg tracking-widest transition-all transform hover:scale-105 inline-flex items-center gap-3"
+          >
+            JETZT STARTEN
+            <ArrowRight className="w-5 h-5" />
+          </button>
         </motion.div>
       </main>
 
