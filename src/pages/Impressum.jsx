@@ -72,6 +72,19 @@ export default function ImpressumPage() {
             <p className="mt-2">Website: <a href="https://www.znpcv.com" className="underline">www.znpcv.com</a></p>
           </section>
 
+          <section className={`${darkMode ? 'bg-teal-900/20 border-teal-800' : 'bg-teal-100 border-teal-300'} rounded-xl p-5 sm:p-6 md:p-8 border-2`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>🚀 Code Export</h2>
+            <p className={`${theme.textSecondary} mb-4`}>
+              Vollständiger Backend + Frontend Code für Self-Hosting auf Railway/VPS.
+            </p>
+            <button
+              onClick={() => navigate(createPageUrl('CodeExport'))}
+              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-bold text-sm"
+            >
+              CODE DOWNLOADEN →
+            </button>
+          </section>
+
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>EU-Streitschlichtung</h2>
             <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:<br/>
