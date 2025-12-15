@@ -9,6 +9,7 @@ import Datenschutz from './pages/Datenschutz';
 import Impressum from './pages/Impressum';
 import Account from './pages/Account';
 import TradeDetail from './pages/TradeDetail';
+import CodeExport from './pages/CodeExport';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +25,7 @@ export const PAGES = {
     "Impressum": Impressum,
     "Account": Account,
     "TradeDetail": TradeDetail,
+    "CodeExport": CodeExport,
 }
 
 export const pagesConfig = {
