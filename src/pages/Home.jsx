@@ -116,7 +116,7 @@ export default function HomePage() {
 
       {/* Market Sessions Bar - Compact */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-2.5 md:py-3">
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-5">
           <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-x-auto scrollbar-hide">
             <Globe className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 flex-shrink-0 ${theme.textMuted}`} />
             {SESSIONS.map((session) => {
@@ -136,11 +136,11 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section - Compact for Mobile */}
-      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-8 lg:py-12">
+      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-4 sm:mb-6 md:mb-10"
+          className="text-center mb-8 sm:mb-10 md:mb-14 lg:mb-16"
         >
           <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-teal-600/10 border border-teal-600/30 rounded-full text-teal-600 text-[10px] sm:text-xs mb-2 sm:mb-3 md:mb-5">
             <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5" />
@@ -164,7 +164,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
+          className="grid md:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-6 sm:mb-8 md:mb-12 lg:mb-16"
         >
           {/* New Analysis - Compact */}
           <button
@@ -284,14 +284,14 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mb-4 sm:mb-6 md:mb-10 lg:mb-14"
+          className="mb-6 sm:mb-8 md:mb-12 lg:mb-16"
         >
           <div className="text-center mb-3 sm:mb-4 md:mb-6">
             <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-1 sm:mb-1.5">{t('features')}</h3>
             <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm`}>{t('featuresDesc')}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
             {[
               { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
               { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
@@ -319,7 +319,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-3 lg:gap-4"
+          className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6"
         >
           {[
             { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
