@@ -294,9 +294,12 @@ export default function TradeHistoryPage() {
             
             {/* Export Buttons */}
             <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
-              <Button onClick={() => navigate(createPageUrl('Trash'))} variant="outline" className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs", theme.border)}>
+              <Button 
+                onClick={() => navigate(createPageUrl('Trash'))} 
+                variant="outline" 
+                className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs relative", theme.border)}>
                 <Trash2 className="w-3.5 h-3.5 sm:mr-1.5" />
-                <span className="hidden md:inline">Papierkorb</span>
+                <span className="hidden sm:inline">Papierkorb</span>
               </Button>
               <Button onClick={handleExportPDF} disabled={exporting} variant="outline" className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs", theme.border)}>
                 <Download className="w-3.5 h-3.5 sm:mr-1.5" />
