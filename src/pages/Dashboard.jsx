@@ -127,7 +127,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`} style={{ transition: 'none' }}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
         <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">

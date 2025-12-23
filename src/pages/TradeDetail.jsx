@@ -197,7 +197,7 @@ export default function TradeDetailPage() {
           {/* Left Column - Screenshots */}
           <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
             {/* Screenshots Section */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
               <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                 <h2 className="text-sm sm:text-lg md:text-xl tracking-widest flex items-center gap-1.5 sm:gap-2">
@@ -235,7 +235,7 @@ export default function TradeDetailPage() {
             </motion.div>
 
             {/* Trade Outcome */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
               <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                 <h2 className="text-sm sm:text-lg md:text-xl tracking-widest">{t('result')}</h2>
@@ -352,7 +352,7 @@ export default function TradeDetailPage() {
           {/* Right Column - Trade Details */}
           <div className="space-y-3 sm:space-y-4 md:space-y-6">
             {/* Score Summary */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgCard} text-center`}>
               <div className="text-3xl sm:text-4xl md:text-5xl font-light mb-1 sm:mb-2">{totalScore}%</div>
               <div className={`text-xs sm:text-sm ${theme.textSecondary} tracking-widest mb-3 sm:mb-4`}>{t('avgScore')}</div>
@@ -377,7 +377,7 @@ export default function TradeDetailPage() {
             </motion.div>
 
             {/* Trade Setup */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
               <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4">{t('setup')}</h3>
               <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
@@ -422,7 +422,7 @@ export default function TradeDetailPage() {
 
             {/* Notes */}
             {trade.notes && !editing && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
                 className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
                 <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -433,7 +433,7 @@ export default function TradeDetailPage() {
             )}
 
             {/* Share Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <TradeShareCard trade={trade} darkMode={darkMode} />
             </motion.div>
           </div>

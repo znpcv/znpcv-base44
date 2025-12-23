@@ -190,7 +190,7 @@ export default function TradeHistoryPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
           {/* Trades List */}
           <div className="lg:col-span-2">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-3 sm:p-4 md:p-5 lg:p-6 border-b ${theme.border}`}>
                 <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.text} mb-2 sm:mb-3 md:mb-4`}>{t('allTrades')}</h3>
@@ -275,7 +275,7 @@ export default function TradeHistoryPage() {
 
           {/* Charts */}
           <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary}`}>
               <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>{t('winLoss')}</h3>
               <div className="h-32 sm:h-36 md:h-40 lg:h-48">
