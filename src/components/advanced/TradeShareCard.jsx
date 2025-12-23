@@ -374,7 +374,7 @@ export default function TradeShareCard({ trade, darkMode }) {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
