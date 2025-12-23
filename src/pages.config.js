@@ -10,6 +10,7 @@ import Impressum from './pages/Impressum';
 import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
+import Reports from './pages/Reports';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "Register": Register,
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
+    "Reports": Reports,
 }
 
 export const pagesConfig = {

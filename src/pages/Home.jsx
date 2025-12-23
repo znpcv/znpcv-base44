@@ -203,7 +203,7 @@ export default function HomePage() {
             </div>
           </button>
 
-          {/* Dashboard - Compact */}
+          {/* Dashboard */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
