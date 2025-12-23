@@ -5,11 +5,11 @@ import CodeExport from './pages/CodeExport';
 import Dashboard from './pages/Dashboard';
 import Datenschutz from './pages/Datenschutz';
 import FAQ from './pages/FAQ';
-import Home from './pages/Home';
 import Impressum from './pages/Impressum';
 import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
+import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
 
@@ -21,11 +21,11 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "Datenschutz": Datenschutz,
     "FAQ": FAQ,
-    "Home": Home,
     "Impressum": Impressum,
     "Register": Register,
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
+    "Home": Home,
 }
 
 export const pagesConfig = {

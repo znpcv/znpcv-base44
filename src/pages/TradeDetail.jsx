@@ -17,7 +17,7 @@ import MarketChart from '@/components/MarketChart';
 
 export default function TradeDetailPage() {
   const navigate = useNavigate();
-  const { darkMode } = useLanguage();
+  const { t, darkMode } = useLanguage();
   const [searchParams] = useSearchParams();
   const tradeId = searchParams.get('id');
   
@@ -116,8 +116,8 @@ export default function TradeDetailPage() {
     return (
       <div className={`min-h-screen ${theme.bg} ${theme.text} flex items-center justify-center`}>
         <div className="text-center">
-          <p className="text-xl mb-4">Trade nicht gefunden</p>
-          <Button onClick={() => navigate(createPageUrl('Dashboard'))}>Zurück zum Dashboard</Button>
+          <p className="text-xl mb-4">{t('tradeNotFound')}</p>
+          <Button onClick={() => navigate(createPageUrl('Dashboard'))}>{t('backToDashboard')}</Button>
         </div>
       </div>
     );
@@ -166,8 +166,8 @@ export default function TradeDetailPage() {
             />
             <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} variant="outline" size="sm" className={`${theme.border} gap-1 sm:gap-2`}>
               <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">BEARBEITEN</span>
-              <span className="sm:hidden text-xs">EDIT</span>
+              <span className="hidden sm:inline">{t('edit')}</span>
+              <span className="sm:hidden text-xs">{t('edit')}</span>
             </Button>
           </div>
         </div>
@@ -203,15 +203,15 @@ export default function TradeDetailPage() {
               <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                 <h2 className="text-sm sm:text-lg md:text-xl tracking-widest flex items-center gap-1.5 sm:gap-2">
                   <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="hidden xs:inline">SCREENSHOTS</span>
-                  <span className="xs:hidden">SCREENS</span>
+                  <span className="hidden xs:inline">{t('screenshots')}</span>
+                  <span className="xs:hidden">{t('screenshots')}</span>
                 </h2>
                 <label className={`px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all text-xs sm:text-sm font-bold ${
                   darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'
                 } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
                   <Upload className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
-                  {uploading ? 'UP...' : 'UP'}
+                  {uploading ? t('uploading') : t('uploadCharts')}
                 </label>
               </div>
               
@@ -230,7 +230,7 @@ export default function TradeDetailPage() {
               ) : (
                 <div className={`border-2 border-dashed ${theme.border} rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center`}>
                   <ImageIcon className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-2 sm:mb-3 ${theme.textSecondary}`} />
-                  <p className={`${theme.textSecondary} text-xs sm:text-sm`}>Keine Screenshots</p>
+                  <p className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('noScreenshots')}</p>
                 </div>
               )}
             </motion.div>
@@ -239,11 +239,11 @@ export default function TradeDetailPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
               <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
-                <h2 className="text-sm sm:text-lg md:text-xl tracking-widest">ERGEBNIS</h2>
+                <h2 className="text-sm sm:text-lg md:text-xl tracking-widest">{t('result')}</h2>
                 {!editing && (
                   <Button onClick={() => setEditing(true)} variant="outline" size="sm" className={`${theme.border} gap-1`}>
                     <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline text-xs">EDIT</span>
+                    <span className="hidden sm:inline text-xs">{t('edit')}</span>
                   </Button>
                 )}
               </div>
@@ -251,22 +251,22 @@ export default function TradeDetailPage() {
               {editing ? (
                 <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>ERGEBNIS</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('result')}</label>
                     <Select value={editData.outcome} onValueChange={(v) => setEditData({...editData, outcome: v})}>
                       <SelectTrigger className={theme.border}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="pending">Ausstehend</SelectItem>
-                        <SelectItem value="win">Gewinn</SelectItem>
-                        <SelectItem value="loss">Verlust</SelectItem>
-                        <SelectItem value="breakeven">Breakeven</SelectItem>
+                        <SelectItem value="pending">{t('pending')}</SelectItem>
+                        <SelectItem value="win">{t('win')}</SelectItem>
+                        <SelectItem value="loss">{t('loss')}</SelectItem>
+                        <SelectItem value="breakeven">{t('breakeven')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>P&L ($)</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('pnl')} ($)</label>
                     <Input 
                       type="number" 
                       step="0.01"
@@ -278,7 +278,7 @@ export default function TradeDetailPage() {
                   </div>
 
                   <div>
-                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>DATUM</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('date')}</label>
                     <Input 
                       type="date"
                       value={editData.exit_date} 
@@ -288,11 +288,11 @@ export default function TradeDetailPage() {
                   </div>
 
                   <div>
-                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>NOTIZEN</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('notes')}</label>
                     <Textarea 
                       value={editData.notes} 
                       onChange={(e) => setEditData({...editData, notes: e.target.value})}
-                      placeholder="Trade Notizen..."
+                      placeholder={t('tradeNotes')}
                       className={`${theme.border} min-h-[80px] sm:min-h-[100px] text-sm`}
                     />
                   </div>
@@ -300,7 +300,7 @@ export default function TradeDetailPage() {
                   <div className="flex gap-2">
                     <Button onClick={handleSaveOutcome} className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
                       <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                      SAVE
+                      {t('save')}
                     </Button>
                     <Button onClick={() => setEditing(false)} variant="outline" size="sm" className={theme.border}>
                       <X className="w-4 h-4" />
@@ -315,19 +315,19 @@ export default function TradeDetailPage() {
                     trade.outcome === 'breakeven' ? 'bg-amber-500 border-amber-400 text-white' :
                     `${theme.border} ${theme.bgCard}`
                   }`}>
-                    <span className="tracking-wider text-xs sm:text-sm">STATUS</span>
+                    <span className="tracking-wider text-xs sm:text-sm">{t('status')}</span>
                     <span className="font-bold text-sm sm:text-base md:text-lg">{
-                      trade.outcome === 'win' ? 'WIN' :
-                      trade.outcome === 'loss' ? 'LOSS' :
-                      trade.outcome === 'breakeven' ? 'BE' :
-                      'PENDING'
+                      trade.outcome === 'win' ? t('win') :
+                      trade.outcome === 'loss' ? t('loss') :
+                      trade.outcome === 'breakeven' ? t('breakeven') :
+                      t('pending')
                     }</span>
                   </div>
 
                   {trade.actual_pnl && (
                     <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
                       <div className="flex items-center justify-between gap-2">
-                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>P&L</span>
+                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('pnl')}</span>
                         <span className={cn("text-lg sm:text-xl md:text-2xl font-bold",
                           parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
                           parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
@@ -340,7 +340,7 @@ export default function TradeDetailPage() {
                   {trade.exit_date && (
                     <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
                       <div className="flex items-center justify-between gap-2">
-                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>EXIT</span>
+                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('exit')}</span>
                         <span className={`${theme.text} text-xs sm:text-sm`}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
                       </div>
                     </div>
@@ -356,7 +356,7 @@ export default function TradeDetailPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgCard} text-center`}>
               <div className="text-3xl sm:text-4xl md:text-5xl font-light mb-1 sm:mb-2">{totalScore}%</div>
-              <div className={`text-xs sm:text-sm ${theme.textSecondary} tracking-widest mb-3 sm:mb-4`}>SCORE</div>
+              <div className={`text-xs sm:text-sm ${theme.textSecondary} tracking-widest mb-3 sm:mb-4`}>{t('avgScore')}</div>
               <div className="space-y-1.5 sm:space-y-2">
                 <div className="flex justify-between text-xs sm:text-sm">
                   <span className={theme.textSecondary}>Weekly</span>
@@ -380,41 +380,41 @@ export default function TradeDetailPage() {
             {/* Trade Setup */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
-              <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4">SETUP</h3>
+              <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4">{t('setup')}</h3>
               <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 {trade.entry_price && (
                   <div className="flex justify-between items-center">
-                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Entry</span>
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('entry')}</span>
                     <span className={`${theme.text} text-xs sm:text-sm font-mono`}>{trade.entry_price}</span>
                   </div>
                 )}
                 {trade.stop_loss && (
                   <div className="flex justify-between items-center">
-                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>SL</span>
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('sl')}</span>
                     <span className="text-rose-600 text-xs sm:text-sm font-mono">{trade.stop_loss}</span>
                   </div>
                 )}
                 {trade.take_profit && (
                   <div className="flex justify-between items-center">
-                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>TP</span>
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('tp')}</span>
                     <span className="text-teal-600 text-xs sm:text-sm font-mono">{trade.take_profit}</span>
                   </div>
                 )}
                 {trade.account_size && (
                   <div className="flex justify-between items-center">
-                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Account</span>
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('account')}</span>
                     <span className={`${theme.text} text-xs sm:text-sm font-mono`}>${trade.account_size}</span>
                   </div>
                 )}
                 {trade.risk_percent && (
                   <div className="flex justify-between items-center">
-                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Risk</span>
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('risk')}</span>
                     <span className={`${theme.text} text-xs sm:text-sm font-mono`}>{trade.risk_percent}%</span>
                   </div>
                 )}
                 {trade.leverage && (
                   <div className="flex justify-between items-center">
-                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>Hebel</span>
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('leverage')}</span>
                     <span className={`${theme.text} text-xs sm:text-sm font-mono`}>1:{trade.leverage}</span>
                   </div>
                 )}
@@ -427,7 +427,7 @@ export default function TradeDetailPage() {
                 className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
                 <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
-                  NOTES
+                  {t('notes')}
                 </h3>
                 <p className={`text-xs sm:text-sm ${theme.text} leading-relaxed font-sans whitespace-pre-wrap`}>{trade.notes}</p>
               </motion.div>
