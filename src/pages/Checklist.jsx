@@ -1037,34 +1037,38 @@ export default function ChecklistPage() {
               }
               </div>
 
-              {/* Trade Summary + Notes Grid */}
-              <div className="grid md:grid-cols-2 gap-2 sm:gap-3">
-                <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
-                  <h3 className={`${theme.text} font-bold tracking-widest text-xs mb-2 sm:mb-3`}>{t('tradeSummary')}</h3>
-                  <div className="space-y-1">
-                    <SummaryRow label="PAIR" value={formData.pair || '-'} />
-                    <SummaryRow label="DIR"
-                  value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'}
-                  color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
-                    <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-1.5`} />
-                    <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
-                    <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
-                    <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
-                    <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
-                    {riskCalc &&
-                  <>
-                        <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-1.5`} />
-                        <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
-                        <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
-                      </>
-                  }
+              {/* Trade Summary + Notes */}
+              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
+                <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+                  {/* Left: Summary */}
+                  <div>
+                    <h3 className={`${theme.text} font-bold tracking-widest text-xs mb-2 sm:mb-3`}>{t('tradeSummary')}</h3>
+                    <div className="space-y-1">
+                      <SummaryRow label="PAIR" value={formData.pair || '-'} />
+                      <SummaryRow label="DIR"
+                        value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'}
+                        color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
+                      <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-1.5`} />
+                      <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
+                      <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
+                      <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
+                      <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
+                      {riskCalc &&
+                        <>
+                          <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-1.5`} />
+                          <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
+                          <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
+                        </>
+                      }
+                    </div>
                   </div>
-                </div>
 
-                <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
-                  <label className={`block ${theme.textMuted} tracking-widest text-xs mb-2`}>{t('notesOptional')}</label>
-                  <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
-                className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[140px] rounded-lg font-sans text-xs`} />
+                  {/* Right: Notes */}
+                  <div>
+                    <label className={`block ${theme.textMuted} tracking-widest text-xs mb-2`}>{t('notesOptional')}</label>
+                    <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
+                      className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[140px] rounded-lg font-sans text-xs`} />
+                  </div>
                 </div>
               </div>
 
@@ -1109,55 +1113,45 @@ export default function ChecklistPage() {
 
               </div>
 
-              {/* Final Grade + Breakdown Combined */}
-              <div className="grid md:grid-cols-3 gap-2">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.1 }}
-              className={cn("md:col-span-2 p-4 sm:p-5 text-center rounded-lg sm:rounded-xl border-2 relative",
-              progress >= 100 ? "bg-teal-600 border-teal-600" :
-              progress >= 90 ? "bg-teal-500 border-teal-500" :
-              progress >= 85 ? "bg-blue-500 border-blue-500" :
-              progress >= 70 ? "bg-amber-500 border-amber-500" :
-              darkMode ? "bg-zinc-900 border-rose-600" : "bg-zinc-100 border-rose-600")}>
-                  
-                  {hasConfluence && progress >= 85 &&
-                <div className="absolute top-2 right-2 px-1.5 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-[8px] font-bold text-white flex items-center gap-1">
-                      <Layers className="w-2.5 h-2.5" />
-                      CONFL
-                    </div>
+              {/* Final Grade - Optimiert */}
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.1 }}
+                className={cn("p-4 sm:p-5 md:p-6 text-center rounded-xl border-2 relative",
+                  progress >= 100 ? "bg-teal-600 border-teal-600" :
+                  progress >= 90 ? "bg-teal-500 border-teal-500" :
+                  progress >= 85 ? "bg-blue-500 border-blue-500" :
+                  progress >= 70 ? "bg-amber-500 border-amber-500" :
+                  darkMode ? "bg-zinc-900 border-rose-600" : "bg-zinc-100 border-rose-600")}>
+                
+                {hasConfluence && progress >= 85 &&
+                  <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[9px] sm:text-[10px] font-bold text-white flex items-center gap-1">
+                    <Layers className="w-3 h-3" />
+                    CONFLUENCE
+                  </div>
                 }
-                  
-                  <div className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-1", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>{gradeInfo.grade}</div>
-                  <div className={cn("text-xl sm:text-2xl md:text-3xl tracking-widest mb-1", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>{progress}%</div>
-                  <div className={cn("text-[10px] sm:text-xs font-sans", progress >= 70 ? "text-white/60" : darkMode ? "text-white/60" : "text-black/60")}>
-                    {progress >= 85 ? `✓ ${t('readyToTradeLabel')}` : t('notRecommended')}
-                  </div>
-                  {riskCalc && parseFloat(riskCalc.rr) >= 2.5 &&
-                <div className={cn("mt-2 pt-2 border-t text-[9px] font-sans", progress >= 70 ? "border-white/20 text-white/60" : darkMode ? "border-zinc-800 text-white/50" : "border-zinc-300 text-black/50")}>
-                      R:R 1:{riskCalc.rr} ✓
-                    </div>
-                }
-                </motion.div>
-
-                <div className={`p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
-                  <div className={`text-[10px] ${theme.textMuted} tracking-widest mb-2 text-center`}>{t('pointsBreakdown')}</div>
-                  <div className="space-y-1">
-                    {[
-                  { label: 'W', score: weeklyScore, max: 60 },
-                  { label: 'D', score: dailyScore, max: 60 },
-                  { label: '4H', score: h4Score, max: 35 },
-                  { label: 'E', score: entryScore, max: 25 }].
-                  map((item) =>
-                  <div key={item.label} className={`flex justify-between items-center p-1.5 rounded ${darkMode ? 'bg-zinc-950' : 'bg-zinc-200'}`}>
-                        <span className={`${theme.textMuted} text-[10px]`}>{item.label}</span>
-                        <span className={`${theme.text} font-bold text-xs`}>{item.score}/{item.max}</span>
-                      </div>
-                  )}
-                  </div>
-                  <div className={`mt-2 p-1.5 rounded text-center font-bold text-xs ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                    {progress}/180
-                  </div>
+                
+                <div className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-2", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>{gradeInfo.grade}</div>
+                <div className={cn("text-2xl sm:text-3xl md:text-4xl tracking-widest mb-1", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>{progress}%</div>
+                <div className={cn("text-xs sm:text-sm font-sans mb-3", progress >= 70 ? "text-white/70" : darkMode ? "text-white/60" : "text-black/60")}>
+                  {progress >= 85 ? `✓ ${t('readyToTradeLabel')}` : t('notRecommended')}
                 </div>
-              </div>
+                
+                {/* Inline Score Breakdown */}
+                <div className={cn("flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>
+                  <span>W: <strong>{weeklyScore}</strong>/60</span>
+                  <span>•</span>
+                  <span>D: <strong>{dailyScore}</strong>/60</span>
+                  <span>•</span>
+                  <span>4H: <strong>{h4Score}</strong>/35</span>
+                  <span>•</span>
+                  <span>E: <strong>{entryScore}</strong>/25</span>
+                </div>
+                
+                {riskCalc && parseFloat(riskCalc.rr) >= 2.5 &&
+                  <div className={cn("mt-3 pt-3 border-t text-[10px] sm:text-xs font-sans", progress >= 70 ? "border-white/20 text-white/70" : darkMode ? "border-zinc-800 text-white/50" : "border-zinc-300 text-black/50")}>
+                    R:R 1:{riskCalc.rr} ✓
+                  </div>
+                }
+              </motion.div>
 
               <TradingQuote variant="minimal" />
 
