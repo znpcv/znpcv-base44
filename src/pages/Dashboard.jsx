@@ -588,85 +588,112 @@ export default function DashboardPage() {
                   const dayPnL = trades.filter(t => t.actual_pnl).reduce((sum, t) => sum + parseFloat(t.actual_pnl), 0);
                   const hasWins = trades.some(t => t.outcome === 'win');
                   const hasLosses = trades.some(t => t.outcome === 'loss');
-                  const hasReady = trades.some(t => t.status === 'ready_to_trade');
-                  
-                  // Session indicators
-                  const allDayTrades = checklists.filter(c => c.trade_date === format(day, 'yyyy-MM-dd'));
-                  const londonTrades = allDayTrades.filter(t => getTradingSession(t.created_date || t.trade_date) === 'london').length;
-                  const nyTrades = allDayTrades.filter(t => getTradingSession(t.created_date || t.trade_date) === 'newyork').length;
-                  const tokyoTrades = allDayTrades.filter(t => getTradingSession(t.created_date || t.trade_date) === 'tokyo').length;
+                  const isProfitable = dayPnL > 0;
+                  const isNegative = dayPnL < 0;
                   
                   return (
-                    <button
+                    <motion.button
                       type="button"
                       key={day.toISOString()}
+                      whileHover={trades.length > 0 ? { scale: 1.08 } : {}}
+                      whileTap={trades.length > 0 ? { scale: 0.95 } : {}}
                       onClick={() => trades.length > 0 && navigate(createPageUrl('TradeDetail') + `?id=${trades[0].id}`)}
                       className={cn(
-                        "aspect-square flex flex-col items-center justify-center text-sm relative rounded-xl transition-all group",
-                        isToday(day) && "ring-2 ring-offset-2 ring-teal-600 font-bold scale-105",
-                        isToday(day) && darkMode && "ring-offset-black",
-                        isToday(day) && !darkMode && "ring-offset-white",
-                        trades.length > 0 && hasWins && !hasLosses && (darkMode ? "bg-teal-600/30 hover:bg-teal-600/50 border-2 border-teal-600/50" : "bg-teal-100 hover:bg-teal-200 border-2 border-teal-300"),
-                        trades.length > 0 && hasLosses && !hasWins && (darkMode ? "bg-rose-600/30 hover:bg-rose-600/50 border-2 border-rose-600/50" : "bg-rose-100 hover:bg-rose-200 border-2 border-rose-300"),
-                        trades.length > 0 && hasWins && hasLosses && (darkMode ? "bg-zinc-700 hover:bg-zinc-600 border-2 border-zinc-600" : "bg-zinc-300 hover:bg-zinc-400 border-2 border-zinc-400"),
-                        trades.length > 0 && !hasWins && !hasLosses && (darkMode ? "bg-zinc-900 hover:bg-zinc-800 border-2 border-zinc-800" : "bg-zinc-200 hover:bg-zinc-300 border-2 border-zinc-300"),
+                        "aspect-square flex flex-col items-center justify-center relative rounded-xl transition-all group overflow-hidden",
+                        isToday(day) && "ring-2 ring-offset-2 ring-teal-600 ring-offset-black scale-105 z-10",
+                        trades.length > 0 && isProfitable && (darkMode 
+                          ? "bg-gradient-to-br from-teal-600/40 via-teal-600/30 to-emerald-600/30 hover:from-teal-600/60 hover:via-teal-600/50 hover:to-emerald-600/50 border-2 border-teal-500/50 shadow-lg shadow-teal-600/20" 
+                          : "bg-gradient-to-br from-teal-100 via-teal-50 to-emerald-50 hover:from-teal-200 hover:via-teal-100 hover:to-emerald-100 border-2 border-teal-400 shadow-lg"),
+                        trades.length > 0 && isNegative && (darkMode 
+                          ? "bg-gradient-to-br from-rose-600/40 via-rose-600/30 to-red-600/30 hover:from-rose-600/60 hover:via-rose-600/50 hover:to-red-600/50 border-2 border-rose-500/50 shadow-lg shadow-rose-600/20" 
+                          : "bg-gradient-to-br from-rose-100 via-rose-50 to-red-50 hover:from-rose-200 hover:via-rose-100 hover:to-red-100 border-2 border-rose-400 shadow-lg"),
+                        trades.length > 0 && dayPnL === 0 && (darkMode 
+                          ? "bg-gradient-to-br from-zinc-800 to-zinc-900 hover:from-zinc-700 hover:to-zinc-800 border-2 border-zinc-700 shadow-md" 
+                          : "bg-gradient-to-br from-zinc-200 to-zinc-300 hover:from-zinc-300 hover:to-zinc-400 border-2 border-zinc-400 shadow-md"),
                         trades.length > 0 && "cursor-pointer",
-                        trades.length === 0 && (darkMode ? "hover:bg-zinc-900/30" : "hover:bg-zinc-100")
+                        trades.length === 0 && (darkMode ? "border border-zinc-800/30 hover:bg-zinc-900/20 hover:border-zinc-700/50" : "border border-zinc-300/50 hover:bg-zinc-100 hover:border-zinc-400/80")
                       )}>
-                      <span className={cn("text-xs sm:text-sm", isToday(day) ? "text-teal-600 font-black" : theme.text)}>
-                        {format(day, 'd')}
-                      </span>
-                      {trades.length > 0 && dayPnL !== 0 && (
-                        <span className={cn("text-[8px] font-bold mt-0.5", dayPnL > 0 ? "text-teal-600" : "text-rose-600")}>
-                          {dayPnL > 0 ? '+' : ''}{dayPnL.toFixed(0)}
-                        </span>
+                      
+                      {/* Glow Effect */}
+                      {trades.length > 0 && (
+                        <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity blur-xl",
+                          isProfitable && "bg-teal-600/30",
+                          isNegative && "bg-rose-600/30"
+                        )} />
                       )}
                       
-                      {/* Session Indicators */}
-                      {allDayTrades.length > 0 && sessionFilter === 'all' && (
-                        <div className="absolute bottom-0.5 left-0.5 right-0.5 flex gap-0.5 justify-center">
-                          {londonTrades > 0 && <div className="w-1 h-1 rounded-full bg-blue-500" title="London" />}
-                          {nyTrades > 0 && <div className="w-1 h-1 rounded-full bg-yellow-500" title="New York" />}
-                          {tokyoTrades > 0 && <div className="w-1 h-1 rounded-full bg-red-500" title="Tokyo" />}
-                        </div>
-                      )}
+                      <div className="relative z-10 flex flex-col items-center">
+                        <span className={cn("text-sm font-bold mb-0.5", 
+                          isToday(day) ? "text-teal-600 text-base" : 
+                          trades.length > 0 ? theme.text : theme.textSecondary)}>
+                          {format(day, 'd')}
+                        </span>
+                        {trades.length > 0 && dayPnL !== 0 && (
+                          <div className={cn("flex items-center gap-0.5 px-1.5 py-0.5 rounded-md font-bold text-[9px]",
+                            isProfitable ? "bg-teal-600/20 text-teal-600 border border-teal-600/30" : "bg-rose-600/20 text-rose-600 border border-rose-600/30")}>
+                            {isProfitable ? '↑' : '↓'}
+                            {Math.abs(dayPnL).toFixed(0)}
+                          </div>
+                        )}
+                      </div>
                       
                       {trades.length > 1 && (
-                        <div className="absolute top-1 right-1 w-4 h-4 bg-teal-600 text-white text-[9px] rounded-full flex items-center justify-center font-bold shadow-md">
+                        <div className="absolute top-1 right-1 w-5 h-5 bg-gradient-to-br from-teal-600 to-emerald-600 text-white text-[10px] rounded-lg flex items-center justify-center font-black shadow-xl border border-white/20">
                           {trades.length}
                         </div>
                       )}
-                    </button>
+                      
+                      {/* Subtle Pattern Overlay */}
+                      {trades.length > 0 && (
+                        <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
+                          backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 1px)',
+                          backgroundSize: '8px 8px'
+                        }} />
+                      )}
+                    </motion.button>
                   );
                 })}
               </div>
               
-              {/* Legend */}
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 pt-4 border-t-2 ${theme.border}">
-                <div className="flex items-center gap-1.5">
-                  <div className={`w-3 h-3 rounded ${darkMode ? 'bg-teal-600/30 border border-teal-600/50' : 'bg-teal-100 border border-teal-300'}`} />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('win')}</span>
+              {/* Stats Summary */}
+              <div className={`mt-5 pt-5 border-t-2 ${theme.border} grid grid-cols-3 gap-3`}>
+                <div className={cn("text-center p-3 rounded-xl border-2 transition-all",
+                  darkMode ? "bg-teal-600/10 border-teal-600/30 hover:border-teal-600/50" : "bg-teal-50 border-teal-300 hover:border-teal-400")}>
+                  <div className="text-xl font-black text-teal-600">
+                    {checklists.filter(t => {
+                      const tDate = format(new Date(t.trade_date || t.created_date), 'yyyy-MM');
+                      const cMonth = format(calendarMonth, 'yyyy-MM');
+                      return tDate === cMonth && t.outcome === 'win';
+                    }).length}
+                  </div>
+                  <div className={`text-[9px] tracking-wider mt-1 ${theme.textMuted} font-bold`}>WINS</div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className={`w-3 h-3 rounded ${darkMode ? 'bg-rose-600/30 border border-rose-600/50' : 'bg-rose-100 border border-rose-300'}`} />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('loss')}</span>
+                <div className={cn("text-center p-3 rounded-xl border-2 transition-all",
+                  darkMode ? "bg-rose-600/10 border-rose-600/30 hover:border-rose-600/50" : "bg-rose-50 border-rose-300 hover:border-rose-400")}>
+                  <div className="text-xl font-black text-rose-600">
+                    {checklists.filter(t => {
+                      const tDate = format(new Date(t.trade_date || t.created_date), 'yyyy-MM');
+                      const cMonth = format(calendarMonth, 'yyyy-MM');
+                      return tDate === cMonth && t.outcome === 'loss';
+                    }).length}
+                  </div>
+                  <div className={`text-[9px] tracking-wider mt-1 ${theme.textMuted} font-bold`}>LOSSES</div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded bg-teal-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('today')}</span>
-                </div>
-                <div className="h-2 w-px bg-zinc-600" />
-                <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  <span className={`text-[9px] ${theme.textMuted}`}>🇬🇧</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
-                  <span className={`text-[9px] ${theme.textMuted}`}>🇺🇸</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                  <span className={`text-[9px] ${theme.textMuted}`}>🇯🇵</span>
+                <div className={cn("text-center p-3 rounded-xl border-2 transition-all",
+                  darkMode ? "bg-zinc-800 border-zinc-700 hover:border-zinc-600" : "bg-zinc-100 border-zinc-300 hover:border-zinc-400")}>
+                  <div className={`text-xl font-black ${theme.text}`}>
+                    {(() => {
+                      const monthPnL = checklists
+                        .filter(t => {
+                          const tDate = format(new Date(t.trade_date || t.created_date), 'yyyy-MM');
+                          const cMonth = format(calendarMonth, 'yyyy-MM');
+                          return tDate === cMonth;
+                        })
+                        .reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+                      return monthPnL >= 0 ? `+${monthPnL.toFixed(0)}` : monthPnL.toFixed(0);
+                    })()}
+                  </div>
+                  <div className={`text-[9px] tracking-wider mt-1 ${theme.textMuted} font-bold`}>P&L</div>
                 </div>
               </div>
             </motion.div>
