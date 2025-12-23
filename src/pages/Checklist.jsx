@@ -455,6 +455,7 @@ export default function ChecklistPage() {
                       type="date"
                       value={formData.trade_date}
                       onChange={(e) => update('trade_date', e.target.value)}
+                      max={format(new Date(), 'yyyy-MM-dd')}
                       className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black'} rounded-lg text-sm font-mono`}
                     />
                   </div>

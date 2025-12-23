@@ -120,26 +120,28 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
 
           </div>
 
-          {/* Exit Date */}
-          <div>
-            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>AUSSTIEGSDATUM</label>
-            <Input
-              type="date"
-              value={formData.exit_date}
-              onChange={(e) => setFormData({ ...formData, exit_date: e.target.value })}
-              className={`${theme.border} h-10 sm:h-11 text-sm`} />
+          {/* Trade Date & Exit Date Grid */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>TRADE DATUM</label>
+              <Input
+                type="date"
+                value={formData.trade_date}
+                onChange={(e) => setFormData({ ...formData, trade_date: e.target.value })}
+                max={format(new Date(), 'yyyy-MM-dd')}
+                className={`${theme.border} h-10 sm:h-11 text-sm`} />
+            </div>
 
-          </div>
-
-          {/* Trade Date */}
-          <div>
-            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>TRADE DATUM</label>
-            <Input
-              type="date"
-              value={formData.trade_date}
-              onChange={(e) => setFormData({ ...formData, trade_date: e.target.value })}
-              className={`${theme.border} h-10 sm:h-11 text-sm`} />
-
+            <div>
+              <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>AUSSTIEG</label>
+              <Input
+                type="date"
+                value={formData.exit_date}
+                onChange={(e) => setFormData({ ...formData, exit_date: e.target.value })}
+                min={formData.trade_date}
+                max={format(new Date(), 'yyyy-MM-dd')}
+                className={`${theme.border} h-10 sm:h-11 text-sm`} />
+            </div>
           </div>
 
           {/* Notes */}

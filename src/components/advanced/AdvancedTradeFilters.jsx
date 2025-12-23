@@ -27,6 +27,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
           type="date"
           value={filters.dateFrom}
           onChange={(e) => onFilterChange({ ...filters, dateFrom: e.target.value })}
+          max={filters.dateTo || undefined}
           className={cn("h-8 sm:h-9 text-[10px] sm:text-xs", theme.border)}
         />
       </div>
@@ -40,6 +41,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
           type="date"
           value={filters.dateTo}
           onChange={(e) => onFilterChange({ ...filters, dateTo: e.target.value })}
+          min={filters.dateFrom || undefined}
           className={cn("h-8 sm:h-9 text-[10px] sm:text-xs", theme.border)}
         />
       </div>
