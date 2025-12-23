@@ -117,7 +117,7 @@ export default function TradeDetailPage() {
       <div className={`min-h-screen ${theme.bg} ${theme.text} flex items-center justify-center`}>
         <div className="text-center">
           <p className="text-xl mb-4">{t('tradeNotFound')}</p>
-          <Button onClick={() => navigate(createPageUrl('Dashboard'))}>{t('backToDashboard')}</Button>
+          <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`border-2 font-bold ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>{t('backToDashboard')}</Button>
         </div>
       </div>
     );
@@ -125,7 +125,7 @@ export default function TradeDetailPage() {
 
   const weeklyScore = (trade.w_at_aoi ? 10 : 0) + (trade.w_ema_touch ? 5 : 0) + 
     (trade.w_candlestick ? 10 : 0) + (trade.w_psp_rejection ? 10 : 0) + 
-    (trade.w_round_level ? 5 : 0) + (trade.w_swing ? 5 : 0) + 
+    (trade.w_round_level ? 5 : 0) + (trade.w_swing ? 10 : 0) + 
     (trade.w_pattern && trade.w_pattern !== 'none' ? 10 : 0);
   
   const dailyScore = (trade.d_at_aoi ? 10 : 0) + (trade.d_ema_touch ? 5 : 0) + 
@@ -164,10 +164,9 @@ export default function TradeDetailPage() {
               alt="ZNPCV" 
               className="h-10 w-auto"
             />
-            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} variant="outline" size="sm" className={`${theme.border} gap-1 sm:gap-2`}>
+            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} className={`gap-1 sm:gap-2 h-8 sm:h-9 md:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('edit')}</span>
-              <span className="sm:hidden text-xs">{t('edit')}</span>
             </Button>
           </div>
         </div>
@@ -206,7 +205,7 @@ export default function TradeDetailPage() {
                   <span className="hidden xs:inline">{t('screenshots')}</span>
                   <span className="xs:hidden">{t('screenshots')}</span>
                 </h2>
-                <label className={`px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all text-xs sm:text-sm font-bold ${
+                <label className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all text-xs sm:text-sm font-bold ${
                   darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'
                 } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
@@ -241,9 +240,9 @@ export default function TradeDetailPage() {
               <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                 <h2 className="text-sm sm:text-lg md:text-xl tracking-widest">{t('result')}</h2>
                 {!editing && (
-                  <Button onClick={() => setEditing(true)} variant="outline" size="sm" className={`${theme.border} gap-1`}>
+                  <Button onClick={() => setEditing(true)} className={`gap-1 h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                     <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline text-xs">{t('edit')}</span>
+                    <span className="hidden sm:inline">{t('edit')}</span>
                   </Button>
                 )}
               </div>
@@ -298,11 +297,11 @@ export default function TradeDetailPage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button onClick={handleSaveOutcome} className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                    <Button onClick={handleSaveOutcome} className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                       <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                       {t('save')}
                     </Button>
-                    <Button onClick={() => setEditing(false)} variant="outline" size="sm" className={theme.border}>
+                    <Button onClick={() => setEditing(false)} variant="outline" className={`h-10 sm:h-11 border-2 ${theme.border}`}>
                       <X className="w-4 h-4" />
                     </Button>
                   </div>

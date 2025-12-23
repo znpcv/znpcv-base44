@@ -208,7 +208,7 @@ export default function AccountPage() {
                   <div className="flex gap-1 sm:gap-2 flex-shrink-0">
                     {editing ? (
                       <>
-                        <Button onClick={handleSave} disabled={saving} size="sm" className={`h-8 sm:h-9 md:h-10 text-xs sm:text-sm ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                        <Button onClick={handleSave} disabled={saving} className={`h-8 sm:h-9 md:h-10 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                           <Save className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
                           <span className="hidden sm:inline">{saving ? `${t('save')}...` : t('save')}</span>
                         </Button>
@@ -223,12 +223,12 @@ export default function AccountPage() {
                           setAddressCity(user.address_city || '');
                           setAddressPostalCode(user.address_postal_code || '');
                           setAddressCountry(user.address_country || '');
-                        }} variant="outline" size="sm" className={`${theme.border} h-8 sm:h-9 md:h-10`}>
+                        }} variant="outline" className={`h-8 sm:h-9 md:h-10 border-2 ${theme.border}`}>
                           <X className="w-3 h-3 sm:w-4 sm:h-4" />
                         </Button>
                       </>
                     ) : (
-                      <Button onClick={() => setEditing(true)} variant="outline" size="sm" className={`${theme.border} h-8 sm:h-9 md:h-10 text-xs sm:text-sm`}>
+                      <Button onClick={() => setEditing(true)} className={`h-8 sm:h-9 md:h-10 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                         <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
                         <span className="hidden sm:inline">{t('edit')}</span>
                       </Button>
@@ -432,7 +432,7 @@ export default function AccountPage() {
             <Button 
               onClick={() => navigate(createPageUrl('Home'))} 
               variant="outline" 
-              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 ${theme.border}`}
             >
               <Home className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
               <span>{t('home')}</span>
@@ -440,21 +440,21 @@ export default function AccountPage() {
             <Button 
               onClick={() => navigate(createPageUrl('Dashboard'))} 
               variant="outline" 
-              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 ${theme.border}`}
             >
               {t('dashboard')}
             </Button>
             <Button 
               onClick={() => navigate(createPageUrl('Integrations'))} 
               variant="outline" 
-              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border} col-span-2 sm:col-span-1`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 ${theme.border} col-span-2 sm:col-span-1`}
             >
               <Settings className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
               INTEGRATIONS
             </Button>
             <Button 
               onClick={handleLogout} 
-              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white col-span-2 sm:col-span-1`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600 col-span-2 sm:col-span-1`}
             >
               <LogOut className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
               <span className="hidden xs:inline">{t('logout')}</span>
@@ -470,8 +470,7 @@ export default function AccountPage() {
             </p>
             <Button 
               onClick={handleDeleteAccount}
-              variant="outline"
-              className="border-2 border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold"
+              className="border-2 border-rose-600 bg-rose-600 text-white hover:bg-rose-700 h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold"
             >
               {t('deletePermanently')}
             </Button>

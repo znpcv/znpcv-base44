@@ -68,20 +68,20 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <button
                   onClick={() => setFormData({...formData, direction: 'long'})}
-                  className={cn("p-3 sm:p-4 rounded-xl border-2 transition-all text-xs sm:text-sm font-bold",
+                  className={cn("p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 transition-all text-xs sm:text-sm font-bold",
                     formData.direction === 'long' 
                       ? 'bg-teal-600 text-white border-teal-600' 
-                      : `${theme.border} ${theme.text}`)}>
-                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1" />
+                      : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5 sm:mb-1" />
                   LONG
                 </button>
                 <button
                   onClick={() => setFormData({...formData, direction: 'short'})}
-                  className={cn("p-3 sm:p-4 rounded-xl border-2 transition-all text-xs sm:text-sm font-bold",
+                  className={cn("p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 transition-all text-xs sm:text-sm font-bold",
                     formData.direction === 'short' 
                       ? 'bg-rose-600 text-white border-rose-600' 
-                      : `${theme.border} ${theme.text}`)}>
-                  <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1" />
+                      : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
+                  <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5 sm:mb-1" />
                   SHORT
                 </button>
               </div>
@@ -141,13 +141,13 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">
-            <Button onClick={onClose} variant="outline" className={`flex-1 h-10 sm:h-11 ${theme.border}`}>
+            <Button onClick={onClose} variant="outline" className={`flex-1 h-10 sm:h-11 border-2 ${theme.border} font-bold text-xs sm:text-sm`}>
               ABBRECHEN
             </Button>
             <Button 
               onClick={handleSave} 
               disabled={!formData.pair || !formData.direction}
-              className={`flex-1 h-10 sm:h-11 font-bold ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+              className={`flex-1 h-10 sm:h-11 font-bold border-2 text-xs sm:text-sm ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               SPEICHERN
             </Button>

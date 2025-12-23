@@ -202,7 +202,7 @@ export default function TradeHistoryPage() {
               ) : filteredTrades.length === 0 ? (
                 <div className="p-8 sm:p-10 md:p-12 text-center">
                   <p className={`${theme.textDimmed} mb-4 sm:mb-5 md:mb-6 text-xs sm:text-sm`}>{t('noAnalyses')}</p>
-                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-lg sm:rounded-xl border-2 font-bold text-xs sm:text-sm ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-lg sm:rounded-xl border-2 font-bold px-4 sm:px-6 h-10 sm:h-11 text-xs sm:text-sm ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                     {t('startFirstAnalysis')}
                   </Button>
                 </div>

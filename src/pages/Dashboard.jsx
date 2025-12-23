@@ -165,7 +165,7 @@ export default function DashboardPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 mb-4 sm:mb-5 md:mb-8">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
-              darkMode ? "bg-gradient-to-br from-white to-zinc-100 text-black border-white" : "bg-gradient-to-br from-zinc-900 to-black text-white border-zinc-900")}>
+              darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900")}>
             <div className={cn("absolute inset-0 opacity-10", darkMode ? "bg-gradient-to-br from-teal-600 to-blue-600" : "bg-gradient-to-br from-teal-500 to-emerald-500")} />
             <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-teal-600/10 rounded-full -translate-y-12 sm:-translate-y-16 translate-x-12 sm:translate-x-16 blur-2xl" />
             <div className="relative z-10">
@@ -180,7 +180,7 @@ export default function DashboardPage() {
 
           <button onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
-              darkMode ? "bg-gradient-to-br from-zinc-950 to-zinc-900 text-white border-zinc-800" : "bg-gradient-to-br from-zinc-100 to-zinc-200 text-black border-zinc-300")}>
+              darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5" />
             <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600/10 rounded-full translate-y-12 sm:translate-y-16 -translate-x-12 sm:-translate-x-16 blur-2xl" />
             <div className="relative z-10">
@@ -230,13 +230,13 @@ export default function DashboardPage() {
                   <div className={`text-xs ${theme.textMuted}`}>{t('last8')}</div>
                 </div>
                 <div className="flex gap-2">
-                  {['all', 'win', 'loss'].map((f) => (
+                  {['all', 'win', 'loss', 'pending'].map((f) => (
                     <button key={f} onClick={() => setFilter(f)}
-                      className={cn("px-4 py-2 text-xs tracking-wider rounded-xl transition-all font-bold border-2 hover:scale-105",
+                      className={cn("px-3 sm:px-4 py-1.5 sm:py-2 text-xs tracking-wider rounded-lg sm:rounded-xl transition-all font-bold border-2",
                         filter === f 
-                          ? darkMode ? "bg-white text-black border-white shadow-md" : "bg-zinc-900 text-white border-zinc-900 shadow-md"
+                          ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
                           : darkMode ? "bg-zinc-900/50 text-zinc-400 border-zinc-800/50 hover:text-white hover:border-zinc-700" : "bg-white text-zinc-600 border-zinc-300 hover:text-black hover:border-zinc-400")}>
-                      {f === 'all' ? t('all') : f === 'win' ? t('win') : t('loss')}
+                      {f === 'all' ? t('all') : f === 'win' ? t('win') : f === 'loss' ? t('loss') : t('pending')}
                     </button>
                   ))}
                 </div>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
                     <Plus className={`w-8 h-8 ${theme.textMuted}`} />
                   </div>
                   <p className={`${theme.textDimmed} mb-5 text-sm sm:text-base font-sans`}>{t('noAnalyses')}</p>
-                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-xl border-2 font-bold px-6 py-3 hover:scale-105 transition-transform ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Button onClick={() => navigate(createPageUrl('Checklist'))} className={`rounded-lg sm:rounded-xl border-2 font-bold px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm transition-all ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                     {t('startFirstAnalysis')}
                   </Button>
                 </div>
