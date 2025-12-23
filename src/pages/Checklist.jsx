@@ -448,6 +448,17 @@ export default function ChecklistPage() {
               {formData.pair &&
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
                   
+                  {/* Trade Date Input */}
+                  <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${theme.bgSecondary}`}>
+                    <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest block mb-2`}>HANDELSDATUM</label>
+                    <Input
+                      type="date"
+                      value={formData.trade_date}
+                      onChange={(e) => update('trade_date', e.target.value)}
+                      className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black'} rounded-lg text-sm font-mono`}
+                    />
+                  </div>
+                  
                   {/* Direction Selection */}
                   <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest block`}>{t('selectDirection')}</label>
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
