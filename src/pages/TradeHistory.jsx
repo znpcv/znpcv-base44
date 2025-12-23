@@ -239,7 +239,7 @@ export default function TradeHistoryPage() {
                                 <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full",
                                   trade.outcome === 'win' ? 'bg-teal-600/20 text-teal-600' :
                                   trade.outcome === 'loss' ? 'bg-rose-600/20 text-rose-600' : 'bg-zinc-600/20 text-zinc-400')}>
-                                  {trade.outcome.toUpperCase()}
+                                  {trade.outcome === 'win' ? t('win') : trade.outcome === 'loss' ? t('loss') : t('breakeven')}
                                 </div>
                               </>
                             )}

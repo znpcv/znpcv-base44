@@ -305,15 +305,15 @@ export default function DashboardPage() {
                                     {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                                   </div>
                                   <div className={cn("text-[10px] tracking-wider px-2.5 py-1 rounded-lg font-bold",
-                                    trade.outcome === 'win' ? 'bg-teal-600 text-white' :
-                                    trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 'bg-zinc-600 text-white')}>
-                                    {trade.outcome.toUpperCase()}
+                                   trade.outcome === 'win' ? 'bg-teal-600 text-white' :
+                                   trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 'bg-zinc-600 text-white')}>
+                                   {trade.outcome === 'win' ? t('win') : trade.outcome === 'loss' ? t('loss') : t('breakeven')}
                                   </div>
                                 </>
                               )}
                               {!trade.outcome && (
                                 <span className="px-3 py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs tracking-wider rounded-lg font-bold shadow-md">
-                                  {trade.status === 'ready_to_trade' ? 'READY' : 'PENDING'}
+                                  {trade.status === 'ready_to_trade' ? t('readyToTradeShort') : t('pending')}
                                 </span>
                               )}
                             </div>
@@ -330,11 +330,11 @@ export default function DashboardPage() {
                         <div className="flex items-center gap-4 text-xs">
                           <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
                             <Target className="w-3 h-3" />
-                            <span className={theme.textMuted}>Score: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                            <span className={theme.textMuted}>{t('avgScore')}: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
                           </div>
                           {trade.risk_percent && (
                             <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
-                              <span className={theme.textMuted}>Risk: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>
+                              <span className={theme.textMuted}>{t('risk')}: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>
                             </div>
                           )}
                         </div>
