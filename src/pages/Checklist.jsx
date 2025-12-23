@@ -100,22 +100,6 @@ export default function ChecklistPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Auto-Save Feature - saves every 3 seconds after changes
-  useEffect(() => {
-    if (!formData.pair || !checklistId) return; // Only auto-save existing checklists
-    
-    const timer = setTimeout(async () => {
-      const data = { 
-        ...formData, 
-        completion_percentage: progress, 
-        status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
-      };
-      await base44.entities.TradeChecklist.update(checklistId, data);
-    }, 3000);
-    
-    return () => clearTimeout(timer);
-  }, [formData, progress, checklistId]);
-
   const loadChecklist = async () => {
     const data = await base44.entities.TradeChecklist.filter({ id: checklistId });
     if (data.length > 0) setFormData(prev => ({ ...prev, ...data[0] }));
@@ -125,9 +109,7 @@ export default function ChecklistPage() {
   const update = (key, value) => setFormData(prev => ({ ...prev, [key]: value }));
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-
-
-  // Calculate scores - FINAL CORRECTED
+  // Calculate scores - FINAL CORRECTED (MOVED BEFORE EFFECTS)
   const weeklyScore = (formData.w_at_aoi ? 10 : 0) + (formData.w_ema_touch ? 5 : 0) + 
     (formData.w_candlestick ? 10 : 0) + (formData.w_psp_rejection ? 10 : 0) + 
     (formData.w_round_level ? 5 : 0) + (formData.w_swing ? 5 : 0) + 
@@ -146,6 +128,22 @@ export default function ChecklistPage() {
     (formData.entry_pattern && formData.entry_pattern !== 'none' ? 5 : 0);
 
   const progress = weeklyScore + dailyScore + h4Score + entryScore;
+
+  // Auto-Save Feature - saves every 3 seconds after changes
+  useEffect(() => {
+    if (!formData.pair || !checklistId) return; // Only auto-save existing checklists
+    
+    const timer = setTimeout(async () => {
+      const data = { 
+        ...formData, 
+        completion_percentage: progress, 
+        status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
+      };
+      await base44.entities.TradeChecklist.update(checklistId, data);
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, [formData, progress, checklistId]);
 
   // Risk calculations with Lot Size
   const calculateRisk = () => {
