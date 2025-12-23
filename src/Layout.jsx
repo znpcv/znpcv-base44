@@ -1,12 +1,14 @@
 import React from 'react';
 import { LanguageProvider } from './components/LanguageContext';
 import ScrollToTop from './components/ScrollToTop';
+import QueryClientProvider from './components/QueryClientProvider';
 
 export default function Layout({ children, currentPageName }) {
 
   return (
     <LanguageProvider>
-      <ScrollToTop />
+      <QueryClientProvider>
+        <ScrollToTop />
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap');
@@ -27,6 +29,7 @@ export default function Layout({ children, currentPageName }) {
       <div className="min-h-screen bg-black">
         {children}
       </div>
+      </QueryClientProvider>
     </LanguageProvider>
   );
 }

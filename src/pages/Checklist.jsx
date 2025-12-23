@@ -165,6 +165,11 @@ export default function ChecklistPage() {
           status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
         };
         await base44.entities.TradeChecklist.update(checklistId, data);
+        
+        // Force reload across all pages
+        if (window.queryClient) {
+          window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+        }
       } catch (error) {
         console.error('Auto-save failed:', error);
       }
@@ -265,6 +270,11 @@ export default function ChecklistPage() {
 
       if (checklistId) await base44.entities.TradeChecklist.update(checklistId, data);else
       await base44.entities.TradeChecklist.create(data);
+
+      // Force reload across all pages
+      if (window.queryClient) {
+        window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      }
 
       navigate(createPageUrl('Dashboard'));
     } catch (error) {

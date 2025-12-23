@@ -70,6 +70,12 @@ export default function TradeDetailPage() {
 
       const updatedScreenshots = [...(trade.screenshots || []), ...newUrls];
       await base44.entities.TradeChecklist.update(tradeId, { screenshots: updatedScreenshots });
+      
+      // Force reload across all pages
+      if (window.queryClient) {
+        window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      }
+      
       await loadTrade();
     } catch (err) {
       console.error('Upload failed:', err);
@@ -82,6 +88,12 @@ export default function TradeDetailPage() {
     try {
       const updatedScreenshots = (trade.screenshots || []).filter((s) => s !== url);
       await base44.entities.TradeChecklist.update(tradeId, { screenshots: updatedScreenshots });
+      
+      // Force reload across all pages
+      if (window.queryClient) {
+        window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      }
+      
       await loadTrade();
     } catch (error) {
       console.error('Delete failed:', error);
@@ -97,6 +109,12 @@ export default function TradeDetailPage() {
         notes: editData.notes,
         status: editData.outcome !== 'pending' ? 'closed' : trade.status
       });
+      
+      // Force reload across all pages
+      if (window.queryClient) {
+        window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      }
+      
       await loadTrade();
       setEditing(false);
     } catch (error) {

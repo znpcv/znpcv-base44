@@ -29,6 +29,7 @@ export default function DashboardPage() {
     },
     staleTime: 0,
     refetchOnWindowFocus: true,
+    refetchInterval: 5000
   });
 
   const handleDeleteTrade = async (e, tradeId) => {

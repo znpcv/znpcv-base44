@@ -41,8 +41,9 @@ export default function TradeHistoryPage() {
       const allTrades = await base44.entities.TradeChecklist.list('-created_date', 100);
       return allTrades.filter(t => !t.deleted);
     },
-    staleTime: 1000 * 60,
-    refetchOnWindowFocus: false
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchInterval: 5000
   });
 
   const { data: deletedTrades = [] } = useQuery({
