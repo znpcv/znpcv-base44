@@ -75,8 +75,7 @@ export default function DashboardPage() {
       date.setDate(date.getDate() - i);
       const dateStr = format(date, 'yyyy-MM-dd');
       const dayTrades = checklists.filter(c => {
-        const tradeDate = c.trade_date || format(new Date(c.created_date), 'yyyy-MM-dd');
-        return tradeDate === dateStr;
+        return c.trade_date === dateStr;
       });
       const dayPnL = dayTrades
         .filter(t => t.outcome && t.outcome !== 'pending' && t.actual_pnl)
@@ -114,7 +113,7 @@ export default function DashboardPage() {
   const getTradesForDay = (date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
     return checklists.filter(c => {
-      const tradeDate = c.trade_date || format(new Date(c.created_date), 'yyyy-MM-dd');
+      const tradeDate = c.trade_date;
       return tradeDate === dateStr;
     });
   };
