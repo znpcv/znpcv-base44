@@ -171,8 +171,8 @@ export default function DashboardPage() {
                 darkMode ? "bg-black" : "bg-white shadow-lg")}>
                 <Plus className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8", darkMode ? "text-white" : "text-black")} />
               </div>
-              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider", darkMode ? "text-black" : "text-white")}>NEW ANALYSIS</div>
-              <div className={cn("text-xs sm:text-sm", darkMode ? "text-black/60" : "text-white/70")}>Start professional setup</div>
+              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</div>
+              <div className={cn("text-xs sm:text-sm", darkMode ? "text-black/60" : "text-white/70")}>{t('startProfessional')}</div>
             </div>
           </button>
 
@@ -186,8 +186,8 @@ export default function DashboardPage() {
                 darkMode ? "bg-white" : "bg-zinc-900 shadow-lg")}>
                 <Activity className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8", darkMode ? "text-black" : "text-white")} />
               </div>
-              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider mb-1", darkMode ? "text-white" : "text-black")}>TRADE JOURNAL</div>
-              <div className={cn("text-xs sm:text-sm", darkMode ? "text-zinc-400" : "text-zinc-600")}>Performance & Analytics</div>
+              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider mb-1", darkMode ? "text-white" : "text-black")}>{t('tradeJournal')}</div>
+              <div className={cn("text-xs sm:text-sm", darkMode ? "text-zinc-400" : "text-zinc-600")}>{t('performanceAnalytics')}</div>
             </div>
           </button>
         </motion.div>
@@ -197,8 +197,8 @@ export default function DashboardPage() {
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
-            { label: 'WIN RATE', value: `${stats.winRate}%`, icon: BarChart3 },
-            { label: 'EXECUTED', value: stats.executed, icon: Activity },
+            { label: t('winRate'), value: `${stats.winRate}%`, icon: BarChart3 },
+            { label: t('exec'), value: stats.executed, icon: Activity },
           ].map((stat, index) => (
             <motion.div key={stat.label} 
               initial={{ opacity: 0, scale: 0.95 }} 
@@ -223,9 +223,9 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
                   <h3 className={`text-lg sm:text-xl tracking-widest ${theme.text} flex items-center gap-2`}>
                     <div className="w-1.5 h-6 bg-teal-600 rounded-full" />
-                    RECENT TRADES
+                    {t('recentTrades')}
                   </h3>
-                  <div className={`text-xs ${theme.textMuted}`}>Last 8 trades</div>
+                  <div className={`text-xs ${theme.textMuted}`}>{t('last8')}</div>
                 </div>
                 <div className="flex gap-2">
                   {['all', 'win', 'loss'].map((f) => (
@@ -234,7 +234,7 @@ export default function DashboardPage() {
                         filter === f 
                           ? darkMode ? "bg-white text-black border-white shadow-md" : "bg-zinc-900 text-white border-zinc-900 shadow-md"
                           : darkMode ? "bg-zinc-900/50 text-zinc-400 border-zinc-800/50 hover:text-white hover:border-zinc-700" : "bg-white text-zinc-600 border-zinc-300 hover:text-black hover:border-zinc-400")}>
-                      {f.toUpperCase()}
+                      {f === 'all' ? t('all') : f === 'win' ? t('win') : t('loss')}
                     </button>
                   ))}
                 </div>
@@ -408,17 +408,17 @@ export default function DashboardPage() {
               </div>
               <div className={`mt-4 pt-4 border-t ${theme.border} grid grid-cols-3 gap-3`}>
                 <div className="text-center">
-                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>START</div>
+                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>{t('start')}</div>
                   <div className={`text-xs sm:text-sm font-bold ${theme.text}`}>$0.00</div>
                 </div>
                 <div className="text-center">
-                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>PEAK</div>
+                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>{t('peak')}</div>
                   <div className="text-xs sm:text-sm font-bold text-teal-600">
                     ${Math.max(...performanceData.map(d => d.cumulative), 0).toFixed(2)}
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>NOW</div>
+                  <div className={`text-[10px] ${theme.textMuted} mb-1`}>{t('now')}</div>
                   <div className={`text-xs sm:text-sm font-bold ${performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-teal-600' : 'text-rose-600'}`}>
                     ${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}
                   </div>
@@ -469,7 +469,7 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="text-center">
-                    <div className={`text-xs ${theme.textMuted}`}>TOTAL</div>
+                    <div className={`text-xs ${theme.textMuted}`}>{t('total')}</div>
                     <div className={`text-2xl font-bold ${theme.text}`}>{stats.longs + stats.shorts}</div>
                   </div>
                 </div>
@@ -483,7 +483,7 @@ export default function DashboardPage() {
                     </div>
                     <div className={`text-xl sm:text-2xl font-bold ${theme.text}`}>{item.value}</div>
                     <div className={`text-[10px] ${theme.textMuted} mt-1`}>
-                      {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}% OF TRADES
+                      {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}% {t('ofTrades')}
                     </div>
                   </div>
                 ))}
@@ -565,15 +565,15 @@ export default function DashboardPage() {
               <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 pt-4 border-t ${theme.border}">
                 <div className="flex items-center gap-1.5">
                   <div className={`w-3 h-3 rounded ${darkMode ? 'bg-teal-600/30 border border-teal-600/50' : 'bg-teal-100 border border-teal-300'}`} />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>WIN</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('win')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className={`w-3 h-3 rounded ${darkMode ? 'bg-rose-600/30 border border-rose-600/50' : 'bg-rose-100 border border-rose-300'}`} />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>LOSS</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('loss')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded bg-teal-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>TODAY</span>
+                  <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('today')}</span>
                 </div>
               </div>
             </motion.div>
@@ -593,7 +593,7 @@ export default function DashboardPage() {
                 </div>
                 <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textMuted} tracking-widest mb-4 sm:mb-5 font-bold`}>
                   <span className="hidden sm:inline">{t('avgCompletion')}</span>
-                  <span className="sm:hidden">AVG SCORE</span>
+                  <span className="sm:hidden">{t('avgScore')}</span>
                 </div>
                 
                 {/* Circular Progress - Kompakt */}
@@ -623,7 +623,7 @@ export default function DashboardPage() {
                 </div>
                 
                 <div className={`text-[9px] sm:text-xs ${theme.textMuted} font-sans px-2`}>
-                  {stats.avgCompletion >= 85 ? '✓ STANDARD' : 'Ziel: 85%+'}
+                  {stats.avgCompletion >= 85 ? t('standardZnpcv') : `${t('target')}: 85%+`}
                 </div>
               </div>
             </motion.div>

@@ -157,7 +157,7 @@ export default function TradeHistoryPage() {
               <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
             </button>
             <div className="min-w-0 flex-1">
-              <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-widest mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>HISTORY</h1>
+              <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-widest mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{t('tradeHistory')}</h1>
               <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
             </div>
           </div>
@@ -168,22 +168,22 @@ export default function TradeHistoryPage() {
           <div className={cn("border-2 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4" />
             <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2">${stats.totalPnL.toFixed(2)}</div>
-            <div className="text-[10px] sm:text-xs md:text-sm tracking-widest opacity-90">P&L</div>
+            <div className="text-[10px] sm:text-xs md:text-sm tracking-widest opacity-90">{t('pnl')}</div>
           </div>
           <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8 ${theme.bgSecondary}`}>
             <Award className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4 ${theme.text}`} />
             <div className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{stats.winRate}%</div>
-            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>WIN</div>
+            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>{t('win')}</div>
           </div>
           <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8 ${theme.bgSecondary}`}>
             <Target className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4 ${theme.text}`} />
             <div className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{stats.wins}/{stats.losses}</div>
-            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>W/L</div>
+            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>{t('winLoss')}</div>
           </div>
           <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8 ${theme.bgSecondary}`}>
             <Calendar className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4 ${theme.text}`} />
             <div className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{stats.executed}</div>
-            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>EXEC</div>
+            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>{t('exec')}</div>
           </div>
         </motion.div>
 
@@ -193,7 +193,7 @@ export default function TradeHistoryPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-3 sm:p-4 md:p-5 lg:p-6 border-b ${theme.border}`}>
-                <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.text} mb-2 sm:mb-3 md:mb-4`}>ALL TRADES</h3>
+                <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.text} mb-2 sm:mb-3 md:mb-4`}>{t('allTrades')}</h3>
                 <TradeFilters filter={filter} setFilter={setFilter} darkMode={darkMode} stats={stats} />
               </div>
 
@@ -245,7 +245,7 @@ export default function TradeHistoryPage() {
                             )}
                             {!trade.outcome && (
                               <span className="px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-blue-500 text-white text-[9px] sm:text-[10px] md:text-xs tracking-wider rounded-full font-bold">
-                                {trade.status === 'ready_to_trade' ? 'READY' : 'PEND'}
+                                {trade.status === 'ready_to_trade' ? t('readyToTradeShort') : t('pending')}
                               </span>
                             )}
                           </div>
@@ -262,9 +262,9 @@ export default function TradeHistoryPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-[9px] sm:text-[10px] md:text-xs">
-                        <span className={theme.textMuted}>Score: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
-                        {trade.risk_percent && <span className={theme.textMuted}>Risk: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>}
-                        {trade.entry_price && <span className={theme.textMuted}>Entry: <span className={`font-bold ${theme.text}`}>{trade.entry_price}</span></span>}
+                        <span className={theme.textMuted}>{t('avgScore')}: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                        {trade.risk_percent && <span className={theme.textMuted}>{t('risk')}: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>}
+                        {trade.entry_price && <span className={theme.textMuted}>{t('entry')}: <span className={`font-bold ${theme.text}`}>{trade.entry_price}</span></span>}
                       </div>
                     </div>
                   ))}
@@ -277,7 +277,7 @@ export default function TradeHistoryPage() {
           <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>WIN/LOSS</h3>
+              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>{t('winLoss')}</h3>
               <div className="h-32 sm:h-36 md:h-40 lg:h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>

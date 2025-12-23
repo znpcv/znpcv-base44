@@ -15,7 +15,7 @@ import { format } from 'date-fns';
 
 export default function AccountPage() {
   const navigate = useNavigate();
-  const { darkMode } = useLanguage();
+  const { t, darkMode } = useLanguage();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -108,14 +108,14 @@ export default function AccountPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (window.confirm('WARNUNG: Möchten Sie Ihr Konto wirklich dauerhaft löschen? Alle Ihre Daten werden unwiderruflich gelöscht.')) {
-      if (window.confirm('Dies kann nicht rückgängig gemacht werden. Sind Sie absolut sicher?')) {
+    if (window.confirm(t('confirmDeleteAccount'))) {
+      if (window.confirm(t('confirmDeleteFinal'))) {
         try {
           await base44.asServiceRole.entities.User.delete(user.id);
           await base44.auth.logout();
           navigate(createPageUrl('Home'));
         } catch (err) {
-          alert('Fehler beim Löschen des Kontos. Bitte kontaktieren Sie den Support.');
+          alert(t('deleteError'));
         }
       }
     }
@@ -164,7 +164,7 @@ export default function AccountPage() {
 
       <main className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-4 sm:mb-6 md:mb-8">ACCOUNT</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-4 sm:mb-6 md:mb-8">{t('account')}</h1>
 
           {/* Profile Header */}
           <div className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 mb-3 sm:mb-4 md:mb-6 ${theme.bgCard}`}>
@@ -192,13 +192,13 @@ export default function AccountPage() {
               <div className="flex-1 w-full">
                 <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                   <div className="flex-1 min-w-0">
-                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1 sm:mb-2`}>NAME</div>
+                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1 sm:mb-2`}>{t('name')}</div>
                     {editing ? (
                       <Input
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         className={`font-bold text-sm sm:text-base md:text-lg ${theme.border} mb-2 sm:mb-4 h-9 sm:h-10`}
-                        placeholder="Dein Name"
+                        placeholder={t('yourName')}
                       />
                     ) : (
                       <div className={`text-lg sm:text-xl md:text-2xl font-bold ${theme.text} mb-1 truncate`}>{user.full_name || '-'}</div>
@@ -210,7 +210,7 @@ export default function AccountPage() {
                       <>
                         <Button onClick={handleSave} disabled={saving} size="sm" className={`h-8 sm:h-9 md:h-10 text-xs sm:text-sm ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
                           <Save className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
-                          <span className="hidden sm:inline">{saving ? 'SAVE...' : 'SAVE'}</span>
+                          <span className="hidden sm:inline">{saving ? `${t('save')}...` : t('save')}</span>
                         </Button>
                         <Button onClick={() => { 
                           setEditing(false); 
@@ -230,7 +230,7 @@ export default function AccountPage() {
                     ) : (
                       <Button onClick={() => setEditing(true)} variant="outline" size="sm" className={`${theme.border} h-8 sm:h-9 md:h-10 text-xs sm:text-sm`}>
                         <Edit2 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
-                        <span className="hidden sm:inline">EDIT</span>
+                        <span className="hidden sm:inline">{t('edit')}</span>
                       </Button>
                     )}
                   </div>
@@ -239,18 +239,18 @@ export default function AccountPage() {
                 {/* Bio */}
                 {editing && (
                   <div className="mb-3 sm:mb-4">
-                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1.5 sm:mb-2`}>BIO</div>
+                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1.5 sm:mb-2`}>{t('bio')}</div>
                     <Textarea
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      placeholder="Erzähl etwas über dich..."
+                      placeholder={t('bioPlaceholder')}
                       className={`${theme.border} h-16 sm:h-20 resize-none text-xs sm:text-sm`}
                     />
                   </div>
                 )}
                 {!editing && bio && (
                   <div className="mb-3 sm:mb-4">
-                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1`}>BIO</div>
+                    <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary} mb-1`}>{t('bio')}</div>
                     <p className={`text-xs sm:text-sm ${theme.text}`}>{bio}</p>
                   </div>
                 )}
@@ -261,7 +261,7 @@ export default function AccountPage() {
               <div className={`p-3 sm:p-4 border ${theme.border} rounded-lg sm:rounded-xl`}>
                 <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
                   <Mail className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>EMAIL</span>
+                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>{t('myAccount')}</span>
                 </div>
                 <div className={`text-xs sm:text-sm md:text-base ${theme.text} break-all`}>{user.email}</div>
               </div>
@@ -269,7 +269,7 @@ export default function AccountPage() {
               <div className={`p-3 sm:p-4 border ${theme.border} rounded-lg sm:rounded-xl sm:col-span-2`}>
                 <div className="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
                   <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>PHONE</span>
+                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>{t('phone')}</span>
                 </div>
                 {editing ? (
                   <div className="flex gap-2">
@@ -302,7 +302,7 @@ export default function AccountPage() {
               <div className={`p-4 border ${theme.border} rounded-xl sm:col-span-2`}>
                 <div className="flex items-center gap-3 mb-2">
                   <MapPin className={`w-5 h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>LAND</span>
+                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>{t('country')}</span>
                 </div>
                 {editing ? (
                   <CountrySelect
@@ -320,7 +320,7 @@ export default function AccountPage() {
               <div className={`p-4 border ${theme.border} rounded-xl`}>
                 <div className="flex items-center gap-3 mb-2">
                   <Shield className={`w-5 h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>ROLLE</span>
+                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>{t('role')}</span>
                 </div>
                 <div className={`text-base ${theme.text} uppercase`}>{user.role}</div>
               </div>
@@ -328,7 +328,7 @@ export default function AccountPage() {
               <div className={`p-4 border ${theme.border} rounded-xl`}>
                 <div className="flex items-center gap-3 mb-2">
                   <Calendar className={`w-5 h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>REGISTRIERT SEIT</span>
+                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>{t('registeredSince')}</span>
                 </div>
                 <div className={`text-base ${theme.text}`}>
                   {format(new Date(user.created_date), 'dd.MM.yyyy')}
@@ -338,7 +338,7 @@ export default function AccountPage() {
               <div className={`p-4 border ${theme.border} rounded-xl`}>
                 <div className="flex items-center gap-3 mb-2">
                   <User className={`w-5 h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>USER ID</span>
+                  <span className={`text-xs tracking-wider ${theme.textSecondary}`}>{t('userId')}</span>
                 </div>
                 <div className={`text-base ${theme.text} font-mono text-xs break-all`}>
                   {user.id.substring(0, 12)}...
@@ -351,18 +351,18 @@ export default function AccountPage() {
           <div className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 mb-3 sm:mb-4 md:mb-6 ${theme.bgCard}`}>
             <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest mb-3 sm:mb-4 ${theme.text} flex items-center gap-1.5 sm:gap-2`}>
               <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
-              ADRESSE
+              {t('address')}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className={`sm:col-span-2`}>
                 <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
-                  STRASSE & HAUSNUMMER
+                  {t('street')}
                 </label>
                 {editing ? (
                   <Input
                     value={addressStreet}
                     onChange={(e) => setAddressStreet(e.target.value)}
-                    placeholder="Musterstraße 123"
+                    placeholder={t('street')}
                     className={`${theme.border}`}
                   />
                 ) : (
@@ -374,13 +374,13 @@ export default function AccountPage() {
 
               <div>
                 <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
-                  POSTLEITZAHL
+                  {t('postalCode')}
                 </label>
                 {editing ? (
                   <Input
                     value={addressPostalCode}
                     onChange={(e) => setAddressPostalCode(e.target.value)}
-                    placeholder="12345"
+                    placeholder={t('postalCode')}
                     className={`${theme.border}`}
                   />
                 ) : (
@@ -392,13 +392,13 @@ export default function AccountPage() {
 
               <div>
                 <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
-                  STADT
+                  {t('city')}
                 </label>
                 {editing ? (
                   <Input
                     value={addressCity}
                     onChange={(e) => setAddressCity(e.target.value)}
-                    placeholder="Berlin"
+                    placeholder={t('city')}
                     className={`${theme.border}`}
                   />
                 ) : (
@@ -410,7 +410,7 @@ export default function AccountPage() {
 
               <div className={`sm:col-span-2`}>
                 <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
-                  LAND DER ADRESSE
+                  {t('addressCountry')}
                 </label>
                 {editing ? (
                   <CountrySelect
@@ -435,37 +435,37 @@ export default function AccountPage() {
               className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
             >
               <Home className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
-              <span>HOME</span>
+              <span>{t('home')}</span>
             </Button>
             <Button 
               onClick={() => navigate(createPageUrl('Dashboard'))} 
               variant="outline" 
               className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border}`}
             >
-              DASHBOARD
+              {t('dashboard')}
             </Button>
             <Button 
               onClick={handleLogout} 
               className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white`}
             >
               <LogOut className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
-              <span className="hidden xs:inline">AUSLOGGEN</span>
-              <span className="xs:hidden">OUT</span>
+              <span className="hidden xs:inline">{t('logout')}</span>
+              <span className="xs:hidden">{t('out')}</span>
             </Button>
           </div>
 
           {/* Delete Account */}
           <div className={`border-2 border-rose-600/30 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 bg-rose-600/5`}>
-            <h3 className="text-rose-600 text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 font-bold">GEFAHRENZONE</h3>
+            <h3 className="text-rose-600 text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 font-bold">{t('dangerZone')}</h3>
             <p className={`${theme.textSecondary} text-xs sm:text-sm mb-3 sm:mb-4 font-sans`}>
-              Das Löschen Ihres Kontos ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden unwiderruflich gelöscht.
+              {t('deleteWarning')}
             </p>
             <Button 
               onClick={handleDeleteAccount}
               variant="outline"
               className="border-2 border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white h-9 sm:h-10 md:h-11 text-xs sm:text-sm font-bold"
             >
-              KONTO DAUERHAFT LÖSCHEN
+              {t('deletePermanently')}
             </Button>
           </div>
         </motion.div>
