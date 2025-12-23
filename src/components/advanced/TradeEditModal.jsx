@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import AssetSelector from '@/components/AssetSelector';
+import { format } from 'date-fns';
 
 export default function TradeEditModal({ trade, onClose, onSave, isCreating, darkMode }) {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
     outcome: trade.outcome || 'pending',
     actual_pnl: trade.actual_pnl || '',
     exit_date: trade.exit_date || '',
+    trade_date: trade.trade_date || format(new Date(), 'yyyy-MM-dd'),
     notes: trade.notes || '',
     completion_percentage: trade.completion_percentage || 0,
     status: trade.status || 'in_progress'
@@ -125,6 +127,17 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
               type="date"
               value={formData.exit_date}
               onChange={(e) => setFormData({ ...formData, exit_date: e.target.value })}
+              className={`${theme.border} h-10 sm:h-11 text-sm`} />
+
+          </div>
+
+          {/* Trade Date */}
+          <div>
+            <label className={`block ${theme.textSecondary} text-xs sm:text-sm mb-2 tracking-wider`}>TRADE DATUM</label>
+            <Input
+              type="date"
+              value={formData.trade_date}
+              onChange={(e) => setFormData({ ...formData, trade_date: e.target.value })}
               className={`${theme.border} h-10 sm:h-11 text-sm`} />
 
           </div>

@@ -109,10 +109,15 @@ export default function TradeHistoryPage() {
   };
 
   const handleSaveTrade = (data) => {
+    const tradeData = {
+      ...data,
+      trade_date: data.trade_date || format(new Date(), 'yyyy-MM-dd')
+    };
+    
     if (creatingNew) {
-      createTradeMutation.mutate(data);
+      createTradeMutation.mutate(tradeData);
     } else {
-      updateTradeMutation.mutate({ id: editingTrade.id, data });
+      updateTradeMutation.mutate({ id: editingTrade.id, data: tradeData });
     }
   };
 
@@ -124,6 +129,7 @@ export default function TradeHistoryPage() {
       outcome: 'pending',
       actual_pnl: '',
       exit_date: '',
+      trade_date: format(new Date(), 'yyyy-MM-dd'),
       notes: '',
       completion_percentage: 0,
       status: 'in_progress'
