@@ -103,9 +103,14 @@ export default function ChecklistPage() {
   }, []);
 
   const loadChecklist = async () => {
-    const data = await base44.entities.TradeChecklist.filter({ id: checklistId });
-    if (data.length > 0) setFormData(prev => ({ ...prev, ...data[0] }));
-    setIsLoading(false);
+    try {
+      const data = await base44.entities.TradeChecklist.filter({ id: checklistId });
+      if (data.length > 0) setFormData(prev => ({ ...prev, ...data[0] }));
+    } catch (error) {
+      console.error('Load failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const update = (key, value) => setFormData(prev => ({ ...prev, [key]: value }));
@@ -135,18 +140,22 @@ export default function ChecklistPage() {
   const hasConfluence = formData.w_trend && formData.d_trend && formData.h4_trend &&
     formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend;
 
-  // Auto-Save Feature - saves every 3 seconds after changes
+  // Auto-Save Feature - saves every 2 seconds after changes
   useEffect(() => {
-    if (!formData.pair || !checklistId) return; // Only auto-save existing checklists
+    if (!formData.pair || !checklistId) return;
     
     const timer = setTimeout(async () => {
-      const data = { 
-        ...formData, 
-        completion_percentage: progress, 
-        status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
-      };
-      await base44.entities.TradeChecklist.update(checklistId, data);
-    }, 3000);
+      try {
+        const data = { 
+          ...formData, 
+          completion_percentage: progress, 
+          status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
+        };
+        await base44.entities.TradeChecklist.update(checklistId, data);
+      } catch (error) {
+        console.error('Auto-save failed:', error);
+      }
+    }, 2000);
     
     return () => clearTimeout(timer);
   }, [formData, progress, checklistId]);
@@ -233,23 +242,32 @@ export default function ChecklistPage() {
       return;
     }
     
-    setSaving(true);
-    const data = { 
-      ...formData, 
-      completion_percentage: progress, 
-      status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
-    };
-    
-    if (checklistId) await base44.entities.TradeChecklist.update(checklistId, data);
-    else await base44.entities.TradeChecklist.create(data);
-    
-    setSaving(false);
-    navigate(createPageUrl('Dashboard'));
+    try {
+      setSaving(true);
+      const data = { 
+        ...formData, 
+        completion_percentage: progress, 
+        status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
+      };
+      
+      if (checklistId) await base44.entities.TradeChecklist.update(checklistId, data);
+      else await base44.entities.TradeChecklist.create(data);
+      
+      navigate(createPageUrl('Dashboard'));
+    } catch (error) {
+      console.error('Save failed:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async () => {
-    if (checklistId) await base44.entities.TradeChecklist.delete(checklistId);
-    navigate(createPageUrl('Dashboard'));
+    try {
+      if (checklistId) await base44.entities.TradeChecklist.delete(checklistId);
+      navigate(createPageUrl('Dashboard'));
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
   };
 
   const getGrade = (p) => {

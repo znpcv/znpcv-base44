@@ -25,6 +25,8 @@ export default function TradeHistoryPage() {
   const { data: checklists = [], isLoading } = useQuery({
     queryKey: ['checklists'],
     queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
   });
 
   const updateTradeMutation = useMutation({
@@ -33,6 +35,7 @@ export default function TradeHistoryPage() {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
       setEditingTrade(null);
     },
+    onError: (error) => console.error('Update failed:', error),
   });
 
   const createTradeMutation = useMutation({
@@ -41,6 +44,7 @@ export default function TradeHistoryPage() {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
       setCreatingNew(false);
     },
+    onError: (error) => console.error('Create failed:', error),
   });
 
   const deleteTradeMutation = useMutation({
@@ -48,6 +52,7 @@ export default function TradeHistoryPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
     },
+    onError: (error) => console.error('Delete failed:', error),
   });
 
   const handleDeleteTrade = async (e, tradeId) => {

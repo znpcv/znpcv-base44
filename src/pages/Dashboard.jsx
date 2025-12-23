@@ -25,6 +25,8 @@ export default function DashboardPage() {
   const { data: checklists = [], isLoading, refetch } = useQuery({
     queryKey: ['checklists'],
     queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false,
   });
 
   const handleDeleteTrade = async (e, tradeId) => {
@@ -263,7 +265,12 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className={`divide-y ${darkMode ? 'divide-zinc-800/50' : 'divide-zinc-200/50'} max-h-[650px] overflow-y-auto`}>
-                  {recentTrades.filter(t => filter === 'all' || (filter === 'win' && t.outcome === 'win') || (filter === 'loss' && t.outcome === 'loss')).slice(0, 8).map((trade, idx) => (
+                  {recentTrades.filter(t => 
+                    filter === 'all' || 
+                    (filter === 'win' && t.outcome === 'win') || 
+                    (filter === 'loss' && t.outcome === 'loss') ||
+                    (filter === 'pending' && (!t.outcome || t.outcome === 'pending'))
+                  ).slice(0, 8).map((trade, idx) => (
                     <motion.div key={trade.id} 
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}

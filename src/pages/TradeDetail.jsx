@@ -50,7 +50,7 @@ export default function TradeDetailPage() {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error('Load failed:', err);
     } finally {
       setLoading(false);
     }
@@ -60,8 +60,8 @@ export default function TradeDetailPage() {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    setUploading(true);
     try {
+      setUploading(true);
       const uploadPromises = files.map(file => 
         base44.integrations.Core.UploadFile({ file })
       );
@@ -72,28 +72,36 @@ export default function TradeDetailPage() {
       await base44.entities.TradeChecklist.update(tradeId, { screenshots: updatedScreenshots });
       await loadTrade();
     } catch (err) {
-      console.error(err);
+      console.error('Upload failed:', err);
     } finally {
       setUploading(false);
     }
   };
 
   const handleDeleteImage = async (url) => {
-    const updatedScreenshots = (trade.screenshots || []).filter(s => s !== url);
-    await base44.entities.TradeChecklist.update(tradeId, { screenshots: updatedScreenshots });
-    await loadTrade();
+    try {
+      const updatedScreenshots = (trade.screenshots || []).filter(s => s !== url);
+      await base44.entities.TradeChecklist.update(tradeId, { screenshots: updatedScreenshots });
+      await loadTrade();
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
   };
 
   const handleSaveOutcome = async () => {
-    await base44.entities.TradeChecklist.update(tradeId, {
-      outcome: editData.outcome,
-      actual_pnl: editData.actual_pnl,
-      exit_date: editData.exit_date,
-      notes: editData.notes,
-      status: editData.outcome !== 'pending' ? 'closed' : trade.status
-    });
-    await loadTrade();
-    setEditing(false);
+    try {
+      await base44.entities.TradeChecklist.update(tradeId, {
+        outcome: editData.outcome,
+        actual_pnl: editData.actual_pnl,
+        exit_date: editData.exit_date,
+        notes: editData.notes,
+        status: editData.outcome !== 'pending' ? 'closed' : trade.status
+      });
+      await loadTrade();
+      setEditing(false);
+    } catch (error) {
+      console.error('Save failed:', error);
+    }
   };
 
   const theme = {

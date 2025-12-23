@@ -49,6 +49,7 @@ export default function AccountPage() {
       setAddressPostalCode(userData.address_postal_code || '');
       setAddressCountry(userData.address_country || '');
     } catch (err) {
+      console.error('Load user failed:', err);
       navigate(createPageUrl('Home'));
     } finally {
       setLoading(false);
@@ -56,8 +57,8 @@ export default function AccountPage() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
     try {
+      setSaving(true);
       await base44.auth.updateMe({ 
         full_name: fullName,
         phone: phone,
@@ -72,7 +73,7 @@ export default function AccountPage() {
       await loadUser();
       setEditing(false);
     } catch (err) {
-      console.error(err);
+      console.error('Save failed:', err);
     } finally {
       setSaving(false);
     }
@@ -90,13 +91,13 @@ export default function AccountPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploading(true);
     try {
+      setUploading(true);
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       await base44.auth.updateMe({ profile_image: file_url });
       await loadUser();
     } catch (err) {
-      console.error(err);
+      console.error('Upload failed:', err);
     } finally {
       setUploading(false);
     }
