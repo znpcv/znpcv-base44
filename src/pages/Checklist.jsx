@@ -861,107 +861,189 @@ export default function ChecklistPage() {
 
           {/* STEP 6: Final */}
           {currentStep === 6 && (
-            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4 md:space-y-5">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
-              {/* Final Rule Confirmation - Compact */}
-              <div className={`border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 ${darkMode ? 'border-white/20 bg-gradient-to-br from-zinc-900 to-zinc-950' : 'border-zinc-300 bg-gradient-to-br from-zinc-100 to-zinc-50'}`}>
-                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-5">
-                  <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
-                    <Shield className={`w-4 h-4 sm:w-5 sm:h-5 md:w-7 md:h-7 ${darkMode ? 'text-black' : 'text-white'}`} />
+              {/* Final Score Display - Hero */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }}
+                className={cn(
+                  "relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl border-2 p-6 sm:p-8 md:p-10 lg:p-12",
+                  progress >= 100 ? "bg-gradient-to-br from-teal-600 to-teal-700 border-teal-500" :
+                  progress >= 90 ? "bg-gradient-to-br from-teal-500 to-teal-600 border-teal-400" :
+                  progress >= 85 ? "bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400" :
+                  progress >= 70 ? "bg-gradient-to-br from-amber-500 to-amber-600 border-amber-400" :
+                  darkMode ? "bg-gradient-to-br from-zinc-900 to-black border-rose-600" : "bg-gradient-to-br from-zinc-100 to-zinc-200 border-rose-600"
+                )}
+              >
+                {/* Decorative background elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-white/5 rounded-full -translate-y-16 translate-x-16" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-black/5 rounded-full translate-y-12 -translate-x-12" />
+                
+                <div className="relative z-10 text-center">
+                  {/* Grade Badge */}
+                  <div className={cn("inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full mb-4 sm:mb-5 md:mb-6",
+                    progress >= 70 ? "bg-white/20 backdrop-blur-sm" : darkMode ? "bg-white/10 backdrop-blur-sm" : "bg-black/10 backdrop-blur-sm")}>
+                    <div className={cn("text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                      {gradeInfo.grade}
+                    </div>
                   </div>
-                  <div>
-                    <div className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm md:text-base lg:text-lg`}>{t('confirmRule')}</div>
-                    <div className={`${theme.textMuted} text-[10px] sm:text-xs font-sans`}>ZNPCV Regel</div>
+                  
+                  {/* Score */}
+                  <div className={cn("text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light mb-2 sm:mb-3", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                    {progress}<span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl opacity-50">%</span>
+                  </div>
+                  
+                  {/* Status Message */}
+                  <div className={cn("text-sm sm:text-base md:text-lg tracking-widest mb-4 sm:mb-5 md:mb-6", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>
+                    {progress >= 85 ? `✓ ${t('readyToTradeLabel').toUpperCase()}` : t('notRecommended').toUpperCase()}
+                  </div>
+                  
+                  {/* Score Breakdown Grid */}
+                  <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4 max-w-md mx-auto">
+                    {[
+                      { label: 'W', score: weeklyScore, max: 60 },
+                      { label: 'D', score: dailyScore, max: 60 },
+                      { label: '4H', score: h4Score, max: 35 },
+                      { label: 'E', score: entryScore, max: 25 }
+                    ].map((item) => (
+                      <div key={item.label} className={cn("rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4",
+                        progress >= 70 ? "bg-white/10 backdrop-blur-sm" : darkMode ? "bg-white/5 backdrop-blur-sm" : "bg-black/5 backdrop-blur-sm")}>
+                        <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-wider mb-1", progress >= 70 ? "text-white/60" : darkMode ? "text-white/50" : "text-black/50")}>
+                          {item.label}
+                        </div>
+                        <div className={cn("text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                          {item.score}
+                        </div>
+                        <div className={cn("text-[9px] sm:text-[10px] md:text-xs", progress >= 70 ? "text-white/50" : darkMode ? "text-white/40" : "text-black/40")}>
+                          /{item.max}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* ZNPCV Rule Confirmation */}
+              <div className={`border-2 rounded-xl sm:rounded-2xl overflow-hidden ${darkMode ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-300 bg-zinc-50'}`}>
+                <div className={`p-3 sm:p-4 md:p-5 border-b ${darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100'}`}>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                      <Shield className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
+                    </div>
+                    <div>
+                      <div className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm md:text-base`}>{t('confirmRule')}</div>
+                      <div className={`${theme.textMuted} text-[10px] sm:text-xs font-sans`}>ZNPCV Golden Rule</div>
+                    </div>
                   </div>
                 </div>
                 
-                {formData.direction === 'long' && (
-                  <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-3 sm:p-4 md:p-5 border-2 rounded-lg sm:rounded-xl flex items-center gap-2.5 sm:gap-3 md:gap-4 transition-all text-left",
-                      formData.confirms_rule 
-                        ? "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/20" 
-                        : darkMode ? "border-zinc-700 hover:border-teal-600/50 bg-zinc-900" : "border-zinc-300 hover:border-teal-600/50 bg-zinc-50")}>
-                    <div className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 border-2 flex items-center justify-center rounded-lg sm:rounded-xl transition-all flex-shrink-0",
-                      formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-teal-600" strokeWidth={3} />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm md:text-base mb-0.5 sm:mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
-                        {t('buyInAboveAoi')}
+                <div className="p-3 sm:p-4 md:p-5">
+                  {formData.direction === 'long' && (
+                    <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
+                      className={cn("w-full p-4 sm:p-5 md:p-6 border-2 rounded-xl sm:rounded-2xl flex items-center gap-3 sm:gap-4 transition-all text-left group",
+                        formData.confirms_rule 
+                          ? "bg-teal-600 border-teal-500 text-white shadow-xl shadow-teal-600/30" 
+                          : darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-950 hover:bg-zinc-900" : "border-zinc-300 hover:border-teal-600/50 bg-white hover:bg-zinc-50")}>
+                      <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 border-2 flex items-center justify-center rounded-xl transition-all flex-shrink-0",
+                        formData.confirms_rule ? "border-white bg-white scale-110 shadow-lg" : darkMode ? "border-zinc-700 group-hover:border-zinc-600" : "border-zinc-400 group-hover:border-zinc-500")}>
+                        {formData.confirms_rule && <Check className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-teal-600" strokeWidth={3} />}
                       </div>
-                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-teal-100" : "text-zinc-500")}>
-                        ✓ {t('notBuyResistance')}
+                      <div className="flex-1 min-w-0">
+                        <div className={cn("font-bold tracking-wider text-sm sm:text-base md:text-lg mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                          {t('buyInAboveAoi')}
+                        </div>
+                        <div className={cn("text-xs sm:text-sm font-sans", formData.confirms_rule ? "text-teal-100" : theme.textMuted)}>
+                          ✓ {t('notBuyResistance')}
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                )}
-                
-                {formData.direction === 'short' && (
-                  <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-3 sm:p-4 md:p-5 border-2 rounded-lg sm:rounded-xl flex items-center gap-2.5 sm:gap-3 md:gap-4 transition-all text-left",
-                      formData.confirms_rule 
-                        ? "bg-rose-600 border-rose-500 text-white shadow-lg shadow-rose-600/20" 
-                        : darkMode ? "border-zinc-700 hover:border-rose-600/50 bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-zinc-50")}>
-                    <div className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 border-2 flex items-center justify-center rounded-lg sm:rounded-xl transition-all flex-shrink-0",
-                      formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-600" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-rose-600" strokeWidth={3} />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm md:text-base mb-0.5 sm:mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
-                        {t('sellInBelowAoi')}
+                    </button>
+                  )}
+                  
+                  {formData.direction === 'short' && (
+                    <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
+                      className={cn("w-full p-4 sm:p-5 md:p-6 border-2 rounded-xl sm:rounded-2xl flex items-center gap-3 sm:gap-4 transition-all text-left group",
+                        formData.confirms_rule 
+                          ? "bg-rose-600 border-rose-500 text-white shadow-xl shadow-rose-600/30" 
+                          : darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-950 hover:bg-zinc-900" : "border-zinc-300 hover:border-rose-600/50 bg-white hover:bg-zinc-50")}>
+                      <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 border-2 flex items-center justify-center rounded-xl transition-all flex-shrink-0",
+                        formData.confirms_rule ? "border-white bg-white scale-110 shadow-lg" : darkMode ? "border-zinc-700 group-hover:border-zinc-600" : "border-zinc-400 group-hover:border-zinc-500")}>
+                        {formData.confirms_rule && <Check className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-600" strokeWidth={3} />}
                       </div>
-                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-rose-100" : "text-zinc-500")}>
-                        ✓ {t('notSellSupport')}
+                      <div className="flex-1 min-w-0">
+                        <div className={cn("font-bold tracking-wider text-sm sm:text-base md:text-lg mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                          {t('sellInBelowAoi')}
+                        </div>
+                        <div className={cn("text-xs sm:text-sm font-sans", formData.confirms_rule ? "text-rose-100" : theme.textMuted)}>
+                          ✓ {t('notSellSupport')}
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                )}
+                    </button>
+                  )}
 
-                {!formData.direction && (
-                  <div className={`${theme.textMuted} text-center py-6 sm:py-8 font-sans`}>
-                    <Shield className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-2 sm:mb-3 ${theme.textMuted}`} />
-                    <div className="text-xs sm:text-sm">{t('selectDirFirst')}</div>
-                  </div>
-                )}
-              </div>
-
-              {/* Trade Summary - Compact */}
-              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 ${theme.bgSecondary}`}>
-                <h3 className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm md:text-base mb-3 sm:mb-4`}>{t('tradeSummary')}</h3>
-                
-                <div className="space-y-1.5 sm:space-y-2">
-                  <SummaryRow label="PAIR" value={formData.pair || '-'} />
-                  <SummaryRow label="DIR" 
-                    value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
-                    color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
-                  <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
-                  <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
-                  <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
-                  <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
-                  <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
-                  {riskCalc && (
-                    <>
-                      <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
-                      <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
-                      <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
-                    </>
+                  {!formData.direction && (
+                    <div className={`${theme.textMuted} text-center py-8 sm:py-10 md:py-12 font-sans`}>
+                      <Shield className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 mx-auto mb-3 sm:mb-4 ${theme.textMuted}`} />
+                      <div className="text-xs sm:text-sm md:text-base">{t('selectDirFirst')}</div>
+                    </div>
                   )}
                 </div>
               </div>
 
-              {/* Notes - Compact */}
-              <div>
-                <label className={`block ${theme.textMuted} tracking-widest text-[10px] sm:text-xs mb-1.5 sm:mb-2`}>{t('notesOptional')}</label>
-                <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
-                  className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[60px] sm:min-h-[80px] rounded-lg sm:rounded-xl font-sans text-xs sm:text-sm`} />
+              {/* Trade Details Grid */}
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+                {/* Trade Summary */}
+                <div className={`border-2 ${theme.borderCard} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgSecondary}`}>
+                  <h3 className={`${theme.text} font-bold tracking-widest text-sm sm:text-base md:text-lg mb-3 sm:mb-4 flex items-center gap-2`}>
+                    <div className={`w-1 h-5 sm:h-6 md:h-7 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                    {t('tradeSummary')}
+                  </h3>
+                  
+                  <div className="space-y-2 sm:space-y-2.5">
+                    <SummaryRow label="PAIR" value={formData.pair || '-'} />
+                    <SummaryRow label="DIR" 
+                      value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
+                      color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
+                    <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
+                    <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
+                    <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
+                    <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
+                    <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
+                    {riskCalc && (
+                      <>
+                        <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
+                        <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
+                        <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Notes */}
+                <div className={`border-2 ${theme.borderCard} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgSecondary}`}>
+                  <h3 className={`${theme.text} font-bold tracking-widest text-sm sm:text-base md:text-lg mb-3 sm:mb-4 flex items-center gap-2`}>
+                    <div className={`w-1 h-5 sm:h-6 md:h-7 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                    {t('notesOptional')}
+                  </h3>
+                  <Textarea 
+                    value={formData.notes} 
+                    onChange={(e) => update('notes', e.target.value)} 
+                    placeholder={t('notesPlaceholderLong')}
+                    className={cn("min-h-[120px] sm:min-h-[140px] md:min-h-[160px] rounded-xl font-sans text-xs sm:text-sm",
+                      darkMode 
+                        ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' 
+                        : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'
+                    )}
+                  />
+                </div>
               </div>
 
-              {/* Screenshot Upload - Before & After */}
-              <div className="grid md:grid-cols-2 gap-2 sm:gap-3">
+              {/* Screenshot Upload */}
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                 <ScreenshotUpload 
                   label="SETUP CHARTS"
-                  description="Vor Trade-Einstieg"
+                  description="Before Entry"
                   screenshots={formData.screenshots_before || []} 
                   onUpload={async (files) => {
                     const uploadPromises = files.map(file => 
@@ -980,7 +1062,7 @@ export default function ChecklistPage() {
                 
                 <ScreenshotUpload 
                   label="RESULT CHARTS"
-                  description="Nach Trade-Exit"
+                  description="After Exit"
                   screenshots={formData.screenshots_after || []} 
                   onUpload={async (files) => {
                     const uploadPromises = files.map(file => 
@@ -998,64 +1080,22 @@ export default function ChecklistPage() {
                 />
               </div>
 
-              {/* Final Grade - Compact */}
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className={cn("p-5 sm:p-6 md:p-8 text-center rounded-lg sm:rounded-xl md:rounded-2xl border-2",
-                  progress >= 100 ? "bg-teal-600 border-teal-500" :
-                  progress >= 90 ? "bg-teal-500 border-teal-400" :
-                  progress >= 85 ? "bg-blue-500 border-blue-400" :
-                  progress >= 70 ? "bg-amber-500 border-amber-400" :
-                  "bg-zinc-900 border-rose-600")}>
-                <div className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-1", progress >= 70 ? "text-black" : "text-white")}>{gradeInfo.grade}</div>
-                <div className={cn("text-xl sm:text-2xl md:text-3xl tracking-widest mb-1 sm:mb-2", progress >= 70 ? "text-black/80" : "text-white")}>{progress}%</div>
-                {progress >= 85 ? (
-                  <div className={cn("text-xs sm:text-sm font-sans", progress >= 70 ? "text-black/60" : "text-white/60")}>✓ {t('readyToTradeLabel')}</div>
-                ) : (
-                  <div className="text-xs sm:text-sm font-sans text-white/80">
-                    {t('notRecommended')}
-                  </div>
-                )}
-              </motion.div>
-
-              {/* Score Breakdown - Compact */}
-              <div className={`p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
-                <div className={`text-[9px] sm:text-[10px] md:text-xs ${theme.textDimmed} tracking-widest mb-2 text-center`}>{t('pointsBreakdown')}</div>
-                <div className="grid grid-cols-4 gap-1 sm:gap-1.5 md:gap-2 text-center">
-                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>W</div>
-                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{weeklyScore}/60</div>
-                  </div>
-                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>D</div>
-                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{dailyScore}/60</div>
-                  </div>
-                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>4H</div>
-                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{h4Score}/35</div>
-                  </div>
-                  <div className={`p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[8px] sm:text-[9px] md:text-[10px]`}>E</div>
-                    <div className={`${theme.text} font-bold text-[10px] sm:text-xs md:text-sm`}>{entryScore}/25</div>
-                  </div>
-                </div>
-                <div className={`mt-1.5 sm:mt-2 p-1.5 sm:p-2 rounded-md sm:rounded-lg text-center font-bold text-xs sm:text-sm md:text-base ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                  {t('total')}: {progress}/180
-                </div>
+              {/* ZNPCV Quote */}
+              <div className="mt-6 sm:mt-8 md:mt-10">
+                <TradingQuote variant="minimal" />
               </div>
 
-              {/* ZNPCV Logo - Compact */}
-            <div className="flex justify-center items-center my-4 sm:my-6 md:my-8">
-              <img 
-                src={darkMode 
-                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                }
-                alt="ZNPCV" 
-                className="h-14 sm:h-20 md:h-24 lg:h-28 w-auto opacity-30"
-              />
-            </div>
-
-            <TradingQuote variant="minimal" />
+              {/* ZNPCV Logo */}
+              <div className="flex justify-center items-center py-4 sm:py-6 md:py-8">
+                <img 
+                  src={darkMode 
+                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                  }
+                  alt="ZNPCV" 
+                  className="h-14 sm:h-20 md:h-24 lg:h-32 w-auto opacity-20"
+                />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
