@@ -164,7 +164,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-4 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
+          className="grid md:grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-10 lg:mb-14"
         >
           {/* New Analysis - Compact */}
           <button
@@ -203,7 +203,7 @@ export default function HomePage() {
             </div>
           </button>
 
-          {/* Dashboard */}
+          {/* Dashboard - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
@@ -241,9 +241,9 @@ export default function HomePage() {
             </div>
           </button>
 
-          {/* Reports */}
+          {/* Trade History */}
           <button
-            onClick={() => navigate(createPageUrl('Reports'))}
+            onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
               darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}
           >
@@ -257,15 +257,15 @@ export default function HomePage() {
                   darkMode ? "bg-white" : "bg-black")}>
                   <History className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
-                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-blue-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-purple-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
-                  EXPORT
+                  LOG
                 </div>
-                </div>
+              </div>
 
-                <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>REPORTS</h2>
-                <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
-                PDF/CSV Export & Performance Analytics
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('performanceAnalytics')}
               </p>
 
               <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
@@ -396,12 +396,6 @@ export default function HomePage() {
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
                   <History className={`w-4 h-4 ${theme.textMuted} group-hover:text-teal-600 transition-colors`} />
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Trade History</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
-                <button onClick={() => navigate(createPageUrl('Reports'))} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <BarChart3 className={`w-4 h-4 ${theme.textMuted} group-hover:text-teal-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Reports & Export</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
                 <button onClick={() => navigate(createPageUrl('FAQ'))} 
