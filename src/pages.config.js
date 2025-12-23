@@ -1,31 +1,31 @@
-import Checklist from './pages/Checklist';
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import FAQ from './pages/FAQ';
-import TradeHistory from './pages/TradeHistory';
-import Register from './pages/Register';
 import AGB from './pages/AGB';
-import Datenschutz from './pages/Datenschutz';
-import Impressum from './pages/Impressum';
 import Account from './pages/Account';
-import TradeDetail from './pages/TradeDetail';
+import Checklist from './pages/Checklist';
 import CodeExport from './pages/CodeExport';
+import Dashboard from './pages/Dashboard';
+import Datenschutz from './pages/Datenschutz';
+import FAQ from './pages/FAQ';
+import Home from './pages/Home';
+import Impressum from './pages/Impressum';
+import Register from './pages/Register';
+import TradeDetail from './pages/TradeDetail';
+import TradeHistory from './pages/TradeHistory';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Checklist": Checklist,
-    "Home": Home,
-    "Dashboard": Dashboard,
-    "FAQ": FAQ,
-    "TradeHistory": TradeHistory,
-    "Register": Register,
     "AGB": AGB,
-    "Datenschutz": Datenschutz,
-    "Impressum": Impressum,
     "Account": Account,
-    "TradeDetail": TradeDetail,
+    "Checklist": Checklist,
     "CodeExport": CodeExport,
+    "Dashboard": Dashboard,
+    "Datenschutz": Datenschutz,
+    "FAQ": FAQ,
+    "Home": Home,
+    "Impressum": Impressum,
+    "Register": Register,
+    "TradeDetail": TradeDetail,
+    "TradeHistory": TradeHistory,
 }
 
 export const pagesConfig = {

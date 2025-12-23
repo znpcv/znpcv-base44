@@ -80,6 +80,8 @@ export default function ChecklistPage() {
     risk_percent: '1',
     leverage: '100',
     screenshots: [],
+    screenshots_before: [],
+    screenshots_after: [],
     
     // Final Rules
     confirms_rule: false,
@@ -838,21 +840,44 @@ export default function ChecklistPage() {
                   className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[60px] sm:min-h-[80px] rounded-lg sm:rounded-xl font-sans text-xs sm:text-sm`} />
               </div>
 
-              {/* Screenshot Upload */}
-              <ScreenshotUpload 
-                screenshots={formData.screenshots || []} 
-                onUpload={async (files) => {
-                  const uploadPromises = files.map(file => 
-                    base44.integrations.Core.UploadFile({ file })
-                  );
-                  const results = await Promise.all(uploadPromises);
-                  const newUrls = results.map(r => r.file_url);
-                  update('screenshots', [...(formData.screenshots || []), ...newUrls]);
-                }}
-                onDelete={(url) => {
-                  update('screenshots', (formData.screenshots || []).filter(s => s !== url));
-                }}
-              />
+              {/* Screenshot Upload - Before & After */}
+              <div className="space-y-3 sm:space-y-4">
+                <ScreenshotUpload 
+                  label="📸 VORHER (Setup)"
+                  description="Chart-Screenshots VOR dem Trade-Einstieg"
+                  screenshots={formData.screenshots_before || []} 
+                  onUpload={async (files) => {
+                    const uploadPromises = files.map(file => 
+                      base44.integrations.Core.UploadFile({ file })
+                    );
+                    const results = await Promise.all(uploadPromises);
+                    const newUrls = results.map(r => r.file_url);
+                    update('screenshots_before', [...(formData.screenshots_before || []), ...newUrls]);
+                  }}
+                  onDelete={(url) => {
+                    update('screenshots_before', (formData.screenshots_before || []).filter(s => s !== url));
+                  }}
+                  darkMode={darkMode}
+                />
+                
+                <ScreenshotUpload 
+                  label="📊 NACHHER (Ergebnis)"
+                  description="Chart-Screenshots NACH dem Trade-Exit"
+                  screenshots={formData.screenshots_after || []} 
+                  onUpload={async (files) => {
+                    const uploadPromises = files.map(file => 
+                      base44.integrations.Core.UploadFile({ file })
+                    );
+                    const results = await Promise.all(uploadPromises);
+                    const newUrls = results.map(r => r.file_url);
+                    update('screenshots_after', [...(formData.screenshots_after || []), ...newUrls]);
+                  }}
+                  onDelete={(url) => {
+                    update('screenshots_after', (formData.screenshots_after || []).filter(s => s !== url));
+                  }}
+                  darkMode={darkMode}
+                />
+              </div>
 
               {/* Final Grade - Compact */}
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
@@ -1136,8 +1161,7 @@ function SummaryRow({ label, value, color }) {
   );
 }
 
-function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
-  const { darkMode } = useLanguage();
+function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete, darkMode }) {
   const [uploadingLocal, setUploadingLocal] = useState(false);
 
   const theme = {
@@ -1161,10 +1185,15 @@ function ScreenshotUpload({ screenshots, onUpload, onDelete }) {
   };
 
   return (
-    <div>
-      <label className={`block ${theme.textSecondary} tracking-widest text-[10px] sm:text-xs mb-2 sm:mb-3`}>
-        SCREENSHOTS
+    <div className={`border-2 rounded-xl p-3 sm:p-4 ${darkMode ? 'border-zinc-800/50 bg-zinc-950/50' : 'border-zinc-300/50 bg-zinc-100/50'}`}>
+      <label className={`block ${theme.text} font-bold tracking-widest text-xs sm:text-sm mb-1`}>
+        {label || 'SCREENSHOTS'}
       </label>
+      {description && (
+        <p className={`${theme.textSecondary} text-[10px] sm:text-xs mb-2 sm:mb-3 font-sans`}>
+          {description}
+        </p>
+      )}
       
       {screenshots && screenshots.length > 0 && (
         <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-2 sm:mb-3">
