@@ -161,6 +161,7 @@ export default function ChecklistPage() {
       try {
         const data = {
           ...formData,
+          trade_date: formData.trade_date || format(new Date(), 'yyyy-MM-dd'),
           completion_percentage: progress,
           status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
         };
@@ -264,6 +265,7 @@ export default function ChecklistPage() {
       setSaving(true);
       const data = {
         ...formData,
+        trade_date: formData.trade_date || format(new Date(), 'yyyy-MM-dd'),
         completion_percentage: progress,
         status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
       };
