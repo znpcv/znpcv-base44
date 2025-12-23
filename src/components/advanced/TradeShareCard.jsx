@@ -58,13 +58,21 @@ export default function TradeShareCard({ trade, darkMode }) {
     canvas.toBlob(async (blob) => {
       const file = new File([blob], `ZNPCV_${trade.pair}.png`, { type: 'image/png' });
 
-      if (navigator.share && navigator.canShare({ files: [file] })) {
+      if (navigator.share) {
         try {
-          await navigator.share({
-            files: [file],
-            title: `ZNPCV Trade - ${trade.pair}`,
-            text: `${trade.pair} ${trade.direction?.toUpperCase()} - Score: ${scores.total}%`
-          });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: `ZNPCV Trade - ${trade.pair}`,
+              text: `${trade.pair} ${trade.direction?.toUpperCase()} - Score: ${scores.total}%`
+            });
+          } else {
+            await navigator.share({
+              title: `ZNPCV Trade - ${trade.pair}`,
+              text: `${trade.pair} ${trade.direction?.toUpperCase()} - Score: ${scores.total}%`,
+              url: window.location.href
+            });
+          }
         } catch (err) {
           if (err.name !== 'AbortError') console.error('Share failed:', err);
         }
@@ -153,7 +161,7 @@ export default function TradeShareCard({ trade, darkMode }) {
 
         <div className="relative z-10">
           {/* Premium Header */}
-          <div className="flex items-start justify-between mb-5">
+          <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <div className="text-3xl sm:text-4xl font-black tracking-tight">{trade.pair}</div>
@@ -163,38 +171,17 @@ export default function TradeShareCard({ trade, darkMode }) {
                   {trade.direction === 'long' ? 'LONG' : 'SHORT'}
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-[10px] text-zinc-500">
-                <Calendar className="w-3 h-3" />
-                {format(new Date(trade.created_date), 'dd.MM.yyyy')}
-              </div>
             </div>
             <div className="text-right">
               <div className={cn("text-4xl sm:text-5xl font-black mb-1 bg-gradient-to-br bg-clip-text text-transparent leading-none", getGradeColor(scores.total))}>
                 {scores.total}
               </div>
-              <div className="text-[10px] sm:text-xs text-zinc-500 tracking-widest font-bold">ZNPCV SCORE</div>
-              {scores.total >= 85 &&
-              <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 bg-teal-600/20 border border-teal-600/40 rounded-md">
-                  <Award className="w-2.5 h-2.5 text-teal-500" />
-                  <span className="text-[9px] text-teal-500 font-bold">A+ TRADE</span>
-                </div>
-              }
+              <div className="text-[10px] sm:text-xs text-zinc-500 tracking-widest font-bold">SCORE</div>
             </div>
           </div>
 
-          {/* Confluence Badge */}
-          {hasConfluence &&
-          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-teal-600/20 border border-teal-600/30 rounded-lg mb-3 sm:mb-4">
-              <Layers className="w-3 h-3 sm:w-4 sm:h-4 text-teal-400" />
-              <div>
-                <div className="text-teal-400 font-bold text-[10px] sm:text-xs">FULL CONFLUENCE</div>
-                <div className="text-zinc-400 text-[9px] sm:text-[10px]">W•D•4H {trade.w_trend?.toUpperCase()}</div>
-              </div>
-            </div>
-          }
-
           {/* Advanced Score Breakdown */}
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 mb-5">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 mb-4">
             {[
             { label: 'W', value: scores.w, max: 60, icon: Activity },
             { label: 'D', value: scores.d, max: 60, icon: BarChart3 },
@@ -220,39 +207,22 @@ export default function TradeShareCard({ trade, darkMode }) {
             )}
           </div>
 
-          {/* Advanced Trade Levels */}
-          {advancedMode && trade.entry_price &&
-          <div className="mb-5">
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <div className="bg-zinc-900/80 border border-zinc-800 rounded-lg p-2.5">
-                  <div className="text-[9px] text-zinc-500 mb-1 tracking-wider flex items-center gap-1">
-                    <Target className="w-2.5 h-2.5" />
-                    ENTRY
-                  </div>
-                  <div className="font-mono text-sm sm:text-base font-bold text-white">{trade.entry_price}</div>
+          {/* Trade Levels - Simplified */}
+          {trade.entry_price &&
+          <div className="mb-4">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-zinc-900/80 border border-zinc-800 rounded-lg p-2.5 text-center">
+                  <div className="text-[9px] text-zinc-500 mb-1 tracking-wider">ENTRY</div>
+                  <div className="font-mono text-sm font-bold text-white">{trade.entry_price}</div>
                 </div>
-                {rr &&
-              <div className={cn("bg-zinc-900/80 border rounded-lg p-2.5",
-              parseFloat(rr) >= 2.5 ? "border-teal-600/50 bg-teal-600/10" : "border-amber-600/50 bg-amber-600/10")}>
-                    <div className="text-[9px] text-zinc-500 mb-1 tracking-wider flex items-center gap-1">
-                      <Shield className="w-2.5 h-2.5" />
-                      R:R
-                    </div>
-                    <div className={cn("font-bold text-sm sm:text-base", parseFloat(rr) >= 2.5 ? "text-teal-400" : "text-amber-400")}>
-                      1:{rr}
-                    </div>
-                  </div>
-              }
-              </div>
-              <div className="grid grid-cols-2 gap-2">
                 {trade.stop_loss &&
-              <div className="bg-rose-600/10 border border-rose-600/30 rounded-lg p-2.5">
+              <div className="bg-rose-600/10 border border-rose-600/30 rounded-lg p-2.5 text-center">
                     <div className="text-[9px] text-rose-400 mb-1 tracking-wider">SL</div>
                     <div className="font-mono text-sm font-bold text-rose-400">{trade.stop_loss}</div>
                   </div>
               }
                 {trade.take_profit &&
-              <div className="bg-teal-600/10 border border-teal-600/30 rounded-lg p-2.5">
+              <div className="bg-teal-600/10 border border-teal-600/30 rounded-lg p-2.5 text-center">
                     <div className="text-[9px] text-teal-400 mb-1 tracking-wider">TP</div>
                     <div className="font-mono text-sm font-bold text-teal-400">{trade.take_profit}</div>
                   </div>
@@ -261,118 +231,58 @@ export default function TradeShareCard({ trade, darkMode }) {
             </div>
           }
 
-          {/* Basic Trade Levels */}
-          {!advancedMode && trade.entry_price &&
-          <div className="space-y-1.5 mb-5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-zinc-500 tracking-wider">ENTRY</span>
-                <span className="font-mono font-bold text-white">{trade.entry_price}</span>
-              </div>
-              {trade.stop_loss &&
-            <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-500 tracking-wider">SL</span>
-                  <span className="font-mono font-bold text-rose-500">{trade.stop_loss}</span>
-                </div>
-            }
-              {trade.take_profit &&
-            <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-500 tracking-wider">TP</span>
-                  <span className="font-mono font-bold text-teal-500">{trade.take_profit}</span>
-                </div>
-            }
-              {rr &&
-            <div className="flex items-center justify-between text-xs pt-2 border-t border-zinc-800">
-                  <span className="text-zinc-500 tracking-wider">R:R</span>
-                  <span className={cn("font-bold", parseFloat(rr) >= 2.5 ? "text-teal-500" : "text-amber-500")}>1:{rr}</span>
-                </div>
-            }
-            </div>
-          }
-
-          {/* Advanced Stats Grid */}
-          {advancedMode &&
-          <div className="grid grid-cols-2 gap-2 mb-5">
-              {trade.risk_percent &&
-            <div className="bg-zinc-900/60 border border-zinc-800 rounded-lg p-2.5">
-                  <div className="flex items-center gap-1 mb-1">
-                    <Percent className="w-3 h-3 text-amber-500" />
-                    <div className="text-[9px] text-zinc-500 tracking-wider">RISK</div>
-                  </div>
-                  <div className="text-base font-bold text-amber-400">{trade.risk_percent}%</div>
-                </div>
-            }
-              {trade.leverage &&
-            <div className="bg-zinc-900/60 border border-zinc-800 rounded-lg p-2.5">
-                  <div className="flex items-center gap-1 mb-1">
-                    <Zap className="w-3 h-3 text-purple-500" />
-                    <div className="text-[9px] text-zinc-500 tracking-wider">LEVERAGE</div>
-                  </div>
-                  <div className="text-base font-bold text-purple-400">1:{trade.leverage}</div>
-                </div>
-            }
-            </div>
-          }
-
-          {/* Result - Enhanced */}
+          {/* Result - Enhanced with Entry & Exit */}
           {trade.outcome && trade.actual_pnl &&
-          <div className={cn("relative px-4 py-4 rounded-xl mb-5 border-2 overflow-hidden",
+          <div className={cn("relative px-4 py-3.5 rounded-xl mb-4 border-2 overflow-hidden",
           trade.outcome === 'win' ? "bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500" :
           trade.outcome === 'loss' ? "bg-gradient-to-br from-rose-600 to-red-600 border-rose-500" :
           "bg-gradient-to-br from-zinc-700 to-zinc-800 border-zinc-600")}>
               <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-10 translate-x-10" />
               <div className="relative z-10">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-2">
                   <div>
-                    <div className="text-[10px] font-bold tracking-widest mb-1 opacity-90">RESULT</div>
+                    <div className="text-[10px] font-bold tracking-widest mb-1 opacity-90">P&L</div>
                     <div className="text-2xl sm:text-3xl font-black">{parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}</div>
                   </div>
-                  {trade.exit_date && advancedMode &&
+                  {rr &&
                 <div className="text-right">
-                      <div className="text-[9px] opacity-70 mb-0.5">EXIT</div>
-                      <div className="text-[10px] font-mono">{format(new Date(trade.exit_date), 'dd.MM.yy')}</div>
+                      <div className="text-[9px] opacity-70 mb-0.5">R:R</div>
+                      <div className="text-base font-bold">1:{rr}</div>
                     </div>
                 }
                 </div>
-              </div>
-            </div>
-          }
-
-          {/* Advanced Footer with QR Code placeholder */}
-          {advancedMode &&
-          <div className="pt-4 border-t border-zinc-800">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                      <div className="text-black font-black text-xs">ZN</div>
+                {/* Entry & Exit Dates */}
+                <div className="flex items-center gap-3 text-[10px] opacity-80 border-t border-white/20 pt-2">
+                  {trade.trade_date &&
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-2.5 h-2.5" />
+                      <span>IN: {format(new Date(trade.trade_date), 'dd.MM.yy')}</span>
                     </div>
-                    <div>
-                      <div className="text-[10px] font-black tracking-wider">ZNPCV</div>
-                      <div className="text-[8px] text-zinc-600">Pro Trading System</div>
+                  }
+                  {trade.exit_date &&
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-2.5 h-2.5" />
+                      <span>OUT: {format(new Date(trade.exit_date), 'dd.MM.yy')}</span>
                     </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[8px] text-zinc-600 mb-0.5">CERTIFIED TRADE</div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse" />
-                    <span className="text-[9px] text-zinc-500 font-mono">{trade.id.substring(0, 8).toUpperCase()}</span>
-                  </div>
+                  }
                 </div>
               </div>
             </div>
           }
 
-          {/* Basic Footer */}
-          {!advancedMode &&
+          {/* Simplified Footer */}
           <div className="flex items-center justify-between pt-3 border-t border-zinc-800">
-              <div>
-                <div className="text-[9px] text-zinc-600 tracking-wider">ZNPCV</div>
-                <div className="text-[8px] text-zinc-700">Ultimate Trading Checklist</div>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
+                <div className="text-black font-black text-[10px]">ZN</div>
               </div>
-              <div className="text-[8px] text-zinc-600 font-mono">{new Date().getFullYear()}</div>
+              <div>
+                <div className="text-[9px] font-black tracking-wider text-white">ZNPCV</div>
+                <div className="text-[7px] text-zinc-600">Trading System</div>
+              </div>
             </div>
-          }
+            <div className="text-[8px] text-zinc-600 font-mono">{new Date().getFullYear()}</div>
+          </div>
         </div>
       </motion.div>
     </div>);

@@ -9,9 +9,9 @@ import Home from './pages/Home';
 import Impressum from './pages/Impressum';
 import Integrations from './pages/Integrations';
 import Register from './pages/Register';
-import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
+import TradeDetail from './pages/TradeDetail';
 import __Layout from './Layout.jsx';
 
 
@@ -27,9 +27,9 @@ export const PAGES = {
     "Impressum": Impressum,
     "Integrations": Integrations,
     "Register": Register,
-    "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
     "Trash": Trash,
+    "TradeDetail": TradeDetail,
 }
 
 export const pagesConfig = {

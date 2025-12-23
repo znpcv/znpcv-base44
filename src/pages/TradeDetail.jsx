@@ -304,7 +304,7 @@ export default function TradeDetailPage() {
                   </div>
 
                   <div>
-                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('date')}</label>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('exit')}</label>
                     <Input
                     type="date"
                     value={editData.exit_date}
@@ -334,7 +334,7 @@ export default function TradeDetailPage() {
                   </div>
                 </div> :
 
-              <div className="space-y-2 sm:space-y-3 md:space-y-4">
+              <div className="space-y-2 sm:space-y-3">
                   <div className={`flex items-center justify-between p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${
                 trade.outcome === 'win' ? 'bg-teal-600 border-teal-500 text-white' :
                 trade.outcome === 'loss' ? 'bg-rose-600 border-rose-500 text-white' :
@@ -350,6 +350,26 @@ export default function TradeDetailPage() {
                     }</span>
                   </div>
 
+                  {/* Entry & Exit Dates Grid */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {trade.trade_date &&
+                      <div className={`p-3 sm:p-3.5 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
+                        <div className="flex flex-col gap-1">
+                          <span className={`${theme.textSecondary} text-[10px] sm:text-xs tracking-wider`}>EINSTIEG</span>
+                          <span className={`${theme.text} text-xs sm:text-sm font-bold`}>{format(new Date(trade.trade_date), 'dd.MM.yyyy')}</span>
+                        </div>
+                      </div>
+                    }
+                    {trade.exit_date &&
+                      <div className={`p-3 sm:p-3.5 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
+                        <div className="flex flex-col gap-1">
+                          <span className={`${theme.textSecondary} text-[10px] sm:text-xs tracking-wider`}>AUSSTIEG</span>
+                          <span className={`${theme.text} text-xs sm:text-sm font-bold`}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
+                        </div>
+                      </div>
+                    }
+                  </div>
+
                   {trade.actual_pnl &&
                 <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
                       <div className="flex items-center justify-between gap-2">
@@ -359,15 +379,6 @@ export default function TradeDetailPage() {
                     parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
                           {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                         </span>
-                      </div>
-                    </div>
-                }
-
-                  {trade.exit_date &&
-                <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
-                      <div className="flex items-center justify-between gap-2">
-                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('exit')}</span>
-                        <span className={`${theme.text} text-xs sm:text-sm`}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
                       </div>
                     </div>
                 }
