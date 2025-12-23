@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export default function ImpressumPage() {
   const navigate = useNavigate();
-  const { darkMode } = useLanguage();
+  const { t, darkMode } = useLanguage();
 
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
@@ -73,15 +73,15 @@ export default function ImpressumPage() {
           </section>
 
           <section className={`${darkMode ? 'bg-teal-900/20 border-teal-800' : 'bg-teal-100 border-teal-300'} rounded-xl p-5 sm:p-6 md:p-8 border-2`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>🚀 Code Export</h2>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>{t('contact')}</h2>
             <p className={`${theme.textSecondary} mb-4`}>
-              Vollständiger Backend + Frontend Code für Self-Hosting auf Railway/VPS.
+              {t('contactUs')}
             </p>
             <button
               onClick={() => navigate(createPageUrl('CodeExport'))}
               className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-bold text-sm"
             >
-              CODE DOWNLOADEN →
+              {t('contact')}
             </button>
           </section>
 

@@ -196,8 +196,8 @@ export default function FAQPage() {
           <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-5 md:mb-6">
             <HelpCircle className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 ${theme.text}`} />
           </div>
-          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-3 sm:mb-4 text-center ${theme.text}`}>FAQ</h1>
-          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Häufig gestellte Fragen zu ZNPCV</p>
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-widest mb-3 sm:mb-4 text-center ${theme.text}`}>{t('faqHelp')}</h1>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>{t('faqHelp')}</p>
         </div>
 
         {FAQ_DATA.map((category, catIndex) => (
@@ -235,9 +235,9 @@ export default function FAQPage() {
         {/* Contact Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
           className={`mt-8 sm:mt-12 md:mt-16 p-6 sm:p-8 md:p-10 border-2 ${theme.border} rounded-2xl ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-100/50'} text-center`}>
-          <h3 className={`text-lg sm:text-xl md:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>WEITERE FRAGEN?</h3>
+          <h3 className={`text-lg sm:text-xl md:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>{t('furtherQuestions')}</h3>
           <p className={`${theme.textMuted} mb-5 sm:mb-6 md:mb-8 text-sm sm:text-base font-sans`}>
-            Kontaktiere uns direkt per E-Mail
+            {t('contactUs')}
           </p>
           <div className="flex justify-center">
             <a href="mailto:support@znpcv.com" className={`inline-flex items-center gap-2 sm:gap-3 ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'} rounded-xl px-5 py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 text-sm sm:text-base font-bold transition-colors border-2 ${darkMode ? 'border-white' : 'border-zinc-900'}`}>

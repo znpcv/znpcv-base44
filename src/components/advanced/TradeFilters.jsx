@@ -1,8 +1,10 @@
 import React from 'react';
 import { Filter, Calendar, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import { useLanguage } from '@/components/LanguageContext';
 
 export default function TradeFilters({ filter, setFilter, darkMode, stats }) {
+  const { t } = useLanguage();
   const theme = {
     bg: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
@@ -11,11 +13,11 @@ export default function TradeFilters({ filter, setFilter, darkMode, stats }) {
   };
 
   const filters = [
-    { key: 'all', label: 'ALL', count: stats.executedTrades.length },
-    { key: 'win', label: 'WINS', count: stats.wins, color: 'teal' },
-    { key: 'loss', label: 'LOSSES', count: stats.losses, color: 'rose' },
-    { key: 'breakeven', label: 'BE', count: stats.breakeven, color: 'zinc' },
-    { key: 'pending', label: 'PENDING', count: stats.pending, color: 'blue' },
+    { key: 'all', label: t('all'), count: stats.executedTrades.length },
+    { key: 'win', label: t('win'), count: stats.wins, color: 'teal' },
+    { key: 'loss', label: t('loss'), count: stats.losses, color: 'rose' },
+    { key: 'breakeven', label: t('breakeven'), count: stats.breakeven, color: 'zinc' },
+    { key: 'pending', label: t('pending'), count: stats.pending, color: 'blue' },
   ];
 
   return (
