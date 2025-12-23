@@ -18,17 +18,33 @@ Deno.serve(async (req) => {
   const totalPnL = executedTrades.reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
   const winRate = executedTrades.length > 0 ? ((wins / executedTrades.length) * 100).toFixed(1) : '0.0';
 
+  const avgWin = wins > 0 ? (executedTrades.filter(t => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / wins).toFixed(2) : '0.00';
+  const avgLoss = losses > 0 ? Math.abs(executedTrades.filter(t => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / losses).toFixed(2) : '0.00';
+  const profitFactor = losses > 0 && avgLoss > 0 ? ((wins * parseFloat(avgWin)) / (losses * parseFloat(avgLoss))).toFixed(2) : '-';
+
   const summaryRows = [
-    ['ZNPCV TRADING REPORT'],
-    ['Generated:', new Date().toLocaleDateString('de-DE')],
+    ['═══════════════════════════════════════════════════════════════════════════════'],
+    ['ZNPCV - PROFESSIONAL TRADING REPORT'],
+    ['Ultimate Checklist Analysis'],
+    ['═══════════════════════════════════════════════════════════════════════════════'],
+    [''],
+    ['REPORT INFORMATION'],
+    ['Generated:', new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })],
     ['Trader:', user.full_name || user.email],
-    [''],
-    ['PERFORMANCE SUMMARY'],
     ['Total Trades:', trades.length],
-    ['Win Rate:', `${winRate}%`],
-    ['Total P&L:', `$${totalPnL.toFixed(2)}`],
-    ['Wins/Losses:', `${wins}/${losses}`],
     [''],
+    ['PERFORMANCE METRICS'],
+    ['Total P&L:', `$${totalPnL.toFixed(2)}`],
+    ['Win Rate:', `${winRate}%`],
+    ['Wins / Losses:', `${wins} / ${losses}`],
+    ['Average Win:', `$${avgWin}`],
+    ['Average Loss:', `$${avgLoss}`],
+    ['Profit Factor:', profitFactor],
+    ['Executed Trades:', executedTrades.length],
+    ['Pending Trades:', trades.length - executedTrades.length],
+    ['Best Trade:', `$${Math.max(...executedTrades.map(t => parseFloat(t.actual_pnl) || 0), 0).toFixed(2)}`],
+    [''],
+    ['═══════════════════════════════════════════════════════════════════════════════'],
     ['']
   ];
 
@@ -91,16 +107,19 @@ Deno.serve(async (req) => {
     ];
   });
 
-  // Build CSV with summary
+  // Build CSV with professional formatting
   const csvContent = [
     ...summaryRows.map(row => row.join(',')),
+    '',
     headers.join(','),
     ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
     '',
     '',
+    '═══════════════════════════════════════════════════════════════════════════════',
     'ZNPCV - Ultimate Trading Checklist',
-    'Discipline beats talent. Every. Single. Day.',
-    'www.znpcv.com'
+    '"Discipline beats talent. Every. Single. Day."',
+    'www.znpcv.com',
+    '© ' + new Date().getFullYear() + ' ZNPCV. All rights reserved.'
   ].join('\n');
 
   return new Response(csvContent, {

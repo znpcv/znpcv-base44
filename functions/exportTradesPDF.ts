@@ -13,27 +13,56 @@ Deno.serve(async (req) => {
   const trades = allTrades.filter(t => !t.deleted);
   const doc = new jsPDF();
 
-  // Professional Header with Brand Colors
+  // Fetch ZNPCV Logo
+  const logoUrl = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png";
+  let logoDataUrl = null;
+  try {
+    const logoResponse = await fetch(logoUrl);
+    const logoBlob = await logoResponse.blob();
+    const arrayBuffer = await logoBlob.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    logoDataUrl = `data:image/png;base64,${base64}`;
+  } catch (e) {
+    console.error('Logo fetch failed:', e);
+  }
+
+  // Ultra Professional Header with Logo
   doc.setFillColor(0, 0, 0);
-  doc.rect(0, 0, 210, 35, 'F');
+  doc.rect(0, 0, 210, 45, 'F');
+  
+  // Add Logo
+  if (logoDataUrl) {
+    try {
+      doc.addImage(logoDataUrl, 'PNG', 15, 8, 35, 10);
+    } catch (e) {
+      console.error('Logo render failed:', e);
+    }
+  }
   
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(28);
+  doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
-  doc.text('ZNPCV', 105, 15, { align: 'center' });
+  doc.text('PROFESSIONAL TRADING REPORT', 105, 22, { align: 'center' });
   
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text('PROFESSIONAL TRADING REPORT', 105, 23, { align: 'center' });
-  
-  // Report Info
-  doc.setTextColor(0, 0, 0);
   doc.setFontSize(9);
-  doc.text(`Generated: ${new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}`, 20, 42);
-  doc.text(`Trader: ${user.full_name || user.email}`, 20, 47);
-  doc.text(`Total Trades Analyzed: ${trades.length}`, 20, 52);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Ultimate Checklist Analysis', 105, 28, { align: 'center' });
+  
+  // Subtle accent line
+  doc.setFillColor(13, 148, 136);
+  doc.rect(0, 45, 210, 1, 'F');
+  
+  // Report Metadata - Modern Layout
+  doc.setTextColor(60, 60, 60);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`GENERATED: ${new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}`, 20, 54);
+  doc.text(`TRADER: ${user.full_name || user.email}`, 20, 59);
+  doc.setTextColor(13, 148, 136);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${trades.length} TRADES ANALYZED`, 190, 54, { align: 'right' });
 
-  // Performance Summary Box
+  // Performance Summary - Ultra Modern Cards
   const executedTrades = trades.filter(t => t.outcome && t.outcome !== 'pending');
   const wins = executedTrades.filter(t => t.outcome === 'win').length;
   const losses = executedTrades.filter(t => t.outcome === 'loss').length;
@@ -41,132 +70,217 @@ Deno.serve(async (req) => {
   const winRate = executedTrades.length > 0 ? ((wins / executedTrades.length) * 100).toFixed(1) : '0.0';
   const avgWin = wins > 0 ? (executedTrades.filter(t => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / wins).toFixed(2) : '0.00';
   const avgLoss = losses > 0 ? Math.abs(executedTrades.filter(t => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / losses).toFixed(2) : '0.00';
+  const profitFactor = losses > 0 && avgLoss > 0 ? ((wins * parseFloat(avgWin)) / (losses * parseFloat(avgLoss))).toFixed(2) : '-';
 
+  // Modern gradient-style cards
   doc.setFillColor(13, 148, 136);
-  doc.roundedRect(20, 60, 85, 40, 3, 3, 'F');
-  
+  doc.roundedRect(20, 68, 55, 35, 2, 2, 'F');
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('PERFORMANCE', 25, 68);
-  
-  doc.setFontSize(9);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Win Rate: ${winRate}%`, 25, 76);
-  doc.text(`Total P&L: $${totalPnL.toFixed(2)}`, 25, 82);
-  doc.text(`Wins/Losses: ${wins}/${losses}`, 25, 88);
-  doc.text(`Avg Win: $${avgWin}`, 25, 94);
-
-  doc.setFillColor(39, 39, 42);
-  doc.roundedRect(110, 60, 85, 40, 3, 3, 'F');
-  
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(11);
+  doc.text('TOTAL P&L', 23, 75);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text('STATISTICS', 115, 68);
-  
-  doc.setFontSize(9);
+  doc.text(`$${totalPnL.toFixed(2)}`, 23, 87);
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Executed: ${executedTrades.length}`, 115, 76);
-  doc.text(`Pending: ${trades.length - executedTrades.length}`, 115, 82);
-  doc.text(`Avg Loss: $${avgLoss}`, 115, 88);
-  doc.text(`Best Trade: $${Math.max(...executedTrades.map(t => parseFloat(t.actual_pnl) || 0), 0).toFixed(2)}`, 115, 94);
+  doc.text(`${executedTrades.length} executed`, 23, 98);
 
-  // Trade Table Header
-  doc.setTextColor(0, 0, 0);
+  doc.setFillColor(250, 250, 250);
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
+  doc.roundedRect(80, 68, 35, 35, 2, 2, 'FD');
+  doc.setTextColor(60, 60, 60);
+  doc.setFontSize(8);
+  doc.text('WIN RATE', 83, 75);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(13, 148, 136);
+  doc.text(`${winRate}%`, 83, 87);
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text(`${wins}W / ${losses}L`, 83, 98);
+
+  doc.setFillColor(250, 250, 250);
+  doc.roundedRect(120, 68, 35, 35, 2, 2, 'FD');
+  doc.setTextColor(60, 60, 60);
+  doc.setFontSize(8);
+  doc.text('AVG WIN', 123, 75);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('DETAILED TRADE LOG', 20, 115);
-
-  // Table Headers
-  doc.setFillColor(240, 240, 240);
-  doc.rect(20, 120, 170, 8, 'F');
-  
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.text('DATE', 22, 125);
-  doc.text('PAIR', 45, 125);
-  doc.text('DIR', 70, 125);
-  doc.text('SCORE', 85, 125);
-  doc.text('ENTRY', 105, 125);
-  doc.text('SL', 125, 125);
-  doc.text('TP', 140, 125);
-  doc.text('P&L', 155, 125);
-  doc.text('STATUS', 172, 125);
-
-  let y = 133;
+  doc.setTextColor(13, 148, 136);
+  doc.text(`$${avgWin}`, 123, 87);
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Loss: $${avgLoss}`, 123, 98);
+
+  doc.setFillColor(250, 250, 250);
+  doc.roundedRect(160, 68, 35, 35, 2, 2, 'FD');
+  doc.setTextColor(60, 60, 60);
+  doc.setFontSize(8);
+  doc.text('PROFIT', 163, 75);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text(profitFactor, 163, 87);
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text('Factor', 163, 98);
+
+  // Trade Table Header - Modern Design
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DETAILED TRADE LOG', 20, 116);
   
-  trades.slice(0, 30).forEach((trade, idx) => {
+  // Accent bar
+  doc.setFillColor(13, 148, 136);
+  doc.rect(20, 118, 40, 1, 'F');
+
+  // Table Headers - Modern styled
+  doc.setFillColor(0, 0, 0);
+  doc.rect(20, 124, 170, 10, 'F');
+  
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(255, 255, 255);
+  doc.text('DATE', 23, 130);
+  doc.text('PAIR', 45, 130);
+  doc.text('DIR', 67, 130);
+  doc.text('SCORE', 80, 130);
+  doc.text('ENTRY', 100, 130);
+  doc.text('SL', 120, 130);
+  doc.text('TP', 135, 130);
+  doc.text('P&L', 152, 130);
+  doc.text('RESULT', 172, 130);
+
+  let y = 141;
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(0, 0, 0);
+  
+  trades.slice(0, 35).forEach((trade, idx) => {
     if (y > 275) {
       doc.addPage();
       
-      // Add header on new page
+      // Minimal header on continuation pages
       doc.setFillColor(0, 0, 0);
-      doc.rect(0, 0, 210, 20, 'F');
+      doc.rect(0, 0, 210, 25, 'F');
+      
+      if (logoDataUrl) {
+        try {
+          doc.addImage(logoDataUrl, 'PNG', 15, 7, 30, 9);
+        } catch (e) {
+          console.error('Logo render failed:', e);
+        }
+      }
+      
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(16);
+      doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
-      doc.text('ZNPCV TRADE REPORT', 105, 12, { align: 'center' });
+      doc.text('TRADE REPORT', 105, 15, { align: 'center' });
       
-      doc.setTextColor(0, 0, 0);
-      doc.setFillColor(240, 240, 240);
-      doc.rect(20, 25, 170, 8, 'F');
-      doc.setFontSize(8);
+      doc.setFillColor(13, 148, 136);
+      doc.rect(0, 25, 210, 1, 'F');
+      
+      // Table header on new page
+      doc.setFillColor(0, 0, 0);
+      doc.rect(20, 30, 170, 10, 'F');
+      doc.setFontSize(7);
       doc.setFont('helvetica', 'bold');
-      doc.text('DATE', 22, 30);
-      doc.text('PAIR', 45, 30);
-      doc.text('DIR', 70, 30);
-      doc.text('SCORE', 85, 30);
-      doc.text('ENTRY', 105, 30);
-      doc.text('SL', 125, 30);
-      doc.text('TP', 140, 30);
-      doc.text('P&L', 155, 30);
-      doc.text('STATUS', 172, 30);
+      doc.setTextColor(255, 255, 255);
+      doc.text('DATE', 23, 36);
+      doc.text('PAIR', 45, 36);
+      doc.text('DIR', 67, 36);
+      doc.text('SCORE', 80, 36);
+      doc.text('ENTRY', 100, 36);
+      doc.text('SL', 120, 36);
+      doc.text('TP', 135, 36);
+      doc.text('P&L', 152, 36);
+      doc.text('RESULT', 172, 36);
       
-      y = 38;
+      y = 47;
       doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0);
     }
 
-    // Alternating row colors
+    // Modern alternating rows with subtle borders
     if (idx % 2 === 0) {
-      doc.setFillColor(250, 250, 250);
-      doc.rect(20, y - 4, 170, 7, 'F');
+      doc.setFillColor(248, 248, 248);
+      doc.rect(20, y - 4.5, 170, 8, 'F');
     }
+    
+    // Subtle row separator
+    doc.setDrawColor(230, 230, 230);
+    doc.setLineWidth(0.1);
+    doc.line(20, y + 3, 190, y + 3);
 
     const date = new Date(trade.created_date).toLocaleDateString('de-DE');
     const pnl = trade.actual_pnl ? `$${trade.actual_pnl}` : '-';
-    const status = trade.outcome || 'Pending';
+    const status = trade.outcome === 'win' ? 'WIN' : trade.outcome === 'loss' ? 'LOSS' : trade.outcome === 'breakeven' ? 'BE' : 'PEND';
     const score = Math.round(trade.completion_percentage || 0);
 
-    doc.setFontSize(7);
-    doc.text(date, 22, y);
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(40, 40, 40);
+    doc.text(date, 23, y);
+    doc.setFont('helvetica', 'bold');
     doc.text(trade.pair || '-', 45, y);
-    doc.text((trade.direction || '-').toUpperCase().substring(0, 1), 70, y);
-    doc.text(`${score}%`, 85, y);
-    doc.text(trade.entry_price || '-', 105, y);
-    doc.text(trade.stop_loss || '-', 125, y);
-    doc.text(trade.take_profit || '-', 140, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text((trade.direction || '-').toUpperCase().substring(0, 1), 67, y);
     
-    // Color code P&L
+    // Score with color coding
+    if (score >= 85) doc.setTextColor(13, 148, 136);
+    else if (score >= 70) doc.setTextColor(234, 179, 8);
+    else doc.setTextColor(150, 150, 150);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${score}%`, 80, y);
+    
+    doc.setTextColor(40, 40, 40);
+    doc.setFont('helvetica', 'normal');
+    doc.text(trade.entry_price || '-', 100, y);
+    doc.text(trade.stop_loss || '-', 120, y);
+    doc.text(trade.take_profit || '-', 135, y);
+    
+    // P&L with strong color coding
     if (trade.actual_pnl) {
       const pnlValue = parseFloat(trade.actual_pnl);
-      if (pnlValue > 0) doc.setTextColor(13, 148, 136);
-      else if (pnlValue < 0) doc.setTextColor(225, 29, 72);
+      if (pnlValue > 0) {
+        doc.setTextColor(13, 148, 136);
+        doc.setFont('helvetica', 'bold');
+      } else if (pnlValue < 0) {
+        doc.setTextColor(225, 29, 72);
+        doc.setFont('helvetica', 'bold');
+      }
     }
-    doc.text(pnl, 155, y);
-    doc.setTextColor(0, 0, 0);
+    doc.text(pnl, 152, y);
+    doc.setTextColor(40, 40, 40);
+    doc.setFont('helvetica', 'normal');
     
+    // Status badge style
+    doc.setFontSize(6.5);
+    if (status === 'WIN') doc.setTextColor(13, 148, 136);
+    else if (status === 'LOSS') doc.setTextColor(225, 29, 72);
+    else doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'bold');
     doc.text(status, 172, y);
     
-    y += 7;
+    y += 8;
   });
 
-  // Footer
-  doc.setFontSize(8);
-  doc.setTextColor(100, 100, 100);
-  doc.text('ZNPCV - Ultimate Trading Checklist | www.znpcv.com', 105, 290, { align: 'center' });
-  doc.text('Discipline beats talent. Every. Single. Day.', 105, 295, { align: 'center' });
+  // Modern Footer
+  doc.setFillColor(245, 245, 245);
+  doc.rect(0, 282, 210, 15, 'F');
+  
+  doc.setFontSize(7);
+  doc.setTextColor(120, 120, 120);
+  doc.setFont('helvetica', 'normal');
+  doc.text('ZNPCV - Ultimate Trading Checklist', 105, 288, { align: 'center' });
+  doc.setFontSize(6.5);
+  doc.setFont('helvetica', 'italic');
+  doc.text('"Discipline beats talent. Every. Single. Day."', 105, 293, { align: 'center' });
 
   const pdfBytes = doc.output('arraybuffer');
 
