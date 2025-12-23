@@ -27,8 +27,8 @@ export default function TradeHistoryPage() {
   const [selectedTrades, setSelectedTrades] = useState([]);
   const [compareMode, setCompareMode] = useState(false);
   const [advancedFilters, setAdvancedFilters] = useState({
-    dateFrom: '',
-    dateTo: '',
+    dateFrom: format(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
+    dateTo: format(new Date(), 'yyyy-MM-dd'),
     pair: 'all',
     minRR: 'all'
   });
