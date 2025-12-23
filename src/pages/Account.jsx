@@ -219,9 +219,9 @@ export default function AccountPage() {
                   placeholder={t('bioPlaceholder')}
                   className={`${theme.border} h-20 md:h-24 resize-none text-xs md:text-sm font-sans`} />
               </div>
-            ) : bio && (
+            ) : user.bio && (
               <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t ${theme.border}">
-                <p className={`text-xs md:text-sm ${theme.text} font-sans leading-relaxed`}>{bio}</p>
+                <p className={`text-xs md:text-sm ${theme.text} font-sans leading-relaxed`}>{user.bio}</p>
               </div>
             )}
           </div>
