@@ -471,7 +471,7 @@ export default function TradeHistoryPage() {
                           </div>
                           <div className="flex-1">
                             <div className={`text-base sm:text-lg md:text-xl font-bold tracking-wider ${theme.text} mb-0.5 sm:mb-1`}>{trade.pair || '-'}</div>
-                            <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textMuted}`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</div>
+                            <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textMuted}`}>{format(new Date(trade.trade_date || trade.created_date), 'dd.MM.yyyy')}</div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
