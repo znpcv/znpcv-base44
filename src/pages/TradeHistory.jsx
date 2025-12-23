@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
+import toast from 'react-hot-toast';
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
@@ -79,8 +80,19 @@ export default function TradeHistoryPage() {
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      queryClient.invalidateQueries({ queryKey: ['deletedTrades'] });
+      toast.success('Trade in Papierkorb verschoben', {
+        style: darkMode ? {
+          background: '#18181b',
+          color: '#fff',
+          border: '1px solid #27272a'
+        } : {}
+      });
     },
-    onError: (error) => console.error('Delete failed:', error)
+    onError: (error) => {
+      console.error('Delete failed:', error);
+      toast.error('Fehler beim Löschen');
+    }
   });
 
   const handleDeleteTrade = async (e, tradeId) => {
@@ -163,9 +175,18 @@ export default function TradeHistoryPage() {
           })
         ));
         queryClient.invalidateQueries({ queryKey: ['checklists'] });
+        queryClient.invalidateQueries({ queryKey: ['deletedTrades'] });
         setSelectedTrades([]);
+        toast.success(`${selectedTrades.length} Trades in Papierkorb verschoben`, {
+          style: darkMode ? {
+            background: '#18181b',
+            color: '#fff',
+            border: '1px solid #27272a'
+          } : {}
+        });
       } catch (error) {
         console.error('Bulk delete failed:', error);
+        toast.error('Fehler beim Löschen');
       }
     }
   };
