@@ -167,10 +167,10 @@ export default function AccountPage() {
             <div className="flex items-center gap-3 md:gap-5 lg:gap-6">
               {/* Profile Image */}
               <div className="relative group flex-shrink-0">
-                <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-800' : 'bg-zinc-900 border-zinc-300'}`}>
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-800' : 'bg-zinc-900 border-zinc-300'}`}>
                   {user.profile_image ?
                   <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" /> :
-                  <User className={`w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 ${darkMode ? 'text-black' : 'text-white'}`} />
+                  <User className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 ${darkMode ? 'text-black' : 'text-white'}`} />
                   }
                 </div>
                 <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
@@ -188,19 +188,19 @@ export default function AccountPage() {
                 <Input
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className={`font-bold text-sm sm:text-base ${theme.border} mb-1 h-8 sm:h-9`}
+                  className={`font-bold text-sm sm:text-base md:text-lg ${theme.border} mb-1 md:mb-2 h-8 sm:h-9 md:h-10`}
                   placeholder={t('yourName')} /> :
-                <div className={`text-base sm:text-lg md:text-xl font-bold ${theme.text} truncate`}>{user.full_name || '-'}</div>
+                <div className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold ${theme.text} truncate mb-1`}>{user.full_name || '-'}</div>
                 }
-                <div className={`text-[10px] sm:text-xs ${theme.textSecondary} truncate mb-1.5`}>{user.email}</div>
+                <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textSecondary} truncate mb-1.5 md:mb-2`}>{user.email}</div>
                 
                 {/* Inline Stats */}
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                    <div className="w-1 h-1 bg-teal-600 rounded-full" />
+                <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                  <div className={`flex items-center gap-1 px-1.5 py-0.5 md:px-2 md:py-1 rounded text-[9px] md:text-[10px] ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-teal-600 rounded-full" />
                     <span className={theme.textSecondary}>{user.role?.toUpperCase()}</span>
                   </div>
-                  <div className={`text-[9px] ${theme.textSecondary}`}>
+                  <div className={`text-[9px] md:text-[10px] ${theme.textSecondary}`}>
                     {format(new Date(user.created_date), 'MM/yyyy')}
                   </div>
                 </div>
@@ -257,9 +257,9 @@ export default function AccountPage() {
           {/* Contact Grid - Super Compact */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
             <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-              <div className="flex items-center gap-1.5 mb-2">
-                <Phone className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
-                <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>{t('phone')}</span>
+              <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
+                <Phone className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
+                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>{t('phone')}</span>
               </div>
               {editing ?
               <div className="flex gap-1.5">
@@ -303,13 +303,13 @@ export default function AccountPage() {
           </div>
 
           {/* Address - Collapsible Compact */}
-          <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-4`}>
-            <div className="flex items-center gap-1.5 mb-2">
-              <HomeIcon className="w-3.5 h-3.5 ${theme.textSecondary}" />
-              <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>{t('address')}</span>
+          <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
+            <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
+              <HomeIcon className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
+              <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>{t('address')}</span>
             </div>
             
-            <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
               <div className="col-span-2">
                 {editing ?
                 <Input
@@ -366,9 +366,9 @@ export default function AccountPage() {
           {/* Trading Preferences - Inline */}
           <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
             <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <Zap className={`w-3.5 h-3.5 text-purple-500`} />
-                <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>LEVERAGE</span>
+              <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
+                <Zap className={`w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500`} />
+                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>LEVERAGE</span>
               </div>
               {editing ?
               <Input
@@ -423,31 +423,28 @@ export default function AccountPage() {
           </div>
 
           {/* Danger Zone - Ultra Compact */}
-          <div className={`border border-rose-600/40 ${darkMode ? 'bg-rose-600/5' : 'bg-rose-50'} rounded-xl p-2.5 sm:p-3 md:p-4`}>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-600 flex-shrink-0" />
-                <div>
-                  <div className={`text-[10px] sm:text-xs font-bold ${theme.text} mb-0.5`}>{t('dangerZone')}</div>
-                  <p className={`${theme.textSecondary} text-[9px] sm:text-[10px] leading-tight`}>
-                    {t('deleteWarning')}
-                  </p>
-                </div>
+          <div className={`border-2 border-rose-600/40 ${darkMode ? 'bg-rose-600/5' : 'bg-rose-50'} rounded-xl p-3 sm:p-4 md:p-6 lg:p-7`}>
+            <div className="flex items-center gap-2 md:gap-4 mb-3 md:mb-4">
+              <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-600 flex-shrink-0" />
+              <div className="flex-1">
+                <div className={`text-xs sm:text-sm md:text-base font-bold ${theme.text} mb-1`}>{t('dangerZone')}</div>
+                <p className={`${theme.textSecondary} text-[10px] sm:text-xs md:text-sm leading-relaxed`}>
+                  {t('deleteWarning')}
+                </p>
               </div>
-              <Button
-                onClick={handleDeleteAccount}
-                size="sm"
-                className="border border-rose-600 bg-rose-600 text-white hover:bg-rose-700 h-8 px-2 sm:px-3 text-[10px] font-bold flex-shrink-0">
-                <Trash2 className="w-3 h-3 sm:mr-1" />
-                <span className="hidden sm:inline">DELETE</span>
-              </Button>
             </div>
+            <Button
+              onClick={handleDeleteAccount}
+              className="w-full h-9 sm:h-10 md:h-11 lg:h-12 border-2 bg-rose-600 text-white hover:bg-rose-700 border-rose-600 text-xs sm:text-sm md:text-base font-bold tracking-wider">
+              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
+              {t('deletePermanently')}
+            </Button>
           </div>
         </motion.div>
 
         {/* Footer */}
-        <footer className={`mt-6 sm:mt-8 pt-4 sm:pt-6 border-t ${theme.border}`}>
-          <div className="flex flex-wrap items-center justify-center gap-3 text-[10px]">
+        <footer className={`mt-6 sm:mt-8 md:mt-12 lg:mt-16 pt-4 sm:pt-6 md:pt-8 border-t ${theme.border}`}>
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-[10px] md:text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
