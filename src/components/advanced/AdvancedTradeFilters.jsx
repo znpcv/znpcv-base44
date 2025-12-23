@@ -16,59 +16,59 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
     'EUR/GBP', 'EUR/JPY', 'GBP/JPY', 'XAU/USD', 'BTC/USD', 'ETH/USD'];
 
   return (
-    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2", theme.bg, "p-3 rounded-xl border-2", theme.border)}>
+    <div className={cn("grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3", theme.bg, "p-3 sm:p-4 rounded-xl border-2", theme.border)}>
       {/* Date Range */}
-      <div>
-        <label className={cn("text-[10px] tracking-wider mb-1.5 flex items-center gap-1", theme.textSecondary)}>
-          <Calendar className="w-3 h-3" />
+      <div className="col-span-2 lg:col-span-1">
+        <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
+          <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           VON
         </label>
         <Input
           type="date"
           value={filters.dateFrom}
           onChange={(e) => onFilterChange({ ...filters, dateFrom: e.target.value })}
-          className={cn("h-9 text-xs", theme.border)}
+          className={cn("h-8 sm:h-9 text-[10px] sm:text-xs", theme.border)}
         />
       </div>
 
-      <div>
-        <label className={cn("text-[10px] tracking-wider mb-1.5 flex items-center gap-1", theme.textSecondary)}>
-          <Calendar className="w-3 h-3" />
+      <div className="col-span-2 lg:col-span-1">
+        <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
+          <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           BIS
         </label>
         <Input
           type="date"
           value={filters.dateTo}
           onChange={(e) => onFilterChange({ ...filters, dateTo: e.target.value })}
-          className={cn("h-9 text-xs", theme.border)}
+          className={cn("h-8 sm:h-9 text-[10px] sm:text-xs", theme.border)}
         />
       </div>
 
       {/* Pair Filter */}
       <div>
-        <label className={cn("text-[10px] tracking-wider mb-1.5 flex items-center gap-1", theme.textSecondary)}>
-          <TrendingUp className="w-3 h-3" />
+        <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
+          <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           PAIR
         </label>
         <Select value={filters.pair} onValueChange={(v) => onFilterChange({ ...filters, pair: v })}>
-          <SelectTrigger className={cn("h-9 text-xs", theme.border)}>
+          <SelectTrigger className={cn("h-8 sm:h-9 text-[10px] sm:text-xs", theme.border)}>
             <SelectValue placeholder="Alle" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Alle Pairs</SelectItem>
-            {pairs.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+            <SelectItem value="all">Alle</SelectItem>
+            {pairs.map(p => <SelectItem key={p} value={p} className="text-xs">{p}</SelectItem>)}
           </SelectContent>
         </Select>
       </div>
 
       {/* R:R Filter */}
       <div>
-        <label className={cn("text-[10px] tracking-wider mb-1.5 flex items-center gap-1", theme.textSecondary)}>
-          <Target className="w-3 h-3" />
-          MIN R:R
+        <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
+          <Target className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+          R:R
         </label>
         <Select value={filters.minRR} onValueChange={(v) => onFilterChange({ ...filters, minRR: v })}>
-          <SelectTrigger className={cn("h-9 text-xs", theme.border)}>
+          <SelectTrigger className={cn("h-8 sm:h-9 text-[10px] sm:text-xs", theme.border)}>
             <SelectValue placeholder="Alle" />
           </SelectTrigger>
           <SelectContent>
@@ -85,7 +85,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
       {(filters.dateFrom || filters.dateTo || filters.pair !== 'all' || filters.minRR !== 'all') && (
         <button
           onClick={onReset}
-          className={cn("col-span-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border-2 transition-all",
+          className={cn("col-span-2 lg:col-span-4 flex items-center justify-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs border-2 transition-all mt-1",
             darkMode ? "border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-white" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black")}
         >
           <X className="w-3 h-3" />
