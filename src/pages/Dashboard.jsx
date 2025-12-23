@@ -14,7 +14,6 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import TradingQuote from '@/components/TradingQuote';
 import AccountButton from '@/components/AccountButton';
 import BestTradingTimes from '@/components/advanced/BestTradingTimes';
-import AdvancedMetricsPanel from '@/components/advanced/AdvancedMetricsPanel';
 
 
 export default function DashboardPage() {
@@ -598,11 +597,6 @@ export default function DashboardPage() {
                   <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('today')}</span>
                 </div>
               </div>
-            </motion.div>
-
-            {/* Advanced Metrics Panel */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
-              <AdvancedMetricsPanel trades={checklists} darkMode={darkMode} />
             </motion.div>
 
             {/* Best Trading Times */}
