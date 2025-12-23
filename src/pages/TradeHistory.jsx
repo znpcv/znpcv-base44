@@ -36,7 +36,10 @@ export default function TradeHistoryPage() {
 
   const { data: checklists = [], isLoading } = useQuery({
     queryKey: ['checklists'],
-    queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
+    queryFn: async () => {
+      const allTrades = await base44.entities.TradeChecklist.list('-created_date', 100);
+      return allTrades.filter(t => !t.deleted);
+    },
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false
   });
@@ -60,7 +63,10 @@ export default function TradeHistoryPage() {
   });
 
   const deleteTradeMutation = useMutation({
-    mutationFn: (id) => base44.entities.TradeChecklist.delete(id),
+    mutationFn: (id) => base44.entities.TradeChecklist.update(id, {
+      deleted: true,
+      deleted_date: new Date().toISOString()
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
     },
@@ -138,9 +144,14 @@ export default function TradeHistoryPage() {
   };
 
   const handleBulkDelete = async () => {
-    if (window.confirm(`${selectedTrades.length} Trades wirklich löschen?`)) {
+    if (window.confirm(`${selectedTrades.length} Trades in Papierkorb verschieben?`)) {
       try {
-        await Promise.all(selectedTrades.map((id) => base44.entities.TradeChecklist.delete(id)));
+        await Promise.all(selectedTrades.map((id) => 
+          base44.entities.TradeChecklist.update(id, {
+            deleted: true,
+            deleted_date: new Date().toISOString()
+          })
+        ));
         queryClient.invalidateQueries({ queryKey: ['checklists'] });
         setSelectedTrades([]);
       } catch (error) {
