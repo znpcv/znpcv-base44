@@ -14,6 +14,8 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import TradingQuote from '@/components/TradingQuote';
 import AdvancedLotCalculator from '@/components/advanced/AdvancedLotCalculator';
 import ChecklistItem from '@/components/checklist/ChecklistItem';
+import ChecklistItemWithTooltip from '@/components/checklist/ChecklistItemWithTooltip';
+import SectionProgressBar from '@/components/checklist/SectionProgressBar';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
 
@@ -433,14 +435,8 @@ export default function ChecklistPage() {
             <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="02" title={t('weeklyAnalysis')} subtitle={t('weeklyConfirm')} />
               
-              {/* Current Score - Compact */}
-              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
-                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('weeklyScore')}</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", weeklyScore >= 40 ? "text-teal-600" : weeklyScore >= 25 ? "text-amber-500" : theme.text)}>{weeklyScore}</span>
-                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/60</span>
-                </div>
-              </div>
+              {/* Progress Bar */}
+              <SectionProgressBar current={weeklyScore} max={60} label={t('weeklyScore')} darkMode={darkMode} />
 
               {/* Trend Selection - Compact */}
               <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
@@ -467,29 +463,71 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={formData.w_at_aoi} onChange={(checked) => update('w_at_aoi', checked)} 
-                label={t('atAoiRejected')} weight={10} 
-                description={t('atAoiDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.w_at_aoi} 
+                onChange={(checked) => update('w_at_aoi', checked)} 
+                label={t('atAoiRejected')} 
+                weight={10} 
+                description={t('atAoiDesc')}
+                tooltip="Price must be at or rejecting your marked Area of Interest (support for LONG, resistance for SHORT)"
+                darkMode={darkMode}
+                show={formData.w_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.w_ema_touch} onChange={(checked) => update('w_ema_touch', checked)} 
-                label={t('touchingEma')} weight={5} 
-                description={t('touchingEmaDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.w_ema_touch} 
+                onChange={(checked) => update('w_ema_touch', checked)} 
+                label={t('touchingEma')} 
+                weight={5} 
+                description={t('touchingEmaDesc')}
+                tooltip="Candles are touching or rejecting the Exponential Moving Average on weekly chart"
+                darkMode={darkMode}
+                show={formData.w_at_aoi}
+              />
               
-              <ChecklistItem checked={formData.w_candlestick} onChange={(checked) => update('w_candlestick', checked)} 
-                label={t('candlestickRejection')} weight={10} 
-                description={t('candlestickDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.w_candlestick} 
+                onChange={(checked) => update('w_candlestick', checked)} 
+                label={t('candlestickRejection')} 
+                weight={10} 
+                description={t('candlestickDesc')}
+                tooltip="Look for Pinbar, Doji, or Hammer patterns showing clear price rejection"
+                darkMode={darkMode}
+                show={formData.w_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.w_psp_rejection} onChange={(checked) => update('w_psp_rejection', checked)} 
-                label={t('rejectionPsp')} weight={10} 
-                description={t('rejectionPspDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.w_psp_rejection} 
+                onChange={(checked) => update('w_psp_rejection', checked)} 
+                label={t('rejectionPsp')} 
+                weight={10} 
+                description={t('rejectionPspDesc')}
+                tooltip="Price rejecting from Previous Structure Point (old support/resistance level)"
+                darkMode={darkMode}
+                show={formData.w_candlestick || formData.w_at_aoi}
+              />
               
-              <ChecklistItem checked={formData.w_round_level} onChange={(checked) => update('w_round_level', checked)} 
-                label={t('roundLevel')} weight={5} 
-                description={t('roundLevelDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.w_round_level} 
+                onChange={(checked) => update('w_round_level', checked)} 
+                label={t('roundLevel')} 
+                weight={5} 
+                description={t('roundLevelDesc')}
+                tooltip="Price at or rejecting psychological round numbers (e.g., 1.10000, 1.20000)"
+                darkMode={darkMode}
+                show={formData.w_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.w_swing} onChange={(checked) => update('w_swing', checked)} 
-                label={t('swingHighLow')} weight={5} 
-                description={t('swingDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.w_swing} 
+                onChange={(checked) => update('w_swing', checked)} 
+                label={t('swingHighLow')} 
+                weight={5} 
+                description={t('swingDesc')}
+                tooltip="Price has reached a significant swing high (for SHORT) or swing low (for LONG)"
+                darkMode={darkMode}
+                show={formData.w_trend !== ''}
+              />
               
               <PatternSelector 
                 value={formData.w_pattern} 
@@ -506,14 +544,8 @@ export default function ChecklistPage() {
             <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="03" title={t('dailyAnalysis')} subtitle={t('dailyConfirm')} />
               
-              {/* Current Score - Compact */}
-              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
-                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('dailyScore')}</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", dailyScore >= 40 ? "text-teal-600" : dailyScore >= 25 ? "text-amber-500" : theme.text)}>{dailyScore}</span>
-                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/60</span>
-                </div>
-              </div>
+              {/* Progress Bar */}
+              <SectionProgressBar current={dailyScore} max={60} label={t('dailyScore')} darkMode={darkMode} />
 
               {/* Trend Selection - Compact */}
               <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
@@ -540,29 +572,71 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={formData.d_at_aoi} onChange={(checked) => update('d_at_aoi', checked)} 
-                label={t('atAoiRejected')} weight={10} 
-                description={t('atAoiDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.d_at_aoi} 
+                onChange={(checked) => update('d_at_aoi', checked)} 
+                label={t('atAoiRejected')} 
+                weight={10} 
+                description={t('atAoiDesc')}
+                tooltip="Daily timeframe confirms price at AOI zone"
+                darkMode={darkMode}
+                show={formData.d_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.d_ema_touch} onChange={(checked) => update('d_ema_touch', checked)} 
-                label={t('touchingEma')} weight={5} 
-                description={t('touchingEmaDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.d_ema_touch} 
+                onChange={(checked) => update('d_ema_touch', checked)} 
+                label={t('touchingEma')} 
+                weight={5} 
+                description={t('touchingEmaDesc')}
+                tooltip="Daily candles touching or rejecting EMA"
+                darkMode={darkMode}
+                show={formData.d_at_aoi}
+              />
               
-              <ChecklistItem checked={formData.d_candlestick} onChange={(checked) => update('d_candlestick', checked)} 
-                label={t('candlestickRejection')} weight={10} 
-                description={t('candlestickDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.d_candlestick} 
+                onChange={(checked) => update('d_candlestick', checked)} 
+                label={t('candlestickRejection')} 
+                weight={10} 
+                description={t('candlestickDesc')}
+                tooltip="Clear rejection candle (Pinbar, Doji, Hammer) on daily chart"
+                darkMode={darkMode}
+                show={formData.d_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.d_psp_rejection} onChange={(checked) => update('d_psp_rejection', checked)} 
-                label={t('rejectionPsp')} weight={10} 
-                description={t('rejectionPspDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.d_psp_rejection} 
+                onChange={(checked) => update('d_psp_rejection', checked)} 
+                label={t('rejectionPsp')} 
+                weight={10} 
+                description={t('rejectionPspDesc')}
+                tooltip="Rejection from previous structure point on daily"
+                darkMode={darkMode}
+                show={formData.d_candlestick || formData.d_at_aoi}
+              />
               
-              <ChecklistItem checked={formData.d_round_level} onChange={(checked) => update('d_round_level', checked)} 
-                label={t('roundLevel')} weight={5} 
-                description={t('roundLevelDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.d_round_level} 
+                onChange={(checked) => update('d_round_level', checked)} 
+                label={t('roundLevel')} 
+                weight={5} 
+                description={t('roundLevelDesc')}
+                tooltip="Psychological round number on daily chart"
+                darkMode={darkMode}
+                show={formData.d_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.d_swing} onChange={(checked) => update('d_swing', checked)} 
-                label={t('swingHighLow')} weight={5} 
-                description={t('swingDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.d_swing} 
+                onChange={(checked) => update('d_swing', checked)} 
+                label={t('swingHighLow')} 
+                weight={5} 
+                description={t('swingDesc')}
+                tooltip="Daily swing high/low reached"
+                darkMode={darkMode}
+                show={formData.d_trend !== ''}
+              />
               
               <PatternSelector 
                 value={formData.d_pattern} 
@@ -579,14 +653,8 @@ export default function ChecklistPage() {
             <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="04" title={t('h4Analysis')} subtitle={t('h4Confirm')} />
               
-              {/* Current Score - Compact */}
-              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
-                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('h4Score')}</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", h4Score >= 25 ? "text-emerald-500" : h4Score >= 15 ? "text-yellow-500" : theme.text)}>{h4Score}</span>
-                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/35</span>
-                </div>
-              </div>
+              {/* Progress Bar */}
+              <SectionProgressBar current={h4Score} max={35} label={t('h4Score')} darkMode={darkMode} />
 
               {/* Trend Selection - Compact */}
               <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
@@ -613,21 +681,49 @@ export default function ChecklistPage() {
                 </div>
               </div>
               
-              <ChecklistItem checked={formData.h4_at_aoi} onChange={(checked) => update('h4_at_aoi', checked)} 
-                label={t('atAoiRejected')} weight={5} 
-                description={t('atAoiDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.h4_at_aoi} 
+                onChange={(checked) => update('h4_at_aoi', checked)} 
+                label={t('atAoiRejected')} 
+                weight={5} 
+                description={t('atAoiDesc')}
+                tooltip="4H price confirmation at AOI zone"
+                darkMode={darkMode}
+                show={formData.h4_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.h4_candlestick} onChange={(checked) => update('h4_candlestick', checked)} 
-                label={t('candlestickRejection')} weight={10} 
-                description={t('candlestickDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.h4_candlestick} 
+                onChange={(checked) => update('h4_candlestick', checked)} 
+                label={t('candlestickRejection')} 
+                weight={10} 
+                description={t('candlestickDesc')}
+                tooltip="4H rejection candle pattern visible"
+                darkMode={darkMode}
+                show={formData.h4_trend !== ''}
+              />
               
-              <ChecklistItem checked={formData.h4_psp_rejection} onChange={(checked) => update('h4_psp_rejection', checked)} 
-                label={t('rejectionPsp')} weight={5} 
-                description={t('rejectionPspDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.h4_psp_rejection} 
+                onChange={(checked) => update('h4_psp_rejection', checked)} 
+                label={t('rejectionPsp')} 
+                weight={5} 
+                description={t('rejectionPspDesc')}
+                tooltip="4H rejection from previous structure"
+                darkMode={darkMode}
+                show={formData.h4_candlestick || formData.h4_at_aoi}
+              />
               
-              <ChecklistItem checked={formData.h4_swing} onChange={(checked) => update('h4_swing', checked)} 
-                label={t('swingHighLow')} weight={5} 
-                description={t('swingDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.h4_swing} 
+                onChange={(checked) => update('h4_swing', checked)} 
+                label={t('swingHighLow')} 
+                weight={5} 
+                description={t('swingDesc')}
+                tooltip="4H swing high/low confirmation"
+                darkMode={darkMode}
+                show={formData.h4_trend !== ''}
+              />
               
               <PatternSelector 
                 value={formData.h4_pattern} 
@@ -655,22 +751,29 @@ export default function ChecklistPage() {
                 </div>
               </div>
 
-              {/* Current Score - Compact */}
-              <div className={`flex items-center justify-between px-3 py-2 sm:p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
-                <span className={`${theme.textMuted} text-[10px] sm:text-xs tracking-wider`}>{t('entryScoreLabel')}</span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className={cn("text-lg sm:text-xl md:text-2xl font-bold", entryScore >= 20 ? "text-teal-600" : entryScore >= 10 ? "text-amber-500" : theme.text)}>{entryScore}</span>
-                  <span className={`${theme.textDimmed} text-xs sm:text-sm`}>/25</span>
-                </div>
-              </div>
+              {/* Progress Bar */}
+              <SectionProgressBar current={entryScore} max={25} label={t('entryScoreLabel')} darkMode={darkMode} />
               
-              <ChecklistItem checked={formData.entry_sos} onChange={(checked) => update('entry_sos', checked)} 
-                label={t('mssShift')} weight={10} 
-                description={t('mssDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.entry_sos} 
+                onChange={(checked) => update('entry_sos', checked)} 
+                label={t('mssShift')} 
+                weight={10} 
+                description={t('mssDesc')}
+                tooltip="Market Structure Shift confirmed - price has reversed direction (30min-1H chart)"
+                darkMode={darkMode}
+              />
               
-              <ChecklistItem checked={formData.entry_engulfing} onChange={(checked) => update('entry_engulfing', checked)} 
-                label={t('engulfingCandle')} weight={10} 
-                description={t('engulfingDesc')} />
+              <ChecklistItemWithTooltip 
+                checked={formData.entry_engulfing} 
+                onChange={(checked) => update('entry_engulfing', checked)} 
+                label={t('engulfingCandle')} 
+                weight={10} 
+                description={t('engulfingDesc')}
+                tooltip="Engulfing candle visible after pullback - strong reversal confirmation"
+                darkMode={darkMode}
+                show={formData.entry_sos}
+              />
               
               <PatternSelector 
                 value={formData.entry_pattern} 
