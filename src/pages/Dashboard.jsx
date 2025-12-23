@@ -227,21 +227,26 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats - Einheitlich */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
             { label: t('winRate'), value: `${stats.winRate}%`, icon: BarChart3 },
             { label: t('exec'), value: stats.executed, icon: Activity },
+            { label: t('avgCompletion'), value: `${stats.avgCompletion}%`, icon: Target, highlight: stats.avgCompletion >= 85 },
           ].map((stat, index) => (
             <motion.div key={stat.label} 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
               transition={{ duration: 0.1 }}
               className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6",
-                `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", theme.text)} />
-              <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", theme.text)}>{stat.value}</div>
+                stat.highlight 
+                  ? darkMode ? "bg-teal-600/20 border-teal-600" : "bg-teal-100 border-teal-600"
+                  : `${theme.border} ${theme.bgSecondary}`)}>
+              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", 
+                stat.highlight ? "text-teal-600" : theme.text)} />
+              <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", 
+                stat.highlight ? "text-teal-600" : theme.text)}>{stat.value}</div>
               <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-widest", theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
@@ -734,70 +739,6 @@ export default function DashboardPage() {
             {/* Best Trading Times */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <BestTradingTimes trades={checklists} darkMode={darkMode} />
-            </motion.div>
-
-            {/* Avg Completion */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-              className={cn("rounded-2xl p-6 sm:p-7 text-center border-2",
-                stats.avgCompletion >= 85 
-                  ? darkMode ? "bg-teal-600/20 border-teal-600" : "bg-teal-100 border-teal-600"
-                  : darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-300")}>
-
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center border-2",
-                  stats.avgCompletion >= 85 
-                    ? "bg-teal-600 border-teal-500" 
-                    : darkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-200 border-zinc-300")}>
-                  <Target className={cn("w-5 h-5", stats.avgCompletion >= 85 ? "text-white" : theme.text)} />
-                </div>
-                <div className="text-sm tracking-widest">{t('avgCompletion')}</div>
-              </div>
-
-              <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-5">
-                <svg className="transform -rotate-90 w-full h-full">
-                  <circle cx="50%" cy="50%" r="70" stroke={darkMode ? "#18181b" : "#f4f4f5"} strokeWidth="12" fill="none" />
-                  <circle 
-                    cx="50%" 
-                    cy="50%" 
-                    r="70"
-                    stroke={stats.avgCompletion >= 85 ? "#0d9488" : "#6b7280"}
-                    strokeWidth="12"
-                    fill="none"
-                    strokeDasharray={`${2 * Math.PI * 70}`}
-                    strokeDashoffset={`${2 * Math.PI * 70 * (1 - stats.avgCompletion / 100)}`}
-                    strokeLinecap="round"
-                    className="transition-all duration-1000 ease-out"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <div className={cn("text-5xl sm:text-6xl font-black mb-1",
-                    stats.avgCompletion >= 85 ? 'text-teal-600' : theme.text)}>
-                    {stats.avgCompletion}%
-                  </div>
-                  {stats.avgCompletion >= 85 ? (
-                    <CheckCircle className="w-7 h-7 text-teal-600" />
-                  ) : (
-                    <div className={`text-xs ${theme.textMuted} tracking-wider`}>85%+</div>
-                  )}
-                </div>
-              </div>
-              
-              <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs tracking-wider border-2",
-                stats.avgCompletion >= 85 
-                  ? "bg-teal-600/20 border-teal-600 text-teal-600" 
-                  : darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-400" : "bg-zinc-200 border-zinc-300 text-zinc-600")}>
-                {stats.avgCompletion >= 85 ? (
-                  <>
-                    <div className="w-2 h-2 bg-teal-600 rounded-full" />
-                    {t('standardZnpcv')}
-                  </>
-                ) : (
-                  <>
-                    <Target className="w-3.5 h-3.5" />
-                    {t('target')}: 85%
-                  </>
-                )}
-              </div>
             </motion.div>
           </div>
         </div>
