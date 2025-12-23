@@ -5,12 +5,12 @@ import CodeExport from './pages/CodeExport';
 import Dashboard from './pages/Dashboard';
 import Datenschutz from './pages/Datenschutz';
 import FAQ from './pages/FAQ';
+import Home from './pages/Home';
 import Impressum from './pages/Impressum';
+import Integrations from './pages/Integrations';
 import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
-import Home from './pages/Home';
-import Integrations from './pages/Integrations';
 import __Layout from './Layout.jsx';
 
 
@@ -22,12 +22,12 @@ export const PAGES = {
     "Dashboard": Dashboard,
     "Datenschutz": Datenschutz,
     "FAQ": FAQ,
+    "Home": Home,
     "Impressum": Impressum,
+    "Integrations": Integrations,
     "Register": Register,
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
-    "Home": Home,
-    "Integrations": Integrations,
 }
 
 export const pagesConfig = {
