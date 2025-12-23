@@ -173,6 +173,15 @@ const translations = {
     furtherQuestions: '还有其他问题吗？',
     contactUs: '如有其他问题，请直接联系我们',
 
+    // FAQ
+    faqBasics: '基础',
+    faqTradingConcepts: '交易概念',
+    faqChartPatterns: '图表模式',
+    faqGoldenRules: '黄金法则',
+    faqRiskManagement: '风险管理',
+    faqFeatures: '功能',
+    faqAccountSecurity: '账户与安全',
+
     // Additional translations
     uploadCharts: '上传图表',
     setupCharts: '设置图表',
@@ -661,6 +670,15 @@ const translations = {
     furtherQuestions: 'D\'AUTRES QUESTIONS?',
     contactUs: 'Si vous avez d\'autres questions, contactez-nous directement',
 
+    // FAQ
+    faqBasics: 'FONDAMENTAUX',
+    faqTradingConcepts: 'CONCEPTS DE TRADING',
+    faqChartPatterns: 'MODÈLES DE GRAPHIQUE',
+    faqGoldenRules: 'RÈGLES D\'OR',
+    faqRiskManagement: 'GESTION DES RISQUES',
+    faqFeatures: 'FONCTIONNALITÉS',
+    faqAccountSecurity: 'COMPTE ET SÉCURITÉ',
+
     // Additional missing translations
     uploadCharts: 'TÉLÉCHARGER GRAPHIQUES',
     setupCharts: 'GRAPHIQUES SETUP',
@@ -904,6 +922,15 @@ const translations = {
     confirmDelete: 'क्या आप वाकई ट्रेड हटाना चाहते हैं?',
     furtherQuestions: 'और सवाल?',
     contactUs: 'यदि आपके और प्रश्न हैं, तो कृपया हमसे संपर्क करें',
+
+    // FAQ
+    faqBasics: 'बुनियादी बातें',
+    faqTradingConcepts: 'ट्रेडिंग अवधारणाएं',
+    faqChartPatterns: 'चार्ट पैटर्न',
+    faqGoldenRules: 'सुनहरे नियम',
+    faqRiskManagement: 'जोखिम प्रबंधन',
+    faqFeatures: 'विशेषताएं और कार्य',
+    faqAccountSecurity: 'खाता और सुरक्षा',
 
     // Additional translations
     uploadCharts: 'चार्ट अपलोड करें',
@@ -1149,6 +1176,15 @@ const translations = {
     furtherQuestions: 'その他の質問？',
     contactUs: 'その他のご質問がございましたら、お気軽にお問い合わせください',
 
+    // FAQ
+    faqBasics: '基礎',
+    faqTradingConcepts: 'トレーディング概念',
+    faqChartPatterns: 'チャートパターン',
+    faqGoldenRules: 'ゴールデンルール',
+    faqRiskManagement: 'リスク管理',
+    faqFeatures: '機能',
+    faqAccountSecurity: 'アカウントとセキュリティ',
+
     // Additional translations
     uploadCharts: 'チャートアップロード',
     setupCharts: 'セットアップチャート',
@@ -1393,6 +1429,15 @@ const translations = {
     furtherQuestions: 'MAIS PERGUNTAS?',
     contactUs: 'Se você tiver mais perguntas, entre em contato conosco diretamente',
 
+    // FAQ
+    faqBasics: 'FUNDAMENTOS',
+    faqTradingConcepts: 'CONCEITOS DE TRADING',
+    faqChartPatterns: 'PADRÕES DE GRÁFICO',
+    faqGoldenRules: 'REGRAS DE OURO',
+    faqRiskManagement: 'GESTÃO DE RISCO',
+    faqFeatures: 'RECURSOS E FUNÇÕES',
+    faqAccountSecurity: 'CONTA E SEGURANÇA',
+
     // Additional translations
     uploadCharts: 'CARREGAR GRÁFICOS',
     setupCharts: 'GRÁFICOS SETUP',
@@ -1636,6 +1681,15 @@ const translations = {
     confirmDelete: 'هل تريد حقًا حذف الصفقة؟',
     furtherQuestions: 'المزيد من الأسئلة؟',
     contactUs: 'إذا كان لديك المزيد من الأسئلة، اتصل بنا مباشرة',
+
+    // FAQ
+    faqBasics: 'الأساسيات',
+    faqTradingConcepts: 'مفاهيم التداول',
+    faqChartPatterns: 'أنماط الرسم البياني',
+    faqGoldenRules: 'القواعد الذهبية',
+    faqRiskManagement: 'إدارة المخاطر',
+    faqFeatures: 'الميزات والوظائف',
+    faqAccountSecurity: 'الحساب والأمان',
 
     // Additional translations
     uploadCharts: 'تحميل الرسوم البيانية',
@@ -2022,6 +2076,15 @@ const translations = {
     furtherQuestions: 'WEITERE FRAGEN?',
     contactUs: 'Wenn du weitere Fragen hast, kontaktiere uns gerne direkt',
 
+    // FAQ
+    faqBasics: 'GRUNDLAGEN',
+    faqTradingConcepts: 'TRADING KONZEPTE',
+    faqChartPatterns: 'CHART PATTERNS',
+    faqGoldenRules: 'GOLDENE REGELN',
+    faqRiskManagement: 'RISIKOMANAGEMENT',
+    faqFeatures: 'FEATURES & FUNKTIONEN',
+    faqAccountSecurity: 'ACCOUNT & SICHERHEIT',
+
     // Additional translations
     uploadCharts: 'CHARTS HOCHLADEN',
     setupCharts: 'SETUP CHARTS',
@@ -2407,6 +2470,15 @@ const translations = {
     furtherQuestions: 'MORE QUESTIONS?',
     contactUs: 'If you have more questions, feel free to contact us directly',
 
+    // FAQ
+    faqBasics: 'BASICS',
+    faqTradingConcepts: 'TRADING CONCEPTS',
+    faqChartPatterns: 'CHART PATTERNS',
+    faqGoldenRules: 'GOLDEN RULES',
+    faqRiskManagement: 'RISK MANAGEMENT',
+    faqFeatures: 'FEATURES & FUNCTIONS',
+    faqAccountSecurity: 'ACCOUNT & SECURITY',
+
     // Additional translations
     uploadCharts: 'UPLOAD CHARTS',
     setupCharts: 'SETUP CHARTS',
@@ -2786,6 +2858,15 @@ const translations = {
     // FAQ
     furtherQuestions: 'سوالات بیشتر؟',
     contactUs: 'اگر سوال بیشتری دارید، با ما تماس بگیرید',
+
+    // FAQ
+    faqBasics: 'مبانی',
+    faqTradingConcepts: 'مفاهیم ترید',
+    faqChartPatterns: 'الگوهای چارت',
+    faqGoldenRules: 'قوانین طلایی',
+    faqRiskManagement: 'مدیریت ریسک',
+    faqFeatures: 'ویژگی‌ها',
+    faqAccountSecurity: 'حساب و امنیت',
 
     // Additional translations
     uploadCharts: 'آپلود نمودار',
