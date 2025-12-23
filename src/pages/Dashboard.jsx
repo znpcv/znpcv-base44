@@ -489,112 +489,77 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Direction Analysis - Ultra Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
-              className={cn("relative rounded-3xl p-6 sm:p-7 overflow-hidden border-2 shadow-2xl",
-                darkMode ? "bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 border-zinc-800/50" : "bg-gradient-to-br from-zinc-50 via-white to-zinc-50 border-zinc-300")}>
-              
-              {/* Animated Pattern Background */}
-              <div className="absolute inset-0 opacity-5 pointer-events-none">
-                <div className="absolute top-0 left-1/4 w-40 h-40 bg-teal-600 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s' }} />
-                <div className="absolute bottom-0 right-1/4 w-40 h-40 bg-rose-600 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }} />
+            {/* Direction Analysis */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+              className={cn("rounded-2xl p-6 sm:p-7 border-2",
+                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
+
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5">
+                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center",
+                    darkMode ? "bg-zinc-900" : "bg-zinc-200")}>
+                    <PieChart className={cn("w-5 h-5", theme.text)} />
+                  </div>
+                  <h3 className={`text-sm tracking-widest ${theme.text}`}>RICHTUNG</h3>
+                </div>
+                <div className={cn("px-3 py-2 rounded-xl font-black text-xs border-2",
+                  darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-400" : "bg-white border-zinc-300 text-zinc-600")}>
+                  {stats.longs + stats.shorts}
+                </div>
               </div>
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-5">
-                  <div className="flex items-center gap-2.5">
-                    <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shadow-lg",
-                      darkMode ? "bg-gradient-to-br from-zinc-800 to-zinc-900" : "bg-gradient-to-br from-zinc-100 to-zinc-200")}>
-                      <PieChart className={cn("w-5 h-5", theme.text)} />
+              
+              <div className="h-48 sm:h-56 relative mb-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartsPie>
+                    <Pie 
+                      data={directionData} 
+                      cx="50%" 
+                      cy="50%" 
+                      innerRadius={42} 
+                      outerRadius={68} 
+                      paddingAngle={6} 
+                      dataKey="value"
+                      label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {directionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ 
+                        background: darkMode ? '#18181b' : '#ffffff',
+                        border: `2px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, 
+                        borderRadius: 12, 
+                        padding: '10px'
+                      }}
+                      formatter={(value, name) => [value, name]}
+                    />
+                  </RechartsPie>
+                </ResponsiveContainer>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                {directionData.map((item) => (
+                  <div 
+                    key={item.name}
+                    className={cn("p-4 rounded-xl border-2 text-center",
+                      item.name === t('long')
+                        ? darkMode ? "bg-teal-600/20 border-teal-600" : "bg-teal-100 border-teal-600"
+                        : darkMode ? "bg-rose-600/20 border-rose-600" : "bg-rose-100 border-rose-600")}>
+                    
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      {item.name === t('long') ? <ArrowUpRight className="w-4 h-4 text-teal-600" /> : <ArrowDownRight className="w-4 h-4 text-rose-600" />}
+                      <span className={cn("text-xs font-black tracking-wider", item.name === t('long') ? 'text-teal-600' : 'text-rose-600')}>
+                        {item.name.toUpperCase()}
+                      </span>
                     </div>
-                    <h3 className={`text-sm tracking-widest ${theme.text}`}>RICHTUNG</h3>
+                    <div className={cn("text-3xl font-black mb-1", item.name === t('long') ? 'text-teal-600' : 'text-rose-600')}>{item.value}</div>
+                    <div className={`text-[10px] ${theme.textMuted} font-bold tracking-wide`}>
+                      {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}%
+                    </div>
                   </div>
-                  <div className={cn("px-3 py-2 rounded-xl font-black text-xs border-2",
-                    darkMode ? "bg-zinc-900/80 border-zinc-800 text-zinc-400" : "bg-white/80 border-zinc-300 text-zinc-600")}>
-                    {stats.longs + stats.shorts}
-                  </div>
-                </div>
-                
-                <div className="h-48 sm:h-56 relative mb-4">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RechartsPie>
-                      <defs>
-                        <filter id="pieGlow">
-                          <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-                          <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                          </feMerge>
-                        </filter>
-                        <linearGradient id="longGradient" x1="0" y1="0" x2="1" y2="1">
-                          <stop offset="0%" stopColor="#0d9488"/>
-                          <stop offset="100%" stopColor="#10b981"/>
-                        </linearGradient>
-                        <linearGradient id="shortGradient" x1="0" y1="0" x2="1" y2="1">
-                          <stop offset="0%" stopColor="#e11d48"/>
-                          <stop offset="100%" stopColor="#dc2626"/>
-                        </linearGradient>
-                      </defs>
-                      <Pie 
-                        data={directionData.map(d => ({ ...d, color: d.name === t('long') ? 'url(#longGradient)' : 'url(#shortGradient)' }))} 
-                        cx="50%" 
-                        cy="50%" 
-                        innerRadius={42} 
-                        outerRadius={68} 
-                        paddingAngle={6} 
-                        dataKey="value"
-                        filter="url(#pieGlow)"
-                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-                        labelLine={false}
-                      >
-                        {directionData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.name === t('long') ? 'url(#longGradient)' : 'url(#shortGradient)'} />
-                        ))}
-                      </Pie>
-                      <Tooltip 
-                        contentStyle={{ 
-                          background: `linear-gradient(135deg, ${darkMode ? '#18181b' : '#ffffff'} 0%, ${darkMode ? '#09090b' : '#fafafa'} 100%)`,
-                          border: `2px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, 
-                          borderRadius: 16, 
-                          padding: '12px',
-                          boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
-                        }}
-                        formatter={(value, name) => [value, name]}
-                      />
-                    </RechartsPie>
-                  </ResponsiveContainer>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  {directionData.map((item) => (
-                    <motion.div 
-                      key={item.name}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                      className={cn("p-4 rounded-2xl border-2 text-center relative overflow-hidden shadow-lg",
-                        item.name === t('long')
-                          ? darkMode ? "bg-gradient-to-br from-teal-900/40 to-emerald-900/30 border-teal-600/50" : "bg-gradient-to-br from-teal-100 to-emerald-50 border-teal-400"
-                          : darkMode ? "bg-gradient-to-br from-rose-900/40 to-red-900/30 border-rose-600/50" : "bg-gradient-to-br from-rose-100 to-red-50 border-rose-400")}>
-                      
-                      <div className="absolute inset-0 opacity-10 pointer-events-none">
-                        <div className={cn("w-full h-full", item.name === t('long') ? "bg-gradient-to-br from-teal-600 to-transparent" : "bg-gradient-to-br from-rose-600 to-transparent")} />
-                      </div>
-
-                      <div className="relative z-10">
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          {item.name === t('long') ? <ArrowUpRight className="w-4 h-4 text-teal-600" /> : <ArrowDownRight className="w-4 h-4 text-rose-600" />}
-                          <span className={cn("text-xs font-black tracking-wider", item.name === t('long') ? 'text-teal-600' : 'text-rose-600')}>
-                            {item.name.toUpperCase()}
-                          </span>
-                        </div>
-                        <div className={cn("text-3xl font-black mb-1", item.name === t('long') ? 'text-teal-600' : 'text-rose-600')}>{item.value}</div>
-                        <div className={`text-[10px] ${theme.textMuted} font-bold tracking-wide`}>
-                          {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}%
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                ))}
               </div>
             </motion.div>
 
@@ -771,103 +736,67 @@ export default function DashboardPage() {
               <BestTradingTimes trades={checklists} darkMode={darkMode} />
             </motion.div>
 
-            {/* Avg Completion - Ultra Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
-              className={cn("relative rounded-3xl p-6 sm:p-7 text-center overflow-hidden border-2 shadow-2xl",
+            {/* Avg Completion */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+              className={cn("rounded-2xl p-6 sm:p-7 text-center border-2",
                 stats.avgCompletion >= 85 
-                  ? darkMode ? "bg-gradient-to-br from-teal-950 via-emerald-950 to-black border-teal-600/30" : "bg-gradient-to-br from-teal-50 via-emerald-50 to-white border-teal-400"
-                  : darkMode ? "bg-gradient-to-br from-zinc-950 via-zinc-900 to-black border-zinc-800/50" : "bg-gradient-to-br from-zinc-100 via-zinc-50 to-white border-zinc-300")}>
-              
-              {/* Animated Radial Background */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className={cn("absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl animate-pulse",
-                  stats.avgCompletion >= 85 ? "bg-teal-600" : "bg-zinc-600")} style={{ animationDuration: '4s' }} />
+                  ? darkMode ? "bg-teal-600/20 border-teal-600" : "bg-teal-100 border-teal-600"
+                  : darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-300")}>
+
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center border-2",
+                  stats.avgCompletion >= 85 
+                    ? "bg-teal-600 border-teal-500" 
+                    : darkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-200 border-zinc-300")}>
+                  <Target className={cn("w-5 h-5", stats.avgCompletion >= 85 ? "text-white" : theme.text)} />
+                </div>
+                <div className="text-sm tracking-widest">{t('avgCompletion')}</div>
               </div>
 
-              {/* Orbiting Particles */}
-              {stats.avgCompletion >= 85 && (
-                <>
-                  <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-teal-600/40 rounded-full blur-sm animate-ping" style={{ animationDuration: '3s' }} />
-                  <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-emerald-600/40 rounded-full blur-sm animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }} />
-                  <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-teal-600/40 rounded-full blur-sm animate-ping" style={{ animationDuration: '3.5s', animationDelay: '1s' }} />
-                </>
-              )}
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-xl border-2",
-                    stats.avgCompletion >= 85 
-                      ? "bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500/50" 
-                      : darkMode ? "bg-zinc-800 border-zinc-700" : "bg-zinc-200 border-zinc-300")}>
-                    <Target className={cn("w-5 h-5", stats.avgCompletion >= 85 ? "text-white" : theme.text)} />
+              <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-5">
+                <svg className="transform -rotate-90 w-full h-full">
+                  <circle cx="50%" cy="50%" r="70" stroke={darkMode ? "#18181b" : "#f4f4f5"} strokeWidth="12" fill="none" />
+                  <circle 
+                    cx="50%" 
+                    cy="50%" 
+                    r="70"
+                    stroke={stats.avgCompletion >= 85 ? "#0d9488" : "#6b7280"}
+                    strokeWidth="12"
+                    fill="none"
+                    strokeDasharray={`${2 * Math.PI * 70}`}
+                    strokeDashoffset={`${2 * Math.PI * 70 * (1 - stats.avgCompletion / 100)}`}
+                    strokeLinecap="round"
+                    className="transition-all duration-1000 ease-out"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className={cn("text-5xl sm:text-6xl font-black mb-1",
+                    stats.avgCompletion >= 85 ? 'text-teal-600' : theme.text)}>
+                    {stats.avgCompletion}%
                   </div>
-                  <div className="text-sm tracking-widest">{t('avgCompletion')}</div>
-                </div>
-
-                {/* Giant Animated Progress Circle */}
-                <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-5">
-                  <svg className="transform -rotate-90 w-full h-full">
-                    {/* Background ring with glow */}
-                    <defs>
-                      <filter id="ringGlow">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge>
-                          <feMergeNode in="coloredBlur"/>
-                          <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    <circle cx="50%" cy="50%" r="70" stroke={darkMode ? "#18181b" : "#f4f4f5"} strokeWidth="12" fill="none" />
-                    <circle 
-                      cx="50%" 
-                      cy="50%" 
-                      r="70"
-                      stroke={stats.avgCompletion >= 85 ? "url(#scoreGradient)" : "#6b7280"}
-                      strokeWidth="12"
-                      fill="none"
-                      strokeDasharray={`${2 * Math.PI * 70}`}
-                      strokeDashoffset={`${2 * Math.PI * 70 * (1 - stats.avgCompletion / 100)}`}
-                      strokeLinecap="round"
-                      filter="url(#ringGlow)"
-                      className="transition-all duration-1000 ease-out"
-                    />
-                    <defs>
-                      <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#0d9488"/>
-                        <stop offset="100%" stopColor="#10b981"/>
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className={cn("text-5xl sm:text-6xl font-black mb-1",
-                      stats.avgCompletion >= 85 ? 'bg-gradient-to-br from-teal-600 to-emerald-600 bg-clip-text text-transparent' : theme.text)}>
-                      {stats.avgCompletion}%
-                    </div>
-                    {stats.avgCompletion >= 85 ? (
-                      <CheckCircle className="w-7 h-7 text-teal-600 animate-pulse" />
-                    ) : (
-                      <div className={`text-xs ${theme.textMuted} tracking-wider`}>85%+</div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Status Badge */}
-                <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs tracking-wider border-2",
-                  stats.avgCompletion >= 85 
-                    ? "bg-teal-600/20 border-teal-600/50 text-teal-600" 
-                    : darkMode ? "bg-zinc-800 border-zinc-700 text-zinc-400" : "bg-zinc-200 border-zinc-300 text-zinc-600")}>
                   {stats.avgCompletion >= 85 ? (
-                    <>
-                      <div className="w-2 h-2 bg-teal-600 rounded-full animate-pulse" />
-                      {t('standardZnpcv')}
-                    </>
+                    <CheckCircle className="w-7 h-7 text-teal-600" />
                   ) : (
-                    <>
-                      <Target className="w-3.5 h-3.5" />
-                      {t('target')}: 85%
-                    </>
+                    <div className={`text-xs ${theme.textMuted} tracking-wider`}>85%+</div>
                   )}
                 </div>
+              </div>
+              
+              <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs tracking-wider border-2",
+                stats.avgCompletion >= 85 
+                  ? "bg-teal-600/20 border-teal-600 text-teal-600" 
+                  : darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-400" : "bg-zinc-200 border-zinc-300 text-zinc-600")}>
+                {stats.avgCompletion >= 85 ? (
+                  <>
+                    <div className="w-2 h-2 bg-teal-600 rounded-full" />
+                    {t('standardZnpcv')}
+                  </>
+                ) : (
+                  <>
+                    <Target className="w-3.5 h-3.5" />
+                    {t('target')}: 85%
+                  </>
+                )}
               </div>
             </motion.div>
           </div>
