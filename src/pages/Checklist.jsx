@@ -130,6 +130,10 @@ export default function ChecklistPage() {
     (formData.entry_pattern && formData.entry_pattern !== 'none' ? 5 : 0);
 
   const progress = weeklyScore + dailyScore + h4Score + entryScore;
+  
+  // Check for confluence (all trends in same direction)
+  const hasConfluence = formData.w_trend && formData.d_trend && formData.h4_trend &&
+    formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend;
 
   // Auto-Save Feature - saves every 3 seconds after changes
   useEffect(() => {
@@ -351,10 +355,18 @@ export default function ChecklistPage() {
         <div className="max-w-3xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5">
           {/* Score Badge - Prominent */}
           <div className="flex items-center justify-between mb-2">
-            <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold", gradeInfo.color, 
-              progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>
-              <span className="text-base sm:text-lg">{progress}%</span>
-              <span className="text-xs opacity-80">{gradeInfo.grade}</span>
+            <div className="flex items-center gap-2">
+              <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-bold", gradeInfo.color, 
+                progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                <span className="text-base sm:text-lg">{progress}%</span>
+                <span className="text-xs opacity-80">{gradeInfo.grade}</span>
+              </div>
+              {hasConfluence && (
+                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-teal-600 text-white text-[9px] sm:text-[10px] font-bold animate-pulse">
+                  <Layers className="w-3 h-3" />
+                  CONFLUENCE
+                </div>
+              )}
             </div>
             <span className={`${theme.textMuted} text-xs`}>MAX: 180%</span>
           </div>
@@ -437,6 +449,20 @@ export default function ChecklistPage() {
               
               {/* Progress Bar */}
               <SectionProgressBar current={weeklyScore} max={60} label={t('weeklyScore')} darkMode={darkMode} />
+
+              {/* Confluence Alert */}
+              {formData.d_trend && formData.h4_trend && formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend && (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                  className={`p-3 sm:p-4 rounded-xl border-2 ${darkMode ? 'bg-teal-600/10 border-teal-600/30' : 'bg-teal-500/10 border-teal-500/30'}`}>
+                  <div className="flex items-center gap-2">
+                    <Layers className="w-5 h-5 text-teal-600" />
+                    <div>
+                      <div className="text-teal-600 font-bold text-xs sm:text-sm tracking-wider">CONFLUENCE CONFIRMED</div>
+                      <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[10px] sm:text-xs font-sans`}>All timeframes aligned - higher probability setup!</div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
 
               {/* Trend Selection - Compact */}
               <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 ${theme.bgSecondary}`}>
@@ -835,6 +861,20 @@ export default function ChecklistPage() {
             </motion.div>
           )}
 
+          {/* R:R Warning */}
+          {riskCalc && parseFloat(riskCalc.rr) < 2.5 && formData.entry_price && formData.stop_loss && formData.take_profit && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+              className={`p-3 sm:p-4 rounded-xl border-2 ${darkMode ? 'bg-amber-600/10 border-amber-600/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                <div>
+                  <div className="text-amber-500 font-bold text-xs sm:text-sm tracking-wider">LOW RISK:REWARD</div>
+                  <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[10px] sm:text-xs font-sans`}>ZNPCV recommends minimum 1:2.5 R:R ratio</div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           <AdvancedLotCalculator
             pair={formData.pair}
             direction={formData.direction}
@@ -863,6 +903,20 @@ export default function ChecklistPage() {
           {currentStep === 6 && (
             <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
+
+              {/* Confluence Banner */}
+              {hasConfluence && (
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 sm:p-5 rounded-xl border-2 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 text-white text-center">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Layers className="w-6 h-6" />
+                    <div className="text-lg sm:text-xl font-bold tracking-wider">FULL CONFLUENCE</div>
+                  </div>
+                  <div className="text-xs sm:text-sm font-sans opacity-90">
+                    Weekly • Daily • 4H all {formData.w_trend?.toUpperCase()} → High Probability Setup!
+                  </div>
+                </motion.div>
+              )}
 
               {/* ZNPCV Rule Confirmation */}
               <div className={`border-2 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${darkMode ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-300 bg-zinc-50'}`}>
@@ -998,19 +1052,35 @@ export default function ChecklistPage() {
                 />
               </div>
 
-              {/* Final Grade */}
+              {/* Final Grade with Confluence Bonus */}
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className={cn("p-6 sm:p-8 text-center rounded-xl sm:rounded-2xl border-2",
+                className={cn("p-6 sm:p-8 text-center rounded-xl sm:rounded-2xl border-2 relative overflow-hidden",
                   progress >= 100 ? "bg-teal-600 border-teal-600" :
                   progress >= 90 ? "bg-teal-500 border-teal-500" :
                   progress >= 85 ? "bg-blue-500 border-blue-500" :
                   progress >= 70 ? "bg-amber-500 border-amber-500" :
                   darkMode ? "bg-zinc-900 border-rose-600" : "bg-zinc-100 border-rose-600")}>
+                
+                {hasConfluence && progress >= 85 && (
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[9px] font-bold text-white flex items-center gap-1">
+                    <Layers className="w-3 h-3" />
+                    CONFLUENCE
+                  </div>
+                )}
+                
                 <div className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-2", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>{gradeInfo.grade}</div>
                 <div className={cn("text-2xl sm:text-3xl md:text-4xl tracking-widest mb-2", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>{progress}%</div>
                 <div className={cn("text-xs sm:text-sm font-sans", progress >= 70 ? "text-white/60" : darkMode ? "text-white/60" : "text-black/60")}>
                   {progress >= 85 ? `✓ ${t('readyToTradeLabel')}` : t('notRecommended')}
                 </div>
+                
+                {riskCalc && parseFloat(riskCalc.rr) >= 2.5 && progress >= 85 && (
+                  <div className={cn("mt-3 pt-3 border-t", progress >= 70 ? "border-white/20" : darkMode ? "border-zinc-800" : "border-zinc-300")}>
+                    <div className={cn("text-xs font-sans", progress >= 70 ? "text-white/70" : darkMode ? "text-white/60" : "text-black/60")}>
+                      Risk:Reward 1:{riskCalc.rr} ✓
+                    </div>
+                  </div>
+                )}
               </motion.div>
 
               {/* Score Breakdown */}
@@ -1069,8 +1139,10 @@ export default function ChecklistPage() {
           )}
           
           {currentStep < STEPS.length - 1 ? (
-            <Button onClick={() => setCurrentStep(prev => prev + 1)} 
-              className={`flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2 ${
+            <Button 
+              onClick={() => setCurrentStep(prev => prev + 1)} 
+              disabled={currentStep === 0 && !formData.pair}
+              className={`flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2 disabled:opacity-50 disabled:cursor-not-allowed ${
                 darkMode 
                   ? 'bg-white hover:bg-zinc-200 text-black border-white' 
                   : 'bg-black hover:bg-zinc-800 text-white border-black'
