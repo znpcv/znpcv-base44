@@ -901,50 +901,48 @@ export default function ChecklistPage() {
 
           {/* STEP 6: Final */}
           {currentStep === 6 && (
-            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
               {/* Confluence Banner */}
               {hasConfluence && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                  className="p-4 sm:p-5 rounded-xl border-2 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 text-white text-center">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Layers className="w-6 h-6" />
-                    <div className="text-lg sm:text-xl font-bold tracking-wider">FULL CONFLUENCE</div>
-                  </div>
-                  <div className="text-xs sm:text-sm font-sans opacity-90">
-                    Weekly • Daily • 4H all {formData.w_trend?.toUpperCase()} → High Probability Setup!
+                  className="p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 text-white">
+                  <div className="flex items-center justify-center gap-2">
+                    <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <div className="text-sm sm:text-base font-bold tracking-wider">FULL CONFLUENCE</div>
+                    <div className="text-[10px] sm:text-xs font-sans opacity-80">W•D•4H {formData.w_trend?.toUpperCase()}</div>
                   </div>
                 </motion.div>
               )}
 
               {/* ZNPCV Rule Confirmation */}
-              <div className={`border-2 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${darkMode ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-300 bg-zinc-50'}`}>
-                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5">
-                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
-                    <Shield className={`w-5 h-5 sm:w-6 sm:h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
+              <div className={`border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 ${darkMode ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-300 bg-zinc-50'}`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                    <Shield className={`w-4 h-4 sm:w-5 sm:h-5 ${darkMode ? 'text-black' : 'text-white'}`} />
                   </div>
                   <div>
-                    <div className={`${theme.text} font-bold tracking-widest text-sm sm:text-base md:text-lg`}>{t('confirmRule')}</div>
-                    <div className={`${theme.textMuted} text-xs sm:text-sm font-sans`}>ZNPCV Golden Rule</div>
+                    <div className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm`}>{t('confirmRule')}</div>
+                    <div className={`${theme.textMuted} text-[10px] sm:text-xs font-sans`}>Golden Rule</div>
                   </div>
                 </div>
                 
                 {formData.direction === 'long' && (
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-4 sm:p-5 border-2 rounded-xl flex items-center gap-3 sm:gap-4 transition-all text-left",
+                    className={cn("w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 transition-all text-left",
                       formData.confirms_rule 
                         ? "bg-teal-600 border-teal-600 text-white" 
                         : darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-950" : "border-zinc-300 hover:border-teal-600/50 bg-white")}>
-                    <div className={cn("w-8 h-8 sm:w-9 sm:h-9 border-2 flex items-center justify-center rounded-lg transition-all flex-shrink-0",
+                    <div className={cn("w-7 h-7 sm:w-8 sm:h-8 border-2 flex items-center justify-center rounded-lg transition-all flex-shrink-0",
                       formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-700" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600" strokeWidth={3} />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm md:text-base mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm mb-0.5", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-xs font-sans", formData.confirms_rule ? "text-teal-100" : theme.textMuted)}>
+                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-teal-100" : theme.textMuted)}>
                         ✓ {t('notBuyResistance')}
                       </div>
                     </div>
@@ -953,19 +951,19 @@ export default function ChecklistPage() {
                 
                 {formData.direction === 'short' && (
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-4 sm:p-5 border-2 rounded-xl flex items-center gap-3 sm:gap-4 transition-all text-left",
+                    className={cn("w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 transition-all text-left",
                       formData.confirms_rule 
                         ? "bg-rose-600 border-rose-600 text-white" 
                         : darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-950" : "border-zinc-300 hover:border-rose-600/50 bg-white")}>
-                    <div className={cn("w-8 h-8 sm:w-9 sm:h-9 border-2 flex items-center justify-center rounded-lg transition-all flex-shrink-0",
+                    <div className={cn("w-7 h-7 sm:w-8 sm:h-8 border-2 flex items-center justify-center rounded-lg transition-all flex-shrink-0",
                       formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-700" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600" strokeWidth={3} />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm md:text-base mb-1", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
+                      <div className={cn("font-bold tracking-wider text-xs sm:text-sm mb-0.5", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('sellInBelowAoi')}
                       </div>
-                      <div className={cn("text-xs font-sans", formData.confirms_rule ? "text-rose-100" : theme.textMuted)}>
+                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-rose-100" : theme.textMuted)}>
                         ✓ {t('notSellSupport')}
                       </div>
                     </div>
@@ -973,48 +971,48 @@ export default function ChecklistPage() {
                 )}
 
                 {!formData.direction && (
-                  <div className={`${theme.textMuted} text-center py-8 sm:py-10 font-sans`}>
-                    <Shield className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 ${theme.textMuted}`} />
-                    <div className="text-xs sm:text-sm">{t('selectDirFirst')}</div>
+                  <div className={`${theme.textMuted} text-center py-6 font-sans`}>
+                    <Shield className={`w-8 h-8 mx-auto mb-2 ${theme.textMuted}`} />
+                    <div className="text-xs">{t('selectDirFirst')}</div>
                   </div>
                 )}
               </div>
 
-              {/* Trade Summary */}
-              <div className={`border-2 ${theme.borderCard} rounded-xl sm:rounded-2xl p-4 sm:p-5 ${theme.bgSecondary}`}>
-                <h3 className={`${theme.text} font-bold tracking-widest text-xs sm:text-sm md:text-base mb-3 sm:mb-4`}>{t('tradeSummary')}</h3>
-                
-                <div className="space-y-1.5 sm:space-y-2">
-                  <SummaryRow label="PAIR" value={formData.pair || '-'} />
-                  <SummaryRow label="DIR" 
-                    value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
-                    color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
-                  <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
-                  <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
-                  <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
-                  <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
-                  <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
-                  {riskCalc && (
-                    <>
-                      <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-2`} />
-                      <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
-                      <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
-                    </>
-                  )}
+              {/* Trade Summary + Notes Grid */}
+              <div className="grid md:grid-cols-2 gap-2 sm:gap-3">
+                <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
+                  <h3 className={`${theme.text} font-bold tracking-widest text-xs mb-2 sm:mb-3`}>{t('tradeSummary')}</h3>
+                  <div className="space-y-1">
+                    <SummaryRow label="PAIR" value={formData.pair || '-'} />
+                    <SummaryRow label="DIR" 
+                      value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
+                      color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
+                    <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-1.5`} />
+                    <SummaryRow label="W" value={`${weeklyScore}/60`} color={weeklyScore >= 40 ? 'teal' : weeklyScore >= 25 ? 'amber' : null} />
+                    <SummaryRow label="D" value={`${dailyScore}/60`} color={dailyScore >= 40 ? 'teal' : dailyScore >= 25 ? 'amber' : null} />
+                    <SummaryRow label="4H" value={`${h4Score}/35`} color={h4Score >= 25 ? 'teal' : h4Score >= 15 ? 'amber' : null} />
+                    <SummaryRow label="E" value={`${entryScore}/25`} color={entryScore >= 20 ? 'teal' : entryScore >= 10 ? 'amber' : null} />
+                    {riskCalc && (
+                      <>
+                        <div className={`border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-300'} my-1.5`} />
+                        <SummaryRow label="R:R" value={`1:${riskCalc.rr}`} color={parseFloat(riskCalc.rr) >= 2.5 ? 'teal' : 'amber'} />
+                        <SummaryRow label="RISK" value={`$${riskCalc.riskAmount}`} color="rose" />
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
+                  <label className={`block ${theme.textMuted} tracking-widest text-xs mb-2`}>{t('notesOptional')}</label>
+                  <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
+                    className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[140px] rounded-lg font-sans text-xs`} />
                 </div>
               </div>
 
-              {/* Notes */}
-              <div>
-                <label className={`block ${theme.textMuted} tracking-widest text-xs sm:text-sm mb-2`}>{t('notesOptional')}</label>
-                <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
-                  className={`${darkMode ? 'bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-700 focus:border-white' : 'bg-zinc-100 border-zinc-300 text-black placeholder:text-zinc-400 focus:border-black'} min-h-[80px] sm:min-h-[100px] rounded-xl font-sans text-xs sm:text-sm`} />
-              </div>
-
               {/* Screenshot Upload */}
-              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid md:grid-cols-2 gap-2 sm:gap-3">
                 <ScreenshotUpload 
-                  label="SETUP CHARTS"
+                  label="SETUP"
                   description="Before Entry"
                   screenshots={formData.screenshots_before || []} 
                   onUpload={async (files) => {
@@ -1033,7 +1031,7 @@ export default function ChecklistPage() {
                 />
                 
                 <ScreenshotUpload 
-                  label="RESULT CHARTS"
+                  label="RESULT"
                   description="After Exit"
                   screenshots={formData.screenshots_after || []} 
                   onUpload={async (files) => {
@@ -1052,73 +1050,66 @@ export default function ChecklistPage() {
                 />
               </div>
 
-              {/* Final Grade with Confluence Bonus */}
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className={cn("p-6 sm:p-8 text-center rounded-xl sm:rounded-2xl border-2 relative overflow-hidden",
-                  progress >= 100 ? "bg-teal-600 border-teal-600" :
-                  progress >= 90 ? "bg-teal-500 border-teal-500" :
-                  progress >= 85 ? "bg-blue-500 border-blue-500" :
-                  progress >= 70 ? "bg-amber-500 border-amber-500" :
-                  darkMode ? "bg-zinc-900 border-rose-600" : "bg-zinc-100 border-rose-600")}>
-                
-                {hasConfluence && progress >= 85 && (
-                  <div className="absolute top-3 right-3 px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[9px] font-bold text-white flex items-center gap-1">
-                    <Layers className="w-3 h-3" />
-                    CONFLUENCE
-                  </div>
-                )}
-                
-                <div className={cn("text-4xl sm:text-5xl md:text-6xl font-bold mb-2", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>{gradeInfo.grade}</div>
-                <div className={cn("text-2xl sm:text-3xl md:text-4xl tracking-widest mb-2", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>{progress}%</div>
-                <div className={cn("text-xs sm:text-sm font-sans", progress >= 70 ? "text-white/60" : darkMode ? "text-white/60" : "text-black/60")}>
-                  {progress >= 85 ? `✓ ${t('readyToTradeLabel')}` : t('notRecommended')}
-                </div>
-                
-                {riskCalc && parseFloat(riskCalc.rr) >= 2.5 && progress >= 85 && (
-                  <div className={cn("mt-3 pt-3 border-t", progress >= 70 ? "border-white/20" : darkMode ? "border-zinc-800" : "border-zinc-300")}>
-                    <div className={cn("text-xs font-sans", progress >= 70 ? "text-white/70" : darkMode ? "text-white/60" : "text-black/60")}>
-                      Risk:Reward 1:{riskCalc.rr} ✓
+              {/* Final Grade + Breakdown Combined */}
+              <div className="grid md:grid-cols-3 gap-2">
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                  className={cn("md:col-span-2 p-4 sm:p-5 text-center rounded-lg sm:rounded-xl border-2 relative",
+                    progress >= 100 ? "bg-teal-600 border-teal-600" :
+                    progress >= 90 ? "bg-teal-500 border-teal-500" :
+                    progress >= 85 ? "bg-blue-500 border-blue-500" :
+                    progress >= 70 ? "bg-amber-500 border-amber-500" :
+                    darkMode ? "bg-zinc-900 border-rose-600" : "bg-zinc-100 border-rose-600")}>
+                  
+                  {hasConfluence && progress >= 85 && (
+                    <div className="absolute top-2 right-2 px-1.5 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-[8px] font-bold text-white flex items-center gap-1">
+                      <Layers className="w-2.5 h-2.5" />
+                      CONFL
                     </div>
+                  )}
+                  
+                  <div className={cn("text-3xl sm:text-4xl md:text-5xl font-bold mb-1", progress >= 70 ? "text-white" : darkMode ? "text-white" : "text-black")}>{gradeInfo.grade}</div>
+                  <div className={cn("text-xl sm:text-2xl md:text-3xl tracking-widest mb-1", progress >= 70 ? "text-white/80" : darkMode ? "text-white/70" : "text-black/70")}>{progress}%</div>
+                  <div className={cn("text-[10px] sm:text-xs font-sans", progress >= 70 ? "text-white/60" : darkMode ? "text-white/60" : "text-black/60")}>
+                    {progress >= 85 ? `✓ ${t('readyToTradeLabel')}` : t('notRecommended')}
                   </div>
-                )}
-              </motion.div>
+                  {riskCalc && parseFloat(riskCalc.rr) >= 2.5 && (
+                    <div className={cn("mt-2 pt-2 border-t text-[9px] font-sans", progress >= 70 ? "border-white/20 text-white/60" : darkMode ? "border-zinc-800 text-white/50" : "border-zinc-300 text-black/50")}>
+                      R:R 1:{riskCalc.rr} ✓
+                    </div>
+                  )}
+                </motion.div>
 
-              {/* Score Breakdown */}
-              <div className={`p-3 sm:p-4 ${theme.bgSecondary} border-2 ${theme.borderCard} rounded-xl`}>
-                <div className={`text-xs ${theme.textMuted} tracking-widest mb-3 text-center`}>{t('pointsBreakdown')}</div>
-                <div className="grid grid-cols-4 gap-2 text-center">
-                  <div className={`p-2 rounded-lg ${darkMode ? 'bg-zinc-950' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px]`}>W</div>
-                    <div className={`${theme.text} font-bold text-sm`}>{weeklyScore}/60</div>
+                <div className={`p-3 ${theme.bgSecondary} border ${theme.borderCard} rounded-lg sm:rounded-xl`}>
+                  <div className={`text-[10px] ${theme.textMuted} tracking-widest mb-2 text-center`}>{t('pointsBreakdown')}</div>
+                  <div className="space-y-1">
+                    {[
+                      { label: 'W', score: weeklyScore, max: 60 },
+                      { label: 'D', score: dailyScore, max: 60 },
+                      { label: '4H', score: h4Score, max: 35 },
+                      { label: 'E', score: entryScore, max: 25 }
+                    ].map((item) => (
+                      <div key={item.label} className={`flex justify-between items-center p-1.5 rounded ${darkMode ? 'bg-zinc-950' : 'bg-zinc-200'}`}>
+                        <span className={`${theme.textMuted} text-[10px]`}>{item.label}</span>
+                        <span className={`${theme.text} font-bold text-xs`}>{item.score}/{item.max}</span>
+                      </div>
+                    ))}
                   </div>
-                  <div className={`p-2 rounded-lg ${darkMode ? 'bg-zinc-950' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px]`}>D</div>
-                    <div className={`${theme.text} font-bold text-sm`}>{dailyScore}/60</div>
+                  <div className={`mt-2 p-1.5 rounded text-center font-bold text-xs ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                    {progress}/180
                   </div>
-                  <div className={`p-2 rounded-lg ${darkMode ? 'bg-zinc-950' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px]`}>4H</div>
-                    <div className={`${theme.text} font-bold text-sm`}>{h4Score}/35</div>
-                  </div>
-                  <div className={`p-2 rounded-lg ${darkMode ? 'bg-zinc-950' : 'bg-zinc-200'}`}>
-                    <div className={`${theme.textMuted} text-[10px]`}>E</div>
-                    <div className={`${theme.text} font-bold text-sm`}>{entryScore}/25</div>
-                  </div>
-                </div>
-                <div className={`mt-2 p-2 rounded-lg text-center font-bold text-sm ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                  {t('total')}: {progress}/180
                 </div>
               </div>
 
               <TradingQuote variant="minimal" />
 
-              <div className="flex justify-center py-6">
+              <div className="flex justify-center py-4">
                 <img 
                   src={darkMode 
                     ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                     : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
                   alt="ZNPCV" 
-                  className="h-16 sm:h-20 md:h-24 w-auto opacity-30"
+                  className="h-14 sm:h-16 md:h-20 w-auto opacity-20"
                 />
               </div>
             </motion.div>
@@ -1375,22 +1366,16 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
   };
 
   return (
-    <div className={cn("border-2 rounded-lg sm:rounded-xl p-2.5 sm:p-3", 
+    <div className={cn("border rounded-lg p-2 sm:p-2.5", 
       variant ? variantColors[variant] : darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100')}>
       
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <div className={`${theme.text} font-bold tracking-widest text-[10px] sm:text-xs`}>
-            {label}
-          </div>
-          {description && (
-            <div className={`${theme.textSecondary} text-[8px] sm:text-[9px] md:text-[10px] font-sans mt-0.5`}>
-              {description}
-            </div>
-          )}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="text-[10px] sm:text-xs font-bold tracking-wider">
+          {label}
+          {description && <span className={`${theme.textSecondary} text-[9px] font-sans ml-1`}>• {description}</span>}
         </div>
         {screenshots && screenshots.length > 0 && (
-          <div className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold ${
+          <div className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
             variant === 'before' ? 'bg-blue-600 text-white' : 'bg-teal-600 text-white'
           }`}>
             {screenshots.length}
@@ -1399,32 +1384,32 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
       </div>
       
       {screenshots && screenshots.length > 0 && (
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-2">
+        <div className="grid grid-cols-3 gap-1 sm:gap-1.5 mb-1.5">
           {screenshots.map((url, index) => (
             <div key={index} className="relative group aspect-square">
-              <img src={url} alt={`${index + 1}`} className={`w-full h-full object-cover rounded-md border ${theme.border}`} />
+              <img src={url} alt={`${index + 1}`} className={`w-full h-full object-cover rounded border ${theme.border}`} />
               <button 
                 onClick={() => onDelete(url)}
                 className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <XIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <XIcon className="w-3.5 h-3.5 text-white" />
               </button>
             </div>
           ))}
         </div>
       )}
 
-      <label className={cn("flex items-center justify-center gap-2 p-2 sm:p-2.5 border border-dashed rounded-md sm:rounded-lg cursor-pointer transition-all",
+      <label className={cn("flex items-center justify-center gap-1.5 p-1.5 sm:p-2 border border-dashed rounded cursor-pointer transition-all",
         uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-700 hover:border-zinc-600 bg-zinc-900/50" : "border-zinc-400 hover:border-zinc-500 bg-white/50")}>
         <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploadingLocal} />
         {uploadingLocal ? (
           <>
-            <div className={`animate-spin w-3.5 h-3.5 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full`} />
-            <span className={`text-[10px] sm:text-xs ${theme.textSecondary} font-sans`}>Uploading...</span>
+            <div className={`animate-spin w-3 h-3 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full`} />
+            <span className={`text-[9px] ${theme.textSecondary} font-sans`}>Uploading...</span>
           </>
         ) : (
           <>
-            <Upload className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-            <span className={`text-[10px] sm:text-xs tracking-wider ${theme.text}`}>UPLOAD CHARTS</span>
+            <Upload className={`w-3 h-3 ${theme.textSecondary}`} />
+            <span className={`text-[9px] sm:text-[10px] tracking-wider ${theme.text}`}>UPLOAD</span>
           </>
         )}
       </label>
