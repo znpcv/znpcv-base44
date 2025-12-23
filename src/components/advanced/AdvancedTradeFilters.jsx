@@ -16,9 +16,9 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
     'EUR/GBP', 'EUR/JPY', 'GBP/JPY', 'XAU/USD', 'BTC/USD', 'ETH/USD'];
 
   return (
-    <div className={cn("grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3", theme.bg, "p-3 sm:p-4 rounded-xl border-2", theme.border)}>
+    <div className={cn("grid grid-cols-4 gap-2 sm:gap-3", theme.bg, "p-3 sm:p-4 rounded-xl border-2", theme.border)}>
       {/* Date Range */}
-      <div className="col-span-2 lg:col-span-1">
+      <div className="col-span-2">
         <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
           <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           VON
@@ -31,7 +31,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
         />
       </div>
 
-      <div className="col-span-2 lg:col-span-1">
+      <div className="col-span-2">
         <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
           <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           BIS
@@ -45,7 +45,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
       </div>
 
       {/* Pair Filter */}
-      <div>
+      <div className="col-span-2">
         <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
           <TrendingUp className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           PAIR
@@ -62,7 +62,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
       </div>
 
       {/* R:R Filter */}
-      <div>
+      <div className="col-span-2">
         <label className={cn("text-[9px] sm:text-[10px] tracking-wider mb-1 sm:mb-1.5 flex items-center gap-1", theme.textSecondary)}>
           <Target className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           R:R
@@ -85,7 +85,7 @@ export default function AdvancedTradeFilters({ filters, onFilterChange, onReset,
       {(filters.dateFrom || filters.dateTo || filters.pair !== 'all' || filters.minRR !== 'all') && (
         <button
           onClick={onReset}
-          className={cn("col-span-2 lg:col-span-4 flex items-center justify-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs border-2 transition-all mt-1",
+          className={cn("col-span-4 flex items-center justify-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs border-2 transition-all mt-1",
             darkMode ? "border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-white" : "border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:text-black")}
         >
           <X className="w-3 h-3" />
