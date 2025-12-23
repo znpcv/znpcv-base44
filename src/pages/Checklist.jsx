@@ -100,6 +100,22 @@ export default function ChecklistPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Auto-Save Feature - saves every 3 seconds after changes
+  useEffect(() => {
+    if (!formData.pair || !checklistId) return; // Only auto-save existing checklists
+    
+    const timer = setTimeout(async () => {
+      const data = { 
+        ...formData, 
+        completion_percentage: progress, 
+        status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
+      };
+      await base44.entities.TradeChecklist.update(checklistId, data);
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, [formData, progress, checklistId]);
+
   const loadChecklist = async () => {
     const data = await base44.entities.TradeChecklist.filter({ id: checklistId });
     if (data.length > 0) setFormData(prev => ({ ...prev, ...data[0] }));
