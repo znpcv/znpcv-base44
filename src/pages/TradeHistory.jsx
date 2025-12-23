@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare } from 'lucide-react';
+import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
@@ -39,6 +39,16 @@ export default function TradeHistoryPage() {
     queryFn: async () => {
       const allTrades = await base44.entities.TradeChecklist.list('-created_date', 100);
       return allTrades.filter(t => !t.deleted);
+    },
+    staleTime: 1000 * 60,
+    refetchOnWindowFocus: false
+  });
+
+  const { data: deletedTrades = [] } = useQuery({
+    queryKey: ['deletedTrades'],
+    queryFn: async () => {
+      const allTrades = await base44.entities.TradeChecklist.list('-deleted_date', 100);
+      return allTrades.filter(t => t.deleted);
     },
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false
@@ -260,6 +270,17 @@ export default function TradeHistoryPage() {
               <DarkModeToggle />
               <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1 sm:p-1.5 md:p-2`}>
                 <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              </button>
+              <button 
+                onClick={() => navigate(createPageUrl('Trash'))} 
+                className={`relative ${theme.textSecondary} hover:${theme.text} transition-colors p-1 sm:p-1.5 md:p-2`}
+              >
+                <Archive className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                {deletedTrades.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-[9px] sm:text-[10px] rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-bold">
+                    {deletedTrades.length}
+                  </span>
+                )}
               </button>
             </div>
 
