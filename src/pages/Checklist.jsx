@@ -841,10 +841,10 @@ export default function ChecklistPage() {
               </div>
 
               {/* Screenshot Upload - Before & After */}
-              <div className="space-y-3 sm:space-y-4">
+              <div className="grid md:grid-cols-2 gap-2 sm:gap-3">
                 <ScreenshotUpload 
-                  label="📸 VORHER (Setup)"
-                  description="Chart-Screenshots VOR dem Trade-Einstieg"
+                  label="SETUP CHARTS"
+                  description="Vor Trade-Einstieg"
                   screenshots={formData.screenshots_before || []} 
                   onUpload={async (files) => {
                     const uploadPromises = files.map(file => 
@@ -858,11 +858,12 @@ export default function ChecklistPage() {
                     update('screenshots_before', (formData.screenshots_before || []).filter(s => s !== url));
                   }}
                   darkMode={darkMode}
+                  variant="before"
                 />
                 
                 <ScreenshotUpload 
-                  label="📊 NACHHER (Ergebnis)"
-                  description="Chart-Screenshots NACH dem Trade-Exit"
+                  label="RESULT CHARTS"
+                  description="Nach Trade-Exit"
                   screenshots={formData.screenshots_after || []} 
                   onUpload={async (files) => {
                     const uploadPromises = files.map(file => 
@@ -876,6 +877,7 @@ export default function ChecklistPage() {
                     update('screenshots_after', (formData.screenshots_after || []).filter(s => s !== url));
                   }}
                   darkMode={darkMode}
+                  variant="after"
                 />
               </div>
 
@@ -1161,14 +1163,18 @@ function SummaryRow({ label, value, color }) {
   );
 }
 
-function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete, darkMode }) {
+function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete, darkMode, variant }) {
   const [uploadingLocal, setUploadingLocal] = useState(false);
 
   const theme = {
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
-    bgCard: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
     text: darkMode ? 'text-white' : 'text-zinc-900',
     textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+  };
+
+  const variantColors = {
+    before: darkMode ? 'border-blue-600/50 bg-blue-600/5' : 'border-blue-500/50 bg-blue-500/5',
+    after: darkMode ? 'border-teal-600/50 bg-teal-600/5' : 'border-teal-500/50 bg-teal-500/5',
   };
 
   const handleFileChange = async (e) => {
@@ -1185,44 +1191,56 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
   };
 
   return (
-    <div className={`border-2 rounded-xl p-3 sm:p-4 ${darkMode ? 'border-zinc-800/50 bg-zinc-950/50' : 'border-zinc-300/50 bg-zinc-100/50'}`}>
-      <label className={`block ${theme.text} font-bold tracking-widest text-xs sm:text-sm mb-1`}>
-        {label || 'SCREENSHOTS'}
-      </label>
-      {description && (
-        <p className={`${theme.textSecondary} text-[10px] sm:text-xs mb-2 sm:mb-3 font-sans`}>
-          {description}
-        </p>
-      )}
+    <div className={cn("border-2 rounded-lg sm:rounded-xl p-2.5 sm:p-3", 
+      variant ? variantColors[variant] : darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100')}>
+      
+      <div className="flex items-center justify-between mb-2">
+        <div>
+          <div className={`${theme.text} font-bold tracking-widest text-[10px] sm:text-xs`}>
+            {label}
+          </div>
+          {description && (
+            <div className={`${theme.textSecondary} text-[8px] sm:text-[9px] md:text-[10px] font-sans mt-0.5`}>
+              {description}
+            </div>
+          )}
+        </div>
+        {screenshots && screenshots.length > 0 && (
+          <div className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold ${
+            variant === 'before' ? 'bg-blue-600 text-white' : 'bg-teal-600 text-white'
+          }`}>
+            {screenshots.length}
+          </div>
+        )}
+      </div>
       
       {screenshots && screenshots.length > 0 && (
-        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-2 sm:mb-3">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-2">
           {screenshots.map((url, index) => (
-            <div key={index} className="relative group">
-              <img src={url} alt={`Screenshot ${index + 1}`} className={`w-full h-24 sm:h-28 md:h-32 object-cover rounded-lg sm:rounded-xl border-2 ${theme.border}`} />
+            <div key={index} className="relative group aspect-square">
+              <img src={url} alt={`${index + 1}`} className={`w-full h-full object-cover rounded-md border ${theme.border}`} />
               <button 
                 onClick={() => onDelete(url)}
-                className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 p-1 sm:p-1.5 bg-rose-600 text-white rounded-md sm:rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                <Trash2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <XIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </button>
             </div>
           ))}
         </div>
       )}
 
-      <label className={cn("flex flex-col items-center justify-center p-4 sm:p-5 md:p-6 border-2 border-dashed rounded-lg sm:rounded-xl cursor-pointer transition-all",
-        uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-800 hover:border-zinc-700 bg-zinc-950" : "border-zinc-300 hover:border-zinc-400 bg-zinc-100")}>
+      <label className={cn("flex items-center justify-center gap-2 p-2 sm:p-2.5 border border-dashed rounded-md sm:rounded-lg cursor-pointer transition-all",
+        uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-700 hover:border-zinc-600 bg-zinc-900/50" : "border-zinc-400 hover:border-zinc-500 bg-white/50")}>
         <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploadingLocal} />
         {uploadingLocal ? (
           <>
-            <div className="animate-spin w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 border-2 border-white border-t-transparent rounded-full mb-1.5 sm:mb-2" />
-            <span className={`text-xs sm:text-sm ${theme.textSecondary}`}>Uploading...</span>
+            <div className={`animate-spin w-3.5 h-3.5 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full`} />
+            <span className={`text-[10px] sm:text-xs ${theme.textSecondary} font-sans`}>Uploading...</span>
           </>
         ) : (
           <>
-            <Upload className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mb-1.5 sm:mb-2 ${theme.textSecondary}`} />
-            <span className={`text-xs sm:text-sm font-bold tracking-wider ${theme.text}`}>UPLOAD</span>
-            <span className={`text-[10px] sm:text-xs ${theme.textSecondary} mt-0.5 sm:mt-1`}>Chart Screenshots</span>
+            <Upload className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
+            <span className={`text-[10px] sm:text-xs tracking-wider ${theme.text}`}>UPLOAD CHARTS</span>
           </>
         )}
       </label>
