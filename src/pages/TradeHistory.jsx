@@ -149,7 +149,7 @@ export default function TradeHistoryPage() {
 
       <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-10">
         {/* Title mit Zurück-Button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-4 md:mb-6 lg:mb-8">
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
             <button 
               onClick={() => navigate(createPageUrl('Dashboard'))}
@@ -164,7 +164,7 @@ export default function TradeHistoryPage() {
         </motion.div>
 
         {/* Stats Grid - Wichtigste Metriken */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
           <div className={cn("border-2 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4" />
             <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2">${stats.totalPnL.toFixed(2)}</div>

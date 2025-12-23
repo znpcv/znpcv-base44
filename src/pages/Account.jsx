@@ -163,7 +163,7 @@ export default function AccountPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-2 sm:px-3 md:px-6 py-4 sm:py-6 md:py-12">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
           <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-4 sm:mb-6 md:mb-8">{t('account')}</h1>
 
           {/* Profile Header */}

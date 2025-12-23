@@ -386,24 +386,24 @@ export default function ChecklistPage() {
           
           {/* STEP 0: Asset & Direction */}
           {currentStep === 0 && (
-            <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3 sm:space-y-4">
+            <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3 sm:space-y-4">
               <StepHeader number="01" title={t('assetDirection')} subtitle={t('selectPairDirection')} />
 
               <AssetSelector selectedPair={formData.pair} onSelect={(pair) => update('pair', pair)} />
 
               {formData.pair && (
                 <div className="grid gap-2 sm:gap-3">
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
                     <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
                   </motion.div>
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
                     <MarketChart pair={formData.pair} darkMode={darkMode} />
                   </motion.div>
                 </div>
               )}
               
               {formData.pair && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-2 sm:space-y-3">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
                   
                   {/* Direction Selection */}
                   <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest block`}>{t('selectDirection')}</label>
@@ -411,8 +411,9 @@ export default function ChecklistPage() {
                     <motion.button 
                       type="button" 
                       onClick={() => update('direction', 'long')}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.1 }}
                       className={cn("p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
                         formData.direction === 'long' ? "bg-teal-600 text-white border-teal-600" : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
                       {formData.direction === 'long' && (
@@ -425,8 +426,9 @@ export default function ChecklistPage() {
                     <motion.button 
                       type="button" 
                       onClick={() => update('direction', 'short')}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.1 }}
                       className={cn("p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
                         formData.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
                       {formData.direction === 'short' && (
@@ -444,7 +446,7 @@ export default function ChecklistPage() {
 
           {/* STEP 1: Weekly */}
           {currentStep === 1 && (
-            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+            <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="02" title={t('weeklyAnalysis')} subtitle={t('weeklyConfirm')} />
               
               {/* Progress Bar */}
@@ -459,8 +461,9 @@ export default function ChecklistPage() {
                       key={trend} 
                       type="button" 
                       onClick={() => update('w_trend', trend)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.1 }}
                       className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                         formData.w_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
@@ -553,7 +556,7 @@ export default function ChecklistPage() {
 
           {/* STEP 2: Daily */}
           {currentStep === 2 && (
-            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+            <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="03" title={t('dailyAnalysis')} subtitle={t('dailyConfirm')} />
               
               {/* Progress Bar */}
@@ -561,7 +564,7 @@ export default function ChecklistPage() {
 
               {/* Confluence Alert */}
               {formData.w_trend && formData.d_trend && formData.h4_trend && formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend && (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
                   className={`p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-teal-600/10 border-teal-600/30' : 'bg-teal-500/10 border-teal-500/30'}`}>
                   <div className="flex items-center gap-2">
                     <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />
@@ -582,8 +585,9 @@ export default function ChecklistPage() {
                       key={trend} 
                       type="button" 
                       onClick={() => update('d_trend', trend)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.1 }}
                       className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                         formData.d_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
@@ -676,7 +680,7 @@ export default function ChecklistPage() {
 
           {/* STEP 3: 4H */}
           {currentStep === 3 && (
-            <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+            <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="04" title={t('h4Analysis')} subtitle={t('h4Confirm')} />
               
               {/* Progress Bar */}
@@ -691,8 +695,9 @@ export default function ChecklistPage() {
                       key={trend} 
                       type="button" 
                       onClick={() => update('h4_trend', trend)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.1 }}
                       className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                         formData.h4_trend === trend 
                           ? trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600"
@@ -763,7 +768,7 @@ export default function ChecklistPage() {
 
           {/* STEP 4: Entry */}
           {currentStep === 4 && (
-            <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+            <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
               {/* Entry Timeframe Info - Compact */}
@@ -838,7 +843,7 @@ export default function ChecklistPage() {
 
           {/* STEP 5: Risk Management */}
           {currentStep === 5 && (
-          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
           <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
 
           {/* Selected Pair Display - Compact */}
@@ -856,14 +861,14 @@ export default function ChecklistPage() {
 
           {/* Live Market Data - Compact */}
           {formData.pair && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
             </motion.div>
           )}
 
           {/* R:R Warning */}
           {riskCalc && parseFloat(riskCalc.rr) < 2.5 && formData.entry_price && formData.stop_loss && formData.take_profit && (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-amber-600/10 border-amber-600/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
@@ -901,12 +906,12 @@ export default function ChecklistPage() {
 
           {/* STEP 6: Final */}
           {currentStep === 6 && (
-            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-2 sm:space-y-3">
+            <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
               {/* Confluence Banner */}
               {hasConfluence && (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.1 }}
                   className="p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 text-white">
                   <div className="flex items-center justify-center gap-2">
                     <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -1052,7 +1057,7 @@ export default function ChecklistPage() {
 
               {/* Final Grade + Breakdown Combined */}
               <div className="grid md:grid-cols-3 gap-2">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.1 }}
                   className={cn("md:col-span-2 p-4 sm:p-5 text-center rounded-lg sm:rounded-xl border-2 relative",
                     progress >= 100 ? "bg-teal-600 border-teal-600" :
                     progress >= 90 ? "bg-teal-500 border-teal-500" :
@@ -1169,9 +1174,9 @@ export default function ChecklistPage() {
       {/* Warning Modal */}
       <AnimatePresence>
         {showWarning && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }}
             className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-4">
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} transition={{ duration: 0.1 }}
               className="bg-zinc-950 border border-zinc-800 rounded-2xl p-8 max-w-sm w-full text-center">
               <XOctagon className="w-16 h-16 text-red-500 mx-auto mb-4" />
               <h2 className="text-2xl tracking-widest mb-3 text-white">WARNUNG</h2>
@@ -1202,7 +1207,7 @@ export default function ChecklistPage() {
       {/* Scroll to Top */}
       <AnimatePresence>
         {showScrollTop && (
-          <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
+          <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} transition={{ duration: 0.1 }}
             onClick={scrollToTop} className={`fixed bottom-6 right-6 w-11 h-11 flex items-center justify-center shadow-lg transition-colors z-50 rounded-full ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
             <ArrowUp className="w-5 h-5" />
           </motion.button>

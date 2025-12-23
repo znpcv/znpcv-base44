@@ -156,13 +156,13 @@ export default function DashboardPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
         {/* Title - Compact */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
           <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 md:mb-3 ${theme.text}`}>DASHBOARD</h1>
           <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
         {/* Quick Actions - Advanced */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 mb-4 sm:mb-5 md:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 mb-4 sm:mb-5 md:mb-8">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
               darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900")}>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats - Einheitlich */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle },
@@ -205,7 +205,7 @@ export default function DashboardPage() {
             <motion.div key={stat.label} 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
-              transition={{ delay: 0.15 + index * 0.05 }}
+              transition={{ duration: 0.1 }}
               className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6",
                 `${theme.border} ${theme.bgSecondary}`)}>
               <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", theme.text)} />
@@ -219,7 +219,7 @@ export default function DashboardPage() {
           {/* Left */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-5 md:space-y-6">
             {/* Trade History - Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-2xl ${theme.bgSecondary} overflow-hidden shadow-xl`}>
               <div className={`p-5 sm:p-6 border-b-2 ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
                 <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
@@ -267,7 +267,7 @@ export default function DashboardPage() {
                     <motion.div key={trade.id} 
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
+                      transition={{ duration: 0.1 }}
                       className={`p-5 sm:p-6 transition-all group cursor-pointer relative ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-100'}`}
                       onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
                       
@@ -281,7 +281,8 @@ export default function DashboardPage() {
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-3 sm:gap-4 flex-1">
                             <motion.div 
-                              whileHover={{ scale: 1.1, rotate: 5 }}
+                              whileHover={{ scale: 1.05, rotate: 2 }}
+                              transition={{ duration: 0.1 }}
                               className={cn("w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border-2 shadow-lg",
                                 trade.outcome === 'win' ? 'bg-gradient-to-br from-teal-600 to-emerald-600 text-white border-teal-500' :
                                 trade.outcome === 'loss' ? 'bg-gradient-to-br from-rose-600 to-red-600 text-white border-rose-500' : 
@@ -351,7 +352,7 @@ export default function DashboardPage() {
           {/* Right */}
           <div className="space-y-4 sm:space-y-5 md:space-y-6">
             {/* Performance Chart - Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
               <div className="flex items-center justify-between mb-4 sm:mb-5">
                 <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 ${theme.text}`}>
@@ -429,7 +430,7 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* Direction Analysis - Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
               <h3 className={`text-base sm:text-lg tracking-widest mb-4 sm:mb-5 flex items-center gap-2 ${theme.text}`}>
                 <PieChart className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -493,7 +494,7 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* Calendar - Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-2xl p-5 sm:p-6 ${theme.bgSecondary} overflow-hidden`}>
               <div className="flex items-center justify-between mb-4 sm:mb-5">
                 <h3 className={`text-base sm:text-lg tracking-widest flex items-center gap-2 ${theme.text}`}>
@@ -581,17 +582,17 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* Advanced Metrics Panel */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <AdvancedMetricsPanel trades={checklists} darkMode={darkMode} />
             </motion.div>
 
             {/* Best Trading Times */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.39 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <BestTradingTimes trades={checklists} darkMode={darkMode} />
             </motion.div>
 
             {/* Avg Completion - Kompakt für Mobile */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-6 md:p-8 ${theme.bgSecondary} text-center overflow-hidden relative`}>
               
               <div className="absolute inset-0 opacity-5">

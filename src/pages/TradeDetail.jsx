@@ -174,7 +174,7 @@ export default function TradeDetailPage() {
 
       <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
         {/* Trade Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-4">
             <div className="min-w-0 flex-1">
               <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-1 sm:mb-2 truncate">{trade.pair}</h1>

@@ -298,10 +298,10 @@ export default function HomePage() {
               { icon: Activity, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc' },
             ].map((item, index) => (
               <motion.div 
-                key={item.titleKey} 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + index * 0.1 }}
+                  key={item.titleKey} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.1 }}
                 className={`p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary} border ${theme.border} rounded-xl sm:rounded-2xl hover:border-teal-600/50 transition-all group`}
               >
                 <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
@@ -481,6 +481,7 @@ export default function HomePage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.1 }}
             onClick={scrollToTop}
             className={`fixed bottom-6 right-6 w-11 h-11 flex items-center justify-center shadow-lg transition-colors z-50 rounded-full ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
           >

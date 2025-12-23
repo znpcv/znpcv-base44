@@ -37,6 +37,7 @@ export default function TradeEditModal({ trade, onClose, onSave, isCreating, dar
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.1 }}
         className={`${theme.bg} border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto`}
       >
         <div className="flex items-center justify-between mb-4 sm:mb-6">
