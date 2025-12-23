@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Home, Edit, Save, X, Upload, Trash2, Image as ImageIcon, FileText, TrendingUp, Target, Activity, ArrowUpRight, ArrowDownRight, Calendar, DollarSign, Shield } from 'lucide-react';
+import { ArrowLeft, Home, Edit, Save, X, Upload, Trash2, Image as ImageIcon, FileText } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -170,20 +170,14 @@ export default function TradeDetailPage() {
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
-      {/* Ultra Advanced Header with Gradient */}
-      <header className={cn("sticky top-0 z-50 border-b-2 backdrop-blur-xl shadow-2xl",
-        darkMode ? "bg-black/90 border-zinc-800/50" : "bg-white/90 border-zinc-200")}>
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-3">
+      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
+        <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <DarkModeToggle />
-              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(createPageUrl('TradeHistory'))} 
-                className={cn("p-2 rounded-xl border-2 transition-all",
-                  darkMode ? "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white" 
-                           : "bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-zinc-600 hover:text-zinc-900")}>
+              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className="bg-transparent text-zinc-400 p-1.5 rounded-lg sm:p-2 hover:text-white transition-colors hover:bg-zinc-900">
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </motion.button>
+              </button>
             </div>
             
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
@@ -193,420 +187,280 @@ export default function TradeDetailPage() {
                 "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV"
-                className="h-10 sm:h-12 md:h-14 w-auto" />
+                className="h-8 sm:h-10 md:h-12 w-auto" />
+
             </button>
 
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-              onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} 
-              className={cn("flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm border-2 shadow-lg transition-all",
-                darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800')}>
-              <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} className={`gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('edit')}</span>
-            </motion.button>
+            </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8">
-        {/* Ultra Advanced Hero Header */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
-          className={cn("relative rounded-3xl p-6 sm:p-8 mb-6 overflow-hidden border-2 shadow-2xl",
-            trade.direction === 'long' 
-              ? darkMode ? "bg-gradient-to-br from-teal-950 via-emerald-950 to-black border-teal-600/30" 
-                        : "bg-gradient-to-br from-teal-50 via-emerald-50 to-white border-teal-400"
-              : darkMode ? "bg-gradient-to-br from-rose-950 via-red-950 to-black border-rose-600/30"
-                        : "bg-gradient-to-br from-rose-50 via-red-50 to-white border-rose-400")}>
-          
-          {/* Animated Background */}
-          <div className="absolute inset-0 opacity-10 pointer-events-none">
-            <div className={cn("absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl animate-pulse",
-              trade.direction === 'long' ? "bg-teal-600" : "bg-rose-600")} style={{ animationDuration: '4s' }} />
-            <div className={cn("absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl animate-pulse",
-              trade.direction === 'long' ? "bg-emerald-600" : "bg-red-600")} style={{ animationDuration: '5s', animationDelay: '1s' }} />
-          </div>
-
-          <div className="relative z-10">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-xl border-2",
-                    trade.direction === 'long' 
-                      ? "bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500/50" 
-                      : "bg-gradient-to-br from-rose-600 to-red-600 border-rose-500/50")}>
-                    {trade.direction === 'long' ? <ArrowUpRight className="w-6 h-6 text-white" /> : <ArrowDownRight className="w-6 h-6 text-white" />}
-                  </div>
-                  <div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-wider">{trade.pair}</h1>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Calendar className={cn("w-3.5 h-3.5", theme.textSecondary)} />
-                      <p className={`${theme.textSecondary} text-xs sm:text-sm font-mono`}>
-                        {trade.trade_date ? format(new Date(trade.trade_date), 'dd.MM.yyyy') : format(new Date(trade.created_date), 'dd.MM.yyyy')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className={cn("px-5 py-3 rounded-2xl font-black text-lg sm:text-2xl border-2 shadow-xl whitespace-nowrap",
-                trade.direction === 'long' 
-                  ? "bg-teal-600 border-teal-500 text-white" 
-                  : "bg-rose-600 border-rose-500 text-white")}>
-                {trade.direction === 'long' ? 'LONG' : 'SHORT'}
-              </div>
+      <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        {/* Trade Header */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-4">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-1 sm:mb-2 truncate">{trade.pair}</h1>
+              <p className={`${theme.textSecondary} text-xs sm:text-sm`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</p>
             </div>
-
-            {/* Quick Stats in Hero */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-              {[
-                { label: 'Score', value: `${totalScore}%`, icon: Target },
-                { label: t('entry'), value: trade.entry_price || '-', icon: Activity },
-                { label: 'SL', value: trade.stop_loss || '-', icon: Shield },
-                { label: 'TP', value: trade.take_profit || '-', icon: TrendingUp }
-              ].map((stat) => (
-                <div key={stat.label} className={cn("p-3 rounded-xl border-2 text-center backdrop-blur-sm",
-                  darkMode ? "bg-zinc-900/60 border-zinc-800/50" : "bg-white/60 border-zinc-200")}>
-                  <stat.icon className={cn("w-4 h-4 mx-auto mb-1", theme.textSecondary)} />
-                  <div className={`text-[10px] ${theme.textSecondary} tracking-wider mb-0.5`}>{stat.label}</div>
-                  <div className={`text-sm sm:text-base font-black ${theme.text}`}>{stat.value}</div>
-                </div>
-              ))}
+            <div className={cn("px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 rounded-lg sm:rounded-xl text-sm sm:text-xl md:text-2xl font-bold whitespace-nowrap flex-shrink-0",
+            trade.direction === 'long' ? 'bg-teal-600 text-white' : 'bg-rose-600 text-white')}>
+              {trade.direction === 'long' ? '↑ LONG' : '↓ SHORT'}
             </div>
           </div>
         </motion.div>
 
-        {/* Live Market Data - Ultra Advanced */}
-        <div className="grid gap-4 mb-6">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: 0.1 }}>
-            <LivePriceDisplay pair={trade.pair} darkMode={darkMode} />
-          </motion.div>
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, delay: 0.2 }}>
-            <MarketChart pair={trade.pair} darkMode={darkMode} />
-          </motion.div>
+        {/* Live Market Data */}
+        <div className="grid gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <LivePriceDisplay pair={trade.pair} darkMode={darkMode} />
+          <MarketChart pair={trade.pair} darkMode={darkMode} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Left Column - Screenshots */}
           <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
-            {/* Screenshots Section - Ultra Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}
-              className={cn("relative rounded-3xl p-5 sm:p-6 overflow-hidden border-2 shadow-xl",
-                darkMode ? "bg-gradient-to-br from-zinc-950 to-zinc-900 border-zinc-800/50" : "bg-gradient-to-br from-zinc-50 to-white border-zinc-300")}>
-              
-              <div className="flex items-center justify-between mb-5 gap-2">
-                <div className="flex items-center gap-2.5">
-                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shadow-lg",
-                    darkMode ? "bg-gradient-to-br from-zinc-800 to-zinc-900" : "bg-gradient-to-br from-zinc-100 to-zinc-200")}>
-                    <ImageIcon className={cn("w-5 h-5", theme.text)} />
-                  </div>
-                  <h2 className="text-base sm:text-lg tracking-widest font-bold">{t('screenshots')}</h2>
-                </div>
-                <motion.label whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  className={cn("flex items-center gap-2 px-4 py-2 rounded-xl border-2 cursor-pointer transition-all text-xs sm:text-sm font-bold shadow-lg",
-                    darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800',
-                    uploading && 'opacity-50 cursor-not-allowed')}>
+            {/* Screenshots Section */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+              <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                <h2 className="text-sm sm:text-lg md:text-xl tracking-widest flex items-center gap-1.5 sm:gap-2">
+                  <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden xs:inline">{t('screenshots')}</span>
+                  <span className="xs:hidden">{t('screenshots')}</span>
+                </h2>
+                <label className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all text-xs sm:text-sm font-bold ${
+                darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'} ${
+                uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
-                  <Upload className="w-4 h-4" />
+                  <Upload className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1 sm:mr-2" />
                   {uploading ? t('uploading') : t('uploadCharts')}
-                </motion.label>
+                </label>
               </div>
               
               {trade.screenshots && trade.screenshots.length > 0 ?
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                   {trade.screenshots.map((url, index) =>
-                    <motion.div key={index} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} 
-                      transition={{ duration: 0.2, delay: index * 0.1 }}
-                      className="relative group overflow-hidden rounded-2xl">
-                      <img src={url} alt={`Screenshot ${index + 1}`} 
-                        className={cn("w-full h-40 sm:h-48 md:h-56 object-cover transition-transform group-hover:scale-110 border-2",
-                          darkMode ? "border-zinc-800" : "border-zinc-300")} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                        onClick={() => handleDeleteImage(url)}
-                        className="absolute top-2 right-2 p-2 bg-rose-600 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity shadow-xl">
-                        <Trash2 className="w-4 h-4" />
-                      </motion.button>
-                    </motion.div>
-                  )}
+                <div key={index} className="relative group">
+                      <img src={url} alt={`Screenshot ${index + 1}`} className={`w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg sm:rounded-xl border-2 ${theme.border}`} />
+                      <button onClick={() => handleDeleteImage(url)}
+                  className="absolute top-1 right-1 sm:top-2 sm:right-2 p-1 sm:p-1.5 md:p-2 bg-rose-600 text-white rounded-md sm:rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                      </button>
+                    </div>
+                )}
                 </div> :
-                <div className={cn("border-2 border-dashed rounded-2xl p-12 text-center",
-                  darkMode ? "border-zinc-800 bg-zinc-900/30" : "border-zinc-300 bg-zinc-100/30")}>
-                  <ImageIcon className={cn("w-16 h-16 mx-auto mb-3", theme.textSecondary)} />
-                  <p className={`${theme.textSecondary} text-sm`}>{t('noScreenshots')}</p>
+
+              <div className={`border-2 border-dashed ${theme.border} rounded-lg sm:rounded-xl p-6 sm:p-8 md:p-12 text-center`}>
+                  <ImageIcon className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-2 sm:mb-3 ${theme.textSecondary}`} />
+                  <p className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('noScreenshots')}</p>
                 </div>
               }
             </motion.div>
 
-            {/* Trade Outcome - Ultra Advanced mit Entry */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.4 }}
-              className={cn("relative rounded-3xl p-5 sm:p-6 overflow-hidden border-2 shadow-xl",
-                trade.outcome === 'win' 
-                  ? darkMode ? "bg-gradient-to-br from-teal-950 via-emerald-950 to-black border-teal-600/30" : "bg-gradient-to-br from-teal-50 to-emerald-50 border-teal-400"
-                  : trade.outcome === 'loss'
-                  ? darkMode ? "bg-gradient-to-br from-rose-950 via-red-950 to-black border-rose-600/30" : "bg-gradient-to-br from-rose-50 to-red-50 border-rose-400"
-                  : darkMode ? "bg-gradient-to-br from-zinc-950 to-zinc-900 border-zinc-800/50" : "bg-gradient-to-br from-zinc-50 to-white border-zinc-300")}>
-              
-              {/* Animated Background */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className={cn("absolute top-0 right-0 w-48 h-48 rounded-full blur-3xl animate-pulse",
-                  trade.outcome === 'win' ? "bg-teal-600" : trade.outcome === 'loss' ? "bg-rose-600" : "bg-zinc-600")} 
-                  style={{ animationDuration: '3s' }} />
-              </div>
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-5 gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shadow-lg",
-                      trade.outcome === 'win' ? "bg-gradient-to-br from-teal-600 to-emerald-600" 
-                        : trade.outcome === 'loss' ? "bg-gradient-to-br from-rose-600 to-red-600"
-                        : darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                      <TrendingUp className={cn("w-5 h-5", trade.outcome === 'win' || trade.outcome === 'loss' ? "text-white" : theme.text)} />
-                    </div>
-                    <h2 className="text-base sm:text-lg tracking-widest font-bold">{t('result')}</h2>
-                  </div>
-                  {!editing &&
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                      onClick={() => setEditing(true)} 
-                      className={cn("flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border-2 shadow-lg transition-all",
-                        darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800')}>
-                      <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      <span className="hidden sm:inline">{t('edit')}</span>
-                    </motion.button>
-                  }
-                </div>
-
-                {editing ?
-                  <div className="space-y-3 sm:space-y-4">
-                    <div>
-                      <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-2 tracking-wider font-bold`}>{t('result')}</label>
-                      <Select value={editData.outcome} onValueChange={(v) => setEditData({ ...editData, outcome: v })}>
-                        <SelectTrigger className={cn("h-11 rounded-xl border-2", theme.border)}>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="pending">{t('pending')}</SelectItem>
-                          <SelectItem value="win">{t('win')}</SelectItem>
-                          <SelectItem value="loss">{t('loss')}</SelectItem>
-                          <SelectItem value="breakeven">{t('breakeven')}</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-2 tracking-wider font-bold`}>{t('pnl')} ($)</label>
-                      <Input type="number" step="0.01" value={editData.actual_pnl}
-                        onChange={(e) => setEditData({ ...editData, actual_pnl: e.target.value })}
-                        placeholder="z.B. 250.50"
-                        className={cn("h-11 rounded-xl border-2 font-mono", theme.border)} />
-                    </div>
-
-                    <div>
-                      <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-2 tracking-wider font-bold`}>{t('date')}</label>
-                      <Input type="date" value={editData.exit_date}
-                        onChange={(e) => setEditData({ ...editData, exit_date: e.target.value })}
-                        className={cn("h-11 rounded-xl border-2 font-mono", theme.border)} />
-                    </div>
-
-                    <div>
-                      <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-2 tracking-wider font-bold`}>{t('notes')}</label>
-                      <Textarea value={editData.notes}
-                        onChange={(e) => setEditData({ ...editData, notes: e.target.value })}
-                        placeholder={t('tradeNotes')}
-                        className={cn("min-h-[100px] rounded-xl border-2 text-sm", theme.border)} />
-                    </div>
-
-                    <div className="flex gap-2 pt-2">
-                      <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                        onClick={handleSaveOutcome}
-                        className={cn("flex-1 flex items-center justify-center gap-2 h-11 rounded-xl text-sm font-bold border-2 shadow-lg",
-                          darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800')}>
-                        <Save className="w-4 h-4" />
-                        {t('save')}
-                      </motion.button>
-                      <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                        onClick={() => setEditing(false)}
-                        className={cn("px-4 h-11 rounded-xl border-2 transition-all",
-                          darkMode ? "bg-zinc-800 border-zinc-700 hover:bg-zinc-700" : "bg-zinc-200 border-zinc-300 hover:bg-zinc-300")}>
-                        <X className="w-4 h-4" />
-                      </motion.button>
-                    </div>
-                  </div> :
-                  
-                  <div className="space-y-3">
-                    {/* Status Badge - Groß und prominent */}
-                    <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}
-                      className={cn("p-5 rounded-2xl border-2 text-center shadow-xl",
-                        trade.outcome === 'win' ? 'bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500/50 text-white' :
-                        trade.outcome === 'loss' ? 'bg-gradient-to-br from-rose-600 to-red-600 border-rose-500/50 text-white' :
-                        trade.outcome === 'breakeven' ? 'bg-gradient-to-br from-amber-500 to-yellow-500 border-amber-400/50 text-white' :
-                        darkMode ? 'bg-zinc-800/80 border-zinc-700' : 'bg-zinc-100 border-zinc-300')}>
-                      <div className="text-xs tracking-widest mb-1 opacity-90">{t('status')}</div>
-                      <div className="text-2xl sm:text-3xl font-black tracking-wide">{
-                        trade.outcome === 'win' ? t('win') :
-                        trade.outcome === 'loss' ? t('loss') :
-                        trade.outcome === 'breakeven' ? t('breakeven') :
-                        t('pending')
-                      }</div>
-                    </motion.div>
-
-                    {/* Entry Details Grid */}
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { label: t('entry'), value: trade.entry_price, color: theme.text },
-                        { label: 'SL', value: trade.stop_loss, color: 'text-rose-600' },
-                        { label: 'TP', value: trade.take_profit, color: 'text-teal-600' }
-                      ].map((item) => (
-                        <div key={item.label} className={cn("p-3 rounded-xl border-2 text-center backdrop-blur-sm",
-                          darkMode ? "bg-zinc-900/60 border-zinc-800/50" : "bg-white/60 border-zinc-200")}>
-                          <div className={`text-[10px] ${theme.textSecondary} tracking-wider mb-1`}>{item.label}</div>
-                          <div className={cn("text-sm font-black font-mono", item.color)}>{item.value || '-'}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* P&L - Groß und auffällig */}
-                    {trade.actual_pnl &&
-                      <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}
-                        className={cn("p-5 rounded-2xl border-2 text-center shadow-xl",
-                          darkMode ? "bg-zinc-900/80 border-zinc-800/50" : "bg-white/80 border-zinc-200")}>
-                        <div className={`text-xs ${theme.textSecondary} tracking-widest mb-1`}>{t('pnl')}</div>
-                        <div className={cn("text-3xl sm:text-4xl font-black",
-                          parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
-                          parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
-                          {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
-                        </div>
-                      </motion.div>
-                    }
-
-                    {/* Exit Date */}
-                    {trade.exit_date &&
-                      <div className={cn("p-3 rounded-xl border-2 flex items-center justify-between",
-                        darkMode ? "bg-zinc-900/60 border-zinc-800/50" : "bg-white/60 border-zinc-200")}>
-                        <span className={`${theme.textSecondary} text-xs flex items-center gap-1.5`}>
-                          <Calendar className="w-3.5 h-3.5" />
-                          {t('exit')}
-                        </span>
-                        <span className={`${theme.text} text-xs font-mono font-bold`}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
-                      </div>
-                    }
-                  </div>
+            {/* Trade Outcome */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+              <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                <h2 className="text-sm sm:text-lg md:text-xl tracking-widest">{t('result')}</h2>
+                {!editing &&
+                <Button onClick={() => setEditing(true)} className={`gap-1 h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">{t('edit')}</span>
+                  </Button>
                 }
               </div>
+
+              {editing ?
+              <div className="space-y-3 sm:space-y-4">
+                  <div>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('result')}</label>
+                    <Select value={editData.outcome} onValueChange={(v) => setEditData({ ...editData, outcome: v })}>
+                      <SelectTrigger className={theme.border}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">{t('pending')}</SelectItem>
+                        <SelectItem value="win">{t('win')}</SelectItem>
+                        <SelectItem value="loss">{t('loss')}</SelectItem>
+                        <SelectItem value="breakeven">{t('breakeven')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('pnl')} ($)</label>
+                    <Input
+                    type="number"
+                    step="0.01"
+                    value={editData.actual_pnl}
+                    onChange={(e) => setEditData({ ...editData, actual_pnl: e.target.value })}
+                    placeholder="z.B. 250.50"
+                    className={`${theme.border} h-10 sm:h-11`} />
+
+                  </div>
+
+                  <div>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('date')}</label>
+                    <Input
+                    type="date"
+                    value={editData.exit_date}
+                    onChange={(e) => setEditData({ ...editData, exit_date: e.target.value })}
+                    className={`${theme.border} h-10 sm:h-11`} />
+
+                  </div>
+
+                  <div>
+                    <label className={`block text-xs sm:text-sm ${theme.textSecondary} mb-1.5 sm:mb-2 tracking-wider`}>{t('notes')}</label>
+                    <Textarea
+                    value={editData.notes}
+                    onChange={(e) => setEditData({ ...editData, notes: e.target.value })}
+                    placeholder={t('tradeNotes')}
+                    className={`${theme.border} min-h-[80px] sm:min-h-[100px] text-sm`} />
+
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button onClick={handleSaveOutcome} className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                      <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                      {t('save')}
+                    </Button>
+                    <Button onClick={() => setEditing(false)} variant="outline" className="bg-background text-slate-950 px-4 py-2 text-sm font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm hover:bg-accent hover:text-accent-foreground h-10 sm:h-11 border-2 border-zinc-800">
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div> :
+
+              <div className="space-y-2 sm:space-y-3 md:space-y-4">
+                  <div className={`flex items-center justify-between p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${
+                trade.outcome === 'win' ? 'bg-teal-600 border-teal-500 text-white' :
+                trade.outcome === 'loss' ? 'bg-rose-600 border-rose-500 text-white' :
+                trade.outcome === 'breakeven' ? 'bg-amber-500 border-amber-400 text-white' :
+                `${theme.border} ${theme.bgCard}`}`
+                }>
+                    <span className="tracking-wider text-xs sm:text-sm">{t('status')}</span>
+                    <span className="font-bold text-sm sm:text-base md:text-lg">{
+                    trade.outcome === 'win' ? t('win') :
+                    trade.outcome === 'loss' ? t('loss') :
+                    trade.outcome === 'breakeven' ? t('breakeven') :
+                    t('pending')
+                    }</span>
+                  </div>
+
+                  {trade.actual_pnl &&
+                <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('pnl')}</span>
+                        <span className={cn("text-lg sm:text-xl md:text-2xl font-bold",
+                    parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
+                    parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
+                          {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
+                        </span>
+                      </div>
+                    </div>
+                }
+
+                  {trade.exit_date &&
+                <div className={`p-3 sm:p-3.5 md:p-4 rounded-lg sm:rounded-xl border-2 ${theme.border}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('exit')}</span>
+                        <span className={`${theme.text} text-xs sm:text-sm`}>{format(new Date(trade.exit_date), 'dd.MM.yyyy')}</span>
+                      </div>
+                    </div>
+                }
+                </div>
+              }
             </motion.div>
           </div>
 
           {/* Right Column - Trade Details */}
           <div className="space-y-3 sm:space-y-4 md:space-y-6">
-            {/* Score Summary - Ultra Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.5 }}
-              className={cn("relative rounded-3xl p-6 text-center overflow-hidden border-2 shadow-xl",
-                totalScore >= 85 
-                  ? darkMode ? "bg-gradient-to-br from-teal-950 via-emerald-950 to-black border-teal-600/30" : "bg-gradient-to-br from-teal-50 to-emerald-50 border-teal-400"
-                  : darkMode ? "bg-gradient-to-br from-zinc-950 to-zinc-900 border-zinc-800/50" : "bg-gradient-to-br from-zinc-50 to-white border-zinc-300")}>
-              
-              {/* Animated Background */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className={cn("absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-3xl animate-pulse",
-                  totalScore >= 85 ? "bg-teal-600" : "bg-zinc-600")} style={{ animationDuration: '4s' }} />
+            {/* Score Summary */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 ${theme.bgCard} text-center`}>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-light mb-1 sm:mb-2">{totalScore}%</div>
+              <div className={`text-xs sm:text-sm ${theme.textSecondary} tracking-widest mb-3 sm:mb-4`}>{t('avgScore')}</div>
+              <div className="space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between text-xs sm:text-sm">
+                  <span className={theme.textSecondary}>Weekly</span>
+                  <span className={theme.text}>{weeklyScore}/60</span>
+                </div>
+                <div className="flex justify-between text-xs sm:text-sm">
+                  <span className={theme.textSecondary}>Daily</span>
+                  <span className={theme.text}>{dailyScore}/60</span>
+                </div>
+                <div className="flex justify-between text-xs sm:text-sm">
+                  <span className={theme.textSecondary}>4H</span>
+                  <span className={theme.text}>{h4Score}/35</span>
+                </div>
+                <div className="flex justify-between text-xs sm:text-sm">
+                  <span className={theme.textSecondary}>Entry</span>
+                  <span className={theme.text}>{entryScore}/25</span>
+                </div>
               </div>
+            </motion.div>
 
-              <div className="relative z-10">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-xl border-2",
-                    totalScore >= 85 ? "bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500/50" 
-                                    : darkMode ? "bg-zinc-800 border-zinc-700" : "bg-zinc-200 border-zinc-300")}>
-                    <Target className={cn("w-5 h-5", totalScore >= 85 ? "text-white" : theme.text)} />
+            {/* Trade Setup */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+              <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-3 sm:mb-4">{t('setup')}</h3>
+              <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
+                {trade.entry_price &&
+                <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('entry')}</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>{trade.entry_price}</span>
                   </div>
-                </div>
-
-                <div className={cn("text-6xl font-black mb-2",
-                  totalScore >= 85 ? 'bg-gradient-to-br from-teal-600 to-emerald-600 bg-clip-text text-transparent' : theme.text)}>
-                  {totalScore}%
-                </div>
-                <div className={`text-xs ${theme.textSecondary} tracking-widest mb-5 font-bold`}>{t('avgScore')}</div>
-                
-                <div className="space-y-2.5">
-                  {[
-                    { label: 'Weekly', value: weeklyScore, max: 60 },
-                    { label: 'Daily', value: dailyScore, max: 60 },
-                    { label: '4H', value: h4Score, max: 35 },
-                    { label: 'Entry', value: entryScore, max: 25 }
-                  ].map((item) => (
-                    <div key={item.label}>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className={theme.textSecondary}>{item.label}</span>
-                        <span className={cn("font-bold", theme.text)}>{item.value}/{item.max}</span>
-                      </div>
-                      <div className={cn("h-2 rounded-full overflow-hidden",
-                        darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                        <motion.div initial={{ width: 0 }} animate={{ width: `${(item.value / item.max) * 100}%` }}
-                          transition={{ duration: 0.8, delay: 0.2 }}
-                          className={cn("h-full rounded-full",
-                            item.value / item.max >= 0.8 ? "bg-gradient-to-r from-teal-600 to-emerald-600" : "bg-gradient-to-r from-zinc-500 to-zinc-600")} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                }
+                {trade.stop_loss &&
+                <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('sl')}</span>
+                    <span className="text-rose-600 text-xs sm:text-sm font-mono">{trade.stop_loss}</span>
+                  </div>
+                }
+                {trade.take_profit &&
+                <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('tp')}</span>
+                    <span className="text-teal-600 text-xs sm:text-sm font-mono">{trade.take_profit}</span>
+                  </div>
+                }
+                {trade.account_size &&
+                <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('account')}</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>${trade.account_size}</span>
+                  </div>
+                }
+                {trade.risk_percent &&
+                <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('risk')}</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>{trade.risk_percent}%</span>
+                  </div>
+                }
+                {trade.leverage &&
+                <div className="flex justify-between items-center">
+                    <span className={`${theme.textSecondary} text-xs sm:text-sm`}>{t('leverage')}</span>
+                    <span className={`${theme.text} text-xs sm:text-sm font-mono`}>1:{trade.leverage}</span>
+                  </div>
+                }
               </div>
             </motion.div>
 
-            {/* Trade Setup - Ultra Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.6 }}
-              className={cn("relative rounded-3xl p-5 overflow-hidden border-2 shadow-xl",
-                darkMode ? "bg-gradient-to-br from-zinc-950 to-zinc-900 border-zinc-800/50" : "bg-gradient-to-br from-zinc-50 to-white border-zinc-300")}>
-              
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg",
-                  darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                  <Activity className={cn("w-5 h-5", theme.text)} />
-                </div>
-                <h3 className="text-base tracking-widest font-bold">{t('setup')}</h3>
-              </div>
-              
-              <div className="space-y-3">
-                {[
-                  { label: t('entry'), value: trade.entry_price, icon: Activity, color: theme.text },
-                  { label: 'SL', value: trade.stop_loss, icon: Shield, color: 'text-rose-600' },
-                  { label: 'TP', value: trade.take_profit, icon: TrendingUp, color: 'text-teal-600' },
-                  { label: t('account'), value: trade.account_size ? `$${trade.account_size}` : null, icon: DollarSign, color: theme.text },
-                  { label: t('risk'), value: trade.risk_percent ? `${trade.risk_percent}%` : null, icon: Target, color: theme.text },
-                  { label: t('leverage'), value: trade.leverage ? `1:${trade.leverage}` : null, icon: TrendingUp, color: theme.text }
-                ].filter(item => item.value).map((item) => (
-                  <motion.div key={item.label} whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}
-                    className={cn("p-3 rounded-xl border-2 flex items-center justify-between group",
-                      darkMode ? "bg-zinc-900/60 border-zinc-800/50 hover:border-zinc-700" : "bg-white/60 border-zinc-200 hover:border-zinc-300")}>
-                    <div className="flex items-center gap-2">
-                      <item.icon className={cn("w-4 h-4", theme.textSecondary)} />
-                      <span className={`${theme.textSecondary} text-xs`}>{item.label}</span>
-                    </div>
-                    <span className={cn("text-sm font-black font-mono", item.color)}>{item.value}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Notes - Ultra Advanced */}
+            {/* Notes */}
             {trade.notes && !editing &&
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.7 }}
-                className={cn("relative rounded-3xl p-5 overflow-hidden border-2 shadow-xl",
-                  darkMode ? "bg-gradient-to-br from-zinc-950 to-zinc-900 border-zinc-800/50" : "bg-gradient-to-br from-zinc-50 to-white border-zinc-300")}>
-                
-                <div className="flex items-center gap-2.5 mb-4">
-                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg",
-                    darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                    <FileText className={cn("w-5 h-5", theme.text)} />
-                  </div>
-                  <h3 className="text-base tracking-widest font-bold">{t('notes')}</h3>
-                </div>
-                
-                <div className={cn("p-4 rounded-xl border-2",
-                  darkMode ? "bg-zinc-900/60 border-zinc-800/50" : "bg-white/60 border-zinc-200")}>
-                  <p className={`text-sm ${theme.text} leading-relaxed font-sans whitespace-pre-wrap`}>{trade.notes}</p>
-                </div>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 ${theme.bgCard}`}>
+                <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2">
+                  <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {t('notes')}
+                </h3>
+                <p className={`text-xs sm:text-sm ${theme.text} leading-relaxed font-sans whitespace-pre-wrap`}>{trade.notes}</p>
               </motion.div>
             }
 
-            {/* Share Card - Ultra Advanced */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.8 }}>
+            {/* Share Card */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <TradeShareCard trade={trade} darkMode={darkMode} />
             </motion.div>
           </div>
