@@ -48,6 +48,7 @@ export default function DashboardPage() {
   };
 
   const [filter, setFilter] = useState('all');
+  const [sessionFilter, setSessionFilter] = useState('all');
 
   const stats = useMemo(() => {
     const total = checklists.length;
@@ -111,11 +112,29 @@ export default function DashboardPage() {
   const monthEnd = endOfMonth(calendarMonth);
   const calendarDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
   const startDay = monthStart.getDay() === 0 ? 6 : monthStart.getDay() - 1;
+  // Determine trading session based on UTC hour
+  const getTradingSession = (date) => {
+    if (!date) return null;
+    const hour = new Date(date).getUTCHours();
+    // Tokyo: 00:00-09:00 UTC
+    if (hour >= 0 && hour < 9) return 'tokyo';
+    // London: 08:00-17:00 UTC
+    if (hour >= 8 && hour < 17) return 'london';
+    // New York: 13:00-22:00 UTC
+    if (hour >= 13 && hour < 22) return 'newyork';
+    return 'tokyo'; // Default
+  };
+
   const getTradesForDay = (date) => {
     const dateStr = format(date, 'yyyy-MM-dd');
     return checklists.filter(c => {
       const tradeDate = c.trade_date;
-      return tradeDate === dateStr;
+      if (tradeDate !== dateStr) return false;
+      
+      // Apply session filter
+      if (sessionFilter === 'all') return true;
+      const tradeSession = getTradingSession(c.created_date || c.trade_date);
+      return tradeSession === sessionFilter;
     });
   };
 
@@ -533,6 +552,30 @@ export default function DashboardPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Session Filter */}
+              <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                {[
+                  { id: 'all', label: 'ALL', emoji: '🌍' },
+                  { id: 'london', label: 'LONDON', emoji: '🇬🇧' },
+                  { id: 'newyork', label: 'NY', emoji: '🇺🇸' },
+                  { id: 'tokyo', label: 'TOKYO', emoji: '🇯🇵' }
+                ].map((session) => (
+                  <button
+                    key={session.id}
+                    onClick={() => setSessionFilter(session.id)}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 text-[10px] tracking-wider rounded-lg transition-all font-bold border-2 whitespace-nowrap",
+                      sessionFilter === session.id
+                        ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
+                        : darkMode ? "bg-zinc-900/50 text-zinc-400 border-zinc-800/50 hover:text-white hover:border-zinc-700" : "bg-white text-zinc-600 border-zinc-300 hover:text-black hover:border-zinc-400"
+                    )}
+                  >
+                    <span>{session.emoji}</span>
+                    {session.label}
+                  </button>
+                ))}
+              </div>
               
               <div className={`grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold ${theme.textMuted} mb-3`}>
                 {(language === 'de' ? ['MO', 'DI', 'MI', 'DO', 'FR', 'SA', 'SO'] : language === 'fa' ? ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'] : ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']).map(d => <div key={d} className="py-1">{d}</div>)}
@@ -546,6 +589,12 @@ export default function DashboardPage() {
                   const hasWins = trades.some(t => t.outcome === 'win');
                   const hasLosses = trades.some(t => t.outcome === 'loss');
                   const hasReady = trades.some(t => t.status === 'ready_to_trade');
+                  
+                  // Session indicators
+                  const allDayTrades = checklists.filter(c => c.trade_date === format(day, 'yyyy-MM-dd'));
+                  const londonTrades = allDayTrades.filter(t => getTradingSession(t.created_date || t.trade_date) === 'london').length;
+                  const nyTrades = allDayTrades.filter(t => getTradingSession(t.created_date || t.trade_date) === 'newyork').length;
+                  const tokyoTrades = allDayTrades.filter(t => getTradingSession(t.created_date || t.trade_date) === 'tokyo').length;
                   
                   return (
                     <button
@@ -572,6 +621,16 @@ export default function DashboardPage() {
                           {dayPnL > 0 ? '+' : ''}{dayPnL.toFixed(0)}
                         </span>
                       )}
+                      
+                      {/* Session Indicators */}
+                      {allDayTrades.length > 0 && sessionFilter === 'all' && (
+                        <div className="absolute bottom-0.5 left-0.5 right-0.5 flex gap-0.5 justify-center">
+                          {londonTrades > 0 && <div className="w-1 h-1 rounded-full bg-blue-500" title="London" />}
+                          {nyTrades > 0 && <div className="w-1 h-1 rounded-full bg-yellow-500" title="New York" />}
+                          {tokyoTrades > 0 && <div className="w-1 h-1 rounded-full bg-red-500" title="Tokyo" />}
+                        </div>
+                      )}
+                      
                       {trades.length > 1 && (
                         <div className="absolute top-1 right-1 w-4 h-4 bg-teal-600 text-white text-[9px] rounded-full flex items-center justify-center font-bold shadow-md">
                           {trades.length}
@@ -583,7 +642,7 @@ export default function DashboardPage() {
               </div>
               
               {/* Legend */}
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 pt-4 border-t ${theme.border}">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 pt-4 border-t-2 ${theme.border}">
                 <div className="flex items-center gap-1.5">
                   <div className={`w-3 h-3 rounded ${darkMode ? 'bg-teal-600/30 border border-teal-600/50' : 'bg-teal-100 border border-teal-300'}`} />
                   <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('win')}</span>
@@ -595,6 +654,19 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded bg-teal-600" />
                   <span className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{t('today')}</span>
+                </div>
+                <div className="h-2 w-px bg-zinc-600" />
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span className={`text-[9px] ${theme.textMuted}`}>🇬🇧</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
+                  <span className={`text-[9px] ${theme.textMuted}`}>🇺🇸</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span className={`text-[9px] ${theme.textMuted}`}>🇯🇵</span>
                 </div>
               </div>
             </motion.div>
