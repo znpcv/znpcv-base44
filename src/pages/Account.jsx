@@ -132,21 +132,26 @@ export default function AccountPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-8 lg:px-12 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <DarkModeToggle />
-            
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-4">
+            <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+              <DarkModeToggle />
+            </div>
+
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
-              <img
-                src={darkMode ?
-                "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png" :
-                "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+              <img 
+                src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
-                alt="ZNPCV"
-                className="h-8 sm:h-10 md:h-12 w-auto" />
+                alt="ZNPCV" 
+                className="h-7 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
             </button>
-            
-            <LanguageToggle />
+
+            <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
+              <LanguageToggle />
+            </div>
           </div>
         </div>
       </header>
