@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { Home, User, Mail, Calendar, LogOut, Edit2, Save, X, Shield, Phone, MapPin, Upload, Camera } from 'lucide-react';
+import { Home, User, Mail, Calendar, LogOut, Edit2, Save, X, Shield, Phone, MapPin, Upload, Camera, Settings } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -428,7 +428,7 @@ export default function AccountPage() {
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
             <Button 
               onClick={() => navigate(createPageUrl('Home'))} 
               variant="outline" 
@@ -445,8 +445,16 @@ export default function AccountPage() {
               {t('dashboard')}
             </Button>
             <Button 
+              onClick={() => navigate(createPageUrl('Integrations'))} 
+              variant="outline" 
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest ${theme.border} col-span-2 sm:col-span-1`}
+            >
+              <Settings className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
+              INTEGRATIONS
+            </Button>
+            <Button 
               onClick={handleLogout} 
-              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white`}
+              className={`h-10 sm:h-12 md:h-14 text-xs sm:text-sm md:text-base tracking-widest bg-rose-600 hover:bg-rose-700 text-white col-span-2 sm:col-span-1`}
             >
               <LogOut className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-2" />
               <span className="hidden xs:inline">{t('logout')}</span>
