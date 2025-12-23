@@ -428,6 +428,53 @@ export default function AccountPage() {
             </div>
           </div>
 
+          {/* Trading Preferences */}
+          <div className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 mb-3 sm:mb-4 md:mb-6 ${theme.bgCard}`}>
+            <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest mb-3 sm:mb-4 ${theme.text} flex items-center gap-1.5 sm:gap-2`}>
+              <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+              TRADING EINSTELLUNGEN
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className={`p-3 sm:p-4 border ${theme.border} rounded-lg sm:rounded-xl`}>
+                <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
+                  DEFAULT LEVERAGE
+                </label>
+                {editing ? (
+                  <Input
+                    value={user.default_leverage || '100'}
+                    onChange={async (e) => {
+                      await base44.auth.updateMe({ default_leverage: e.target.value });
+                      await loadUser();
+                    }}
+                    placeholder="100"
+                    className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text}`}>1:{user.default_leverage || '100'}</div>
+                )}
+              </div>
+
+              <div className={`p-3 sm:p-4 border ${theme.border} rounded-lg sm:rounded-xl`}>
+                <label className={`block text-xs tracking-wider ${theme.textSecondary} mb-2`}>
+                  DEFAULT RISK %
+                </label>
+                {editing ? (
+                  <Input
+                    value={user.default_risk_percent || '1'}
+                    onChange={async (e) => {
+                      await base44.auth.updateMe({ default_risk_percent: e.target.value });
+                      await loadUser();
+                    }}
+                    placeholder="1"
+                    className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm`}
+                  />
+                ) : (
+                  <div className={`text-base ${theme.text}`}>{user.default_risk_percent || '1'}%</div>
+                )}
+              </div>
+            </div>
+          </div>
+
           {/* Actions */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
             <Button 

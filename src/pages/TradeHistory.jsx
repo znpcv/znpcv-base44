@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft } from 'lucide-react';
+import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
@@ -13,6 +13,9 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import AccountButton from '@/components/AccountButton';
 import TradeEditModal from '@/components/advanced/TradeEditModal';
 import TradeFilters from '@/components/advanced/TradeFilters';
+import AdvancedTradeFilters from '@/components/advanced/AdvancedTradeFilters';
+import BulkDeletePanel from '@/components/advanced/BulkDeletePanel';
+import TradeCompareModal from '@/components/advanced/TradeCompareModal';
 
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
@@ -20,6 +23,15 @@ export default function TradeHistoryPage() {
   const [filter, setFilter] = useState('all');
   const [editingTrade, setEditingTrade] = useState(null);
   const [creatingNew, setCreatingNew] = useState(false);
+  const [selectedTrades, setSelectedTrades] = useState([]);
+  const [compareMode, setCompareMode] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState({
+    dateFrom: '',
+    dateTo: '',
+    pair: 'all',
+    minRR: 'all'
+  });
+  const [exporting, setExporting] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: checklists = [], isLoading } = useQuery({
@@ -89,6 +101,68 @@ export default function TradeHistoryPage() {
     });
   };
 
+  const handleExportPDF = async () => {
+    try {
+      setExporting(true);
+      const response = await base44.functions.invoke('exportTradesPDF', {});
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ZNPCV_Trades_${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      setExporting(true);
+      const response = await base44.functions.invoke('exportTradesExcel', {});
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ZNPCV_Trades_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (window.confirm(`${selectedTrades.length} Trades wirklich löschen?`)) {
+      try {
+        await Promise.all(selectedTrades.map(id => base44.entities.TradeChecklist.delete(id)));
+        queryClient.invalidateQueries({ queryKey: ['checklists'] });
+        setSelectedTrades([]);
+      } catch (error) {
+        console.error('Bulk delete failed:', error);
+      }
+    }
+  };
+
+  const toggleTradeSelection = (tradeId) => {
+    setSelectedTrades(prev => 
+      prev.includes(tradeId) ? prev.filter(id => id !== tradeId) : [...prev, tradeId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedTrades.length === filteredTrades.length) {
+      setSelectedTrades([]);
+    } else {
+      setSelectedTrades(filteredTrades.map(t => t.id));
+    }
+  };
+
   const stats = useMemo(() => {
     const executedTrades = checklists.filter(t => t.outcome && t.outcome !== 'pending');
     const pending = checklists.filter(t => !t.outcome || t.outcome === 'pending').length;
@@ -103,11 +177,52 @@ export default function TradeHistoryPage() {
     return { wins, losses, breakeven, pending, totalPnL, winRate, avgWin, avgLoss, executedTrades, total: checklists.length, executed: executedTrades.length };
   }, [checklists]);
 
-  const filteredTrades = filter === 'all' 
-    ? checklists 
-    : filter === 'pending'
-    ? checklists.filter(t => !t.outcome || t.outcome === 'pending')
-    : checklists.filter(t => t.outcome === filter);
+  const filteredTrades = useMemo(() => {
+    let filtered = checklists;
+
+    // Basic filter
+    if (filter !== 'all') {
+      filtered = filter === 'pending'
+        ? filtered.filter(t => !t.outcome || t.outcome === 'pending')
+        : filtered.filter(t => t.outcome === filter);
+    }
+
+    // Advanced filters
+    if (advancedFilters.dateFrom) {
+      filtered = filtered.filter(t => {
+        const tradeDate = t.trade_date || format(new Date(t.created_date), 'yyyy-MM-dd');
+        return tradeDate >= advancedFilters.dateFrom;
+      });
+    }
+
+    if (advancedFilters.dateTo) {
+      filtered = filtered.filter(t => {
+        const tradeDate = t.trade_date || format(new Date(t.created_date), 'yyyy-MM-dd');
+        return tradeDate <= advancedFilters.dateTo;
+      });
+    }
+
+    if (advancedFilters.pair !== 'all') {
+      filtered = filtered.filter(t => t.pair === advancedFilters.pair);
+    }
+
+    if (advancedFilters.minRR !== 'all') {
+      const minRR = parseFloat(advancedFilters.minRR);
+      filtered = filtered.filter(t => {
+        if (!t.entry_price || !t.stop_loss || !t.take_profit) return false;
+        const entry = parseFloat(t.entry_price);
+        const sl = parseFloat(t.stop_loss);
+        const tp = parseFloat(t.take_profit);
+        const isLong = t.direction === 'long';
+        const slDistance = isLong ? entry - sl : sl - entry;
+        const tpDistance = isLong ? tp - entry : entry - tp;
+        const rr = slDistance > 0 ? tpDistance / slDistance : 0;
+        return rr >= minRR;
+      });
+    }
+
+    return filtered;
+  }, [checklists, filter, advancedFilters]);
 
   const pieData = [
     { name: 'Wins', value: stats.wins, color: '#0d9488' },
@@ -153,19 +268,51 @@ export default function TradeHistoryPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-10">
-        {/* Title mit Zurück-Button */}
+        {/* Title mit Actions */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
-            <button 
-              onClick={() => navigate(createPageUrl('Dashboard'))}
-              className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 transition-all flex-shrink-0 group`}>
-              <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
-            </button>
-            <div className="min-w-0 flex-1">
-              <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-widest mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{t('tradeHistory')}</h1>
-              <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
+          <div className="flex items-start justify-between gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4">
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+              <button 
+                onClick={() => navigate(createPageUrl('Dashboard'))}
+                className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 transition-all flex-shrink-0 group`}>
+                <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
+              </button>
+              <div className="min-w-0">
+                <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-widest mb-1 ${theme.text}`}>{t('tradeHistory')}</h1>
+                <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
+              </div>
+            </div>
+            
+            {/* Export Buttons */}
+            <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
+              <Button onClick={handleExportPDF} disabled={exporting} variant="outline" className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs", theme.border)}>
+                <Download className="w-3.5 h-3.5 sm:mr-1.5" />
+                <span className="hidden sm:inline">PDF</span>
+              </Button>
+              <Button onClick={handleExportExcel} disabled={exporting} variant="outline" className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs", theme.border)}>
+                <FileText className="w-3.5 h-3.5 sm:mr-1.5" />
+                <span className="hidden sm:inline">CSV</span>
+              </Button>
+              {filteredTrades.length >= 2 && (
+                <Button 
+                  onClick={() => setCompareMode(!compareMode)} 
+                  variant="outline"
+                  className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs", 
+                    compareMode ? "bg-teal-600 text-white border-teal-600" : theme.border)}>
+                  <GitCompare className="w-3.5 h-3.5 sm:mr-1.5" />
+                  <span className="hidden sm:inline">{compareMode ? 'Fertig' : 'Vergleich'}</span>
+                </Button>
+              )}
             </div>
           </div>
+          
+          {/* Advanced Filters */}
+          <AdvancedTradeFilters
+            filters={advancedFilters}
+            onFilterChange={setAdvancedFilters}
+            onReset={() => setAdvancedFilters({ dateFrom: '', dateTo: '', pair: 'all', minRR: 'all' })}
+            darkMode={darkMode}
+          />
         </motion.div>
 
         {/* Stats Grid - Wichtigste Metriken */}
@@ -198,7 +345,20 @@ export default function TradeHistoryPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-3 sm:p-4 md:p-5 lg:p-6 border-b ${theme.border}`}>
-                <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.text} mb-2 sm:mb-3 md:mb-4`}>{t('allTrades')}</h3>
+                <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4">
+                  <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
+                  {filteredTrades.length > 0 && (
+                    <button
+                      onClick={toggleSelectAll}
+                      className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border-2 transition-all",
+                        selectedTrades.length === filteredTrades.length 
+                          ? "bg-teal-600 text-white border-teal-600"
+                          : darkMode ? "border-zinc-800 text-zinc-400 hover:border-zinc-700" : "border-zinc-300 text-zinc-600 hover:border-zinc-400")}>
+                      <CheckSquare className="w-3.5 h-3.5" />
+                      {selectedTrades.length === filteredTrades.length ? 'Alle abwählen' : 'Alle auswählen'}
+                    </button>
+                  )}
+                </div>
                 <TradeFilters filter={filter} setFilter={setFilter} darkMode={darkMode} stats={stats} />
               </div>
 
@@ -215,10 +375,34 @@ export default function TradeHistoryPage() {
                 <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[500px] sm:max-h-[550px] md:max-h-[600px] overflow-y-auto`}>
                   {filteredTrades.map((trade) => (
                     <div key={trade.id}
-                      className={`p-3 sm:p-4 md:p-5 lg:p-6 transition-all group cursor-pointer ${darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70'}`}
-                      onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
+                      className={cn("p-3 sm:p-4 md:p-5 lg:p-6 transition-all group cursor-pointer relative",
+                        compareMode && selectedTrades.includes(trade.id) && "ring-2 ring-teal-600",
+                        darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70')}
+                      onClick={(e) => {
+                        if (compareMode) {
+                          e.stopPropagation();
+                          if (selectedTrades.length < 2 || selectedTrades.includes(trade.id)) {
+                            toggleTradeSelection(trade.id);
+                          }
+                        } else {
+                          navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`);
+                        }
+                      }}>
                       <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-2.5 md:mb-3">
                         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1">
+                          {compareMode && (
+                            <div 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleTradeSelection(trade.id);
+                              }}
+                              className={cn("w-6 h-6 border-2 rounded flex items-center justify-center flex-shrink-0 cursor-pointer transition-all",
+                                selectedTrades.includes(trade.id) 
+                                  ? "bg-teal-600 border-teal-600" 
+                                  : darkMode ? "border-zinc-700 hover:border-zinc-600" : "border-zinc-400 hover:border-zinc-500")}>
+                              {selectedTrades.includes(trade.id) && <CheckSquare className="w-4 h-4 text-white" />}
+                            </div>
+                          )}
                           <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg sm:rounded-xl border-2",
                             trade.outcome === 'win' ? 'bg-teal-600 text-white border-teal-600' :
                             trade.outcome === 'loss' ? 'bg-rose-600 text-white border-rose-600' :
@@ -334,7 +518,7 @@ export default function TradeHistoryPage() {
         </footer>
       </main>
 
-      {/* Edit/Create Modal */}
+      {/* Modals */}
       <AnimatePresence>
         {editingTrade && (
           <TradeEditModal
@@ -348,7 +532,27 @@ export default function TradeHistoryPage() {
             darkMode={darkMode}
           />
         )}
+
+        {compareMode && selectedTrades.length === 2 && (
+          <TradeCompareModal
+            trade1={checklists.find(t => t.id === selectedTrades[0])}
+            trade2={checklists.find(t => t.id === selectedTrades[1])}
+            onClose={() => {
+              setCompareMode(false);
+              setSelectedTrades([]);
+            }}
+            darkMode={darkMode}
+          />
+        )}
       </AnimatePresence>
+
+      {/* Bulk Delete Panel */}
+      <BulkDeletePanel
+        selectedCount={selectedTrades.length}
+        onDelete={handleBulkDelete}
+        onCancel={() => setSelectedTrades([])}
+        darkMode={darkMode}
+      />
     </div>
   );
 }
