@@ -195,7 +195,7 @@ export default function DashboardPage() {
           <button onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
               darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5" />
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-600/5 to-emerald-600/5" />
             <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600/10 rounded-full translate-y-12 sm:translate-y-16 -translate-x-12 sm:-translate-x-16 blur-2xl" />
             <div className="relative z-10">
               <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
