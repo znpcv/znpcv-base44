@@ -145,6 +145,12 @@ export default function DashboardPage() {
                 <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
                   <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 </button>
+                <button 
+                  onClick={() => navigate(createPageUrl('Trash'))}
+                  className={cn("p-2 rounded-xl border-2 transition-all relative group",
+                    darkMode ? "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white" : "bg-zinc-100 border-zinc-300 hover:border-zinc-400 text-zinc-600 hover:text-black")}>
+                  <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
               </div>
 
               <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
