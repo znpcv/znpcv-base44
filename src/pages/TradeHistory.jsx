@@ -36,10 +36,7 @@ export default function TradeHistoryPage() {
 
   const { data: checklists = [], isLoading } = useQuery({
     queryKey: ['checklists'],
-    queryFn: async () => {
-      const all = await base44.entities.TradeChecklist.list('-created_date', 100);
-      return all.filter(t => !t.deleted);
-    },
+    queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false,
   });
@@ -63,10 +60,7 @@ export default function TradeHistoryPage() {
   });
 
   const deleteTradeMutation = useMutation({
-    mutationFn: (id) => base44.entities.TradeChecklist.update(id, { 
-      deleted: true, 
-      deleted_date: new Date().toISOString() 
-    }),
+    mutationFn: (id) => base44.entities.TradeChecklist.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
     },
@@ -146,10 +140,7 @@ export default function TradeHistoryPage() {
   const handleBulkDelete = async () => {
     if (window.confirm(`${selectedTrades.length} Trades wirklich löschen?`)) {
       try {
-        const deleteDate = new Date().toISOString();
-        await Promise.all(selectedTrades.map(id => 
-          base44.entities.TradeChecklist.update(id, { deleted: true, deleted_date: deleteDate })
-        ));
+        await Promise.all(selectedTrades.map(id => base44.entities.TradeChecklist.delete(id)));
         queryClient.invalidateQueries({ queryKey: ['checklists'] });
         setSelectedTrades([]);
       } catch (error) {
@@ -294,13 +285,6 @@ export default function TradeHistoryPage() {
             
             {/* Export Buttons */}
             <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
-              <Button 
-                onClick={() => navigate(createPageUrl('Trash'))} 
-                variant="outline" 
-                className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs relative", theme.border)}>
-                <Trash2 className="w-3.5 h-3.5 sm:mr-1.5" />
-                <span className="hidden sm:inline">Papierkorb</span>
-              </Button>
               <Button onClick={handleExportPDF} disabled={exporting} variant="outline" className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs", theme.border)}>
                 <Download className="w-3.5 h-3.5 sm:mr-1.5" />
                 <span className="hidden sm:inline">PDF</span>
