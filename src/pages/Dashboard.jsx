@@ -27,8 +27,8 @@ export default function DashboardPage() {
       const all = await base44.entities.TradeChecklist.list('-created_date', 100);
       return all.filter(t => !t.deleted);
     },
-    staleTime: 1000 * 60,
-    refetchOnWindowFocus: false,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const handleDeleteTrade = async (e, tradeId) => {
