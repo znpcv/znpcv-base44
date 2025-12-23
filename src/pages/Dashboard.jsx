@@ -331,7 +331,7 @@ export default function DashboardPage() {
                               <div className={`text-lg sm:text-xl font-black tracking-wider ${theme.text} mb-1`}>{trade.pair || '-'}</div>
                               <div className={`text-xs ${theme.textMuted} flex items-center gap-2`}>
                                 <Clock className="w-3 h-3" />
-                                {format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}
+                                {format(new Date(trade.trade_date || trade.created_date), 'dd.MM.yyyy')}
                               </div>
                             </div>
                           </div>
