@@ -232,15 +232,13 @@ export default function TradeHistoryPage() {
     // Advanced filters
     if (advancedFilters.dateFrom) {
       filtered = filtered.filter((t) => {
-        const tradeDate = t.trade_date || format(new Date(t.created_date), 'yyyy-MM-dd');
-        return tradeDate >= advancedFilters.dateFrom;
+        return t.trade_date && t.trade_date >= advancedFilters.dateFrom;
       });
     }
 
     if (advancedFilters.dateTo) {
       filtered = filtered.filter((t) => {
-        const tradeDate = t.trade_date || format(new Date(t.created_date), 'yyyy-MM-dd');
-        return tradeDate <= advancedFilters.dateTo;
+        return t.trade_date && t.trade_date <= advancedFilters.dateTo;
       });
     }
 
