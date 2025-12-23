@@ -153,26 +153,27 @@ export default function TradeDetailPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+        <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-2">
               <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={theme.textSecondary}>
-                <ArrowLeft className="w-6 h-6" />
-              </button>
-              <button onClick={() => navigate(createPageUrl('Home'))} className={theme.textSecondary}>
-                <Home className="w-6 h-6" />
+              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`p-1.5 sm:p-2 ${theme.textSecondary} hover:${theme.text} transition-colors rounded-lg ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-200'}`}>
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
-            <img 
-              src={darkMode 
-                ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-              }
-              alt="ZNPCV" 
-              className="h-10 w-auto"
-            />
-            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} className={`gap-1 sm:gap-2 h-8 sm:h-9 md:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+            
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
+              <img 
+                src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                }
+                alt="ZNPCV" 
+                className="h-8 sm:h-10 md:h-12 w-auto"
+              />
+            </button>
+
+            <Button onClick={() => navigate(createPageUrl('Checklist') + `?id=${tradeId}`)} className={`gap-1 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">{t('edit')}</span>
             </Button>

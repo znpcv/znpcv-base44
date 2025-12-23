@@ -90,21 +90,18 @@ export default function IntegrationsPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-5xl mx-auto px-4 py-3">
+        <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} p-2`}>
-                <Home className="w-5 h-5" />
-              </button>
-            </div>
-            <button onClick={() => navigate(createPageUrl('Home'))}>
+            <DarkModeToggle />
+            
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img src={darkMode 
                 ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                 : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-              } alt="ZNPCV" className="h-10 w-auto" />
+              } alt="ZNPCV" className="h-8 sm:h-10 md:h-12 w-auto" />
             </button>
-            <div className="flex items-center gap-2">
+            
+            <div className="flex items-center gap-1 sm:gap-2">
               <LanguageToggle />
               <AccountButton />
             </div>

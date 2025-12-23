@@ -340,18 +340,13 @@ export default function ChecklistPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-3xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+        <div className="max-w-3xl mx-auto px-2 sm:px-3 md:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <button onClick={() => navigate(createPageUrl('Home'))} className={`p-1.5 sm:p-2 ${theme.textMuted} hover:${theme.text} transition-colors rounded-lg ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-200'}`}>
-                <Home className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`p-1.5 sm:p-2 ${theme.textMuted} hover:${theme.text} transition-colors rounded-lg ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-200'}`}>
-                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-            </div>
+            <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`p-1.5 sm:p-2 ${theme.textMuted} hover:${theme.text} transition-colors rounded-lg ${darkMode ? 'hover:bg-zinc-900' : 'hover:bg-zinc-200'}`}>
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
             
-            <button onClick={() => navigate(createPageUrl('Home'))}>
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img src={darkMode 
               ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
               : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
