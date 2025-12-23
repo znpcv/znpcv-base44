@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2 } from 'lucide-react';
+import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,15 +18,19 @@ export default function AccountPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [phoneCountryCode, setPhoneCountryCode] = useState('');
-  const [bio, setBio] = useState('');
-  const [country, setCountry] = useState('');
-  const [addressStreet, setAddressStreet] = useState('');
-  const [addressCity, setAddressCity] = useState('');
-  const [addressPostalCode, setAddressPostalCode] = useState('');
-  const [addressCountry, setAddressCountry] = useState('');
+  const [formData, setFormData] = useState({
+    full_name: '',
+    phone: '',
+    phone_country_code: '+49',
+    bio: '',
+    country: '',
+    address_street: '',
+    address_city: '',
+    address_postal_code: '',
+    address_country: '',
+    default_leverage: '100',
+    default_risk_percent: '1'
+  });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
@@ -38,15 +42,19 @@ export default function AccountPage() {
     try {
       const userData = await base44.auth.me();
       setUser(userData);
-      setFullName(userData.full_name || '');
-      setPhone(userData.phone || '');
-      setPhoneCountryCode(userData.phone_country_code || '+49');
-      setBio(userData.bio || '');
-      setCountry(userData.country || '');
-      setAddressStreet(userData.address_street || '');
-      setAddressCity(userData.address_city || '');
-      setAddressPostalCode(userData.address_postal_code || '');
-      setAddressCountry(userData.address_country || '');
+      setFormData({
+        full_name: userData.full_name || '',
+        phone: userData.phone || '',
+        phone_country_code: userData.phone_country_code || '+49',
+        bio: userData.bio || '',
+        country: userData.country || '',
+        address_street: userData.address_street || '',
+        address_city: userData.address_city || '',
+        address_postal_code: userData.address_postal_code || '',
+        address_country: userData.address_country || '',
+        default_leverage: userData.default_leverage || '100',
+        default_risk_percent: userData.default_risk_percent || '1'
+      });
     } catch (err) {
       console.error('Load user failed:', err);
       navigate(createPageUrl('Home'));
@@ -58,31 +66,13 @@ export default function AccountPage() {
   const handleSave = async () => {
     try {
       setSaving(true);
-      await base44.auth.updateMe({
-        full_name: fullName,
-        phone: phone,
-        phone_country_code: phoneCountryCode,
-        bio: bio,
-        country: country,
-        address_street: addressStreet,
-        address_city: addressCity,
-        address_postal_code: addressPostalCode,
-        address_country: addressCountry
-      });
+      await base44.auth.updateMe(formData);
       await loadUser();
       setEditing(false);
     } catch (err) {
       console.error('Save failed:', err);
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleCountryChange = (countryCode) => {
-    setCountry(countryCode);
-    const selectedCountry = COUNTRIES.find((c) => c.code === countryCode);
-    if (selectedCountry && !phoneCountryCode) {
-      setPhoneCountryCode(selectedCountry.dial);
     }
   };
 
@@ -126,24 +116,26 @@ export default function AccountPage() {
     bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
     text: darkMode ? 'text-white' : 'text-zinc-900',
     textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+    textMuted: darkMode ? 'text-zinc-500' : 'text-zinc-500',
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200'
   };
 
   if (loading) {
     return (
       <div className={`min-h-screen ${theme.bg} flex items-center justify-center`}>
-        <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full" />
+        <div className={`animate-spin w-12 h-12 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full`} />
       </div>
     );
   }
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
-      {/* Compact Header */}
+      {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-8 lg:px-12 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <DarkModeToggle />
+            
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img
                 src={darkMode ?
@@ -153,118 +145,99 @@ export default function AccountPage() {
                 alt="ZNPCV"
                 className="h-8 sm:h-10 md:h-12 w-auto" />
             </button>
+            
             <LanguageToggle />
           </div>
         </div>
       </header>
 
-      {/* Main Content - Ultra Compact */}
-      <main className="max-w-4xl mx-auto px-2 sm:px-3 md:px-8 lg:px-12 py-3 sm:py-4 md:py-10 lg:py-14">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
+      {/* Main Content */}
+      <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 lg:py-16">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 sm:space-y-5 md:space-y-7 lg:space-y-9">
           
-          {/* Profile Card - Compact */}
-          <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-3 sm:p-4 md:p-6 lg:p-8`}>
-            <div className="flex items-center gap-3 md:gap-5 lg:gap-6">
+          {/* Profile Card */}
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-2xl p-4 sm:p-5 md:p-7 lg:p-9`}>
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5 md:gap-6 lg:gap-8">
               {/* Profile Image */}
               <div className="relative group flex-shrink-0">
-                <div className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-800' : 'bg-zinc-900 border-zinc-300'}`}>
+                <div className={`w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-2xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
                   {user.profile_image ?
                   <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" /> :
-                  <User className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 ${darkMode ? 'text-black' : 'text-white'}`} />
+                  <User className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 ${darkMode ? 'text-black' : 'text-white'}`} />
                   }
                 </div>
-                <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                   <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
                   {uploading ?
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> :
-                  <Camera className="w-4 h-4 text-white" />
+                  <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" /> :
+                  <Camera className="w-6 h-6 text-white" />
                   }
                 </label>
               </div>
 
               {/* User Info */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 text-center sm:text-left">
                 {editing ?
                 <Input
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className={`font-bold text-sm sm:text-base md:text-lg ${theme.border} mb-1 md:mb-2 h-8 sm:h-9 md:h-10`}
+                  value={formData.full_name}
+                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                  className={`font-bold text-base sm:text-lg md:text-xl lg:text-2xl ${theme.border} mb-2 md:mb-3 h-10 sm:h-11 md:h-12`}
                   placeholder={t('yourName')} /> :
-                <div className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold ${theme.text} truncate mb-1`}>{user.full_name || '-'}</div>
+                <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${theme.text} mb-2`}>{user.full_name || '-'}</h1>
                 }
-                <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textSecondary} truncate mb-1.5 md:mb-2`}>{user.email}</div>
+                <p className={`text-xs sm:text-sm md:text-base ${theme.textSecondary} mb-3 md:mb-4`}>{user.email}</p>
                 
-                {/* Inline Stats */}
-                <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
-                  <div className={`flex items-center gap-1 px-1.5 py-0.5 md:px-2 md:py-1 rounded text-[9px] md:text-[10px] ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 bg-teal-600 rounded-full" />
-                    <span className={theme.textSecondary}>{user.role?.toUpperCase()}</span>
+                {/* Stats Pills */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 md:gap-3">
+                  <div className={`flex items-center gap-1.5 md:gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-bold ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                    <User className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
+                    {user.role?.toUpperCase()}
                   </div>
-                  <div className={`text-[9px] md:text-[10px] ${theme.textSecondary}`}>
+                  <div className={`flex items-center gap-1.5 md:gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-mono ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                    <Calendar className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
                     {format(new Date(user.created_date), 'MM/yyyy')}
                   </div>
                 </div>
               </div>
 
               {/* Edit Button */}
-              <div className="flex gap-1 flex-shrink-0">
-                {editing ?
-                <>
-                  <Button onClick={handleSave} disabled={saving} size="sm" className={`h-8 px-2 sm:px-3 text-[10px] sm:text-xs font-bold border-2 ${darkMode ? 'bg-white text-black border-white' : 'bg-zinc-900 text-white border-zinc-900'}`}>
-                    <Save className="w-3 h-3 sm:mr-1" />
-                    <span className="hidden sm:inline">{saving ? '...' : t('save')}</span>
-                  </Button>
-                  <Button onClick={() => {
-                    setEditing(false);
-                    setFullName(user.full_name);
-                    setPhone(user.phone || '');
-                    setPhoneCountryCode(user.phone_country_code || '+49');
-                    setBio(user.bio || '');
-                    setCountry(user.country || '');
-                    setAddressStreet(user.address_street || '');
-                    setAddressCity(user.address_city || '');
-                    setAddressPostalCode(user.address_postal_code || '');
-                    setAddressCountry(user.address_country || '');
-                  }} size="sm" variant="outline" className={`h-8 px-2 border-2 ${theme.border}`}>
-                    <X className="w-3 h-3" />
-                  </Button>
-                </> :
-                <Button onClick={() => setEditing(true)} size="sm" className={`h-8 px-2 sm:px-3 text-[10px] sm:text-xs font-bold border-2 ${darkMode ? 'bg-white text-black border-white' : 'bg-zinc-900 text-white border-zinc-900'}`}>
-                  <Edit2 className="w-3 h-3 sm:mr-1" />
-                  <span className="hidden sm:inline">{t('edit')}</span>
+              {!editing && (
+                <Button onClick={() => setEditing(true)} className={`h-9 sm:h-10 md:h-11 px-4 md:px-5 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Edit2 className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                  {t('edit')}
                 </Button>
-                }
-              </div>
+              )}
             </div>
 
             {/* Bio */}
-            {editing &&
-            <div className="mt-3 pt-3 border-t ${theme.border}">
-              <Textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                placeholder={t('bioPlaceholder')}
-                className={`${theme.border} h-12 sm:h-14 resize-none text-[10px] sm:text-xs`} />
-            </div>
-            }
-            {!editing && bio &&
-            <div className="mt-3 pt-3 border-t ${theme.border}">
-              <p className={`text-[10px] sm:text-xs ${theme.text}`}>{bio}</p>
-            </div>
-            }
+            {editing ? (
+              <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t ${theme.border}">
+                <label className={`block text-xs md:text-sm ${theme.textSecondary} mb-2 md:mb-3 tracking-wider`}>BIO</label>
+                <Textarea
+                  value={formData.bio}
+                  onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                  placeholder={t('bioPlaceholder')}
+                  className={`${theme.border} h-20 md:h-24 resize-none text-xs md:text-sm font-sans`} />
+              </div>
+            ) : bio && (
+              <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t ${theme.border}">
+                <p className={`text-xs md:text-sm ${theme.text} font-sans leading-relaxed`}>{bio}</p>
+              </div>
+            )}
           </div>
 
-          {/* Contact Grid - Super Compact */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-              <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
-                <Phone className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
-                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>{t('phone')}</span>
+          {/* Contact Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+            {/* Phone */}
+            <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6 lg:p-7`}>
+              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                <Phone className={`w-4 h-4 md:w-5 md:h-5 ${theme.textSecondary}`} />
+                <span className={`text-xs md:text-sm tracking-wider ${theme.textSecondary}`}>{t('phone')}</span>
               </div>
               {editing ?
-              <div className="flex gap-1.5">
-                <Select value={phoneCountryCode} onValueChange={setPhoneCountryCode}>
-                  <SelectTrigger className={`w-16 sm:w-20 ${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`}>
+              <div className="flex gap-2 md:gap-3">
+                <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
+                  <SelectTrigger className={`w-20 md:w-24 ${theme.border} h-9 md:h-10 text-xs md:text-sm`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="max-h-[250px]">
@@ -274,50 +247,51 @@ export default function AccountPage() {
                   </SelectContent>
                 </Select>
                 <Input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
                   placeholder="123456789"
-                  className={`flex-1 ${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`} />
+                  className={`flex-1 ${theme.border} h-9 md:h-10 text-xs md:text-sm`} />
               </div> :
-              <div className={`text-xs sm:text-sm ${theme.text}`}>
+              <div className={`text-sm md:text-base ${theme.text} font-mono`}>
                 {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
               </div>
               }
             </div>
 
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-              <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
-                <MapPin className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
-                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>{t('country')}</span>
+            {/* Country */}
+            <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6 lg:p-7`}>
+              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                <MapPin className={`w-4 h-4 md:w-5 md:h-5 ${theme.textSecondary}`} />
+                <span className={`text-xs md:text-sm tracking-wider ${theme.textSecondary}`}>{t('country')}</span>
               </div>
               {editing ?
               <CountrySelect
-                value={country}
-                onChange={handleCountryChange}
-                className={`${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`} /> :
-              <div className={`text-xs sm:text-sm ${theme.text}`}>
+                value={formData.country}
+                onChange={(v) => setFormData({...formData, country: v})}
+                className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+              <div className={`text-sm md:text-base ${theme.text}`}>
                 {COUNTRIES.find((c) => c.code === user.country)?.name || '-'}
               </div>
               }
             </div>
           </div>
 
-          {/* Address - Collapsible Compact */}
-          <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-            <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
-              <HomeIcon className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
-              <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>{t('address')}</span>
+          {/* Address */}
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6 lg:p-7`}>
+            <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-5">
+              <HomeIcon className={`w-4 h-4 md:w-5 md:h-5 ${theme.textSecondary}`} />
+              <span className={`text-xs md:text-sm tracking-wider ${theme.textSecondary}`}>{t('address')}</span>
             </div>
             
-            <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div className="col-span-2">
                 {editing ?
                 <Input
-                  value={addressStreet}
-                  onChange={(e) => setAddressStreet(e.target.value)}
+                  value={formData.address_street}
+                  onChange={(e) => setFormData({...formData, address_street: e.target.value})}
                   placeholder={t('street')}
-                  className={`${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`} /> :
-                <div className={`text-[10px] sm:text-xs ${theme.text} p-1.5 sm:p-2 border ${theme.border} rounded`}>
+                  className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+                <div className={`text-xs md:text-sm ${theme.text} p-3 md:p-3.5 border ${theme.border} rounded-lg`}>
                   {user.address_street || '-'}
                 </div>
                 }
@@ -326,11 +300,11 @@ export default function AccountPage() {
               <div>
                 {editing ?
                 <Input
-                  value={addressPostalCode}
-                  onChange={(e) => setAddressPostalCode(e.target.value)}
+                  value={formData.address_postal_code}
+                  onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
                   placeholder={t('postalCode')}
-                  className={`${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`} /> :
-                <div className={`text-[10px] sm:text-xs ${theme.text} p-1.5 sm:p-2 border ${theme.border} rounded`}>
+                  className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+                <div className={`text-xs md:text-sm ${theme.text} p-3 md:p-3.5 border ${theme.border} rounded-lg`}>
                   {user.address_postal_code || '-'}
                 </div>
                 }
@@ -339,11 +313,11 @@ export default function AccountPage() {
               <div>
                 {editing ?
                 <Input
-                  value={addressCity}
-                  onChange={(e) => setAddressCity(e.target.value)}
+                  value={formData.address_city}
+                  onChange={(e) => setFormData({...formData, address_city: e.target.value})}
                   placeholder={t('city')}
-                  className={`${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`} /> :
-                <div className={`text-[10px] sm:text-xs ${theme.text} p-1.5 sm:p-2 border ${theme.border} rounded`}>
+                  className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+                <div className={`text-xs md:text-sm ${theme.text} p-3 md:p-3.5 border ${theme.border} rounded-lg`}>
                   {user.address_city || '-'}
                 </div>
                 }
@@ -352,10 +326,10 @@ export default function AccountPage() {
               <div className="col-span-2">
                 {editing ?
                 <CountrySelect
-                  value={addressCountry}
-                  onChange={setAddressCountry}
-                  className={`${theme.border} h-7 sm:h-8 text-[10px] sm:text-xs`} /> :
-                <div className={`text-[10px] sm:text-xs ${theme.text} p-1.5 sm:p-2 border ${theme.border} rounded`}>
+                  value={formData.address_country}
+                  onChange={(v) => setFormData({...formData, address_country: v})}
+                  className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+                <div className={`text-xs md:text-sm ${theme.text} p-3 md:p-3.5 border ${theme.border} rounded-lg`}>
                   {COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}
                 </div>
                 }
@@ -363,88 +337,110 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Trading Preferences - Inline */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-              <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
-                <Zap className={`w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500`} />
-                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>LEVERAGE</span>
+          {/* Trading Preferences */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+            <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6 lg:p-7`}>
+              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                <Zap className={`w-4 h-4 md:w-5 md:h-5 text-purple-500`} />
+                <span className={`text-xs md:text-sm tracking-wider ${theme.textSecondary}`}>LEVERAGE</span>
               </div>
               {editing ?
               <Input
-                value={user.default_leverage || '100'}
-                onChange={async (e) => {
-                  await base44.auth.updateMe({ default_leverage: e.target.value });
-                  await loadUser();
-                }}
+                value={formData.default_leverage}
+                onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
                 placeholder="100"
-                className={`${theme.border} h-7 sm:h-8 text-xs`} /> :
-              <div className={`text-sm sm:text-base font-bold ${theme.text}`}>1:{user.default_leverage || '100'}</div>
+                className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+              <div className={`text-base md:text-lg lg:text-xl font-bold ${theme.text}`}>1:{user.default_leverage || '100'}</div>
               }
             </div>
 
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
-              <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
-                <Percent className={`w-3.5 h-3.5 md:w-4 md:h-4 text-amber-500`} />
-                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>RISK</span>
+            <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6 lg:p-7`}>
+              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                <Percent className={`w-4 h-4 md:w-5 md:h-5 text-amber-500`} />
+                <span className={`text-xs md:text-sm tracking-wider ${theme.textSecondary}`}>RISK</span>
               </div>
               {editing ?
               <Input
-                value={user.default_risk_percent || '1'}
-                onChange={async (e) => {
-                  await base44.auth.updateMe({ default_risk_percent: e.target.value });
-                  await loadUser();
-                }}
+                value={formData.default_risk_percent}
+                onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
                 placeholder="1"
-                className={`${theme.border} h-7 sm:h-8 text-xs`} /> :
-              <div className={`text-sm sm:text-base font-bold ${theme.text}`}>{user.default_risk_percent || '1'}%</div>
+                className={`${theme.border} h-9 md:h-10 text-xs md:text-sm`} /> :
+              <div className={`text-base md:text-lg lg:text-xl font-bold ${theme.text}`}>{user.default_risk_percent || '1'}%</div>
               }
             </div>
           </div>
 
-          {/* Navigation - Compact */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 lg:gap-4">
-            <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <HomeIcon className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
+          {/* Save/Cancel Buttons (only in edit mode) */}
+          {editing && (
+            <div className="flex gap-3 md:gap-4">
+              <Button onClick={handleSave} disabled={saving} className={`flex-1 h-11 md:h-12 lg:h-14 text-sm md:text-base font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                <Save className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3" />
+                {saving ? '...' : t('save')}
+              </Button>
+              <Button onClick={() => {
+                setEditing(false);
+                setFormData({
+                  full_name: user.full_name || '',
+                  phone: user.phone || '',
+                  phone_country_code: user.phone_country_code || '+49',
+                  bio: user.bio || '',
+                  country: user.country || '',
+                  address_street: user.address_street || '',
+                  address_city: user.address_city || '',
+                  address_postal_code: user.address_postal_code || '',
+                  address_country: user.address_country || '',
+                  default_leverage: user.default_leverage || '100',
+                  default_risk_percent: user.default_risk_percent || '1'
+                });
+              }} variant="outline" className={`h-11 md:h-12 lg:h-14 px-5 md:px-6 border-2 ${theme.border}`}>
+                <X className="w-5 h-5 md:w-6 md:h-6" />
+              </Button>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
+            <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-11 md:h-12 lg:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <HomeIcon className="w-4 h-4 md:w-5 md:h-5 mr-0 sm:mr-2 md:mr-3" />
               <span className="hidden sm:inline">HOME</span>
             </Button>
-            <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <BarChart3 className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
+            <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-11 md:h-12 lg:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <BarChart3 className="w-4 h-4 md:w-5 md:h-5 mr-0 sm:mr-2 md:mr-3" />
               <span className="hidden sm:inline">STATS</span>
             </Button>
-            <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <Settings className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
-              <span className="hidden sm:inline">INTEGRATIONS</span>
+            <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-11 md:h-12 lg:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <Settings className="w-4 h-4 md:w-5 md:h-5 mr-0 sm:mr-2 md:mr-3" />
+              <span className="hidden sm:inline">TOOLS</span>
             </Button>
-            <Button onClick={handleLogout} className="h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
-              <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
-              <span className="hidden sm:inline">LOGOUT</span>
+            <Button onClick={handleLogout} className="h-11 md:h-12 lg:h-14 text-xs sm:text-sm md:text-base tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
+              <LogOut className="w-4 h-4 md:w-5 md:h-5 mr-0 sm:mr-2 md:mr-3" />
+              <span className="hidden sm:inline">OUT</span>
             </Button>
           </div>
 
-          {/* Danger Zone - Ultra Compact */}
-          <div className={`border-2 border-rose-600/40 ${darkMode ? 'bg-rose-600/5' : 'bg-rose-50'} rounded-xl p-3 sm:p-4 md:p-6 lg:p-7`}>
-            <div className="flex items-center gap-2 md:gap-4 mb-3 md:mb-4">
-              <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-600 flex-shrink-0" />
+          {/* Danger Zone */}
+          <div className={`border-2 border-rose-600/40 ${darkMode ? 'bg-rose-600/5' : 'bg-rose-50'} rounded-xl p-4 sm:p-5 md:p-6 lg:p-7`}>
+            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-5">
+              <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-rose-600 flex-shrink-0" />
               <div className="flex-1">
-                <div className={`text-xs sm:text-sm md:text-base font-bold ${theme.text} mb-1`}>{t('dangerZone')}</div>
-                <p className={`${theme.textSecondary} text-[10px] sm:text-xs md:text-sm leading-relaxed`}>
+                <h3 className="text-sm md:text-base lg:text-lg tracking-wider text-rose-600 font-bold mb-1 md:mb-2">{t('dangerZone')}</h3>
+                <p className={`${theme.textSecondary} text-xs md:text-sm leading-relaxed font-sans`}>
                   {t('deleteWarning')}
                 </p>
               </div>
             </div>
             <Button
               onClick={handleDeleteAccount}
-              className="w-full h-9 sm:h-10 md:h-11 lg:h-12 border-2 bg-rose-600 text-white hover:bg-rose-700 border-rose-600 text-xs sm:text-sm md:text-base font-bold tracking-wider">
-              <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-2" />
+              className="w-full h-11 md:h-12 lg:h-14 border-2 bg-rose-600 text-white hover:bg-rose-700 border-rose-600 text-sm md:text-base font-bold tracking-wider">
+              <Trash2 className="w-4 h-4 md:w-5 md:h-5 mr-2 md:mr-3" />
               {t('deletePermanently')}
             </Button>
           </div>
         </motion.div>
 
         {/* Footer */}
-        <footer className={`mt-6 sm:mt-8 md:mt-12 lg:mt-16 pt-4 sm:pt-6 md:pt-8 border-t ${theme.border}`}>
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-[10px] md:text-xs">
+        <footer className={`mt-8 sm:mt-10 md:mt-16 lg:mt-20 pt-6 sm:pt-8 md:pt-10 border-t ${theme.border}`}>
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-5 text-xs md:text-sm">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
