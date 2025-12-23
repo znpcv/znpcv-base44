@@ -94,7 +94,20 @@ export default function ChecklistPage() {
 
   useEffect(() => {
     if (checklistId) loadChecklist();
+    else {
+      loadDefaults();
+    }
   }, [checklistId]);
+
+  const loadDefaults = async () => {
+    try {
+      const user = await base44.auth.me();
+      if (user.default_leverage) update('leverage', user.default_leverage);
+      if (user.default_risk_percent) update('risk_percent', user.default_risk_percent);
+    } catch (error) {
+      console.error('Load defaults failed:', error);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
@@ -263,7 +276,12 @@ export default function ChecklistPage() {
 
   const handleDelete = async () => {
     try {
-      if (checklistId) await base44.entities.TradeChecklist.delete(checklistId);
+      if (checklistId) {
+        await base44.entities.TradeChecklist.update(checklistId, { 
+          deleted: true, 
+          deleted_date: new Date().toISOString() 
+        });
+      }
       navigate(createPageUrl('Dashboard'));
     } catch (error) {
       console.error('Delete failed:', error);

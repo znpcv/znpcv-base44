@@ -11,6 +11,7 @@ import Integrations from './pages/Integrations';
 import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
+import Trash from './pages/Trash';
 import __Layout from './Layout.jsx';
 
 
@@ -28,6 +29,7 @@ export const PAGES = {
     "Register": Register,
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
+    "Trash": Trash,
 }
 
 export const pagesConfig = {

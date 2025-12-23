@@ -24,7 +24,10 @@ export default function DashboardPage() {
 
   const { data: checklists = [], isLoading, refetch } = useQuery({
     queryKey: ['checklists'],
-    queryFn: () => base44.entities.TradeChecklist.list('-created_date', 100),
+    queryFn: async () => {
+      const all = await base44.entities.TradeChecklist.list('-created_date', 100);
+      return all.filter(t => !t.deleted);
+    },
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false,
   });
@@ -33,7 +36,10 @@ export default function DashboardPage() {
     e.stopPropagation();
     if (window.confirm(t('confirmDelete') || 'Trade wirklich löschen?')) {
       try {
-        await base44.entities.TradeChecklist.delete(tradeId);
+        await base44.entities.TradeChecklist.update(tradeId, { 
+          deleted: true, 
+          deleted_date: new Date().toISOString() 
+        });
         refetch();
       } catch (error) {
         console.error('Delete failed:', error);

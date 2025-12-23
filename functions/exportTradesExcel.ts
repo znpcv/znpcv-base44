@@ -8,12 +8,34 @@ Deno.serve(async (req) => {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const trades = await base44.entities.TradeChecklist.list('-created_date', 100);
+  const allTrades = await base44.entities.TradeChecklist.list('-created_date', 100);
+  const trades = allTrades.filter(t => !t.deleted);
+
+  // Performance Summary
+  const executedTrades = trades.filter(t => t.outcome && t.outcome !== 'pending');
+  const wins = executedTrades.filter(t => t.outcome === 'win').length;
+  const losses = executedTrades.filter(t => t.outcome === 'loss').length;
+  const totalPnL = executedTrades.reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+  const winRate = executedTrades.length > 0 ? ((wins / executedTrades.length) * 100).toFixed(1) : '0.0';
+
+  const summaryRows = [
+    ['ZNPCV TRADING REPORT'],
+    ['Generated:', new Date().toLocaleDateString('de-DE')],
+    ['Trader:', user.full_name || user.email],
+    [''],
+    ['PERFORMANCE SUMMARY'],
+    ['Total Trades:', trades.length],
+    ['Win Rate:', `${winRate}%`],
+    ['Total P&L:', `$${totalPnL.toFixed(2)}`],
+    ['Wins/Losses:', `${wins}/${losses}`],
+    [''],
+    ['']
+  ];
 
   // CSV Header
   const headers = [
-    'Date', 'Pair', 'Direction', 'Weekly Score', 'Daily Score', '4H Score', 'Entry Score',
-    'Total Score', 'Entry Price', 'Stop Loss', 'Take Profit', 'Risk %', 'Outcome', 'P&L', 'Exit Date', 'Notes'
+    'Date', 'Pair', 'Direction', 'Weekly', 'Daily', '4H', 'Entry',
+    'Total Score', 'Entry', 'SL', 'TP', 'Risk%', 'Leverage', 'Outcome', 'P&L', 'Exit Date', 'R:R', 'Notes'
   ];
 
   // CSV Rows
@@ -35,10 +57,22 @@ Deno.serve(async (req) => {
     const entryScore = (trade.entry_sos ? 10 : 0) + (trade.entry_engulfing ? 10 : 0) + 
       (trade.entry_pattern && trade.entry_pattern !== 'none' ? 5 : 0);
 
+    // Calculate R:R
+    let rr = '';
+    if (trade.entry_price && trade.stop_loss && trade.take_profit) {
+      const entry = parseFloat(trade.entry_price);
+      const sl = parseFloat(trade.stop_loss);
+      const tp = parseFloat(trade.take_profit);
+      const isLong = trade.direction === 'long';
+      const slDist = isLong ? entry - sl : sl - entry;
+      const tpDist = isLong ? tp - entry : entry - tp;
+      rr = slDist > 0 ? (tpDist / slDist).toFixed(2) : '';
+    }
+
     return [
       new Date(trade.created_date).toLocaleDateString('de-DE'),
       trade.pair || '',
-      trade.direction || '',
+      (trade.direction || '').toUpperCase(),
       weeklyScore,
       dailyScore,
       h4Score,
@@ -48,17 +82,25 @@ Deno.serve(async (req) => {
       trade.stop_loss || '',
       trade.take_profit || '',
       trade.risk_percent || '',
-      trade.outcome || 'pending',
+      trade.leverage || '',
+      (trade.outcome || 'pending').toUpperCase(),
       trade.actual_pnl || '',
       trade.exit_date || '',
-      (trade.notes || '').replace(/"/g, '""')
+      rr ? `1:${rr}` : '',
+      (trade.notes || '').replace(/"/g, '""').substring(0, 100)
     ];
   });
 
-  // Build CSV
+  // Build CSV with summary
   const csvContent = [
+    ...summaryRows.map(row => row.join(',')),
     headers.join(','),
-    ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+    '',
+    '',
+    'ZNPCV - Ultimate Trading Checklist',
+    'Discipline beats talent. Every. Single. Day.',
+    'www.znpcv.com'
   ].join('\n');
 
   return new Response(csvContent, {
