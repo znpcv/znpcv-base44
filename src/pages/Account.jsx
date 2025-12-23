@@ -159,12 +159,12 @@ export default function AccountPage() {
       </header>
 
       {/* Main Content - Ultra Compact */}
-      <main className="max-w-5xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-8 lg:py-12">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+      <main className="max-w-4xl mx-auto px-2 sm:px-3 md:px-8 lg:px-12 py-3 sm:py-4 md:py-10 lg:py-14">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
           
           {/* Profile Card - Compact */}
-          <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-3 sm:p-4 md:p-5 lg:p-6`}>
-            <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
+          <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-3 sm:p-4 md:p-6 lg:p-8`}>
+            <div className="flex items-center gap-3 md:gap-5 lg:gap-6">
               {/* Profile Image */}
               <div className="relative group flex-shrink-0">
                 <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-800' : 'bg-zinc-900 border-zinc-300'}`}>
@@ -255,8 +255,8 @@ export default function AccountPage() {
           </div>
 
           {/* Contact Grid - Super Compact */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-4`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
               <div className="flex items-center gap-1.5 mb-2">
                 <Phone className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
                 <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>{t('phone')}</span>
@@ -285,10 +285,10 @@ export default function AccountPage() {
               }
             </div>
 
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-4`}>
-              <div className="flex items-center gap-1.5 mb-2">
-                <MapPin className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
-                <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>{t('country')}</span>
+            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
+              <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
+                <MapPin className={`w-3.5 h-3.5 md:w-4 md:h-4 ${theme.textSecondary}`} />
+                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>{t('country')}</span>
               </div>
               {editing ?
               <CountrySelect
@@ -364,8 +364,8 @@ export default function AccountPage() {
           </div>
 
           {/* Trading Preferences - Inline */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-4`}>
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
               <div className="flex items-center gap-1.5 mb-1.5">
                 <Zap className={`w-3.5 h-3.5 text-purple-500`} />
                 <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>LEVERAGE</span>
@@ -383,10 +383,10 @@ export default function AccountPage() {
               }
             </div>
 
-            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-4`}>
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <Percent className={`w-3.5 h-3.5 text-amber-500`} />
-                <span className={`text-[10px] tracking-wider ${theme.textSecondary}`}>RISK</span>
+            <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-2.5 sm:p-3 md:p-5 lg:p-6`}>
+              <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
+                <Percent className={`w-3.5 h-3.5 md:w-4 md:h-4 text-amber-500`} />
+                <span className={`text-[10px] md:text-xs tracking-wider ${theme.textSecondary}`}>RISK</span>
               </div>
               {editing ?
               <Input
@@ -403,21 +403,21 @@ export default function AccountPage() {
           </div>
 
           {/* Navigation - Compact */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3">
-            <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-9 md:h-10 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <HomeIcon className="w-3.5 h-3.5 sm:mr-1.5" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 lg:gap-4">
+            <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <HomeIcon className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
               <span className="hidden sm:inline">HOME</span>
             </Button>
-            <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-9 md:h-10 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <BarChart3 className="w-3.5 h-3.5 sm:mr-1.5" />
+            <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <BarChart3 className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
               <span className="hidden sm:inline">STATS</span>
             </Button>
-            <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-9 md:h-10 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <Settings className="w-3.5 h-3.5 sm:mr-1.5" />
+            <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <Settings className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
               <span className="hidden sm:inline">INTEGRATIONS</span>
             </Button>
-            <Button onClick={handleLogout} className="h-9 md:h-10 text-[10px] sm:text-xs tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
-              <LogOut className="w-3.5 h-3.5 sm:mr-1.5" />
+            <Button onClick={handleLogout} className="h-9 md:h-11 lg:h-12 text-[10px] sm:text-xs md:text-sm tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
+              <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4 sm:mr-1.5 md:mr-2" />
               <span className="hidden sm:inline">LOGOUT</span>
             </Button>
           </div>
