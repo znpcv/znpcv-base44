@@ -97,12 +97,7 @@ export default function TradeShareCard({ trade, darkMode }) {
     });
   };
 
-  const getGradeColor = (score) => {
-    if (score >= 100) return 'from-teal-600 to-emerald-600';
-    if (score >= 90) return 'from-teal-500 to-teal-600';
-    if (score >= 85) return 'from-blue-500 to-blue-600';
-    return 'from-zinc-600 to-zinc-700';
-  };
+
 
   return (
     <div>
@@ -126,103 +121,88 @@ export default function TradeShareCard({ trade, darkMode }) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2 }}
-        className="bg-gradient-to-br from-zinc-950 to-black text-white p-5 sm:p-7 rounded-2xl border-2 border-zinc-800 overflow-hidden relative shadow-2xl">
-        {/* Advanced Background Pattern */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-teal-600/20 to-blue-600/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-purple-600/10 to-pink-600/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-emerald-600/5 to-cyan-600/5 rounded-full blur-3xl" />
-        </div>
-
-        {/* Grid Pattern Overlay */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
+        className="bg-black text-white p-6 sm:p-8 rounded-2xl border border-white/10 overflow-hidden relative shadow-2xl">
+        
+        {/* Subtle Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
-          backgroundSize: '20px 20px'
+          backgroundSize: '30px 30px'
         }} />
 
         <div className="relative z-10">
           {/* Header mit Logo */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="border-b border-white/10 pb-5 mb-6">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
               alt="ZNPCV"
-              className="h-8 sm:h-10 w-auto"
+              className="h-10 sm:h-12 w-auto mb-4"
             />
-            <div className="text-right">
-              <div className={cn("text-4xl sm:text-5xl font-black bg-gradient-to-br bg-clip-text text-transparent", getGradeColor(scores.total))}>
-                {scores.total}%
+            <div className="flex items-end justify-between">
+              <div>
+                <div className="text-3xl sm:text-4xl font-black tracking-tight mb-1">{trade.pair}</div>
+                <div className="flex items-center gap-2 text-xs text-zinc-500">
+                  <Calendar className="w-3 h-3" />
+                  {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yyyy')}
+                </div>
               </div>
-              <div className="text-[9px] text-zinc-500 tracking-widest">SCORE</div>
+              <div className={cn("px-4 py-2 rounded-lg border",
+                trade.direction === 'long' ? "bg-white/5 border-white/20" : "bg-white/5 border-white/20")}>
+                <div className="flex items-center gap-1.5">
+                  {trade.direction === 'long' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                  <span className="text-sm font-black tracking-wider">{trade.direction === 'long' ? 'LONG' : 'SHORT'}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Trade Info */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="text-3xl sm:text-4xl font-black tracking-tight">{trade.pair}</div>
-            <div className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black",
-              trade.direction === 'long' ? "bg-emerald-700 text-white" : "bg-rose-600 text-white")}>
-              {trade.direction === 'long' ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-              {trade.direction === 'long' ? 'LONG' : 'SHORT'}
-            </div>
+          {/* Main Score */}
+          <div className="text-center mb-6">
+            <div className="text-6xl sm:text-7xl font-black mb-2 tracking-tighter">{scores.total}%</div>
+            <div className="text-sm text-zinc-500 tracking-widest">ANALYSE SCORE</div>
           </div>
 
-          {/* Trade Levels */}
+          {/* Trade Levels - Kompakt */}
           {trade.entry_price && (
             <div className="grid grid-cols-3 gap-2 mb-6">
-              <div className="bg-zinc-900/80 border border-zinc-800 rounded-lg p-3 text-center">
-                <div className="text-[9px] text-zinc-500 mb-1 tracking-wider">ENTRY</div>
+              <div className="border border-white/10 rounded-lg p-3 bg-white/5">
+                <div className="text-[9px] text-zinc-500 mb-1.5 tracking-widest">ENTRY</div>
                 <div className="font-mono text-sm font-bold">{trade.entry_price}</div>
               </div>
               {trade.stop_loss && (
-                <div className="bg-rose-600/10 border border-rose-600/30 rounded-lg p-3 text-center">
-                  <div className="text-[9px] text-rose-400 mb-1 tracking-wider">SL</div>
-                  <div className="font-mono text-sm font-bold text-rose-400">{trade.stop_loss}</div>
+                <div className="border border-white/10 rounded-lg p-3 bg-white/5">
+                  <div className="text-[9px] text-zinc-500 mb-1.5 tracking-widest">STOP LOSS</div>
+                  <div className="font-mono text-sm font-bold">{trade.stop_loss}</div>
                 </div>
               )}
               {trade.take_profit && (
-                <div className="bg-emerald-700/10 border border-emerald-700/30 rounded-lg p-3 text-center">
-                  <div className="text-[9px] text-emerald-400 mb-1 tracking-wider">TP</div>
-                  <div className="font-mono text-sm font-bold text-emerald-400">{trade.take_profit}</div>
+                <div className="border border-white/10 rounded-lg p-3 bg-white/5">
+                  <div className="text-[9px] text-zinc-500 mb-1.5 tracking-widest">TAKE PROFIT</div>
+                  <div className="font-mono text-sm font-bold">{trade.take_profit}</div>
                 </div>
               )}
             </div>
           )}
 
-          {/* Confluence Badge */}
+          {/* Confluence */}
           {hasConfluence && (
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-700/20 border border-emerald-700/30 mb-4">
-              <Layers className="w-4 h-4 text-emerald-400" />
-              <span className="text-xs font-bold text-emerald-400">CONFLUENCE W•D•4H</span>
+            <div className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 mb-6">
+              <Layers className="w-4 h-4" />
+              <span className="text-xs font-bold tracking-wider">CONFLUENCE W • D • 4H</span>
             </div>
           )}
 
-          {/* Result */}
-          {trade.outcome && trade.actual_pnl && (
-            <div className={cn("px-4 py-3.5 rounded-xl mb-4 border-2",
-              trade.outcome === 'win' ? "bg-emerald-700 border-emerald-600" :
-              trade.outcome === 'loss' ? "bg-rose-600 border-rose-500" :
-              "bg-zinc-700 border-zinc-600")}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] font-bold tracking-widest mb-1 opacity-80">P&L</div>
-                  <div className="text-2xl sm:text-3xl font-black">{parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}</div>
-                </div>
-                {rr && (
-                  <div className="text-right">
-                    <div className="text-[9px] opacity-70">R:R</div>
-                    <div className="text-lg font-bold">1:{rr}</div>
-                  </div>
-                )}
-              </div>
+          {/* RR wenn vorhanden */}
+          {rr && (
+            <div className="text-center mb-6 px-4 py-3 border border-white/10 rounded-lg bg-white/5">
+              <div className="text-[10px] text-zinc-500 mb-1 tracking-widest">RISK:REWARD</div>
+              <div className="text-2xl font-black">1:{rr}</div>
             </div>
           )}
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-zinc-800 text-zinc-600">
-            <div className="text-[10px] font-mono">
-              {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yyyy')}
-            </div>
-            <div className="text-[9px] tracking-wider">ZNPCV.COM</div>
+          <div className="flex items-center justify-between pt-5 border-t border-white/10">
+            <div className="text-[10px] text-zinc-600 tracking-widest">ZNPCV TRADE JOURNAL</div>
+            <div className="text-[10px] text-zinc-600 font-mono">{new Date().getFullYear()}</div>
           </div>
         </div>
       </motion.div>
