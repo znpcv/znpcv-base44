@@ -173,22 +173,22 @@ export default function TradeShareCard({ trade, darkMode }) {
             onClick={handleDownload}
             disabled={isLoading}
             className={cn(
-              "h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 transition-all",
+              "h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 transition-all rounded-lg",
               darkMode 
                 ? "bg-zinc-900 text-white border-zinc-800 hover:bg-zinc-800" 
                 : "bg-white text-black border-zinc-200 hover:bg-zinc-50",
               isLoading && "opacity-50 cursor-not-allowed"
             )}
           >
-            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-            <span className="hidden sm:inline">Download</span>
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline sm:ml-1.5">Download</span>
           </Button>
 
           <Button
             onClick={handleCopy}
             disabled={isLoading}
             className={cn(
-              "h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 transition-all",
+              "h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 transition-all rounded-lg",
               darkMode 
                 ? "bg-zinc-900 text-white border-zinc-800 hover:bg-zinc-800" 
                 : "bg-white text-black border-zinc-200 hover:bg-zinc-50",
@@ -197,13 +197,13 @@ export default function TradeShareCard({ trade, darkMode }) {
           >
             {copied ? (
               <>
-                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5 text-emerald-700" />
-                <span className="hidden sm:inline">Kopiert!</span>
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-700" />
+                <span className="hidden sm:inline sm:ml-1.5">Kopiert!</span>
               </>
             ) : (
               <>
-                <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-                <span className="hidden sm:inline">Kopieren</span>
+                <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline sm:ml-1.5">Kopieren</span>
               </>
             )}
           </Button>
@@ -212,15 +212,15 @@ export default function TradeShareCard({ trade, darkMode }) {
             onClick={handleNativeShare}
             disabled={isLoading}
             className={cn(
-              "h-9 sm:h-10 px-4 sm:px-5 text-xs sm:text-sm font-bold border-2 shadow-lg transition-all",
+              "h-9 sm:h-10 px-4 sm:px-5 text-xs sm:text-sm font-bold border-2 shadow-lg transition-all rounded-lg",
               darkMode 
                 ? "bg-white text-black border-white hover:bg-zinc-100" 
                 : "bg-black text-white border-black hover:bg-zinc-900",
               isLoading && "opacity-50 cursor-not-allowed"
             )}
           >
-            <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-            Teilen
+            <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="sm:ml-1.5">Teilen</span>
           </Button>
         </div>
       </div>
@@ -255,20 +255,20 @@ export default function TradeShareCard({ trade, darkMode }) {
                 <X className="w-5 h-5" />
               </button>
 
-              <h3 className="text-2xl font-black mb-6">Trade teilen</h3>
+              <h3 className="text-xl sm:text-2xl font-black mb-5 sm:mb-6">Trade teilen</h3>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 <button
                   onClick={async () => {
                     await handleDownload();
                     setShowShareModal(false);
                   }}
                   className={cn(
-                    "w-full p-4 rounded-xl border-2 font-bold transition-all hover:scale-[1.02]",
-                    darkMode ? "bg-zinc-800 border-zinc-700" : "bg-zinc-50 border-zinc-200"
+                    "w-full p-3.5 sm:p-4 rounded-xl border-2 font-bold transition-all hover:scale-[1.02] text-sm",
+                    darkMode ? "bg-zinc-800 border-zinc-700 hover:bg-zinc-700" : "bg-zinc-50 border-zinc-200 hover:bg-zinc-100"
                   )}
                 >
-                  <Download className="w-6 h-6 mx-auto mb-2" />
+                  <Download className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2" />
                   Download als PNG
                 </button>
 
@@ -277,18 +277,18 @@ export default function TradeShareCard({ trade, darkMode }) {
                     await handleCopy();
                   }}
                   className={cn(
-                    "w-full p-4 rounded-xl border-2 font-bold transition-all hover:scale-[1.02]",
-                    darkMode ? "bg-zinc-800 border-zinc-700" : "bg-zinc-50 border-zinc-200"
+                    "w-full p-3.5 sm:p-4 rounded-xl border-2 font-bold transition-all hover:scale-[1.02] text-sm",
+                    darkMode ? "bg-zinc-800 border-zinc-700 hover:bg-zinc-700" : "bg-zinc-50 border-zinc-200 hover:bg-zinc-100"
                   )}
                 >
                   {copied ? (
                     <>
-                      <Check className="w-6 h-6 mx-auto mb-2 text-emerald-700" />
+                      <Check className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2 text-emerald-700" />
                       In Zwischenablage kopiert!
                     </>
                   ) : (
                     <>
-                      <Copy className="w-6 h-6 mx-auto mb-2" />
+                      <Copy className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2" />
                       In Zwischenablage kopieren
                     </>
                   )}
@@ -296,7 +296,7 @@ export default function TradeShareCard({ trade, darkMode }) {
               </div>
 
               <p className={cn(
-                "text-xs text-center mt-4",
+                "text-xs text-center mt-4 leading-relaxed",
                 darkMode ? "text-zinc-500" : "text-zinc-600"
               )}>
                 Füge das Bild direkt in Instagram, WhatsApp, Telegram oder andere Apps ein
