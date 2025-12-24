@@ -199,7 +199,7 @@ export default function DashboardPage() {
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
               darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900")}>
             <div className={cn("absolute inset-0 opacity-10", darkMode ? "bg-gradient-to-br from-teal-600 to-blue-600" : "bg-gradient-to-br from-teal-500 to-emerald-500")} />
-            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-teal-600/10 rounded-full -translate-y-12 sm:-translate-y-16 translate-x-12 sm:translate-x-16 blur-2xl" />
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-emerald-700/10 rounded-full -translate-y-12 sm:-translate-y-16 translate-x-12 sm:translate-x-16 blur-2xl" />
             <div className="relative z-10">
               <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
                 darkMode ? "bg-black" : "bg-white shadow-lg")}>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
           <button onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
               darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-600/5 to-emerald-600/5" />
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-600/5 to-emerald-700/5" />
             <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600/10 rounded-full translate-y-12 sm:translate-y-16 -translate-x-12 sm:-translate-x-16 blur-2xl" />
             <div className="relative z-10">
               <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
@@ -241,12 +241,12 @@ export default function DashboardPage() {
               transition={{ duration: 0.1 }}
               className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6",
                 stat.highlight 
-                  ? darkMode ? "bg-teal-600/20 border-teal-600" : "bg-teal-100 border-teal-600"
+                  ? darkMode ? "bg-emerald-700/20 border-emerald-700" : "bg-teal-100 border-emerald-700"
                   : `${theme.border} ${theme.bgSecondary}`)}>
               <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3 md:mb-4", 
-                stat.highlight ? "text-teal-600" : theme.text)} />
+                stat.highlight ? "text-emerald-700" : theme.text)} />
               <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", 
-                stat.highlight ? "text-teal-600" : theme.text)}>{stat.value}</div>
+                stat.highlight ? "text-emerald-700" : theme.text)}>{stat.value}</div>
               <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-widest", theme.textMuted)}>{stat.label}</div>
             </motion.div>
           ))}
@@ -261,7 +261,7 @@ export default function DashboardPage() {
               <div className={`p-5 sm:p-6 border-b-2 ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
                 <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
                   <h3 className={`text-lg sm:text-xl tracking-widest ${theme.text} flex items-center gap-2`}>
-                    <div className="w-1.5 h-6 bg-teal-600 rounded-full" />
+                    <div className="w-1.5 h-6 bg-emerald-700 rounded-full" />
                     {t('recentTrades')}
                   </h3>
                   <div className={`text-xs ${theme.textMuted}`}>{t('last8')}</div>
@@ -282,9 +282,9 @@ export default function DashboardPage() {
               {isLoading ? (
                 <div className={`p-10 sm:p-12 text-center ${theme.textDimmed}`}>
                   <div className="flex items-center justify-center gap-2 mb-3">
-                    <div className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 bg-emerald-700 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-emerald-700 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-emerald-700 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                   {t('loading')}
                 </div>
@@ -326,9 +326,9 @@ export default function DashboardPage() {
                               whileHover={{ scale: 1.05, rotate: 2 }}
                               transition={{ duration: 0.1 }}
                               className={cn("w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-xl border-2 shadow-lg",
-                                trade.outcome === 'win' ? 'bg-gradient-to-br from-teal-600 to-emerald-600 text-white border-teal-500' :
+                                trade.outcome === 'win' ? 'bg-gradient-to-br from-teal-600 to-emerald-700 text-white border-emerald-600' :
                                 trade.outcome === 'loss' ? 'bg-gradient-to-br from-rose-600 to-red-600 text-white border-rose-500' : 
-                                trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600 bg-teal-600/10' : 'border-2 border-rose-600 text-rose-600 bg-rose-600/10')}>
+                                trade.direction === 'long' ? 'border-2 border-emerald-700 text-emerald-700 bg-emerald-700/10' : 'border-2 border-rose-600 text-rose-600 bg-rose-600/10')}>
                               {(trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0) || (!trade.outcome && trade.direction === 'long') ? 
                                 <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" /> : <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6" />}
                             </motion.div>
@@ -345,12 +345,12 @@ export default function DashboardPage() {
                               {trade.outcome && trade.actual_pnl && (
                                 <>
                                   <div className={cn("text-lg sm:text-xl font-black mb-1",
-                                    parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
+                                    parseFloat(trade.actual_pnl) > 0 ? 'text-emerald-700' :
                                     parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
                                     {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                                   </div>
                                   <div className={cn("text-[10px] tracking-wider px-2.5 py-1 rounded-lg font-bold",
-                                   trade.outcome === 'win' ? 'bg-teal-600 text-white' :
+                                   trade.outcome === 'win' ? 'bg-emerald-700 text-white' :
                                    trade.outcome === 'loss' ? 'bg-rose-600 text-white' : 'bg-zinc-600 text-white')}>
                                    {trade.outcome === 'win' ? t('win') : trade.outcome === 'loss' ? t('loss') : t('breakeven')}
                                   </div>
@@ -397,13 +397,13 @@ export default function DashboardPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
               className={cn("relative rounded-3xl p-6 sm:p-7 overflow-hidden border-2 shadow-2xl",
                 performanceData[performanceData.length - 1]?.cumulative >= 0 
-                  ? darkMode ? "bg-gradient-to-br from-teal-950 via-black to-black border-teal-600/30" : "bg-gradient-to-br from-teal-50 via-white to-white border-teal-400"
+                  ? darkMode ? "bg-gradient-to-br from-teal-950 via-black to-black border-emerald-700/30" : "bg-gradient-to-br from-teal-50 via-white to-white border-teal-400"
                   : darkMode ? "bg-gradient-to-br from-rose-950 via-black to-black border-rose-600/30" : "bg-gradient-to-br from-rose-50 via-white to-white border-rose-400")}>
               
               {/* Animated Background */}
               <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <div className={cn("absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl animate-pulse",
-                  performanceData[performanceData.length - 1]?.cumulative >= 0 ? "bg-teal-600" : "bg-rose-600")} style={{ animationDuration: '3s' }} />
+                  performanceData[performanceData.length - 1]?.cumulative >= 0 ? "bg-emerald-700" : "bg-rose-600")} style={{ animationDuration: '3s' }} />
                 <div className={cn("absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl animate-pulse",
                   performanceData[performanceData.length - 1]?.cumulative >= 0 ? "bg-emerald-600" : "bg-red-600")} style={{ animationDuration: '4s' }} />
               </div>
@@ -413,21 +413,21 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2.5">
                     <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shadow-lg",
                       performanceData[performanceData.length - 1]?.cumulative >= 0 
-                        ? "bg-gradient-to-br from-teal-600 to-emerald-600" 
+                        ? "bg-gradient-to-br from-teal-600 to-emerald-700" 
                         : "bg-gradient-to-br from-rose-600 to-red-600")}>
                       <TrendingUp className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <h3 className={`text-sm tracking-widest ${theme.text}`}>CUMULATIVE</h3>
                       <div className={cn("text-2xl font-black",
-                        performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-teal-600' : 'text-rose-600')}>
+                        performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-emerald-700' : 'text-rose-600')}>
                         {performanceData[performanceData.length - 1]?.cumulative >= 0 ? '+' : ''}${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}
                       </div>
                     </div>
                   </div>
                   <div className={cn("px-3 py-2 rounded-xl font-black text-xs border-2",
                     performanceData[performanceData.length - 1]?.cumulative >= 0 
-                      ? "bg-teal-600/20 border-teal-600/50 text-teal-600" 
+                      ? "bg-emerald-700/20 border-emerald-700/50 text-emerald-700" 
                       : "bg-rose-600/20 border-rose-600/50 text-rose-600")}>
                     30D
                   </div>
@@ -481,8 +481,8 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-3 gap-3">
                   {[
                     { label: t('start'), value: '$0.00', color: theme.textMuted },
-                    { label: t('peak'), value: `$${Math.max(...performanceData.map(d => d.cumulative), 0).toFixed(2)}`, color: 'text-teal-600' },
-                    { label: t('now'), value: `${performanceData[performanceData.length - 1]?.cumulative >= 0 ? '+' : ''}$${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}`, color: performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-teal-600' : 'text-rose-600' }
+                    { label: t('peak'), value: `$${Math.max(...performanceData.map(d => d.cumulative), 0).toFixed(2)}`, color: 'text-emerald-700' },
+                    { label: t('now'), value: `${performanceData[performanceData.length - 1]?.cumulative >= 0 ? '+' : ''}$${(performanceData[performanceData.length - 1]?.cumulative || 0).toFixed(2)}`, color: performanceData[performanceData.length - 1]?.cumulative >= 0 ? 'text-emerald-700' : 'text-rose-600' }
                   ].map((stat) => (
                     <div key={stat.label} className={cn("p-3 rounded-xl text-center border-2 transition-all hover:scale-105",
                       darkMode ? "bg-zinc-900/80 border-zinc-800/50 hover:border-zinc-700" : "bg-white/80 border-zinc-200 hover:border-zinc-300")}>
@@ -550,16 +550,16 @@ export default function DashboardPage() {
                     key={item.name}
                     className={cn("p-4 rounded-xl border-2 text-center",
                       item.name === t('long')
-                        ? darkMode ? "bg-teal-600/20 border-teal-600" : "bg-teal-100 border-teal-600"
+                        ? darkMode ? "bg-emerald-700/20 border-emerald-700" : "bg-teal-100 border-emerald-700"
                         : darkMode ? "bg-rose-600/20 border-rose-600" : "bg-rose-100 border-rose-600")}>
                     
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      {item.name === t('long') ? <ArrowUpRight className="w-4 h-4 text-teal-600" /> : <ArrowDownRight className="w-4 h-4 text-rose-600" />}
-                      <span className={cn("text-xs font-black tracking-wider", item.name === t('long') ? 'text-teal-600' : 'text-rose-600')}>
+                      {item.name === t('long') ? <ArrowUpRight className="w-4 h-4 text-emerald-700" /> : <ArrowDownRight className="w-4 h-4 text-rose-600" />}
+                      <span className={cn("text-xs font-black tracking-wider", item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
                         {item.name.toUpperCase()}
                       </span>
                     </div>
-                    <div className={cn("text-3xl font-black mb-1", item.name === t('long') ? 'text-teal-600' : 'text-rose-600')}>{item.value}</div>
+                    <div className={cn("text-3xl font-black mb-1", item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>{item.value}</div>
                     <div className={`text-[10px] ${theme.textMuted} font-bold tracking-wide`}>
                       {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}%
                     </div>
@@ -640,7 +640,7 @@ export default function DashboardPage() {
                         "aspect-square flex flex-col items-center justify-center relative rounded-xl transition-all group overflow-hidden",
                         isToday(day) && "ring-2 ring-offset-2 ring-teal-600 ring-offset-black scale-105 z-10",
                         trades.length > 0 && isProfitable && (darkMode 
-                          ? "bg-gradient-to-br from-teal-600/40 via-teal-600/30 to-emerald-600/30 hover:from-teal-600/60 hover:via-teal-600/50 hover:to-emerald-600/50 border-2 border-teal-500/50 shadow-lg shadow-teal-600/20" 
+                          ? "bg-gradient-to-br from-teal-600/40 via-teal-600/30 to-emerald-700/30 hover:from-teal-600/60 hover:via-teal-600/50 hover:to-emerald-700/50 border-2 border-emerald-600/50 shadow-lg shadow-teal-600/20" 
                           : "bg-gradient-to-br from-teal-100 via-teal-50 to-emerald-50 hover:from-teal-200 hover:via-teal-100 hover:to-emerald-100 border-2 border-teal-400 shadow-lg"),
                         trades.length > 0 && isNegative && (darkMode 
                           ? "bg-gradient-to-br from-rose-600/40 via-rose-600/30 to-red-600/30 hover:from-rose-600/60 hover:via-rose-600/50 hover:to-red-600/50 border-2 border-rose-500/50 shadow-lg shadow-rose-600/20" 
@@ -655,20 +655,20 @@ export default function DashboardPage() {
                       {/* Glow Effect */}
                       {trades.length > 0 && (
                         <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity blur-xl",
-                          isProfitable && "bg-teal-600/30",
+                          isProfitable && "bg-emerald-700/30",
                           isNegative && "bg-rose-600/30"
                         )} />
                       )}
                       
                       <div className="relative z-10 flex flex-col items-center">
                         <span className={cn("text-sm font-bold mb-0.5", 
-                          isToday(day) ? "text-teal-600 text-base" : 
+                          isToday(day) ? "text-emerald-700 text-base" : 
                           trades.length > 0 ? theme.text : theme.textSecondary)}>
                           {format(day, 'd')}
                         </span>
                         {trades.length > 0 && dayPnL !== 0 && (
                           <div className={cn("flex items-center gap-0.5 px-1.5 py-0.5 rounded-md font-bold text-[9px]",
-                            isProfitable ? "bg-teal-600/20 text-teal-600 border border-teal-600/30" : "bg-rose-600/20 text-rose-600 border border-rose-600/30")}>
+                            isProfitable ? "bg-emerald-700/20 text-emerald-700 border border-emerald-700/30" : "bg-rose-600/20 text-rose-600 border border-rose-600/30")}>
                             {isProfitable ? '↑' : '↓'}
                             {Math.abs(dayPnL).toFixed(0)}
                           </div>
@@ -676,7 +676,7 @@ export default function DashboardPage() {
                       </div>
                       
                       {trades.length > 1 && (
-                        <div className="absolute top-1 right-1 w-5 h-5 bg-gradient-to-br from-teal-600 to-emerald-600 text-white text-[10px] rounded-lg flex items-center justify-center font-black shadow-xl border border-white/20">
+                        <div className="absolute top-1 right-1 w-5 h-5 bg-gradient-to-br from-teal-600 to-emerald-700 text-white text-[10px] rounded-lg flex items-center justify-center font-black shadow-xl border border-white/20">
                           {trades.length}
                         </div>
                       )}
@@ -696,8 +696,8 @@ export default function DashboardPage() {
               {/* Stats Summary */}
               <div className={`mt-5 pt-5 border-t-2 ${theme.border} grid grid-cols-3 gap-3`}>
                 <div className={cn("text-center p-3 rounded-xl border-2 transition-all",
-                  darkMode ? "bg-teal-600/10 border-teal-600/30 hover:border-teal-600/50" : "bg-teal-50 border-teal-300 hover:border-teal-400")}>
-                  <div className="text-xl font-black text-teal-600">
+                  darkMode ? "bg-emerald-700/10 border-emerald-700/30 hover:border-emerald-700/50" : "bg-teal-50 border-teal-300 hover:border-teal-400")}>
+                  <div className="text-xl font-black text-emerald-700">
                     {checklists.filter(t => {
                       const tDate = format(new Date(t.trade_date || t.created_date), 'yyyy-MM');
                       const cMonth = format(calendarMonth, 'yyyy-MM');

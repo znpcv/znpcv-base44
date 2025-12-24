@@ -356,7 +356,7 @@ export default function TradeHistoryPage() {
                 onClick={() => setCompareMode(!compareMode)}
                 variant="outline"
                 className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs",
-                compareMode ? "bg-teal-600 text-white border-teal-600" : theme.border)}>
+                compareMode ? "bg-emerald-700 text-white border-emerald-700" : theme.border)}>
                   <GitCompare className="w-3.5 h-3.5 sm:mr-1.5" />
                   <span className="hidden sm:inline">{compareMode ? 'Fertig' : 'Vergleich'}</span>
                 </Button>
@@ -375,7 +375,7 @@ export default function TradeHistoryPage() {
 
         {/* Stats Grid - Wichtigste Metriken */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-          <div className={cn("border-2 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8", stats.totalPnL >= 0 ? "bg-teal-600 border-teal-600 text-white" : "bg-rose-600 border-rose-600 text-white")}>
+          <div className={cn("border-2 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white" : "bg-rose-600 border-rose-600 text-white")}>
             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4" />
             <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2">${stats.totalPnL.toFixed(2)}</div>
             <div className="text-[10px] sm:text-xs md:text-sm tracking-widest opacity-90">{t('pnl')}</div>
@@ -410,7 +410,7 @@ export default function TradeHistoryPage() {
                     onClick={toggleSelectAll}
                     className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border-2 transition-all",
                     selectedTrades.length === filteredTrades.length ?
-                    "bg-teal-600 text-white border-teal-600" :
+                    "bg-emerald-700 text-white border-emerald-700" :
                     darkMode ? "border-zinc-800 text-zinc-400 hover:border-zinc-700" : "border-zinc-300 text-zinc-600 hover:border-zinc-400")}>
                       <CheckSquare className="w-3.5 h-3.5" />
                       {selectedTrades.length === filteredTrades.length ? 'Alle abwählen' : 'Alle auswählen'}
@@ -434,7 +434,7 @@ export default function TradeHistoryPage() {
                   {filteredTrades.map((trade) =>
                 <div key={trade.id}
                 className={cn("p-3 sm:p-4 md:p-5 lg:p-6 transition-all group cursor-pointer relative",
-                compareMode && selectedTrades.includes(trade.id) && "ring-2 ring-teal-600",
+                compareMode && selectedTrades.includes(trade.id) && "ring-2 ring-emerald-700",
                 darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70')}
                 onClick={(e) => {
                   if (compareMode) {
@@ -456,16 +456,16 @@ export default function TradeHistoryPage() {
                         }}
                         className={cn("w-6 h-6 border-2 rounded flex items-center justify-center flex-shrink-0 cursor-pointer transition-all",
                         selectedTrades.includes(trade.id) ?
-                        "bg-teal-600 border-teal-600" :
+                        "bg-emerald-700 border-emerald-700" :
                         darkMode ? "border-zinc-700 hover:border-zinc-600" : "border-zinc-400 hover:border-zinc-500")}>
                               {selectedTrades.includes(trade.id) && <CheckSquare className="w-4 h-4 text-white" />}
                             </div>
                       }
                           <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg sm:rounded-xl border-2",
-                      trade.outcome === 'win' ? 'bg-teal-600 text-white border-teal-600' :
+                      trade.outcome === 'win' ? 'bg-emerald-700 text-white border-emerald-700' :
                       trade.outcome === 'loss' ? 'bg-rose-600 text-white border-rose-600' :
                       trade.outcome === 'breakeven' ? 'bg-zinc-600 text-white border-zinc-600' :
-                      trade.direction === 'long' ? 'border-2 border-teal-600 text-teal-600' : 'border-2 border-rose-600 text-rose-600')}>
+                      trade.direction === 'long' ? 'border-2 border-emerald-700 text-emerald-700' : 'border-2 border-rose-600 text-rose-600')}>
                             {trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0 || !trade.outcome && trade.direction === 'long' ?
                         <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" /> : <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
                           </div>
@@ -479,12 +479,12 @@ export default function TradeHistoryPage() {
                             {trade.outcome && trade.actual_pnl &&
                         <>
                                 <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-0.5 sm:mb-1",
-                          parseFloat(trade.actual_pnl) > 0 ? 'text-teal-600' :
+                          parseFloat(trade.actual_pnl) > 0 ? 'text-emerald-700' :
                           parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
                                   {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                                 </div>
                                 <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full",
-                          trade.outcome === 'win' ? 'bg-teal-600/20 text-teal-600' :
+                          trade.outcome === 'win' ? 'bg-emerald-700/20 text-emerald-700' :
                           trade.outcome === 'loss' ? 'bg-rose-600/20 text-rose-600' : 'bg-zinc-600/20 text-zinc-400')}>
                                   {trade.outcome === 'win' ? t('win') : trade.outcome === 'loss' ? t('loss') : t('breakeven')}
                                 </div>
@@ -498,7 +498,7 @@ export default function TradeHistoryPage() {
                           </div>
                           <div className="flex flex-col gap-1 sm:gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button type="button" onClick={(e) => handleEditTrade(e, trade)}
-                        className={`p-1.5 sm:p-2 rounded-md sm:rounded-lg transition-colors ${darkMode ? 'hover:bg-teal-600/20 text-teal-400 hover:text-teal-500' : 'hover:bg-teal-100 text-teal-600 hover:text-teal-700'}`}>
+                        className={`p-1.5 sm:p-2 rounded-md sm:rounded-lg transition-colors ${darkMode ? 'hover:bg-emerald-700/20 text-teal-400 hover:text-teal-500' : 'hover:bg-teal-100 text-emerald-700 hover:text-teal-700'}`}>
                               <Edit className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                             </button>
                             <button type="button" onClick={(e) => handleDeleteTrade(e, trade.id)}
