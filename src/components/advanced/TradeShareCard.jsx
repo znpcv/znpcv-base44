@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share2, Download, TrendingUp, TrendingDown, Target, Shield, Award, Layers, Copy, Check, X, Zap, Activity, BarChart3, Percent, Calendar, DollarSign } from 'lucide-react';
+import { Share2, Download, TrendingUp, TrendingDown, Target, Layers, Copy, Check, Calendar } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import html2canvas from 'html2canvas';
@@ -10,7 +10,6 @@ export default function TradeShareCard({ trade, darkMode }) {
   const cardRef = useRef(null);
   const [showShare, setShowShare] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [advancedMode, setAdvancedMode] = useState(true);
 
   const calculateScores = () => {
     const w = (trade.w_at_aoi ? 10 : 0) + (trade.w_ema_touch ? 5 : 0) + (trade.w_candlestick ? 10 : 0) + (
@@ -108,36 +107,18 @@ export default function TradeShareCard({ trade, darkMode }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <h3 className={cn("text-xs sm:text-sm tracking-widest flex items-center gap-2", darkMode ? "text-white" : "text-zinc-900")}>
-            <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            TEILEN
-          </h3>
-          <button
-            onClick={() => setAdvancedMode(!advancedMode)}
-            className={cn("px-2 sm:px-2.5 py-1 rounded-lg text-[9px] sm:text-[10px] font-bold border-2 transition-all flex items-center gap-1",
-            advancedMode ?
-            "bg-gradient-to-r from-teal-600 to-blue-600 text-white border-teal-600" :
-            darkMode ? "border-zinc-800 text-zinc-400 hover:border-zinc-700" : "border-zinc-300 text-zinc-600 hover:border-zinc-400")}>
-            <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-            <span className="hidden sm:inline">{advancedMode ? 'ADVANCED' : 'BASIC'}</span>
-          </button>
-        </div>
-        <div className="flex gap-1.5">
-          <Button onClick={handleDownload} variant="outline" className="bg-background text-[#000] px-2 py-2 font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm hover:bg-accent hover:text-accent-foreground h-7 sm:h-8 sm:px-3 sm:text-xs border-2 border-zinc-800">
-            <Download className="w-3 h-3 sm:mr-1.5" />
-            <span className="hidden sm:inline">Download</span>
-          </Button>
-          <Button onClick={handleCopyImage} variant="outline" className="bg-background text-[#000000] px-2 py-2 font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm hover:bg-accent hover:text-accent-foreground h-7 sm:h-8 sm:px-3 sm:text-xs border-2 border-zinc-800">
-            {copied ? <Check className="w-3 h-3 text-teal-500 sm:mr-1.5" /> : <Copy className="w-3 h-3 sm:mr-1.5" />}
-            <span className="hidden sm:inline">{copied ? 'Kopiert!' : 'Kopieren'}</span>
-          </Button>
-          <Button onClick={handleShare} className={cn("h-7 sm:h-8 px-2 sm:px-3 text-[10px] sm:text-xs font-bold border-2",
-          darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900")}>
-            <Share2 className="w-3 h-3 sm:mr-1.5" />
-            <span className="hidden sm:inline">Teilen</span>
-          </Button>
-        </div>
+        <h3 className={cn("text-xs sm:text-sm tracking-widest flex items-center gap-2", darkMode ? "text-white" : "text-zinc-900")}>
+          <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          TEILEN
+        </h3>
+        <Button onClick={async () => {
+          await handleDownload();
+          await handleShare();
+        }} className={cn("h-8 sm:h-9 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 flex items-center gap-2",
+        darkMode ? "bg-white text-black border-white hover:bg-zinc-100" : "bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800")}>
+          <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          Teilen
+        </Button>
       </div>
 
       <motion.div
@@ -160,128 +141,88 @@ export default function TradeShareCard({ trade, darkMode }) {
         }} />
 
         <div className="relative z-10">
-          {/* Premium Header */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="text-3xl sm:text-4xl font-black tracking-tight">{trade.pair}</div>
-                <div className={cn("inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-black shadow-lg",
-                trade.direction === 'long' ? "bg-gradient-to-r from-teal-600 to-emerald-600" : "bg-gradient-to-r from-rose-600 to-red-600")}>
-                  {trade.direction === 'long' ? <TrendingUp className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <TrendingDown className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
-                  {trade.direction === 'long' ? 'LONG' : 'SHORT'}
-                </div>
-              </div>
-            </div>
+          {/* Header mit Logo */}
+          <div className="flex items-center justify-between mb-6">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+              alt="ZNPCV"
+              className="h-8 sm:h-10 w-auto"
+            />
             <div className="text-right">
-              <div className={cn("text-4xl sm:text-5xl font-black mb-1 bg-gradient-to-br bg-clip-text text-transparent leading-none", getGradeColor(scores.total))}>
-                {scores.total}
+              <div className={cn("text-4xl sm:text-5xl font-black bg-gradient-to-br bg-clip-text text-transparent", getGradeColor(scores.total))}>
+                {scores.total}%
               </div>
-              <div className="text-[10px] sm:text-xs text-zinc-500 tracking-widest font-bold">SCORE</div>
+              <div className="text-[9px] text-zinc-500 tracking-widest">SCORE</div>
             </div>
           </div>
 
-          {/* Advanced Score Breakdown */}
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 mb-4">
-            {[
-            { label: 'W', value: scores.w, max: 60, icon: Activity },
-            { label: 'D', value: scores.d, max: 60, icon: BarChart3 },
-            { label: '4H', value: scores.h, max: 35, icon: TrendingUp },
-            { label: 'E', value: scores.e, max: 25, icon: Target }].
-            map((item, idx) =>
-            <div key={item.label} className="relative group">
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 sm:p-3 text-center overflow-hidden relative">
-                  {/* Progress Bar Background */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-teal-600/10 to-transparent" style={{
-                  height: `${item.value / item.max * 100}%`,
-                  bottom: 0
-                }} />
-                  
-                  <div className="relative z-10">
-                    <item.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 mx-auto mb-1 text-zinc-600" />
-                    <div className="text-lg sm:text-xl font-black text-white mb-0.5">{item.value}</div>
-                    <div className="text-[8px] sm:text-[9px] text-zinc-500 tracking-wider font-bold">{item.label}</div>
-                    <div className="text-[7px] sm:text-[8px] text-zinc-600 mt-0.5">/{item.max}</div>
-                  </div>
-                </div>
-              </div>
-            )}
+          {/* Trade Info */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="text-3xl sm:text-4xl font-black tracking-tight">{trade.pair}</div>
+            <div className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black",
+              trade.direction === 'long' ? "bg-emerald-700 text-white" : "bg-rose-600 text-white")}>
+              {trade.direction === 'long' ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+              {trade.direction === 'long' ? 'LONG' : 'SHORT'}
+            </div>
           </div>
 
-          {/* Trade Levels - Simplified */}
-          {trade.entry_price &&
-          <div className="mb-4">
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-zinc-900/80 border border-zinc-800 rounded-lg p-2.5 text-center">
-                  <div className="text-[9px] text-zinc-500 mb-1 tracking-wider">ENTRY</div>
-                  <div className="font-mono text-sm font-bold text-white">{trade.entry_price}</div>
-                </div>
-                {trade.stop_loss &&
-              <div className="bg-rose-600/10 border border-rose-600/30 rounded-lg p-2.5 text-center">
-                    <div className="text-[9px] text-rose-400 mb-1 tracking-wider">SL</div>
-                    <div className="font-mono text-sm font-bold text-rose-400">{trade.stop_loss}</div>
-                  </div>
-              }
-                {trade.take_profit &&
-              <div className="bg-teal-600/10 border border-teal-600/30 rounded-lg p-2.5 text-center">
-                    <div className="text-[9px] text-teal-400 mb-1 tracking-wider">TP</div>
-                    <div className="font-mono text-sm font-bold text-teal-400">{trade.take_profit}</div>
-                  </div>
-              }
+          {/* Trade Levels */}
+          {trade.entry_price && (
+            <div className="grid grid-cols-3 gap-2 mb-6">
+              <div className="bg-zinc-900/80 border border-zinc-800 rounded-lg p-3 text-center">
+                <div className="text-[9px] text-zinc-500 mb-1 tracking-wider">ENTRY</div>
+                <div className="font-mono text-sm font-bold">{trade.entry_price}</div>
               </div>
+              {trade.stop_loss && (
+                <div className="bg-rose-600/10 border border-rose-600/30 rounded-lg p-3 text-center">
+                  <div className="text-[9px] text-rose-400 mb-1 tracking-wider">SL</div>
+                  <div className="font-mono text-sm font-bold text-rose-400">{trade.stop_loss}</div>
+                </div>
+              )}
+              {trade.take_profit && (
+                <div className="bg-emerald-700/10 border border-emerald-700/30 rounded-lg p-3 text-center">
+                  <div className="text-[9px] text-emerald-400 mb-1 tracking-wider">TP</div>
+                  <div className="font-mono text-sm font-bold text-emerald-400">{trade.take_profit}</div>
+                </div>
+              )}
             </div>
-          }
+          )}
 
-          {/* Result - Enhanced with Entry & Exit */}
-          {trade.outcome && trade.actual_pnl &&
-          <div className={cn("relative px-4 py-3.5 rounded-xl mb-4 border-2 overflow-hidden",
-          trade.outcome === 'win' ? "bg-gradient-to-br from-teal-600 to-emerald-600 border-teal-500" :
-          trade.outcome === 'loss' ? "bg-gradient-to-br from-rose-600 to-red-600 border-rose-500" :
-          "bg-gradient-to-br from-zinc-700 to-zinc-800 border-zinc-600")}>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-10 translate-x-10" />
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <div className="text-[10px] font-bold tracking-widest mb-1 opacity-90">P&L</div>
-                    <div className="text-2xl sm:text-3xl font-black">{parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}</div>
-                  </div>
-                  {rr &&
-                <div className="text-right">
-                      <div className="text-[9px] opacity-70 mb-0.5">R:R</div>
-                      <div className="text-base font-bold">1:{rr}</div>
-                    </div>
-                }
-                </div>
-                {/* Entry & Exit Dates */}
-                <div className="flex items-center gap-3 text-[10px] opacity-80 border-t border-white/20 pt-2">
-                  {trade.trade_date &&
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-2.5 h-2.5" />
-                      <span>IN: {format(new Date(trade.trade_date), 'dd.MM.yy')}</span>
-                    </div>
-                  }
-                  {trade.exit_date &&
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-2.5 h-2.5" />
-                      <span>OUT: {format(new Date(trade.exit_date), 'dd.MM.yy')}</span>
-                    </div>
-                  }
-                </div>
-              </div>
+          {/* Confluence Badge */}
+          {hasConfluence && (
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-700/20 border border-emerald-700/30 mb-4">
+              <Layers className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-bold text-emerald-400">CONFLUENCE W•D•4H</span>
             </div>
-          }
+          )}
 
-          {/* Simplified Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-zinc-800">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
-                <div className="text-black font-black text-[10px]">ZN</div>
-              </div>
-              <div>
-                <div className="text-[9px] font-black tracking-wider text-white">ZNPCV</div>
-                <div className="text-[7px] text-zinc-600">Trading System</div>
+          {/* Result */}
+          {trade.outcome && trade.actual_pnl && (
+            <div className={cn("px-4 py-3.5 rounded-xl mb-4 border-2",
+              trade.outcome === 'win' ? "bg-emerald-700 border-emerald-600" :
+              trade.outcome === 'loss' ? "bg-rose-600 border-rose-500" :
+              "bg-zinc-700 border-zinc-600")}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] font-bold tracking-widest mb-1 opacity-80">P&L</div>
+                  <div className="text-2xl sm:text-3xl font-black">{parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}</div>
+                </div>
+                {rr && (
+                  <div className="text-right">
+                    <div className="text-[9px] opacity-70">R:R</div>
+                    <div className="text-lg font-bold">1:{rr}</div>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="text-[8px] text-zinc-600 font-mono">{new Date().getFullYear()}</div>
+          )}
+
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-4 border-t border-zinc-800 text-zinc-600">
+            <div className="text-[10px] font-mono">
+              {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yyyy')}
+            </div>
+            <div className="text-[9px] tracking-wider">ZNPCV.COM</div>
           </div>
         </div>
       </motion.div>
