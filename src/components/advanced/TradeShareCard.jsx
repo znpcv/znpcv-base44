@@ -159,28 +159,28 @@ export default function TradeShareCard({ trade, darkMode }) {
   return (
     <div className="w-full space-y-4 md:space-y-6">
       {/* Header & Action Buttons */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
         <h3 className={cn(
-          "text-base sm:text-lg font-black tracking-[0.2em] flex items-center gap-2",
+          "text-sm sm:text-base font-black tracking-[0.25em] flex items-center gap-2.5",
           darkMode ? "text-white" : "text-black"
         )}>
-          <Share2 className="w-5 h-5" />
+          <Share2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
           TRADE TEILEN
         </h3>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 sm:gap-2.5">
           <Button
             onClick={handleDownload}
             disabled={isLoading}
             className={cn(
-              "h-10 px-4 text-sm font-bold border-2 transition-all",
+              "h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 transition-all",
               darkMode 
                 ? "bg-zinc-900 text-white border-zinc-800 hover:bg-zinc-800" 
                 : "bg-white text-black border-zinc-200 hover:bg-zinc-50",
               isLoading && "opacity-50 cursor-not-allowed"
             )}
           >
-            <Download className="w-4 h-4 mr-2" />
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
             <span className="hidden sm:inline">Download</span>
           </Button>
 
@@ -188,7 +188,7 @@ export default function TradeShareCard({ trade, darkMode }) {
             onClick={handleCopy}
             disabled={isLoading}
             className={cn(
-              "h-10 px-4 text-sm font-bold border-2 transition-all",
+              "h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm font-bold border-2 transition-all",
               darkMode 
                 ? "bg-zinc-900 text-white border-zinc-800 hover:bg-zinc-800" 
                 : "bg-white text-black border-zinc-200 hover:bg-zinc-50",
@@ -197,12 +197,12 @@ export default function TradeShareCard({ trade, darkMode }) {
           >
             {copied ? (
               <>
-                <Check className="w-4 h-4 mr-2 text-emerald-700" />
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5 text-emerald-700" />
                 <span className="hidden sm:inline">Kopiert!</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 mr-2" />
+                <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
                 <span className="hidden sm:inline">Kopieren</span>
               </>
             )}
@@ -212,14 +212,14 @@ export default function TradeShareCard({ trade, darkMode }) {
             onClick={handleNativeShare}
             disabled={isLoading}
             className={cn(
-              "h-10 px-5 text-sm font-bold border-2 shadow-lg transition-all",
+              "h-9 sm:h-10 px-4 sm:px-5 text-xs sm:text-sm font-bold border-2 shadow-lg transition-all",
               darkMode 
                 ? "bg-white text-black border-white hover:bg-zinc-100" 
                 : "bg-black text-white border-black hover:bg-zinc-900",
               isLoading && "opacity-50 cursor-not-allowed"
             )}
           >
-            <Share2 className="w-4 h-4 mr-2" />
+            <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
             Teilen
           </Button>
         </div>
@@ -312,7 +312,7 @@ export default function TradeShareCard({ trade, darkMode }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className={cn(
-          "w-full p-8 sm:p-10 md:p-12 rounded-2xl relative overflow-hidden",
+          "w-full p-6 sm:p-8 md:p-10 rounded-2xl relative overflow-hidden",
           darkMode ? "bg-black" : "bg-white"
         )}
       >
@@ -323,14 +323,14 @@ export default function TradeShareCard({ trade, darkMode }) {
             backgroundImage: darkMode 
               ? 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)'
               : 'linear-gradient(black 1px, transparent 1px), linear-gradient(90deg, black 1px, transparent 1px)',
-            backgroundSize: '50px 50px'
+            backgroundSize: '40px 40px'
           }}
         />
 
-        <div className="relative space-y-8 sm:space-y-10">
+        <div className="relative space-y-6 sm:space-y-7 md:space-y-8">
           {/* Logo & Header */}
           <div className={cn(
-            "pb-6 border-b-2",
+            "pb-5 sm:pb-6 border-b-2",
             darkMode ? "border-white/10" : "border-black/10"
           )}>
             <img
@@ -339,35 +339,35 @@ export default function TradeShareCard({ trade, darkMode }) {
                 : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
               }
               alt="ZNPCV"
-              className="h-12 sm:h-14 md:h-16 w-auto mb-6"
+              className="h-10 sm:h-12 md:h-14 w-auto mb-5 sm:mb-6"
             />
 
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4">
               <div>
-                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-2">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2">
                   {trade.pair}
                 </h2>
                 <div className={cn(
-                  "flex items-center gap-2 text-sm",
+                  "flex items-center gap-1.5 text-xs sm:text-sm",
                   darkMode ? "text-zinc-500" : "text-zinc-600"
                 )}>
-                  <Calendar className="w-4 h-4" />
+                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yyyy')}
                 </div>
               </div>
 
               <div className={cn(
-                "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black shadow-lg",
+                "inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg font-black shadow-lg",
                 trade.direction === 'long' 
                   ? "bg-emerald-700 text-white" 
                   : "bg-rose-600 text-white"
               )}>
                 {trade.direction === 'long' ? (
-                  <TrendingUp className="w-5 h-5" />
+                  <TrendingUp className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                 ) : (
-                  <TrendingDown className="w-5 h-5" />
+                  <TrendingDown className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                 )}
-                <span className="text-base tracking-wider">
+                <span className="text-sm sm:text-base tracking-wider">
                   {trade.direction === 'long' ? 'LONG' : 'SHORT'}
                 </span>
               </div>
@@ -375,12 +375,12 @@ export default function TradeShareCard({ trade, darkMode }) {
           </div>
 
           {/* Score */}
-          <div className="text-center py-6">
-            <div className="text-7xl sm:text-8xl md:text-9xl font-black tracking-tighter mb-3">
-              {scores.total}<span className="text-5xl sm:text-6xl">%</span>
+          <div className="text-center py-4 sm:py-5">
+            <div className="text-6xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-none mb-2 sm:mb-3">
+              {scores.total}<span className="text-4xl sm:text-5xl md:text-6xl">%</span>
             </div>
             <div className={cn(
-              "text-sm tracking-[0.3em] font-bold",
+              "text-xs sm:text-sm tracking-[0.25em] font-bold",
               darkMode ? "text-zinc-500" : "text-zinc-600"
             )}>
               ANALYSE SCORE
@@ -389,36 +389,36 @@ export default function TradeShareCard({ trade, darkMode }) {
 
           {/* Trade Levels */}
           {trade.entry_price && (
-            <div className="space-y-4 py-4">
-              <div className="flex items-center justify-between">
+            <div className="space-y-3 sm:space-y-3.5">
+              <div className="flex items-center justify-between py-1.5">
                 <span className={cn(
-                  "text-sm font-bold tracking-widest",
+                  "text-xs sm:text-sm font-bold tracking-[0.2em]",
                   darkMode ? "text-zinc-500" : "text-zinc-600"
                 )}>
                   ENTRY
                 </span>
-                <span className="font-mono text-2xl font-black">
+                <span className="font-mono text-lg sm:text-xl md:text-2xl font-black">
                   {trade.entry_price}
                 </span>
               </div>
 
               {trade.stop_loss && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold tracking-widest text-rose-600">
+                <div className="flex items-center justify-between py-1.5">
+                  <span className="text-xs sm:text-sm font-bold tracking-[0.2em] text-rose-600">
                     STOP LOSS
                   </span>
-                  <span className="font-mono text-2xl font-black text-rose-600">
+                  <span className="font-mono text-lg sm:text-xl md:text-2xl font-black text-rose-600">
                     {trade.stop_loss}
                   </span>
                 </div>
               )}
 
               {trade.take_profit && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold tracking-widest text-emerald-700">
+                <div className="flex items-center justify-between py-1.5">
+                  <span className="text-xs sm:text-sm font-bold tracking-[0.2em] text-emerald-700">
                     TAKE PROFIT
                   </span>
-                  <span className="font-mono text-2xl font-black text-emerald-700">
+                  <span className="font-mono text-lg sm:text-xl md:text-2xl font-black text-emerald-700">
                     {trade.take_profit}
                   </span>
                 </div>
@@ -428,17 +428,17 @@ export default function TradeShareCard({ trade, darkMode }) {
 
           {/* Meta Info */}
           {(hasConfluence || rr) && (
-            <div className="flex items-center justify-center gap-6 py-4">
+            <div className="flex items-center justify-center gap-4 sm:gap-5 py-3">
               {hasConfluence && (
-                <div className="flex items-center gap-2">
-                  <Layers className="w-5 h-5" />
-                  <span className="text-sm font-black tracking-wider">CONFLUENCE</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <Layers className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <span className="text-xs sm:text-sm font-black tracking-wider">CONFLUENCE</span>
                 </div>
               )}
               {rr && (
-                <div className="flex items-center gap-2">
-                  <Target className="w-5 h-5" />
-                  <span className="text-sm font-black">R:R 1:{rr}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <Target className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <span className="text-xs sm:text-sm font-black">R:R 1:{rr}</span>
                 </div>
               )}
             </div>
@@ -446,17 +446,17 @@ export default function TradeShareCard({ trade, darkMode }) {
 
           {/* Footer */}
           <div className={cn(
-            "flex items-center justify-between pt-6 border-t-2",
+            "flex items-center justify-between pt-5 sm:pt-6 border-t-2",
             darkMode ? "border-white/10" : "border-black/10"
           )}>
             <div className={cn(
-              "text-xs font-bold tracking-[0.2em]",
+              "text-[10px] sm:text-xs font-bold tracking-[0.2em]",
               darkMode ? "text-zinc-600" : "text-zinc-500"
             )}>
               ZNPCV TRADE JOURNAL
             </div>
             <div className={cn(
-              "text-xs font-mono font-bold",
+              "text-[10px] sm:text-xs font-mono font-bold",
               darkMode ? "text-zinc-600" : "text-zinc-500"
             )}>
               {new Date().getFullYear()}
