@@ -301,8 +301,8 @@ export default function ChecklistPage() {
   };
 
   const getGrade = (p) => {
-    if (p >= 100) return { grade: 'A+++', color: 'bg-teal-600', border: 'border-teal-600' };
-    if (p >= 90) return { grade: 'A++', color: 'bg-teal-500', border: 'border-teal-500' };
+    if (p >= 100) return { grade: 'A+++', color: 'bg-emerald-700', border: 'border-emerald-700' };
+    if (p >= 90) return { grade: 'A++', color: 'bg-teal-500', border: 'border-emerald-600' };
     if (p >= 85) return { grade: 'A+', color: 'bg-blue-500', border: 'border-blue-500' };
     if (p >= 70) return { grade: 'OK', color: 'bg-amber-500', border: 'border-amber-500' };
     return { grade: 'NO TRADE', color: 'bg-rose-600', border: 'border-rose-600' };
@@ -405,7 +405,7 @@ export default function ChecklistPage() {
                 <span className="text-xs opacity-80">{gradeInfo.grade}</span>
               </div>
               {hasConfluence &&
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-teal-600 text-white text-[9px] sm:text-[10px] font-bold animate-pulse">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-700 text-white text-[9px] sm:text-[10px] font-bold animate-pulse">
                   <Layers className="w-3 h-3" />
                   CONFLUENCE
                 </div>
@@ -470,7 +470,7 @@ export default function ChecklistPage() {
                   whileTap={{ scale: 0.99 }}
                   transition={{ duration: 0.1 }}
                   className={cn("p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
-                  formData.direction === 'long' ? "bg-teal-600 text-white border-teal-600" : `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                  formData.direction === 'long' ? "bg-emerald-700 text-white border-emerald-700" : `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
                       {formData.direction === 'long' &&
                   <div className="absolute inset-0 bg-white/10 animate-pulse" />
                   }
@@ -521,8 +521,8 @@ export default function ChecklistPage() {
                   transition={{ duration: 0.1 }}
                   className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                   formData.w_trend === trend ?
-                  trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600" :
-                  `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                  trend === 'bullish' ? "bg-emerald-700 text-white border-emerald-700" : "bg-rose-600 text-white border-rose-600" :
+                  `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
                       {formData.w_trend === trend &&
                   <div className="absolute inset-0 bg-white/10" />
                   }
@@ -620,11 +620,11 @@ export default function ChecklistPage() {
               {/* Confluence Alert */}
               {formData.w_trend && formData.d_trend && formData.h4_trend && formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend &&
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-            className={`p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-teal-600/10 border-teal-600/30' : 'bg-teal-500/10 border-teal-500/30'}`}>
+            className={`p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-emerald-700/10 border-emerald-700/30' : 'bg-teal-500/10 border-emerald-600/30'}`}>
                   <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600" />
+                    <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
                     <div>
-                      <div className="text-teal-600 font-bold text-[10px] sm:text-xs tracking-wider">CONFLUENCE CONFIRMED</div>
+                      <div className="text-emerald-600 font-bold text-[10px] sm:text-xs tracking-wider">CONFLUENCE CONFIRMED</div>
                       <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[9px] sm:text-[10px] font-sans`}>W•D•4H aligned!</div>
                     </div>
                   </div>
@@ -645,8 +645,8 @@ export default function ChecklistPage() {
                   transition={{ duration: 0.1 }}
                   className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                   formData.d_trend === trend ?
-                  trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600" :
-                  `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                  trend === 'bullish' ? "bg-emerald-700 text-white border-emerald-700" : "bg-rose-600 text-white border-rose-600" :
+                  `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
                       {formData.d_trend === trend &&
                   <div className="absolute inset-0 bg-white/10" />
                   }
@@ -755,8 +755,8 @@ export default function ChecklistPage() {
                   transition={{ duration: 0.1 }}
                   className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
                   formData.h4_trend === trend ?
-                  trend === 'bullish' ? "bg-teal-600 text-white border-teal-600" : "bg-rose-600 text-white border-rose-600" :
-                  `${theme.border} ${theme.text} hover:border-teal-600/50`)}>
+                  trend === 'bullish' ? "bg-emerald-700 text-white border-emerald-700" : "bg-rose-600 text-white border-rose-600" :
+                  `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
                       {formData.h4_trend === trend &&
                   <div className="absolute inset-0 bg-white/10" />
                   }
@@ -903,11 +903,11 @@ export default function ChecklistPage() {
 
           {/* Selected Pair Display - Compact */}
           {formData.pair &&
-            <div className={`border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 ${darkMode ? 'border-teal-600 bg-teal-600/10' : 'border-teal-500 bg-teal-500/10'}`}>
+            <div className={`border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 ${darkMode ? 'border-emerald-700 bg-emerald-700/10' : 'border-emerald-600 bg-teal-500/10'}`}>
               <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-teal-600 flex-shrink-0" />
+                <Target className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                 <div>
-                  <div className="text-[9px] sm:text-[10px] text-teal-600 tracking-wider">PAIR</div>
+                  <div className="text-[9px] sm:text-[10px] text-emerald-600 tracking-wider">PAIR</div>
                   <div className={`text-base sm:text-lg md:text-xl font-bold tracking-wider ${theme.text}`}>{formData.pair}</div>
                 </div>
               </div>
@@ -967,7 +967,7 @@ export default function ChecklistPage() {
               {/* Confluence Banner */}
               {hasConfluence &&
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.1 }}
-            className="p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 bg-gradient-to-r from-teal-600 to-teal-700 border-teal-500 text-white">
+            className="p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 bg-gradient-to-r from-emerald-700 to-emerald-800 border-emerald-600 text-white">
                   <div className="flex items-center justify-center gap-2">
                     <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
                     <div className="text-sm sm:text-base font-bold tracking-wider">FULL CONFLUENCE</div>
@@ -992,17 +992,17 @@ export default function ChecklistPage() {
               <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
               className={cn("w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 transition-all text-left",
               formData.confirms_rule ?
-              "bg-teal-600 border-teal-600 text-white" :
-              darkMode ? "border-zinc-800 hover:border-teal-600/50 bg-zinc-950" : "border-zinc-300 hover:border-teal-600/50 bg-white")}>
+              "bg-emerald-700 border-emerald-700 text-white" :
+              darkMode ? "border-zinc-800 hover:border-emerald-700/50 bg-zinc-950" : "border-zinc-300 hover:border-emerald-700/50 bg-white")}>
                     <div className={cn("w-7 h-7 sm:w-8 sm:h-8 border-2 flex items-center justify-center rounded-lg transition-all flex-shrink-0",
                 formData.confirms_rule ? "border-white bg-white scale-110" : darkMode ? "border-zinc-700" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" strokeWidth={3} />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className={cn("font-bold tracking-wider text-xs sm:text-sm mb-0.5", formData.confirms_rule ? "text-white" : darkMode ? "text-white" : "text-black")}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-teal-100" : theme.textMuted)}>
+                      <div className={cn("text-[10px] sm:text-xs font-sans", formData.confirms_rule ? "text-emerald-100" : theme.textMuted)}>
                         ✓ {t('notBuyResistance')}
                       </div>
                     </div>
@@ -1117,8 +1117,8 @@ export default function ChecklistPage() {
               {/* Final Grade - Optimiert */}
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.1 }}
                 className={cn("p-4 sm:p-5 md:p-6 text-center rounded-xl border-2 relative",
-                  progress >= 100 ? "bg-teal-600 border-teal-600" :
-                  progress >= 90 ? "bg-teal-500 border-teal-500" :
+                  progress >= 100 ? "bg-emerald-700 border-emerald-700" :
+                  progress >= 90 ? "bg-teal-500 border-emerald-600" :
                   progress >= 85 ? "bg-blue-500 border-blue-500" :
                   progress >= 70 ? "bg-amber-500 border-amber-500" :
                   darkMode ? "bg-zinc-900 border-rose-600" : "bg-zinc-100 border-rose-600")}>
@@ -1209,7 +1209,7 @@ export default function ChecklistPage() {
               <Button onClick={() => handleSave(false)} disabled={saving || !formData.pair}
             className={cn("flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2",
             isReady ?
-            "bg-teal-600 hover:bg-teal-700 text-white border-teal-600" :
+            "bg-emerald-700 hover:bg-emerald-800 text-white border-emerald-700" :
             darkMode ?
             "bg-white hover:bg-zinc-200 text-black border-white" :
             "bg-black hover:bg-zinc-800 text-white border-black")}>
@@ -1342,7 +1342,7 @@ function PatternSelector({ value, onChange, score, label, description }) {
           {description && <span className={`text-[9px] sm:text-[10px] hidden sm:block ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{description}</span>}
         </div>
         {value && value !== 'none' &&
-        <div className="px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-teal-600 text-white flex-shrink-0">+{score}%</div>
+        <div className="px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-700 text-white flex-shrink-0">+{score}%</div>
         }
       </div>
       <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
@@ -1352,13 +1352,13 @@ function PatternSelector({ value, onChange, score, label, description }) {
         value === pattern.key ?
         pattern.key === 'none' ?
         darkMode ? "bg-zinc-700 border-zinc-600 text-white" : "bg-zinc-400 border-zinc-400 text-white" :
-        "bg-teal-600 border-teal-500 text-white shadow-lg shadow-teal-600/20" :
+        "bg-emerald-700 border-emerald-600 text-white shadow-lg shadow-teal-600/20" :
         darkMode ?
         "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white" :
         "border-zinc-300 text-zinc-600 hover:border-zinc-400 bg-zinc-50 hover:text-black")}>
             {value === pattern.key && pattern.key !== 'none' &&
           <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-white rounded-full flex items-center justify-center">
-                <Check className="w-1.5 h-1.5 text-teal-600" strokeWidth={4} />
+                <Check className="w-1.5 h-1.5 text-emerald-600" strokeWidth={4} />
               </div>
           }
             <div className="w-5 h-3.5 sm:w-6 sm:h-4 md:w-7 md:h-5">
@@ -1378,7 +1378,7 @@ function PatternSelector({ value, onChange, score, label, description }) {
 function SummaryRow({ label, value, color }) {
   const { darkMode } = useLanguage();
   const colorClasses = {
-    teal: 'text-teal-600',
+    teal: 'text-emerald-600',
     rose: 'text-rose-600',
     amber: 'text-amber-500',
     blue: 'text-blue-400'
@@ -1403,7 +1403,7 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
 
   const variantColors = {
     before: darkMode ? 'border-blue-600/50 bg-blue-600/5' : 'border-blue-500/50 bg-blue-500/5',
-    after: darkMode ? 'border-teal-600/50 bg-teal-600/5' : 'border-teal-500/50 bg-teal-500/5'
+    after: darkMode ? 'border-emerald-700/50 bg-emerald-700/5' : 'border-emerald-600/50 bg-teal-500/5'
   };
 
   const handleFileChange = async (e) => {
@@ -1430,7 +1430,7 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
         </div>
         {screenshots && screenshots.length > 0 &&
         <div className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
-        variant === 'before' ? 'bg-blue-600 text-white' : 'bg-teal-600 text-white'}`
+        variant === 'before' ? 'bg-blue-600 text-white' : 'bg-emerald-700 text-white'}`
         }>
             {screenshots.length}
           </div>

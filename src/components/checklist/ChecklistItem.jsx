@@ -22,15 +22,15 @@ export default function ChecklistItem({
       className={cn(
         "w-full p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all text-left group relative overflow-hidden",
         checked 
-          ? "bg-teal-600 border-teal-600" 
+          ? "bg-emerald-700 border-emerald-700" 
           : darkMode 
-            ? "bg-zinc-900 border-zinc-800 hover:border-teal-600/50"
-            : "bg-white border-zinc-200 hover:border-teal-600/50"
+            ? "bg-zinc-900 border-zinc-800 hover:border-emerald-700/50"
+            : "bg-white border-zinc-200 hover:border-emerald-700/50"
       )}
     >
       {weight && (
         <div className={cn("absolute top-1.5 sm:top-2 right-1.5 sm:right-2 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold",
-          checked ? "bg-white/20 text-white" : "bg-teal-600/10 text-teal-600")}>
+          checked ? "bg-white/20 text-white" : "bg-emerald-700/10 text-emerald-700")}>
           +{weight}%
         </div>
       )}
@@ -39,7 +39,7 @@ export default function ChecklistItem({
           "w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all",
           checked ? "bg-white border-white" : darkMode ? "border-zinc-700" : "border-zinc-400"
         )}>
-          {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600" strokeWidth={3} />}
+          {checked && <Check className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-700" strokeWidth={3} />}
         </div>
         <div className="flex-1 min-w-0">
           <div className={cn("text-xs sm:text-sm font-bold tracking-wider mb-0.5 sm:mb-1", 
@@ -48,7 +48,7 @@ export default function ChecklistItem({
           </div>
           {description && (
             <div className={cn("text-[10px] sm:text-xs leading-relaxed font-sans", 
-              checked ? "text-teal-100" : darkMode ? "text-zinc-500" : "text-zinc-600")}>
+              checked ? "text-emerald-100" : darkMode ? "text-zinc-500" : "text-zinc-600")}>
               {description}
             </div>
           )}

@@ -128,7 +128,7 @@ export default function TrashPage() {
                         <Button
                       onClick={() => restoreMutation.mutate(trade.id)}
                       className={cn("h-9 px-3 text-xs font-bold border-2",
-                      darkMode ? "bg-teal-600 text-white border-teal-600" : "bg-teal-600 text-white border-teal-600")}>
+                      darkMode ? "bg-emerald-700 text-white border-emerald-700" : "bg-emerald-700 text-white border-emerald-700")}>
                           <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
                           Wiederherstellen
                         </Button>

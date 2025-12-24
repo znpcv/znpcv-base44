@@ -273,7 +273,7 @@ export default function FAQPage() {
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ delay: 0.3 }}
-          className={`mt-8 sm:mt-12 md:mt-16 p-6 sm:p-8 md:p-10 border-2 ${darkMode ? 'border-teal-600/30 bg-teal-600/10' : 'border-teal-500/30 bg-teal-500/10'} rounded-2xl text-center`}>
+          className={`mt-8 sm:mt-12 md:mt-16 p-6 sm:p-8 md:p-10 border-2 ${darkMode ? 'border-emerald-600/30 bg-emerald-700/10' : 'border-teal-500/30 bg-teal-500/10'} rounded-2xl text-center`}>
           <h3 className={`text-lg sm:text-xl md:text-2xl tracking-widest mb-3 sm:mb-4 ${theme.text}`}>
             {t('furtherQuestions')}
           </h3>

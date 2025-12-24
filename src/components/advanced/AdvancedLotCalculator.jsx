@@ -108,7 +108,7 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
           {['1000', '5000', '10000', '50000'].map((size) => (
             <button key={size} type="button" onClick={() => { setAccountSize(size); setCustomAccount(''); }}
               className={cn("py-1.5 sm:py-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold border transition-all",
-                accountSize === size ? "bg-teal-600 text-white border-teal-600" : `${theme.input} hover:border-teal-600/50`)}>
+                accountSize === size ? "bg-emerald-700 text-white border-emerald-600" : `${theme.input} hover:border-emerald-600/50`)}>
               {size === '1000' ? '1K' : size === '5000' ? '5K' : size === '10000' ? '10K' : '50K'}
             </button>
           ))}
@@ -117,8 +117,8 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
           onChange={(e) => { setCustomAccount(e.target.value); if (e.target.value) setAccountSize(e.target.value); }}
           className={`${theme.input} text-xs sm:text-sm text-center mb-1.5 sm:mb-2 h-8 sm:h-9 md:h-10`} />
         {accountSize && (
-          <div className="text-center p-1.5 sm:p-2 bg-teal-600/10 border border-teal-600/20 rounded-md sm:rounded-lg">
-            <span className="text-teal-600 font-bold text-sm sm:text-base md:text-lg">${parseInt(accountSize).toLocaleString()}</span>
+          <div className="text-center p-1.5 sm:p-2 bg-emerald-700/10 border border-emerald-600/20 rounded-md sm:rounded-lg">
+            <span className="text-emerald-600 font-bold text-sm sm:text-base md:text-lg">${parseInt(accountSize).toLocaleString()}</span>
           </div>
         )}
       </div>
@@ -154,8 +154,8 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
             <button key={r} type="button" onClick={() => { setRiskPercent(r); setCustomRisk(''); }}
               className={cn("py-1.5 sm:py-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs md:text-sm font-bold border transition-all",
                 riskPercent === r 
-                  ? (r === '3' || r === '4' || r === '5') ? "bg-teal-600 text-white border-teal-600" : "bg-blue-500 text-white border-blue-500"
-                  : `${theme.input} hover:border-teal-600/50`)}>
+                  ? (r === '3' || r === '4' || r === '5') ? "bg-emerald-700 text-white border-emerald-600" : "bg-blue-500 text-white border-blue-500"
+                  : `${theme.input} hover:border-emerald-600/50`)}>
               {r}%
             </button>
           ))}
@@ -163,7 +163,7 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
         <Input type="number" step="0.1" placeholder="Custom" value={customRisk}
           onChange={(e) => { setCustomRisk(e.target.value); if (e.target.value) setRiskPercent(e.target.value); }}
           className={`${theme.input} text-xs sm:text-sm text-center mb-1.5 sm:mb-2 h-8 sm:h-9 md:h-10`} />
-        <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs flex items-center gap-1.5 sm:gap-2 bg-teal-600/10 text-teal-400 border border-teal-600/20">
+        <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs flex items-center gap-1.5 sm:gap-2 bg-emerald-700/10 text-emerald-500 border border-emerald-600/20">
           <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           ZNPCV: 3-5%
         </div>
@@ -188,13 +188,13 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
                 placeholder="0.00000" className="bg-rose-600/10 border-rose-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
             </div>
             <div>
-              <label className="text-[9px] sm:text-[10px] text-teal-600 mb-1 block">TP</label>
+              <label className="text-[9px] sm:text-[10px] text-emerald-600 mb-1 block">TP</label>
               <Input type="number" step="0.00001" value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)}
-                placeholder="0.00000" className="bg-teal-600/10 border-teal-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
+                placeholder="0.00000" className="bg-emerald-700/10 border-emerald-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
             </div>
           </div>
           <details className="mt-1.5 sm:mt-2">
-            <summary className={`text-[9px] sm:text-[10px] ${theme.textMuted} cursor-pointer hover:text-teal-600`}>+ TP2/TP3</summary>
+            <summary className={`text-[9px] sm:text-[10px] ${theme.textMuted} cursor-pointer hover:text-emerald-600`}>+ TP2/TP3</summary>
             <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mt-1.5 sm:mt-2">
               <Input type="number" step="0.00001" value={takeProfit2} onChange={(e) => setTakeProfit2(e.target.value)}
                 placeholder="TP2" className={`${theme.input} text-[10px] sm:text-xs text-center h-7 sm:h-8`} />
@@ -208,8 +208,8 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
       {/* Results - Compact */}
       {calculation?.isValid && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-          className="border-2 border-teal-600/30 bg-gradient-to-br from-teal-600/10 to-teal-600/5 rounded-lg sm:rounded-xl overflow-hidden">
-          <div className="bg-teal-600 text-white p-2 sm:p-2.5 md:p-3 flex items-center justify-between">
+          className="border-2 border-emerald-600/30 bg-gradient-to-br from-teal-600/10 to-teal-600/5 rounded-lg sm:rounded-xl overflow-hidden">
+          <div className="bg-emerald-700 text-white p-2 sm:p-2.5 md:p-3 flex items-center justify-between">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
               <span className="font-bold tracking-wider text-[10px] sm:text-xs md:text-sm">CALCULATION</span>
@@ -244,7 +244,7 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
               <div className={`p-2 sm:p-2.5 md:p-3 rounded-md sm:rounded-lg ${theme.bg}`}>
                 <div className={`text-[8px] sm:text-[9px] ${theme.textMuted}`}>R:R</div>
                 <div className={cn("text-sm sm:text-base md:text-lg font-bold", 
-                  parseFloat(calculation.rr) >= 2.5 ? "text-teal-600" : 
+                  parseFloat(calculation.rr) >= 2.5 ? "text-emerald-600" : 
                   parseFloat(calculation.rr) >= 1.5 ? "text-amber-500" : "text-rose-600")}>
                   1:{calculation.rr}
                 </div>
@@ -253,20 +253,20 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
             
             {parseFloat(calculation.rr) > 0 && (
               <div className="space-y-1.5 sm:space-y-2">
-                <div className="p-2 sm:p-2.5 md:p-3 bg-teal-600/20 border border-teal-600/30 rounded-md sm:rounded-lg flex items-center justify-between">
-                  <span className="text-teal-600 text-[10px] sm:text-xs font-bold">TP1</span>
-                  <span className="text-teal-600 text-base sm:text-lg md:text-xl font-bold">${calculation.potentialProfit}</span>
+                <div className="p-2 sm:p-2.5 md:p-3 bg-emerald-700/20 border border-emerald-600/30 rounded-md sm:rounded-lg flex items-center justify-between">
+                  <span className="text-emerald-600 text-[10px] sm:text-xs font-bold">TP1</span>
+                  <span className="text-emerald-600 text-base sm:text-lg md:text-xl font-bold">${calculation.potentialProfit}</span>
                 </div>
                 {takeProfit2 && parseFloat(calculation.tp2Profit) > 0 && (
-                  <div className="p-1.5 sm:p-2 bg-teal-600/10 rounded-md sm:rounded-lg flex justify-between text-[10px] sm:text-xs">
-                    <span className="text-teal-600">TP2</span>
-                    <span className="text-teal-600 font-bold">${calculation.tp2Profit}</span>
+                  <div className="p-1.5 sm:p-2 bg-emerald-700/10 rounded-md sm:rounded-lg flex justify-between text-[10px] sm:text-xs">
+                    <span className="text-emerald-600">TP2</span>
+                    <span className="text-emerald-600 font-bold">${calculation.tp2Profit}</span>
                   </div>
                 )}
                 {takeProfit3 && parseFloat(calculation.tp3Profit) > 0 && (
-                  <div className="p-1.5 sm:p-2 bg-teal-600/10 rounded-md sm:rounded-lg flex justify-between text-[10px] sm:text-xs">
-                    <span className="text-teal-600">TP3</span>
-                    <span className="text-teal-600 font-bold">${calculation.tp3Profit}</span>
+                  <div className="p-1.5 sm:p-2 bg-emerald-700/10 rounded-md sm:rounded-lg flex justify-between text-[10px] sm:text-xs">
+                    <span className="text-emerald-600">TP3</span>
+                    <span className="text-emerald-600 font-bold">${calculation.tp3Profit}</span>
                   </div>
                 )}
               </div>
