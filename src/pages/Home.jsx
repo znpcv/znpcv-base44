@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
   Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
-  Activity, Award, HelpCircle, Calendar, History
+  Activity, Award, HelpCircle, Calendar, History, Users
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
