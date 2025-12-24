@@ -11,7 +11,6 @@ import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
-import Community from './pages/Community';
 import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
@@ -30,7 +29,6 @@ export const PAGES = {
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
     "Trash": Trash,
-    "Community": Community,
     "Home": Home,
 }
 
