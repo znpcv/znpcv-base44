@@ -9,6 +9,8 @@ import {
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
+import DailyQuoteWidget from '@/components/DailyQuoteWidget';
+import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
 const SESSIONS = [
@@ -26,6 +28,7 @@ export default function HomePage() {
   const [localTime, setLocalTime] = useState(new Date());
   const [serverStatus, setServerStatus] = useState('operational');
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showDailyQuote, setShowDailyQuote] = useState(false);
 
   useEffect(() => {
     const updateTimes = () => {
@@ -48,6 +51,20 @@ export default function HomePage() {
 
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
+
+    // Check if user wants to show daily quote
+    const checkUserSettings = async () => {
+      try {
+        const isAuth = await base44.auth.isAuthenticated();
+        if (isAuth) {
+          const userData = await base44.auth.me();
+          setShowDailyQuote(userData.show_daily_quote_in_app || false);
+        }
+      } catch (err) {
+        console.error('Failed to load user settings');
+      }
+    };
+    checkUserSettings();
 
     return () => {
       clearInterval(interval);
@@ -137,6 +154,12 @@ export default function HomePage() {
 
       {/* Hero Section - Compact for Mobile */}
       <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
+        {showDailyQuote && (
+          <div className="mb-6 sm:mb-8 md:mb-10">
+            <DailyQuoteWidget darkMode={darkMode} />
+          </div>
+        )}
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
