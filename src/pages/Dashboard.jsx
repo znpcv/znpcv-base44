@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell } from 'recharts';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
+import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import AccountButton from '@/components/AccountButton';
 import BestTradingTimes from '@/components/advanced/BestTradingTimes';
 
@@ -187,6 +188,11 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
+        {/* Daily Quote */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
+          <DailyQuoteWidget darkMode={darkMode} />
+        </motion.div>
+
         {/* Title - Compact */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
           <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 md:mb-3 ${theme.text}`}>DASHBOARD</h1>
