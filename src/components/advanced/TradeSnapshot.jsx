@@ -77,16 +77,11 @@ export default function TradeSnapshot({ trade, darkMode }) {
       <div
         ref={cardRef}
         className={cn(
-          "w-full mx-auto rounded-2xl overflow-hidden shadow-2xl relative",
-          darkMode ? "bg-black" : "bg-white"
+          "w-full mx-auto rounded-2xl overflow-hidden shadow-xl border",
+          darkMode ? "bg-black border-zinc-900" : "bg-white border-zinc-200"
         )}
-        style={{ maxWidth: '600px' }}
+        style={{ maxWidth: '500px' }}
       >
-        {/* Gradient Overlay Top */}
-        <div className={cn(
-          "absolute inset-x-0 top-0 h-1.5",
-          isLong ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500" : "bg-gradient-to-r from-rose-500 via-pink-500 to-red-500"
-        )} />
 
         <div className="relative px-5 py-6">
           {/* Logo */}
