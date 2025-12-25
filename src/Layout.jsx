@@ -2,14 +2,12 @@ import React from 'react';
 import { LanguageProvider } from './components/LanguageContext';
 import ScrollToTop from './components/ScrollToTop';
 import QueryClientProvider from './components/QueryClientProvider';
-import PWAHead from './components/PWAHead';
 
 export default function Layout({ children, currentPageName }) {
 
   return (
     <LanguageProvider>
       <QueryClientProvider>
-        <PWAHead />
         <ScrollToTop />
       <style>
         {`

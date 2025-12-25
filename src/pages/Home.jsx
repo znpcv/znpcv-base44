@@ -11,7 +11,6 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
-import InstallPrompt from '@/components/InstallPrompt';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
@@ -517,9 +516,6 @@ export default function HomePage() {
 
       {/* Notification Prompt */}
       <NotificationPrompt darkMode={darkMode} />
-      
-      {/* Install Prompt */}
-      <InstallPrompt />
     </div>
   );
 }

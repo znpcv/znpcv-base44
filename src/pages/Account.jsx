@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, Edit2, Save, X, Phone, MapPin, Home as HomeIcon, BarChart3, Bell, LogOut, Settings, Mail, Zap, AlertTriangle, Trash2 } from 'lucide-react';
+import { User, Camera, Edit2, Check, X, Phone, MapPin, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar, Bell, Clock, LogOut, Settings, Mail } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,27 +17,9 @@ export default function AccountPage() {
   const { t, darkMode } = useLanguage();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    full_name: '',
-    bio: '',
-    phone: '',
-    phone_country_code: '+49',
-    country: '',
-    address_street: '',
-    address_city: '',
-    address_postal_code: '',
-    address_country: '',
-    default_leverage: '100',
-    default_risk_percent: '1',
-    daily_quote_enabled: false,
-    daily_quote_time: '09:00',
-    show_daily_quote_in_app: false,
-    browser_notifications_enabled: false,
-    notification_frequency: '1'
-  });
-  const [saving, setSaving] = useState(false);
+  const [editingSections, setEditingSections] = useState({});
   const [uploading, setUploading] = useState(false);
+  const [tempValues, setTempValues] = useState({});
 
   useEffect(() => {
     loadUser();
@@ -47,24 +29,6 @@ export default function AccountPage() {
     try {
       const userData = await base44.auth.me();
       setUser(userData);
-      setFormData({
-        full_name: userData.full_name || '',
-        bio: userData.bio || '',
-        phone: userData.phone || '',
-        phone_country_code: userData.phone_country_code || '+49',
-        country: userData.country || '',
-        address_street: userData.address_street || '',
-        address_city: userData.address_city || '',
-        address_postal_code: userData.address_postal_code || '',
-        address_country: userData.address_country || '',
-        default_leverage: userData.default_leverage || '100',
-        default_risk_percent: userData.default_risk_percent || '1',
-        daily_quote_enabled: userData.daily_quote_enabled || false,
-        daily_quote_time: userData.daily_quote_time || '09:00',
-        show_daily_quote_in_app: userData.show_daily_quote_in_app || false,
-        browser_notifications_enabled: userData.browser_notifications_enabled || false,
-        notification_frequency: userData.notification_frequency || '1'
-      });
     } catch (err) {
       console.error('Load user failed:', err);
       navigate(createPageUrl('Home'));
@@ -73,16 +37,24 @@ export default function AccountPage() {
     }
   };
 
-  const handleSave = async () => {
+  const toggleSection = (section) => {
+    if (editingSections[section]) {
+      setTempValues(prev => {
+        const newVals = {...prev};
+        delete newVals[section];
+        return newVals;
+      });
+    }
+    setEditingSections(prev => ({...prev, [section]: !prev[section]}));
+  };
+
+  const saveSection = async (section, data) => {
     try {
-      setSaving(true);
-      await base44.auth.updateMe(formData);
+      await base44.auth.updateMe(data);
       await loadUser();
-      setEditing(false);
+      toggleSection(section);
     } catch (err) {
       console.error('Save failed:', err);
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -122,7 +94,7 @@ export default function AccountPage() {
 
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
-    bgSecondary: darkMode ? 'bg-zinc-900' : 'bg-zinc-50',
+    bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
     text: darkMode ? 'text-white' : 'text-zinc-900',
     textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200'
@@ -139,8 +111,8 @@ export default function AccountPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text}`}>
       {/* Header */}
-      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-4xl mx-auto px-4 py-4">
+      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50 backdrop-blur-lg bg-opacity-80`}>
+        <div className="max-w-4xl mx-auto px-3 py-2">
           <div className="flex items-center justify-between">
             <DarkModeToggle />
             <button onClick={() => navigate(createPageUrl('Home'))}>
@@ -150,7 +122,7 @@ export default function AccountPage() {
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-12 w-auto"
+                className="h-8 sm:h-10 w-auto"
               />
             </button>
             <LanguageToggle />
@@ -159,308 +131,338 @@ export default function AccountPage() {
       </header>
 
       {/* Main */}
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+      <main className="max-w-4xl mx-auto px-3 py-4 space-y-3">
         
-        {/* Profile Section - Editable */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={`${theme.bgSecondary} border ${theme.border} rounded-2xl p-6`}>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className={`text-lg font-bold tracking-wider ${theme.text}`}>PROFIL</h2>
-            {!editing ? (
-              <button onClick={() => setEditing(true)} className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${theme.border} hover:${theme.bgSecondary} transition-colors`}>
-                <Edit2 className="w-4 h-4" />
-                <span className="text-sm">Bearbeiten</span>
-              </button>
-            ) : (
-              <div className="flex gap-2">
-                <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white transition-colors">
-                  <Save className="w-4 h-4" />
-                  <span className="text-sm">{saving ? 'Speichern...' : 'Speichern'}</span>
-                </button>
-                <button onClick={() => { setEditing(false); loadUser(); }} className={`px-4 py-2 rounded-xl border ${theme.border} hover:${theme.bgSecondary} transition-colors`}>
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-start gap-6">
+        {/* Profile Header */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={`${theme.bgSecondary} border ${theme.border} rounded-2xl p-4`}>
+          <div className="flex items-start gap-3">
             <div className="relative group">
-              <div className={`w-24 h-24 rounded-2xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-200'}`}>
-                {user.profile_image ? <img src={user.profile_image} alt="" className="w-full h-full object-cover" /> : <User className={`w-12 h-12 ${darkMode ? 'text-black' : 'text-white'}`} />}
+              <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-200'}`}>
+                {user.profile_image ? <img src={user.profile_image} alt="" className="w-full h-full object-cover" /> : <User className={`w-8 h-8 sm:w-10 sm:h-10 ${darkMode ? 'text-black' : 'text-white'}`} />}
               </div>
-              <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-2xl opacity-0 group-hover:opacity-100 transition cursor-pointer">
+              <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 transition cursor-pointer">
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
-                {uploading ? <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full" /> : <Camera className="w-6 h-6 text-white" />}
+                {uploading ? <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> : <Camera className="w-5 h-5 text-white" />}
               </label>
             </div>
-
-            <div className="flex-1">
-              {editing ? (
-                <Input
-                  value={formData.full_name}
-                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                  placeholder="Name"
-                  className={`${theme.border} mb-3 font-bold text-lg`}
-                />
-              ) : (
-                <h1 className={`text-xl font-bold ${theme.text} mb-1`}>{user.full_name || 'User'}</h1>
-              )}
-              
-              <p className={`text-sm ${theme.textSecondary} mb-3`}>{user.email}</p>
-              
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className={`px-3 py-1 rounded-lg text-xs font-bold ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>{user.role?.toUpperCase()}</span>
-                <span className={`px-3 py-1 rounded-lg text-xs ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>Mitglied seit {format(new Date(user.created_date), 'MMM yyyy')}</span>
+            <div className="flex-1 min-w-0">
+              <h1 className={`text-lg sm:text-xl font-bold ${theme.text} mb-1 truncate`}>{user.full_name || 'User'}</h1>
+              <p className={`text-xs ${theme.textSecondary} mb-2 truncate`}>{user.email}</p>
+              <div className="flex flex-wrap gap-1.5">
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>{user.role?.toUpperCase()}</span>
+                <span className={`px-2 py-0.5 rounded text-[10px] ${darkMode ? 'bg-zinc-900' : 'bg-zinc-200'}`}>{format(new Date(user.created_date), 'MMM yyyy')}</span>
               </div>
-
-              {editing ? (
-                <Textarea
-                  value={formData.bio}
-                  onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                  placeholder="Erzähle etwas über dich..."
-                  className={`${theme.border} resize-none`}
-                  rows={3}
-                />
-              ) : (
-                <p className={`text-sm ${theme.text} ${!user.bio && theme.textSecondary}`}>
-                  {user.bio || 'Keine Bio hinterlegt'}
-                </p>
-              )}
             </div>
           </div>
         </motion.div>
 
-        {/* Contact & Address Section - Editable */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={`${theme.bgSecondary} border ${theme.border} rounded-2xl p-6`}>
-          <div className="flex items-center gap-3 mb-6">
-            <Phone className={`w-5 h-5 ${theme.textSecondary}`} />
-            <h2 className={`text-lg font-bold tracking-wider ${theme.text}`}>KONTAKT & ADRESSE</h2>
-          </div>
+        {/* Bio */}
+        <Section
+          icon={<Edit2 className="w-4 h-4" />}
+          title="BIO"
+          isEditing={editingSections.bio}
+          onToggle={() => toggleSection('bio')}
+          onSave={() => saveSection('bio', { bio: tempValues.bio })}
+          theme={theme}
+        >
+          {editingSections.bio ? (
+            <Textarea
+              value={tempValues.bio ?? user.bio ?? ''}
+              onChange={(e) => setTempValues({...tempValues, bio: e.target.value})}
+              placeholder="Erzähle etwas über dich..."
+              className={`${theme.border} h-20 resize-none text-xs`}
+            />
+          ) : (
+            <p className={`text-xs ${theme.text} ${!user.bio && theme.textSecondary}`}>{user.bio || 'Keine Bio hinterlegt'}</p>
+          )}
+        </Section>
 
-          {editing ? (
-            <div className="space-y-4">
+        {/* Contact */}
+        <Section
+          icon={<Phone className="w-4 h-4" />}
+          title="KONTAKT"
+          isEditing={editingSections.contact}
+          onToggle={() => toggleSection('contact')}
+          onSave={() => saveSection('contact', {
+            phone: tempValues.phone ?? user.phone,
+            phone_country_code: tempValues.phone_country_code ?? user.phone_country_code,
+            country: tempValues.country ?? user.country
+          })}
+          theme={theme}
+        >
+          {editingSections.contact ? (
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <Select 
+                  value={tempValues.phone_country_code ?? user.phone_country_code ?? '+49'} 
+                  onValueChange={(v) => setTempValues({...tempValues, phone_country_code: v})}
+                >
+                  <SelectTrigger className={`w-16 ${theme.border} h-8 text-xs`}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-40">
+                    {COUNTRIES.map(c => <SelectItem key={c.dial} value={c.dial} className="text-xs">{c.dial}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                <Input
+                  value={tempValues.phone ?? user.phone ?? ''}
+                  onChange={(e) => setTempValues({...tempValues, phone: e.target.value.replace(/[^0-9]/g, '')})}
+                  placeholder="123456789"
+                  className={`flex-1 ${theme.border} h-8 text-xs`}
+                />
+              </div>
+              <CountrySelect
+                value={tempValues.country ?? user.country ?? ''}
+                onChange={(v) => setTempValues({...tempValues, country: v})}
+                className={`${theme.border} h-8 text-xs`}
+              />
+            </div>
+          ) : (
+            <div className="space-y-1">
+              <div className={`text-xs ${theme.text}`}>
+                {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : 'Keine Telefonnummer'}
+              </div>
+              <div className={`text-xs ${theme.textSecondary}`}>
+                {COUNTRIES.find(c => c.code === user.country)?.name || 'Kein Land'}
+              </div>
+            </div>
+          )}
+        </Section>
+
+        {/* Address */}
+        <Section
+          icon={<MapPin className="w-4 h-4" />}
+          title="ADRESSE"
+          isEditing={editingSections.address}
+          onToggle={() => toggleSection('address')}
+          onSave={() => saveSection('address', {
+            address_street: tempValues.address_street ?? user.address_street,
+            address_postal_code: tempValues.address_postal_code ?? user.address_postal_code,
+            address_city: tempValues.address_city ?? user.address_city,
+            address_country: tempValues.address_country ?? user.address_country
+          })}
+          theme={theme}
+        >
+          {editingSections.address ? (
+            <div className="space-y-2">
+              <Input value={tempValues.address_street ?? user.address_street ?? ''} onChange={(e) => setTempValues({...tempValues, address_street: e.target.value})} placeholder="Straße" className={`${theme.border} h-8 text-xs`} />
+              <div className="grid grid-cols-2 gap-2">
+                <Input value={tempValues.address_postal_code ?? user.address_postal_code ?? ''} onChange={(e) => setTempValues({...tempValues, address_postal_code: e.target.value})} placeholder="PLZ" className={`${theme.border} h-8 text-xs`} />
+                <Input value={tempValues.address_city ?? user.address_city ?? ''} onChange={(e) => setTempValues({...tempValues, address_city: e.target.value})} placeholder="Stadt" className={`${theme.border} h-8 text-xs`} />
+              </div>
+              <CountrySelect value={tempValues.address_country ?? user.address_country ?? ''} onChange={(v) => setTempValues({...tempValues, address_country: v})} className={`${theme.border} h-8 text-xs`} />
+            </div>
+          ) : (
+            <div className={`text-xs ${theme.text} space-y-0.5`}>
+              <div>{user.address_street || '-'}</div>
+              <div>{user.address_postal_code || '-'} {user.address_city || '-'}</div>
+              <div className={theme.textSecondary}>{COUNTRIES.find(c => c.code === user.address_country)?.name || '-'}</div>
+            </div>
+          )}
+        </Section>
+
+        {/* Trading Settings */}
+        <Section
+          icon={<BarChart3 className="w-4 h-4" />}
+          title="TRADING"
+          isEditing={editingSections.trading}
+          onToggle={() => toggleSection('trading')}
+          onSave={() => saveSection('trading', {
+            default_leverage: tempValues.default_leverage ?? user.default_leverage,
+            default_risk_percent: tempValues.default_risk_percent ?? user.default_risk_percent
+          })}
+          theme={theme}
+        >
+          {editingSections.trading ? (
+            <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className={`text-xs ${theme.textSecondary} mb-2 block`}>Telefon</label>
-                <div className="flex gap-2">
-                  <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
-                    <SelectTrigger className={`w-24 ${theme.border}`}>
+                <label className={`text-[9px] ${theme.textSecondary} mb-1 block`}>LEVERAGE</label>
+                <Input value={tempValues.default_leverage ?? user.default_leverage ?? '100'} onChange={(e) => setTempValues({...tempValues, default_leverage: e.target.value})} className={`${theme.border} h-8 text-xs`} />
+              </div>
+              <div>
+                <label className={`text-[9px] ${theme.textSecondary} mb-1 block`}>RISK %</label>
+                <Input value={tempValues.default_risk_percent ?? user.default_risk_percent ?? '1'} onChange={(e) => setTempValues({...tempValues, default_risk_percent: e.target.value})} className={`${theme.border} h-8 text-xs`} />
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <div className={`text-[9px] ${theme.textSecondary} mb-1`}>LEVERAGE</div>
+                <div className={`text-sm font-bold ${theme.text}`}>1:{user.default_leverage || '100'}</div>
+              </div>
+              <div>
+                <div className={`text-[9px] ${theme.textSecondary} mb-1`}>RISK</div>
+                <div className={`text-sm font-bold ${theme.text}`}>{user.default_risk_percent || '1'}%</div>
+              </div>
+            </div>
+          )}
+        </Section>
+
+        {/* Notifications */}
+        <Section
+          icon={<Bell className="w-4 h-4" />}
+          title="BENACHRICHTIGUNGEN"
+          isEditing={editingSections.notifications}
+          onToggle={() => toggleSection('notifications')}
+          onSave={() => saveSection('notifications', {
+            daily_quote_enabled: tempValues.daily_quote_enabled ?? user.daily_quote_enabled,
+            daily_quote_time: tempValues.daily_quote_time ?? user.daily_quote_time,
+            show_daily_quote_in_app: tempValues.show_daily_quote_in_app ?? user.show_daily_quote_in_app,
+            browser_notifications_enabled: tempValues.browser_notifications_enabled ?? user.browser_notifications_enabled,
+            notification_frequency: tempValues.notification_frequency ?? user.notification_frequency
+          })}
+          theme={theme}
+        >
+          {editingSections.notifications ? (
+            <div className="space-y-3">
+              <NotifToggle
+                icon={<Mail className="w-3.5 h-3.5 text-blue-500" />}
+                label="E-Mail"
+                checked={tempValues.daily_quote_enabled ?? user.daily_quote_enabled ?? false}
+                onChange={(v) => setTempValues({...tempValues, daily_quote_enabled: v})}
+                theme={theme}
+              >
+                {(tempValues.daily_quote_enabled ?? user.daily_quote_enabled) && (
+                  <Input
+                    type="time"
+                    value={tempValues.daily_quote_time ?? user.daily_quote_time ?? '09:00'}
+                    onChange={(e) => setTempValues({...tempValues, daily_quote_time: e.target.value})}
+                    className={`${theme.border} h-8 text-xs w-28`}
+                  />
+                )}
+              </NotifToggle>
+              
+              <NotifToggle
+                icon={<Zap className="w-3.5 h-3.5 text-purple-500" />}
+                label="In-App"
+                checked={tempValues.show_daily_quote_in_app ?? user.show_daily_quote_in_app ?? false}
+                onChange={(v) => setTempValues({...tempValues, show_daily_quote_in_app: v})}
+                theme={theme}
+              />
+              
+              <NotifToggle
+                icon={<Bell className="w-3.5 h-3.5 text-amber-500" />}
+                label="Browser Push"
+                checked={tempValues.browser_notifications_enabled ?? user.browser_notifications_enabled ?? false}
+                onChange={(v) => setTempValues({...tempValues, browser_notifications_enabled: v})}
+                theme={theme}
+              >
+                {(tempValues.browser_notifications_enabled ?? user.browser_notifications_enabled) && (
+                  <Select 
+                    value={tempValues.notification_frequency ?? user.notification_frequency ?? '1'} 
+                    onValueChange={(v) => setTempValues({...tempValues, notification_frequency: v})}
+                  >
+                    <SelectTrigger className={`${theme.border} h-8 text-xs w-28`}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="max-h-60">
-                      {COUNTRIES.map(c => <SelectItem key={c.dial} value={c.dial}>{c.dial}</SelectItem>)}
+                    <SelectContent>
+                      <SelectItem value="1">1x täglich</SelectItem>
+                      <SelectItem value="2">2x täglich</SelectItem>
+                      <SelectItem value="3">3x täglich</SelectItem>
+                      <SelectItem value="4">4x täglich</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
-                    placeholder="123456789"
-                    className={`flex-1 ${theme.border}`}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className={`text-xs ${theme.textSecondary} mb-2 block`}>Land</label>
-                <CountrySelect value={formData.country} onChange={(v) => setFormData({...formData, country: v})} className={theme.border} />
-              </div>
-
-              <div className="pt-4 border-t ${theme.border}">
-                <label className={`text-xs ${theme.textSecondary} mb-2 block`}>Adresse</label>
-                <Input value={formData.address_street} onChange={(e) => setFormData({...formData, address_street: e.target.value})} placeholder="Straße" className={`${theme.border} mb-2`} />
-                <div className="grid grid-cols-2 gap-2">
-                  <Input value={formData.address_postal_code} onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})} placeholder="PLZ" className={theme.border} />
-                  <Input value={formData.address_city} onChange={(e) => setFormData({...formData, address_city: e.target.value})} placeholder="Stadt" className={theme.border} />
-                </div>
-                <CountrySelect value={formData.address_country} onChange={(v) => setFormData({...formData, address_country: v})} className={`${theme.border} mt-2`} />
-              </div>
+                )}
+              </NotifToggle>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-2`}>TELEFON</h3>
-                <p className={`text-sm ${theme.text}`}>
-                  {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : 'Keine Telefonnummer'}
-                </p>
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-2 mt-4`}>LAND</h3>
-                <p className={`text-sm ${theme.text}`}>
-                  {COUNTRIES.find(c => c.code === user.country)?.name || 'Kein Land'}
-                </p>
-              </div>
-              <div>
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-2`}>ADRESSE</h3>
-                <p className={`text-sm ${theme.text}`}>{user.address_street || '-'}</p>
-                <p className={`text-sm ${theme.text}`}>{user.address_postal_code || '-'} {user.address_city || '-'}</p>
-                <p className={`text-sm ${theme.textSecondary}`}>{COUNTRIES.find(c => c.code === user.address_country)?.name || '-'}</p>
-              </div>
+            <div className="grid grid-cols-3 gap-2">
+              <StatusPill icon={<Mail className="w-3 h-3" />} label="E-Mail" active={user.daily_quote_enabled} extra={user.daily_quote_enabled && user.daily_quote_time} theme={theme} />
+              <StatusPill icon={<Zap className="w-3 h-3" />} label="In-App" active={user.show_daily_quote_in_app} theme={theme} />
+              <StatusPill icon={<Bell className="w-3 h-3" />} label="Push" active={user.browser_notifications_enabled} extra={user.browser_notifications_enabled && `${user.notification_frequency}x`} theme={theme} />
             </div>
           )}
-        </motion.div>
+        </Section>
 
-        {/* Trading & Notifications Section - Editable */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={`${theme.bgSecondary} border ${theme.border} rounded-2xl p-6`}>
-          <div className="flex items-center gap-3 mb-6">
-            <BarChart3 className={`w-5 h-5 ${theme.textSecondary}`} />
-            <h2 className={`text-lg font-bold tracking-wider ${theme.text}`}>TRADING & BENACHRICHTIGUNGEN</h2>
-          </div>
-
-          {editing ? (
-            <div className="space-y-6">
-              <div>
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-3`}>TRADING EINSTELLUNGEN</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className={`text-xs ${theme.textSecondary} mb-2 block`}>Standard Leverage</label>
-                    <Input value={formData.default_leverage} onChange={(e) => setFormData({...formData, default_leverage: e.target.value})} className={theme.border} />
-                  </div>
-                  <div>
-                    <label className={`text-xs ${theme.textSecondary} mb-2 block`}>Standard Risk %</label>
-                    <Input value={formData.default_risk_percent} onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})} className={theme.border} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t ${theme.border}">
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-3`}>BENACHRICHTIGUNGEN</h3>
-                <div className="space-y-3">
-                  <div className={`${darkMode ? 'bg-zinc-950' : 'bg-white'} border ${theme.border} rounded-xl p-4`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-blue-500" />
-                        <span className={`text-sm ${theme.text}`}>E-Mail Quote</span>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked={formData.daily_quote_enabled} onChange={(e) => setFormData({...formData, daily_quote_enabled: e.target.checked})} className="sr-only peer" />
-                        <div className="w-11 h-6 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
-                      </label>
-                    </div>
-                    {formData.daily_quote_enabled && (
-                      <Input type="time" value={formData.daily_quote_time} onChange={(e) => setFormData({...formData, daily_quote_time: e.target.value})} className={`${theme.border} mt-2`} />
-                    )}
-                  </div>
-
-                  <div className={`${darkMode ? 'bg-zinc-950' : 'bg-white'} border ${theme.border} rounded-xl p-4`}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-purple-500" />
-                        <span className={`text-sm ${theme.text}`}>In-App Quote</span>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked={formData.show_daily_quote_in_app} onChange={(e) => setFormData({...formData, show_daily_quote_in_app: e.target.checked})} className="sr-only peer" />
-                        <div className="w-11 h-6 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className={`${darkMode ? 'bg-zinc-950' : 'bg-white'} border ${theme.border} rounded-xl p-4`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Bell className="w-4 h-4 text-amber-500" />
-                        <span className={`text-sm ${theme.text}`}>Browser Push</span>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked={formData.browser_notifications_enabled} onChange={(e) => setFormData({...formData, browser_notifications_enabled: e.target.checked})} className="sr-only peer" />
-                        <div className="w-11 h-6 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
-                      </label>
-                    </div>
-                    {formData.browser_notifications_enabled && (
-                      <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
-                        <SelectTrigger className={`${theme.border} mt-2`}>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">1x täglich</SelectItem>
-                          <SelectItem value="2">2x täglich</SelectItem>
-                          <SelectItem value="3">3x täglich</SelectItem>
-                          <SelectItem value="4">4x täglich</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-3`}>TRADING</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className={`text-sm ${theme.textSecondary}`}>Leverage:</span>
-                    <span className={`text-sm font-bold ${theme.text}`}>1:{user.default_leverage || '100'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className={`text-sm ${theme.textSecondary}`}>Risk:</span>
-                    <span className={`text-sm font-bold ${theme.text}`}>{user.default_risk_percent || '1'}%</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h3 className={`text-xs font-bold ${theme.textSecondary} mb-3`}>BENACHRICHTIGUNGEN</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-blue-500" />
-                      <span className={`text-sm ${theme.text}`}>E-Mail</span>
-                    </div>
-                    <span className={`text-xs font-bold ${user.daily_quote_enabled ? 'text-teal-500' : theme.textSecondary}`}>
-                      {user.daily_quote_enabled ? `Aktiv (${user.daily_quote_time})` : 'Aus'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-purple-500" />
-                      <span className={`text-sm ${theme.text}`}>In-App</span>
-                    </div>
-                    <span className={`text-xs font-bold ${user.show_daily_quote_in_app ? 'text-teal-500' : theme.textSecondary}`}>
-                      {user.show_daily_quote_in_app ? 'Aktiv' : 'Aus'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Bell className="w-4 h-4 text-amber-500" />
-                      <span className={`text-sm ${theme.text}`}>Push</span>
-                    </div>
-                    <span className={`text-xs font-bold ${user.browser_notifications_enabled ? 'text-teal-500' : theme.textSecondary}`}>
-                      {user.browser_notifications_enabled ? `Aktiv (${user.notification_frequency}x)` : 'Aus'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-4 gap-3">
-          <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-12 ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
-            <HomeIcon className="w-5 h-5" />
+        {/* Quick Nav */}
+        <div className="grid grid-cols-4 gap-2">
+          <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-11 text-xs ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+            <HomeIcon className="w-4 h-4" />
           </Button>
-          <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-12 ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
-            <BarChart3 className="w-5 h-5" />
+          <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-11 text-xs ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+            <BarChart3 className="w-4 h-4" />
           </Button>
-          <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-12 ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
-            <Settings className="w-5 h-5" />
+          <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-11 text-xs ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+            <Settings className="w-4 h-4" />
           </Button>
-          <Button onClick={handleLogout} className="h-12 bg-rose-600 hover:bg-rose-700 text-white">
-            <LogOut className="w-5 h-5" />
+          <Button onClick={handleLogout} className="h-11 text-xs bg-rose-600 hover:bg-rose-700 text-white">
+            <LogOut className="w-4 h-4" />
           </Button>
         </div>
 
         {/* Danger Zone */}
-        <div className={`border-2 border-rose-600/40 ${darkMode ? 'bg-rose-600/10' : 'bg-rose-50'} rounded-2xl p-6`}>
-          <div className="flex items-start gap-3 mb-4">
-            <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0" />
-            <div>
-              <h3 className="text-sm font-bold text-rose-600 mb-1">{t('dangerZone')}</h3>
-              <p className={`${theme.textSecondary} text-xs`}>{t('deleteWarning')}</p>
+        <div className={`border-2 border-rose-600/40 ${darkMode ? 'bg-rose-600/5' : 'bg-rose-50'} rounded-xl p-3`}>
+          <div className="flex items-start gap-2 mb-2">
+            <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="text-xs font-bold text-rose-600 mb-1">{t('dangerZone')}</h3>
+              <p className={`${theme.textSecondary} text-[10px]`}>{t('deleteWarning')}</p>
             </div>
           </div>
-          <Button onClick={handleDeleteAccount} className="w-full bg-rose-600 hover:bg-rose-700 text-white">
-            <Trash2 className="w-4 h-4 mr-2" />
+          <Button onClick={handleDeleteAccount} className="w-full h-9 bg-rose-600 hover:bg-rose-700 text-white text-xs">
+            <Trash2 className="w-3.5 h-3.5 mr-1.5" />
             {t('deletePermanently')}
           </Button>
         </div>
       </main>
+    </div>
+  );
+}
+
+function Section({ icon, title, isEditing, onToggle, onSave, children, theme }) {
+  return (
+    <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-3`}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <div className={`${theme.textSecondary}`}>{icon}</div>
+          <span className={`text-[10px] font-bold tracking-wider ${theme.textSecondary}`}>{title}</span>
+        </div>
+        <div className="flex gap-1">
+          {isEditing && (
+            <button onClick={onSave} className={`p-1.5 rounded-lg ${darkMode ? 'bg-teal-600 hover:bg-teal-700' : 'bg-teal-600 hover:bg-teal-700'} text-white`}>
+              <Check className="w-3.5 h-3.5" />
+            </button>
+          )}
+          <button onClick={onToggle} className={`p-1.5 rounded-lg ${theme.border} border hover:${theme.bgSecondary}`}>
+            {isEditing ? <X className="w-3.5 h-3.5" /> : <Edit2 className="w-3.5 h-3.5" />}
+          </button>
+        </div>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+}
+
+function NotifToggle({ icon, label, checked, onChange, children, theme }) {
+  return (
+    <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-lg p-2`}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          {icon}
+          <span className={`text-xs ${theme.text}`}>{label}</span>
+        </div>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only peer" />
+          <div className="w-8 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
+        </label>
+      </div>
+      {children && <div className="mt-2">{children}</div>}
+    </div>
+  );
+}
+
+function StatusPill({ icon, label, active, extra, theme }) {
+  return (
+    <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-lg p-2`}>
+      <div className="flex items-center gap-1.5 mb-1">
+        <div className={active ? 'text-teal-500' : theme.textSecondary}>{icon}</div>
+        <span className={`text-[9px] ${theme.textSecondary}`}>{label}</span>
+      </div>
+      <div className="flex items-center gap-1">
+        <div className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-teal-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+        <span className={`text-[10px] font-bold ${theme.text}`}>{active ? 'Aktiv' : 'Aus'}</span>
+      </div>
+      {extra && <div className={`text-[9px] ${theme.textSecondary} mt-0.5`}>{extra}</div>}
     </div>
   );
 }
