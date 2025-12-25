@@ -470,6 +470,11 @@ export default function TradeDetailPage() {
               </motion.div>
             }
 
+            {/* Trade Snapshot */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
+              <TradeSnapshot trade={trade} darkMode={darkMode} />
+            </motion.div>
+
 
           </div>
         </div>
