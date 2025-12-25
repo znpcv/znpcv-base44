@@ -171,74 +171,77 @@ export default function AccountPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 sm:space-y-5 md:space-y-6">
           
           {/* Profile Card */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6`}>
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
-              {/* Profile Image */}
-              <div className="relative group flex-shrink-0">
-                <div className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl md:rounded-2xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
-                  {user.profile_image ?
-                  <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" /> :
-                  <User className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 ${darkMode ? 'text-black' : 'text-white'}`} />
-                  }
+          <div className={`relative overflow-hidden ${theme.bgSecondary} border-2 ${theme.border} rounded-2xl`}>
+            <div className={`absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-teal-500/5 to-transparent rounded-full blur-3xl`} />
+            <div className="relative z-10 p-4 sm:p-5 md:p-6">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
+                {/* Profile Image */}
+                <div className="relative group flex-shrink-0">
+                  <div className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
+                    {user.profile_image ?
+                    <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" /> :
+                    <User className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 ${darkMode ? 'text-black' : 'text-white'}`} />
+                    }
+                  </div>
+                  <label className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm rounded-2xl opacity-0 group-hover:opacity-100 transition-all cursor-pointer">
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+                    {uploading ?
+                    <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full" /> :
+                    <Camera className="w-6 h-6 text-white" />
+                    }
+                  </label>
                 </div>
-                <label className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
-                  {uploading ?
-                  <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" /> :
-                  <Camera className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+
+                {/* User Info */}
+                <div className="flex-1 min-w-0 text-center sm:text-left">
+                  {editing ?
+                  <Input
+                    value={formData.full_name}
+                    onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                    className={`font-bold text-base sm:text-lg md:text-xl ${theme.border} mb-2 h-10 sm:h-11`}
+                    placeholder={t('yourName')} /> :
+                  <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold ${theme.text} mb-1 sm:mb-2`}>{user.full_name || '-'}</h1>
                   }
-                </label>
+                  <p className={`text-xs sm:text-sm ${theme.textSecondary} mb-3 sm:mb-4 truncate font-sans`}>{user.email}</p>
+                  
+                  {/* Stats Pills */}
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <div className={`flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'}`}>
+                      <User className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
+                      {user.role?.toUpperCase()}
+                    </div>
+                    <div className={`flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-mono border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'}`}>
+                      <Calendar className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
+                      {format(new Date(user.created_date), 'MMM yyyy')}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Edit Button */}
+                {!editing && (
+                  <Button onClick={() => setEditing(true)} className={`h-9 sm:h-10 px-4 sm:px-5 text-xs sm:text-sm font-bold border-2 rounded-xl ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                    <Edit2 className="w-4 h-4 sm:mr-2" />
+                    <span className="hidden sm:inline">{t('edit')}</span>
+                  </Button>
+                )}
               </div>
 
-              {/* User Info */}
-              <div className="flex-1 min-w-0 text-center sm:text-left">
-                {editing ?
-                <Input
-                  value={formData.full_name}
-                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                  className={`font-bold text-sm sm:text-base md:text-lg ${theme.border} mb-2 h-9 sm:h-10`}
-                  placeholder={t('yourName')} /> :
-                <h1 className={`text-lg sm:text-xl md:text-2xl font-bold ${theme.text} mb-1 sm:mb-2`}>{user.full_name || '-'}</h1>
-                }
-                <p className={`text-[10px] sm:text-xs md:text-sm ${theme.textSecondary} mb-2 sm:mb-3 truncate`}>{user.email}</p>
-                
-                {/* Stats Pills */}
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
-                  <div className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-bold ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                    <User className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${theme.textSecondary}`} />
-                    {user.role?.toUpperCase()}
-                  </div>
-                  <div className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                    <Calendar className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${theme.textSecondary}`} />
-                    {format(new Date(user.created_date), 'MM/yyyy')}
-                  </div>
+              {/* Bio */}
+              {editing ? (
+                <div className={`mt-4 sm:mt-5 pt-4 sm:pt-5 border-t ${theme.border}`}>
+                  <label className={`block text-xs ${theme.textSecondary} mb-2 tracking-wider font-bold`}>BIO</label>
+                  <Textarea
+                    value={formData.bio}
+                    onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                    placeholder={t('bioPlaceholder')}
+                    className={`${theme.border} h-24 sm:h-28 resize-none text-sm font-sans rounded-xl`} />
                 </div>
-              </div>
-
-              {/* Edit Button */}
-              {!editing && (
-                <Button onClick={() => setEditing(true)} className={`h-8 sm:h-9 px-3 sm:px-4 text-[10px] sm:text-xs font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-                  <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-                  <span className="hidden sm:inline">{t('edit')}</span>
-                </Button>
+              ) : user.bio && (
+                <div className={`mt-4 sm:mt-5 pt-4 sm:pt-5 border-t ${theme.border}`}>
+                  <p className={`text-sm sm:text-base ${theme.text} font-sans leading-relaxed`}>{user.bio}</p>
+                </div>
               )}
             </div>
-
-            {/* Bio */}
-            {editing ? (
-              <div className={`mt-3 sm:mt-4 pt-3 sm:pt-4 border-t ${theme.border}`}>
-                <label className={`block text-[10px] sm:text-xs ${theme.textSecondary} mb-2 tracking-wider`}>BIO</label>
-                <Textarea
-                  value={formData.bio}
-                  onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                  placeholder={t('bioPlaceholder')}
-                  className={`${theme.border} h-20 sm:h-24 resize-none text-xs font-sans`} />
-              </div>
-            ) : user.bio && (
-              <div className={`mt-3 sm:mt-4 pt-3 sm:pt-4 border-t ${theme.border}`}>
-                <p className={`text-xs sm:text-sm ${theme.text} font-sans leading-relaxed`}>{user.bio}</p>
-              </div>
-            )}
           </div>
 
           {/* Contact Grid */}
@@ -385,98 +388,218 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Daily Reminder Settings */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
-            <div className="flex items-center gap-2 mb-3 sm:mb-4">
-              <Bell className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-500`} />
-              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>ERINNERUNGEN</span>
+          {/* Notifications Section */}
+          <div className={`relative overflow-hidden ${theme.bgSecondary} border-2 ${theme.border} rounded-2xl`}>
+            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 rounded-full blur-3xl -z-0`} />
+            <div className="relative z-10 p-4 sm:p-5 md:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-5">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className={`p-2 sm:p-2.5 rounded-xl ${darkMode ? 'bg-teal-500/20' : 'bg-teal-100'}`}>
+                    <Bell className={`w-4 h-4 sm:w-5 sm:h-5 text-teal-600`} />
+                  </div>
+                  <div>
+                    <h3 className={`text-sm sm:text-base font-bold tracking-wider ${theme.text}`}>ERINNERUNGEN</h3>
+                    <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary}`}>Personalisiere deine Benachrichtigungen</p>
+                  </div>
+                </div>
+              </div>
+              
+              {editing ? (
+                <div className="space-y-4 sm:space-y-5">
+                  {/* Email Notifications */}
+                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex items-start gap-2 sm:gap-3 flex-1">
+                        <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
+                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                          </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>E-Mail Benachrichtigungen</h4>
+                          <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Erhalte Trading-Sprüche direkt in dein Postfach</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.daily_quote_enabled}
+                          onChange={(e) => setFormData({...formData, daily_quote_enabled: e.target.checked})}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
+                      </label>
+                    </div>
+                    {formData.daily_quote_enabled && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className={`pt-3 border-t ${theme.border}`}>
+                        <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-2 block font-bold tracking-wider`}>UHRZEIT</label>
+                        <div className="flex items-center gap-2">
+                          <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
+                          <Input
+                            type="time"
+                            value={formData.daily_quote_time}
+                            onChange={(e) => setFormData({...formData, daily_quote_time: e.target.value})}
+                            className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm flex-1`}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+
+                  {/* In-App Notifications */}
+                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-2 sm:gap-3 flex-1">
+                        <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
+                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/>
+                          </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>In-App Widget</h4>
+                          <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Zeige Sprüche auf Dashboard & Home</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.show_daily_quote_in_app}
+                          onChange={(e) => setFormData({...formData, show_daily_quote_in_app: e.target.checked})}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Browser Push Notifications */}
+                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex items-start gap-2 sm:gap-3 flex-1">
+                        <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
+                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                          </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>Browser Push-Notifications</h4>
+                          <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Desktop-Benachrichtigungen auch wenn App geschlossen</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.browser_notifications_enabled}
+                          onChange={(e) => setFormData({...formData, browser_notifications_enabled: e.target.checked})}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600"></div>
+                      </label>
+                    </div>
+                    {formData.browser_notifications_enabled && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className={`pt-3 border-t ${theme.border}`}>
+                        <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-2 block font-bold tracking-wider`}>HÄUFIGKEIT PRO TAG</label>
+                        <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
+                          <SelectTrigger className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm w-full`}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1" className="text-xs sm:text-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                <span>1x täglich (Empfohlen)</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="2" className="text-xs sm:text-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                <span>2x täglich</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="3" className="text-xs sm:text-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                <span>3x täglich</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="4" className="text-xs sm:text-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-rose-500" />
+                                <span>4x täglich (Max)</span>
+                              </div>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                  {/* Email Status */}
+                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                      </svg>
+                      <span className={`text-[9px] sm:text-[10px] ${theme.textSecondary} font-bold tracking-wider`}>E-MAIL</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${user.daily_quote_enabled ? 'bg-teal-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                      <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>
+                        {user.daily_quote_enabled ? 'Aktiv' : 'Aus'}
+                      </span>
+                    </div>
+                    {user.daily_quote_enabled && (
+                      <div className={`flex items-center gap-1.5 mt-2 text-[9px] sm:text-[10px] ${theme.textSecondary}`}>
+                        <Clock className="w-3 h-3" />
+                        {user.daily_quote_time || '09:00'} Uhr
+                      </div>
+                    )}
+                  </div>
+
+                  {/* In-App Status */}
+                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-3.5 h-3.5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/>
+                      </svg>
+                      <span className={`text-[9px] sm:text-[10px] ${theme.textSecondary} font-bold tracking-wider`}>IN-APP</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${user.show_daily_quote_in_app ? 'bg-purple-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                      <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>
+                        {user.show_daily_quote_in_app ? 'Aktiv' : 'Aus'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Browser Status */}
+                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                      </svg>
+                      <span className={`text-[9px] sm:text-[10px] ${theme.textSecondary} font-bold tracking-wider`}>BROWSER</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${user.browser_notifications_enabled ? 'bg-amber-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                      <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>
+                        {user.browser_notifications_enabled ? 'Aktiv' : 'Aus'}
+                      </span>
+                    </div>
+                    {user.browser_notifications_enabled && (
+                      <div className={`flex items-center gap-1.5 mt-2 text-[9px] sm:text-[10px] ${theme.textSecondary}`}>
+                        <Zap className="w-3 h-3" />
+                        {user.notification_frequency || '1'}x täglich
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
-            
-            {editing ? (
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.daily_quote_enabled}
-                    onChange={(e) => setFormData({...formData, daily_quote_enabled: e.target.checked})}
-                    className="w-4 h-4 rounded border-zinc-300"
-                  />
-                  <span className={`text-xs ${theme.text} font-sans`}>
-                    Trading-Sprüche täglich per E-Mail erhalten
-                  </span>
-                </div>
-                {formData.daily_quote_enabled && (
-                  <div className="flex items-center gap-2 pl-7">
-                    <Clock className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
-                    <Input
-                      type="time"
-                      value={formData.daily_quote_time}
-                      onChange={(e) => setFormData({...formData, daily_quote_time: e.target.value})}
-                      className={`${theme.border} h-8 sm:h-9 text-[10px] sm:text-xs w-32`}
-                    />
-                  </div>
-                )}
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.show_daily_quote_in_app}
-                    onChange={(e) => setFormData({...formData, show_daily_quote_in_app: e.target.checked})}
-                    className="w-4 h-4 rounded border-zinc-300"
-                  />
-                  <span className={`text-xs ${theme.text} font-sans`}>
-                    Trading-Sprüche in der App anzeigen
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.browser_notifications_enabled}
-                    onChange={(e) => setFormData({...formData, browser_notifications_enabled: e.target.checked})}
-                    className="w-4 h-4 rounded border-zinc-300"
-                  />
-                  <span className={`text-xs ${theme.text} font-sans`}>
-                    Browser-Benachrichtigungen aktivieren
-                  </span>
-                </div>
-                {formData.browser_notifications_enabled && (
-                  <div className="pl-7">
-                    <label className={`text-[10px] ${theme.textSecondary} mb-2 block`}>Häufigkeit pro Tag:</label>
-                    <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
-                      <SelectTrigger className={`${theme.border} h-8 sm:h-9 text-[10px] sm:text-xs w-32`}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">1x täglich</SelectItem>
-                        <SelectItem value="2">2x täglich</SelectItem>
-                        <SelectItem value="3">3x täglich</SelectItem>
-                        <SelectItem value="4">4x täglich</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className={`text-xs sm:text-sm ${theme.text} font-sans space-y-2`}>
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${user.daily_quote_enabled ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                  <span>E-Mail: {user.daily_quote_enabled ? 'Aktiviert' : 'Deaktiviert'}</span>
-                </div>
-                {user.daily_quote_enabled && (
-                  <div className={`flex items-center gap-2 text-[10px] sm:text-xs ${theme.textSecondary} pl-4`}>
-                    <Clock className="w-3 h-3" />
-                    Täglich um {user.daily_quote_time || '09:00'} Uhr
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${user.show_daily_quote_in_app ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                  <span>In App: {user.show_daily_quote_in_app ? 'Aktiviert' : 'Deaktiviert'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${user.browser_notifications_enabled ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                  <span>Browser: {user.browser_notifications_enabled ? `Aktiviert (${user.notification_frequency || '1'}x täglich)` : 'Deaktiviert'}</span>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Save/Cancel Buttons (only in edit mode) */}
