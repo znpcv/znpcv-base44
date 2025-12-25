@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import { Share2, Download, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -22,15 +21,16 @@ export default function TradeSnapshot({ trade, darkMode }) {
     (trade.entry_pattern && trade.entry_pattern !== 'none' ? 5 : 0);
 
   const isLong = trade.direction === 'long';
+  const rr = trade.entry_price && trade.stop_loss && trade.take_profit ? 
+    (Math.abs(parseFloat(trade.take_profit) - parseFloat(trade.entry_price)) / 
+     Math.abs(parseFloat(trade.entry_price) - parseFloat(trade.stop_loss))).toFixed(1) : null;
 
   const captureAndShare = async () => {
     setIsSharing(true);
     try {
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: darkMode ? '#000000' : '#FFFFFF',
-        scale: 3,
-        width: 1080,
-        height: 1080,
+        scale: 2,
         useCORS: true,
         allowTaint: true
       });
@@ -59,150 +59,190 @@ export default function TradeSnapshot({ trade, darkMode }) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full">
       <Button
         onClick={captureAndShare}
         disabled={isSharing}
         className={cn(
-          "w-full h-12 text-base font-black tracking-wider border-2 shadow-2xl rounded-xl mb-6 relative overflow-hidden group",
+          "w-full h-12 text-base font-black tracking-wider mb-6",
           darkMode 
-            ? "bg-white text-black border-white hover:bg-zinc-100" 
-            : "bg-black text-white border-black hover:bg-zinc-900"
+            ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700" 
+            : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700"
         )}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <Share2 className="w-5 h-5 mr-3" />
-        <span className="relative z-10">
-          {isSharing ? 'WIRD ERSTELLT...' : 'FÜR SOCIAL MEDIA TEILEN'}
-        </span>
-        <Sparkles className="w-5 h-5 ml-3" />
+        <Share2 className="w-5 h-5 mr-2" />
+        {isSharing ? 'WIRD ERSTELLT...' : 'SOCIAL MEDIA EXPORT'}
+        <Sparkles className="w-5 h-5 ml-2" />
       </Button>
 
-      {/* Preview Card - Perfect Square for Social Media */}
       <div
         ref={cardRef}
         className={cn(
-          "w-full aspect-square rounded-3xl relative overflow-hidden shadow-2xl",
-          darkMode ? "bg-black" : "bg-white"
+          "w-full max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl",
+          darkMode ? "bg-gradient-to-br from-zinc-900 via-black to-zinc-900" : "bg-gradient-to-br from-white via-zinc-50 to-white"
         )}
-        style={{ width: '540px', height: '540px', maxWidth: '100%', margin: '0 auto' }}
       >
-        {/* Subtle Background Pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: darkMode 
-              ? 'radial-gradient(circle, white 1px, transparent 1px)'
-              : 'radial-gradient(circle, black 1px, transparent 1px)',
-            backgroundSize: '30px 30px'
-          }}
-        />
+        {/* Gradient Overlay Top */}
+        <div className={cn(
+          "absolute inset-x-0 top-0 h-1",
+          isLong ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500" : "bg-gradient-to-r from-rose-500 via-pink-500 to-red-500"
+        )} />
 
-        <div className="relative h-full flex flex-col justify-between p-16">
-          {/* Top - Logo */}
-          <div>
+        <div className="relative p-8 md:p-12">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <div className={cn(
+                "text-xs font-bold tracking-[0.3em] mb-2",
+                darkMode ? "text-zinc-600" : "text-zinc-400"
+              )}>
+                ZNPCV TRADE SETUP
+              </div>
+              <div className="flex items-baseline gap-3">
+                <h1 className="text-5xl md:text-6xl font-black tracking-tight">
+                  {trade.pair}
+                </h1>
+                <div className={cn(
+                  "px-4 py-1.5 rounded-full text-sm font-black",
+                  isLong 
+                    ? "bg-emerald-500 text-white" 
+                    : "bg-rose-500 text-white"
+                )}>
+                  {isLong ? '↑ LONG' : '↓ SHORT'}
+                </div>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-6xl md:text-7xl font-black tracking-tighter">
+                {score}
+              </div>
+              <div className={cn(
+                "text-xs font-bold tracking-[0.3em] mt-1",
+                darkMode ? "text-zinc-600" : "text-zinc-500"
+              )}>
+                SCORE
+              </div>
+            </div>
+          </div>
+
+          {/* Trade Levels */}
+          <div className="space-y-3 mb-8">
+            {trade.entry_price && (
+              <div className={cn(
+                "flex items-center justify-between p-4 rounded-xl border-2",
+                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+              )}>
+                <span className={cn(
+                  "text-sm font-bold tracking-[0.2em]",
+                  darkMode ? "text-zinc-500" : "text-zinc-600"
+                )}>
+                  ENTRY
+                </span>
+                <span className="text-3xl font-black font-mono">
+                  {trade.entry_price}
+                </span>
+              </div>
+            )}
+
+            {trade.stop_loss && (
+              <div className={cn(
+                "flex items-center justify-between p-4 rounded-xl border-2",
+                darkMode ? "bg-rose-950/30 border-rose-900" : "bg-rose-50 border-rose-200"
+              )}>
+                <span className="text-sm font-bold tracking-[0.2em] text-rose-600">
+                  STOP LOSS
+                </span>
+                <span className="text-3xl font-black font-mono text-rose-600">
+                  {trade.stop_loss}
+                </span>
+              </div>
+            )}
+
+            {trade.take_profit && (
+              <div className={cn(
+                "flex items-center justify-between p-4 rounded-xl border-2",
+                darkMode ? "bg-emerald-950/30 border-emerald-900" : "bg-emerald-50 border-emerald-200"
+              )}>
+                <span className="text-sm font-bold tracking-[0.2em] text-emerald-600">
+                  TAKE PROFIT
+                </span>
+                <span className="text-3xl font-black font-mono text-emerald-600">
+                  {trade.take_profit}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            {rr && (
+              <div className={cn(
+                "p-4 rounded-xl text-center border-2",
+                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+              )}>
+                <div className="text-2xl font-black mb-1">
+                  1:{rr}
+                </div>
+                <div className={cn(
+                  "text-xs font-bold tracking-wider",
+                  darkMode ? "text-zinc-600" : "text-zinc-500"
+                )}>
+                  R:R
+                </div>
+              </div>
+            )}
+            {trade.risk_percent && (
+              <div className={cn(
+                "p-4 rounded-xl text-center border-2",
+                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+              )}>
+                <div className="text-2xl font-black mb-1">
+                  {trade.risk_percent}%
+                </div>
+                <div className={cn(
+                  "text-xs font-bold tracking-wider",
+                  darkMode ? "text-zinc-600" : "text-zinc-500"
+                )}>
+                  RISK
+                </div>
+              </div>
+            )}
+            {trade.leverage && (
+              <div className={cn(
+                "p-4 rounded-xl text-center border-2",
+                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+              )}>
+                <div className="text-2xl font-black mb-1">
+                  1:{trade.leverage}
+                </div>
+                <div className={cn(
+                  "text-xs font-bold tracking-wider",
+                  darkMode ? "text-zinc-600" : "text-zinc-500"
+                )}>
+                  LEV
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className={cn(
+            "flex items-center justify-between pt-6 border-t-2",
+            darkMode ? "border-zinc-800" : "border-zinc-200"
+          )}>
             <img
               src={darkMode 
                 ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                 : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
               }
               alt="ZNPCV"
-              className="h-20 w-auto opacity-90"
+              className="h-10 opacity-70"
             />
-          </div>
-
-          {/* Center - Main Content */}
-          <div className="text-center">
-            {/* Pair Name */}
-            <motion.h1 
-              className="text-7xl font-black tracking-tight mb-6"
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-            >
-              {trade.pair}
-            </motion.h1>
-
-            {/* Direction Badge */}
-            <div className="flex justify-center mb-10">
-              <div className={cn(
-                "px-10 py-4 rounded-2xl font-black text-3xl tracking-wider shadow-2xl",
-                isLong 
-                  ? "bg-emerald-700 text-white" 
-                  : "bg-rose-600 text-white"
-              )}>
-                {isLong ? '↑ LONG' : '↓ SHORT'}
-              </div>
-            </div>
-
-            {/* Score - Massive */}
-            <div className="mb-10">
-              <div className="text-[120px] font-black tracking-tighter leading-none">
-                {score}<span className="text-7xl opacity-70">%</span>
-              </div>
-              <div className={cn(
-                "text-lg tracking-[0.4em] font-bold mt-4",
-                darkMode ? "text-zinc-500" : "text-zinc-600"
-              )}>
-                SCORE
-              </div>
-            </div>
-
-            {/* Trade Levels - Clean Layout */}
-            {trade.entry_price && (
-              <div className="space-y-5">
-                <div className="flex items-center justify-between px-4">
-                  <span className={cn(
-                    "text-base font-bold tracking-[0.3em]",
-                    darkMode ? "text-zinc-500" : "text-zinc-600"
-                  )}>
-                    ENTRY
-                  </span>
-                  <span className="font-mono text-4xl font-black">
-                    {trade.entry_price}
-                  </span>
-                </div>
-
-                {trade.stop_loss && (
-                  <div className="flex items-center justify-between px-4">
-                    <span className="text-base font-bold tracking-[0.3em] text-rose-600">
-                      SL
-                    </span>
-                    <span className="font-mono text-4xl font-black text-rose-600">
-                      {trade.stop_loss}
-                    </span>
-                  </div>
-                )}
-
-                {trade.take_profit && (
-                  <div className="flex items-center justify-between px-4">
-                    <span className="text-base font-bold tracking-[0.3em] text-emerald-700">
-                      TP
-                    </span>
-                    <span className="font-mono text-4xl font-black text-emerald-700">
-                      {trade.take_profit}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Bottom - Footer */}
-          <div className={cn(
-            "flex items-center justify-between pt-8 border-t-2",
-            darkMode ? "border-white/10" : "border-black/10"
-          )}>
-            <div className={cn(
-              "text-sm font-bold tracking-[0.3em]",
-              darkMode ? "text-zinc-600" : "text-zinc-500"
-            )}>
-              ZNPCV TRADE
-            </div>
             <div className={cn(
               "text-sm font-mono font-bold",
               darkMode ? "text-zinc-600" : "text-zinc-500"
             )}>
-              {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yy')}
+              {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yyyy')}
             </div>
           </div>
         </div>
