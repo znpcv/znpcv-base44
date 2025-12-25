@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar } from 'lucide-react';
+import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar, Bell, Clock } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,9 @@ export default function AccountPage() {
     address_postal_code: '',
     address_country: '',
     default_leverage: '100',
-    default_risk_percent: '1'
+    default_risk_percent: '1',
+    daily_quote_enabled: false,
+    daily_quote_time: '09:00'
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -53,7 +55,9 @@ export default function AccountPage() {
         address_postal_code: userData.address_postal_code || '',
         address_country: userData.address_country || '',
         default_leverage: userData.default_leverage || '100',
-        default_risk_percent: userData.default_risk_percent || '1'
+        default_risk_percent: userData.default_risk_percent || '1',
+        daily_quote_enabled: userData.daily_quote_enabled || false,
+        daily_quote_time: userData.daily_quote_time || '09:00'
       });
     } catch (err) {
       console.error('Load user failed:', err);
@@ -375,6 +379,61 @@ export default function AccountPage() {
             </div>
           </div>
 
+          {/* Daily Reminder Settings */}
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
+            <div className="flex items-center gap-2 mb-3 sm:mb-4">
+              <Bell className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-500`} />
+              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>TÄGLICHE ERINNERUNG</span>
+            </div>
+            
+            {editing ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.daily_quote_enabled}
+                    onChange={(e) => setFormData({...formData, daily_quote_enabled: e.target.checked})}
+                    className="w-4 h-4 rounded border-zinc-300"
+                  />
+                  <span className={`text-xs ${theme.text} font-sans`}>
+                    Trading-Sprüche täglich per E-Mail erhalten
+                  </span>
+                </div>
+                {formData.daily_quote_enabled && (
+                  <div className="flex items-center gap-2 pl-7">
+                    <Clock className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
+                    <Input
+                      type="time"
+                      value={formData.daily_quote_time}
+                      onChange={(e) => setFormData({...formData, daily_quote_time: e.target.value})}
+                      className={`${theme.border} h-8 sm:h-9 text-[10px] sm:text-xs w-32`}
+                    />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className={`text-xs sm:text-sm ${theme.text} font-sans`}>
+                {user.daily_quote_enabled ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-teal-500" />
+                      <span>Aktiviert</span>
+                    </div>
+                    <div className={`flex items-center gap-2 text-[10px] sm:text-xs ${theme.textSecondary}`}>
+                      <Clock className="w-3 h-3" />
+                      Täglich um {user.daily_quote_time || '09:00'} Uhr
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                    <span>Deaktiviert</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           {/* Save/Cancel Buttons (only in edit mode) */}
           {editing && (
             <div className="flex gap-2 sm:gap-3">
@@ -396,7 +455,9 @@ export default function AccountPage() {
                   address_postal_code: user.address_postal_code || '',
                   address_country: user.address_country || '',
                   default_leverage: user.default_leverage || '100',
-                  default_risk_percent: user.default_risk_percent || '1'
+                  default_risk_percent: user.default_risk_percent || '1',
+                  daily_quote_enabled: user.daily_quote_enabled || false,
+                  daily_quote_time: user.daily_quote_time || '09:00'
                 });
               }} variant="outline" className={`h-10 sm:h-11 px-3 sm:px-4 border-2 ${theme.border}`}>
                 <X className="w-4 h-4 sm:w-5 sm:h-5" />
