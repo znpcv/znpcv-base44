@@ -31,7 +31,8 @@ export default function AccountPage() {
     default_leverage: '100',
     default_risk_percent: '1',
     daily_quote_enabled: false,
-    daily_quote_time: '09:00'
+    daily_quote_time: '09:00',
+    show_daily_quote_in_app: false
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -57,7 +58,8 @@ export default function AccountPage() {
         default_leverage: userData.default_leverage || '100',
         default_risk_percent: userData.default_risk_percent || '1',
         daily_quote_enabled: userData.daily_quote_enabled || false,
-        daily_quote_time: userData.daily_quote_time || '09:00'
+        daily_quote_time: userData.daily_quote_time || '09:00',
+        show_daily_quote_in_app: userData.show_daily_quote_in_app || false
       });
     } catch (err) {
       console.error('Load user failed:', err);
@@ -410,26 +412,34 @@ export default function AccountPage() {
                     />
                   </div>
                 )}
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.show_daily_quote_in_app}
+                    onChange={(e) => setFormData({...formData, show_daily_quote_in_app: e.target.checked})}
+                    className="w-4 h-4 rounded border-zinc-300"
+                  />
+                  <span className={`text-xs ${theme.text} font-sans`}>
+                    Trading-Sprüche in der App anzeigen
+                  </span>
+                </div>
               </div>
             ) : (
-              <div className={`text-xs sm:text-sm ${theme.text} font-sans`}>
-                {user.daily_quote_enabled ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-teal-500" />
-                      <span>Aktiviert</span>
-                    </div>
-                    <div className={`flex items-center gap-2 text-[10px] sm:text-xs ${theme.textSecondary}`}>
-                      <Clock className="w-3 h-3" />
-                      Täglich um {user.daily_quote_time || '09:00'} Uhr
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                    <span>Deaktiviert</span>
+              <div className={`text-xs sm:text-sm ${theme.text} font-sans space-y-2`}>
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${user.daily_quote_enabled ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                  <span>E-Mail: {user.daily_quote_enabled ? 'Aktiviert' : 'Deaktiviert'}</span>
+                </div>
+                {user.daily_quote_enabled && (
+                  <div className={`flex items-center gap-2 text-[10px] sm:text-xs ${theme.textSecondary} pl-4`}>
+                    <Clock className="w-3 h-3" />
+                    Täglich um {user.daily_quote_time || '09:00'} Uhr
                   </div>
                 )}
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${user.show_daily_quote_in_app ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                  <span>In App: {user.show_daily_quote_in_app ? 'Aktiviert' : 'Deaktiviert'}</span>
+                </div>
               </div>
             )}
           </div>
@@ -457,7 +467,8 @@ export default function AccountPage() {
                   default_leverage: user.default_leverage || '100',
                   default_risk_percent: user.default_risk_percent || '1',
                   daily_quote_enabled: user.daily_quote_enabled || false,
-                  daily_quote_time: user.daily_quote_time || '09:00'
+                  daily_quote_time: user.daily_quote_time || '09:00',
+                  show_daily_quote_in_app: user.show_daily_quote_in_app || false
                 });
               }} variant="outline" className={`h-10 sm:h-11 px-3 sm:px-4 border-2 ${theme.border}`}>
                 <X className="w-4 h-4 sm:w-5 sm:h-5" />
