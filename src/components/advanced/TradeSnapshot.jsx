@@ -78,32 +78,33 @@ export default function TradeSnapshot({ trade, darkMode }) {
       <div
         ref={cardRef}
         className={cn(
-          "w-full max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-2xl",
-          darkMode ? "bg-gradient-to-br from-zinc-900 via-black to-zinc-900" : "bg-gradient-to-br from-white via-zinc-50 to-white"
+          "w-full mx-auto rounded-2xl overflow-hidden shadow-2xl relative",
+          darkMode ? "bg-black" : "bg-white"
         )}
+        style={{ maxWidth: '600px' }}
       >
         {/* Gradient Overlay Top */}
         <div className={cn(
-          "absolute inset-x-0 top-0 h-1",
+          "absolute inset-x-0 top-0 h-1.5",
           isLong ? "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500" : "bg-gradient-to-r from-rose-500 via-pink-500 to-red-500"
         )} />
 
-        <div className="relative p-8 md:p-12">
+        <div className="relative px-8 py-10">
           {/* Header */}
-          <div className="flex items-start justify-between mb-8">
-            <div>
+          <div className="flex items-start justify-between mb-10">
+            <div className="flex-1">
               <div className={cn(
-                "text-xs font-bold tracking-[0.3em] mb-2",
-                darkMode ? "text-zinc-600" : "text-zinc-400"
+                "text-[10px] font-bold tracking-[0.4em] mb-3",
+                darkMode ? "text-zinc-700" : "text-zinc-400"
               )}>
-                ZNPCV TRADE SETUP
+                ZNPCV TRADE
               </div>
-              <div className="flex items-baseline gap-3">
-                <h1 className="text-5xl md:text-6xl font-black tracking-tight">
+              <div className="flex items-center gap-4 mb-2">
+                <h1 className="text-4xl font-black tracking-tight">
                   {trade.pair}
                 </h1>
                 <div className={cn(
-                  "px-4 py-1.5 rounded-full text-sm font-black",
+                  "px-4 py-1 rounded-full text-xs font-black",
                   isLong 
                     ? "bg-emerald-500 text-white" 
                     : "bg-rose-500 text-white"
@@ -112,13 +113,13 @@ export default function TradeSnapshot({ trade, darkMode }) {
                 </div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-6xl md:text-7xl font-black tracking-tighter">
+            <div className="text-right flex-shrink-0 ml-6">
+              <div className="text-5xl font-black tracking-tighter leading-none">
                 {score}
               </div>
               <div className={cn(
-                "text-xs font-bold tracking-[0.3em] mt-1",
-                darkMode ? "text-zinc-600" : "text-zinc-500"
+                "text-[9px] font-bold tracking-[0.4em] mt-2",
+                darkMode ? "text-zinc-700" : "text-zinc-500"
               )}>
                 SCORE
               </div>
@@ -129,16 +130,16 @@ export default function TradeSnapshot({ trade, darkMode }) {
           <div className="space-y-3 mb-8">
             {trade.entry_price && (
               <div className={cn(
-                "flex items-center justify-between p-4 rounded-xl border-2",
-                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+                "flex items-center justify-between px-5 py-3 rounded-xl border",
+                darkMode ? "bg-zinc-950/50 border-zinc-800" : "bg-zinc-50 border-zinc-200"
               )}>
                 <span className={cn(
-                  "text-sm font-bold tracking-[0.2em]",
-                  darkMode ? "text-zinc-500" : "text-zinc-600"
+                  "text-xs font-bold tracking-[0.25em]",
+                  darkMode ? "text-zinc-600" : "text-zinc-500"
                 )}>
                   ENTRY
                 </span>
-                <span className="text-3xl font-black font-mono">
+                <span className="text-2xl font-black font-mono">
                   {trade.entry_price}
                 </span>
               </div>
@@ -146,13 +147,13 @@ export default function TradeSnapshot({ trade, darkMode }) {
 
             {trade.stop_loss && (
               <div className={cn(
-                "flex items-center justify-between p-4 rounded-xl border-2",
-                darkMode ? "bg-rose-950/30 border-rose-900" : "bg-rose-50 border-rose-200"
+                "flex items-center justify-between px-5 py-3 rounded-xl border",
+                darkMode ? "bg-rose-950/20 border-rose-900/50" : "bg-rose-50 border-rose-200"
               )}>
-                <span className="text-sm font-bold tracking-[0.2em] text-rose-600">
-                  STOP LOSS
+                <span className="text-xs font-bold tracking-[0.25em] text-rose-500">
+                  SL
                 </span>
-                <span className="text-3xl font-black font-mono text-rose-600">
+                <span className="text-2xl font-black font-mono text-rose-500">
                   {trade.stop_loss}
                 </span>
               </div>
@@ -160,13 +161,13 @@ export default function TradeSnapshot({ trade, darkMode }) {
 
             {trade.take_profit && (
               <div className={cn(
-                "flex items-center justify-between p-4 rounded-xl border-2",
-                darkMode ? "bg-emerald-950/30 border-emerald-900" : "bg-emerald-50 border-emerald-200"
+                "flex items-center justify-between px-5 py-3 rounded-xl border",
+                darkMode ? "bg-emerald-950/20 border-emerald-900/50" : "bg-emerald-50 border-emerald-200"
               )}>
-                <span className="text-sm font-bold tracking-[0.2em] text-emerald-600">
-                  TAKE PROFIT
+                <span className="text-xs font-bold tracking-[0.25em] text-emerald-500">
+                  TP
                 </span>
-                <span className="text-3xl font-black font-mono text-emerald-600">
+                <span className="text-2xl font-black font-mono text-emerald-500">
                   {trade.take_profit}
                 </span>
               </div>
@@ -174,18 +175,18 @@ export default function TradeSnapshot({ trade, darkMode }) {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-3 gap-2.5 mb-8">
             {rr && (
               <div className={cn(
-                "p-4 rounded-xl text-center border-2",
-                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+                "px-3 py-4 rounded-xl text-center border",
+                darkMode ? "bg-zinc-950/50 border-zinc-800" : "bg-zinc-50 border-zinc-200"
               )}>
-                <div className="text-2xl font-black mb-1">
+                <div className="text-xl font-black mb-1.5">
                   1:{rr}
                 </div>
                 <div className={cn(
-                  "text-xs font-bold tracking-wider",
-                  darkMode ? "text-zinc-600" : "text-zinc-500"
+                  "text-[9px] font-bold tracking-[0.2em]",
+                  darkMode ? "text-zinc-700" : "text-zinc-500"
                 )}>
                   R:R
                 </div>
@@ -193,15 +194,15 @@ export default function TradeSnapshot({ trade, darkMode }) {
             )}
             {trade.risk_percent && (
               <div className={cn(
-                "p-4 rounded-xl text-center border-2",
-                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+                "px-3 py-4 rounded-xl text-center border",
+                darkMode ? "bg-zinc-950/50 border-zinc-800" : "bg-zinc-50 border-zinc-200"
               )}>
-                <div className="text-2xl font-black mb-1">
+                <div className="text-xl font-black mb-1.5">
                   {trade.risk_percent}%
                 </div>
                 <div className={cn(
-                  "text-xs font-bold tracking-wider",
-                  darkMode ? "text-zinc-600" : "text-zinc-500"
+                  "text-[9px] font-bold tracking-[0.2em]",
+                  darkMode ? "text-zinc-700" : "text-zinc-500"
                 )}>
                   RISK
                 </div>
@@ -209,15 +210,15 @@ export default function TradeSnapshot({ trade, darkMode }) {
             )}
             {trade.leverage && (
               <div className={cn(
-                "p-4 rounded-xl text-center border-2",
-                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-200"
+                "px-3 py-4 rounded-xl text-center border",
+                darkMode ? "bg-zinc-950/50 border-zinc-800" : "bg-zinc-50 border-zinc-200"
               )}>
-                <div className="text-2xl font-black mb-1">
+                <div className="text-xl font-black mb-1.5">
                   1:{trade.leverage}
                 </div>
                 <div className={cn(
-                  "text-xs font-bold tracking-wider",
-                  darkMode ? "text-zinc-600" : "text-zinc-500"
+                  "text-[9px] font-bold tracking-[0.2em]",
+                  darkMode ? "text-zinc-700" : "text-zinc-500"
                 )}>
                   LEV
                 </div>
@@ -227,8 +228,8 @@ export default function TradeSnapshot({ trade, darkMode }) {
 
           {/* Footer */}
           <div className={cn(
-            "flex items-center justify-between pt-6 border-t-2",
-            darkMode ? "border-zinc-800" : "border-zinc-200"
+            "flex items-center justify-between pt-6 border-t",
+            darkMode ? "border-zinc-900" : "border-zinc-200"
           )}>
             <img
               src={darkMode 
@@ -236,11 +237,11 @@ export default function TradeSnapshot({ trade, darkMode }) {
                 : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
               }
               alt="ZNPCV"
-              className="h-10 opacity-70"
+              className="h-8 opacity-60"
             />
             <div className={cn(
-              "text-sm font-mono font-bold",
-              darkMode ? "text-zinc-600" : "text-zinc-500"
+              "text-xs font-mono font-bold",
+              darkMode ? "text-zinc-700" : "text-zinc-500"
             )}>
               {trade.trade_date && format(new Date(trade.trade_date), 'dd.MM.yyyy')}
             </div>
