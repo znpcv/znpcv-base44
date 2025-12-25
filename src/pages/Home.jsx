@@ -10,6 +10,7 @@ import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
+import NotificationPrompt from '@/components/NotificationPrompt';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
@@ -512,6 +513,9 @@ export default function HomePage() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* Notification Prompt */}
+      <NotificationPrompt darkMode={darkMode} />
     </div>
   );
 }

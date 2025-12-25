@@ -13,6 +13,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart a
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import TradingQuote from '@/components/TradingQuote';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
+import NotificationPrompt from '@/components/NotificationPrompt';
 import AccountButton from '@/components/AccountButton';
 import BestTradingTimes from '@/components/advanced/BestTradingTimes';
 
@@ -789,6 +790,9 @@ export default function DashboardPage() {
           </div>
         </footer>
       </main>
+
+      {/* Notification Prompt */}
+      <NotificationPrompt darkMode={darkMode} />
     </div>
   );
 }
