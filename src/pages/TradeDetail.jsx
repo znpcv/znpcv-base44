@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
-
+import TradeSnapshot from '@/components/advanced/TradeSnapshot';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
 
