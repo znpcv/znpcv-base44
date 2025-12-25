@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
-import TradeShareCard from '@/components/advanced/TradeShareCard';
+
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
 
@@ -470,10 +470,7 @@ export default function TradeDetailPage() {
               </motion.div>
             }
 
-            {/* Share Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
-              <TradeShareCard trade={trade} darkMode={darkMode} />
-            </motion.div>
+
           </div>
         </div>
       </main>
