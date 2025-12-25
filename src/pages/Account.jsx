@@ -164,6 +164,7 @@ export default function AccountPage() {
           onToggle={() => toggleSection('bio')}
           onSave={() => saveSection('bio', { bio: tempValues.bio })}
           theme={theme}
+          darkMode={darkMode}
         >
           {editingSections.bio ? (
             <Textarea
@@ -189,6 +190,7 @@ export default function AccountPage() {
             country: tempValues.country ?? user.country
           })}
           theme={theme}
+          darkMode={darkMode}
         >
           {editingSections.contact ? (
             <div className="space-y-2">
@@ -242,6 +244,7 @@ export default function AccountPage() {
             address_country: tempValues.address_country ?? user.address_country
           })}
           theme={theme}
+          darkMode={darkMode}
         >
           {editingSections.address ? (
             <div className="space-y-2">
@@ -272,6 +275,7 @@ export default function AccountPage() {
             default_risk_percent: tempValues.default_risk_percent ?? user.default_risk_percent
           })}
           theme={theme}
+          darkMode={darkMode}
         >
           {editingSections.trading ? (
             <div className="grid grid-cols-2 gap-2">
@@ -312,6 +316,7 @@ export default function AccountPage() {
             notification_frequency: tempValues.notification_frequency ?? user.notification_frequency
           })}
           theme={theme}
+          darkMode={darkMode}
         >
           {editingSections.notifications ? (
             <div className="space-y-3">
@@ -321,6 +326,7 @@ export default function AccountPage() {
                 checked={tempValues.daily_quote_enabled ?? user.daily_quote_enabled ?? false}
                 onChange={(v) => setTempValues({...tempValues, daily_quote_enabled: v})}
                 theme={theme}
+                darkMode={darkMode}
               >
                 {(tempValues.daily_quote_enabled ?? user.daily_quote_enabled) && (
                   <Input
@@ -338,6 +344,7 @@ export default function AccountPage() {
                 checked={tempValues.show_daily_quote_in_app ?? user.show_daily_quote_in_app ?? false}
                 onChange={(v) => setTempValues({...tempValues, show_daily_quote_in_app: v})}
                 theme={theme}
+                darkMode={darkMode}
               />
               
               <NotifToggle
@@ -346,6 +353,7 @@ export default function AccountPage() {
                 checked={tempValues.browser_notifications_enabled ?? user.browser_notifications_enabled ?? false}
                 onChange={(v) => setTempValues({...tempValues, browser_notifications_enabled: v})}
                 theme={theme}
+                darkMode={darkMode}
               >
                 {(tempValues.browser_notifications_enabled ?? user.browser_notifications_enabled) && (
                   <Select 
@@ -367,9 +375,9 @@ export default function AccountPage() {
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-2">
-              <StatusPill icon={<Mail className="w-3 h-3" />} label="E-Mail" active={user.daily_quote_enabled} extra={user.daily_quote_enabled && user.daily_quote_time} theme={theme} />
-              <StatusPill icon={<Zap className="w-3 h-3" />} label="In-App" active={user.show_daily_quote_in_app} theme={theme} />
-              <StatusPill icon={<Bell className="w-3 h-3" />} label="Push" active={user.browser_notifications_enabled} extra={user.browser_notifications_enabled && `${user.notification_frequency}x`} theme={theme} />
+              <StatusPill icon={<Mail className="w-3 h-3" />} label="E-Mail" active={user.daily_quote_enabled} extra={user.daily_quote_enabled && user.daily_quote_time} theme={theme} darkMode={darkMode} />
+              <StatusPill icon={<Zap className="w-3 h-3" />} label="In-App" active={user.show_daily_quote_in_app} theme={theme} darkMode={darkMode} />
+              <StatusPill icon={<Bell className="w-3 h-3" />} label="Push" active={user.browser_notifications_enabled} extra={user.browser_notifications_enabled && `${user.notification_frequency}x`} theme={theme} darkMode={darkMode} />
             </div>
           )}
         </Section>
@@ -409,7 +417,7 @@ export default function AccountPage() {
   );
 }
 
-function Section({ icon, title, isEditing, onToggle, onSave, children, theme }) {
+function Section({ icon, title, isEditing, onToggle, onSave, children, theme, darkMode }) {
   return (
     <div className={`${theme.bgSecondary} border ${theme.border} rounded-xl p-3`}>
       <div className="flex items-center justify-between mb-2">
@@ -419,7 +427,7 @@ function Section({ icon, title, isEditing, onToggle, onSave, children, theme }) 
         </div>
         <div className="flex gap-1">
           {isEditing && (
-            <button onClick={onSave} className={`p-1.5 rounded-lg ${darkMode ? 'bg-teal-600 hover:bg-teal-700' : 'bg-teal-600 hover:bg-teal-700'} text-white`}>
+            <button onClick={onSave} className="p-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white">
               <Check className="w-3.5 h-3.5" />
             </button>
           )}
@@ -433,7 +441,7 @@ function Section({ icon, title, isEditing, onToggle, onSave, children, theme }) 
   );
 }
 
-function NotifToggle({ icon, label, checked, onChange, children, theme }) {
+function NotifToggle({ icon, label, checked, onChange, children, theme, darkMode }) {
   return (
     <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-lg p-2`}>
       <div className="flex items-center justify-between mb-2">
@@ -451,7 +459,7 @@ function NotifToggle({ icon, label, checked, onChange, children, theme }) {
   );
 }
 
-function StatusPill({ icon, label, active, extra, theme }) {
+function StatusPill({ icon, label, active, extra, theme, darkMode }) {
   return (
     <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-lg p-2`}>
       <div className="flex items-center gap-1.5 mb-1">
