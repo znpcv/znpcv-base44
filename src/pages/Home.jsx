@@ -9,7 +9,6 @@ import {
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
-import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import { cn } from "@/lib/utils";
 
 const SESSIONS = [
@@ -138,11 +137,6 @@ export default function HomePage() {
 
       {/* Hero Section - Compact for Mobile */}
       <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
-        {/* Daily Quote */}
-        <div className="mb-6 sm:mb-8 md:mb-10">
-          <DailyQuoteWidget darkMode={darkMode} />
-        </div>
-
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
