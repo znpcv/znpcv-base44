@@ -59,6 +59,12 @@ export default function NotificationPrompt({ darkMode }) {
     
     if (permission === 'granted') {
       setShow(false);
+      // Update user settings
+      try {
+        await base44.auth.updateMe({ browser_notifications_enabled: true });
+      } catch (err) {
+        console.error('Failed to update settings');
+      }
       // Send welcome notification
       sendNotification();
       // Schedule daily notifications
@@ -80,20 +86,26 @@ export default function NotificationPrompt({ darkMode }) {
     }
   };
 
-  const scheduleDailyNotifications = () => {
-    // Send notification once per day
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0);
-    
-    const timeUntilTomorrow = tomorrow - now;
-    
-    setTimeout(() => {
-      sendNotification();
-      // Repeat daily
-      setInterval(sendNotification, 24 * 60 * 60 * 1000);
-    }, timeUntilTomorrow);
+  const scheduleDailyNotifications = async () => {
+    try {
+      const userData = await base44.auth.me();
+      const frequency = parseInt(userData.notification_frequency || '1');
+      
+      if (!userData.browser_notifications_enabled) return;
+      
+      // Calculate interval based on frequency
+      const hoursInterval = 24 / frequency;
+      const msInterval = hoursInterval * 60 * 60 * 1000;
+      
+      // Send first notification after 1 minute
+      setTimeout(() => {
+        sendNotification();
+        // Then repeat at specified interval
+        setInterval(sendNotification, msInterval);
+      }, 60000);
+    } catch (err) {
+      console.error('Failed to schedule notifications');
+    }
   };
 
   const theme = {

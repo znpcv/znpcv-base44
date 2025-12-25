@@ -32,7 +32,9 @@ export default function AccountPage() {
     default_risk_percent: '1',
     daily_quote_enabled: false,
     daily_quote_time: '09:00',
-    show_daily_quote_in_app: false
+    show_daily_quote_in_app: false,
+    browser_notifications_enabled: false,
+    notification_frequency: '1'
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -59,7 +61,9 @@ export default function AccountPage() {
         default_risk_percent: userData.default_risk_percent || '1',
         daily_quote_enabled: userData.daily_quote_enabled || false,
         daily_quote_time: userData.daily_quote_time || '09:00',
-        show_daily_quote_in_app: userData.show_daily_quote_in_app || false
+        show_daily_quote_in_app: userData.show_daily_quote_in_app || false,
+        browser_notifications_enabled: userData.browser_notifications_enabled || false,
+        notification_frequency: userData.notification_frequency || '1'
       });
     } catch (err) {
       console.error('Load user failed:', err);
@@ -385,7 +389,7 @@ export default function AccountPage() {
           <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
             <div className="flex items-center gap-2 mb-3 sm:mb-4">
               <Bell className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-500`} />
-              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>TÄGLICHE ERINNERUNG</span>
+              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>ERINNERUNGEN</span>
             </div>
             
             {editing ? (
@@ -423,6 +427,33 @@ export default function AccountPage() {
                     Trading-Sprüche in der App anzeigen
                   </span>
                 </div>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.browser_notifications_enabled}
+                    onChange={(e) => setFormData({...formData, browser_notifications_enabled: e.target.checked})}
+                    className="w-4 h-4 rounded border-zinc-300"
+                  />
+                  <span className={`text-xs ${theme.text} font-sans`}>
+                    Browser-Benachrichtigungen aktivieren
+                  </span>
+                </div>
+                {formData.browser_notifications_enabled && (
+                  <div className="pl-7">
+                    <label className={`text-[10px] ${theme.textSecondary} mb-2 block`}>Häufigkeit pro Tag:</label>
+                    <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
+                      <SelectTrigger className={`${theme.border} h-8 sm:h-9 text-[10px] sm:text-xs w-32`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">1x täglich</SelectItem>
+                        <SelectItem value="2">2x täglich</SelectItem>
+                        <SelectItem value="3">3x täglich</SelectItem>
+                        <SelectItem value="4">4x täglich</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
             ) : (
               <div className={`text-xs sm:text-sm ${theme.text} font-sans space-y-2`}>
@@ -439,6 +470,10 @@ export default function AccountPage() {
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${user.show_daily_quote_in_app ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
                   <span>In App: {user.show_daily_quote_in_app ? 'Aktiviert' : 'Deaktiviert'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${user.browser_notifications_enabled ? 'bg-teal-500' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                  <span>Browser: {user.browser_notifications_enabled ? `Aktiviert (${user.notification_frequency || '1'}x täglich)` : 'Deaktiviert'}</span>
                 </div>
               </div>
             )}
@@ -468,7 +503,9 @@ export default function AccountPage() {
                   default_risk_percent: user.default_risk_percent || '1',
                   daily_quote_enabled: user.daily_quote_enabled || false,
                   daily_quote_time: user.daily_quote_time || '09:00',
-                  show_daily_quote_in_app: user.show_daily_quote_in_app || false
+                  show_daily_quote_in_app: user.show_daily_quote_in_app || false,
+                  browser_notifications_enabled: user.browser_notifications_enabled || false,
+                  notification_frequency: user.notification_frequency || '1'
                 });
               }} variant="outline" className={`h-10 sm:h-11 px-3 sm:px-4 border-2 ${theme.border}`}>
                 <X className="w-4 h-4 sm:w-5 sm:h-5" />
