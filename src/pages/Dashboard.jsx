@@ -752,63 +752,19 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Direction Distribution */}
-              <div className="relative z-10">
-                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-4 font-bold flex items-center gap-2`}>
-                  <div className={`w-1.5 h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                  TRADE-VERTEILUNG
+              {/* Quick Direction Stats */}
+              <div className={cn("relative z-10 rounded-lg p-3 border flex items-center justify-center gap-4",
+                darkMode ? "bg-zinc-900/30 border-zinc-800/50" : "bg-white border-zinc-300")}>
+                <div className="flex items-center gap-2">
+                  <ArrowUpRight className="w-4 h-4 text-emerald-700" />
+                  <span className="text-xl font-black text-emerald-700">{stats.longs}</span>
+                  <span className={`text-xs ${theme.textMuted}`}>LONG</span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Long Stats */}
-                  <div className={cn("rounded-xl p-4 border-2 relative overflow-hidden",
-                    darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400")}>
-                    <div className="absolute -top-2 -right-2 w-20 h-20 bg-emerald-700/10 rounded-full blur-xl" />
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-2 mb-3">
-                        <ArrowUpRight className="w-5 h-5 text-emerald-700" />
-                        <span className="text-xs font-black text-emerald-700 tracking-wider">LONG</span>
-                      </div>
-                      <div className="text-3xl sm:text-4xl font-black text-emerald-700 mb-1">{stats.longs}</div>
-                      <div className={`text-sm font-bold ${theme.text}`}>
-                        {((stats.longs / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
-                      </div>
-
-                      {/* Progress Bar */}
-                      <div className={cn("h-2 rounded-full mt-3 overflow-hidden",
-                        darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                        <div 
-                          className="h-full bg-gradient-to-r from-emerald-600 to-teal-500 transition-all duration-500"
-                          style={{ width: `${(stats.longs / (stats.longs + stats.shorts)) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Short Stats */}
-                  <div className={cn("rounded-xl p-4 border-2 relative overflow-hidden",
-                    darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400")}>
-                    <div className="absolute -top-2 -right-2 w-20 h-20 bg-rose-600/10 rounded-full blur-xl" />
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-2 mb-3">
-                        <ArrowDownRight className="w-5 h-5 text-rose-600" />
-                        <span className="text-xs font-black text-rose-600 tracking-wider">SHORT</span>
-                      </div>
-                      <div className="text-3xl sm:text-4xl font-black text-rose-600 mb-1">{stats.shorts}</div>
-                      <div className={`text-sm font-bold ${theme.text}`}>
-                        {((stats.shorts / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
-                      </div>
-
-                      {/* Progress Bar */}
-                      <div className={cn("h-2 rounded-full mt-3 overflow-hidden",
-                        darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                        <div 
-                          className="h-full bg-gradient-to-r from-rose-600 to-red-500 transition-all duration-500"
-                          style={{ width: `${(stats.shorts / (stats.longs + stats.shorts)) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                <div className={`w-px h-6 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <div className="flex items-center gap-2">
+                  <ArrowDownRight className="w-4 h-4 text-rose-600" />
+                  <span className="text-xl font-black text-rose-600">{stats.shorts}</span>
+                  <span className={`text-xs ${theme.textMuted}`}>SHORT</span>
                 </div>
               </div>
             </motion.div>
