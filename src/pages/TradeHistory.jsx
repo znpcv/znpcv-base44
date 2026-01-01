@@ -723,46 +723,6 @@ export default function TradeHistoryPage() {
               </div>
             </motion.div>
 
-            {/* Quick Actions - Neu auf Trade History */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.6 }}
-            className={`border-2 ${theme.border} rounded-lg sm:rounded-2xl p-3 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
-              <h3 className={`text-xs sm:text-base tracking-widest mb-3 sm:mb-4 ${theme.text}`}>AKTIONEN</h3>
-              <div className="space-y-2">
-                <button
-                  onClick={() => navigate(createPageUrl('Checklist'))}
-                  className={cn("w-full group relative p-3 sm:p-4 rounded-xl overflow-hidden border-2 text-left transition-all hover:scale-105",
-                    darkMode ? "bg-white text-black border-white hover:shadow-xl" : "bg-zinc-900 text-white border-zinc-900 hover:shadow-xl")}>
-                  <div className="flex items-center gap-3">
-                    <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center",
-                      darkMode ? "bg-black" : "bg-white")}>
-                      <Plus className={cn("w-5 h-5", darkMode ? "text-white" : "text-black")} />
-                    </div>
-                    <div className="flex-1">
-                      <div className={cn("text-sm font-bold tracking-wider mb-0.5", darkMode ? "text-black" : "text-white")}>Neue Analyse</div>
-                      <div className={cn("text-[10px]", darkMode ? "text-black/60" : "text-white/70")}>Trade Setup erstellen</div>
-                    </div>
-                    <ChevronRight className={cn("w-4 h-4 group-hover:translate-x-1 transition-transform", darkMode ? "text-black" : "text-white")} />
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigate(createPageUrl('Dashboard'))}
-                  className={cn("w-full group p-3 sm:p-4 rounded-xl border-2 text-left transition-all hover:scale-105",
-                    darkMode ? "bg-zinc-900/50 border-zinc-800 hover:border-zinc-700" : "bg-white border-zinc-300 hover:border-zinc-400")}>
-                  <div className="flex items-center gap-3">
-                    <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center",
-                      darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                      <BarChart3 className={cn("w-5 h-5", theme.text)} />
-                    </div>
-                    <div className="flex-1">
-                      <div className={cn("text-sm font-bold tracking-wider mb-0.5", theme.text)}>Dashboard</div>
-                      <div className={cn("text-[10px]", theme.textMuted)}>Zurück zur Übersicht</div>
-                    </div>
-                    <ChevronRight className={cn("w-4 h-4 group-hover:translate-x-1 transition-transform", theme.text)} />
-                  </div>
-                </button>
-              </div>
-            </motion.div>
-
           </div>
         </div>
 
