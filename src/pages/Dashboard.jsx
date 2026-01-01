@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useOffline } from '@/components/offline/OfflineManager';
 import { offlineClient } from '@/components/offline/OfflineBase44Client';
-import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp } from 'lucide-react';
+import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, subMonths, addMonths } from 'date-fns';
@@ -184,8 +184,8 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between gap-2 sm:gap-4 relative">
             <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
                 <DarkModeToggle />
-                <button onClick={() => navigate(createPageUrl('Home'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
-                  <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <button onClick={() => navigate(createPageUrl('Home'))} className={`p-2 rounded-xl transition-all ${darkMode ? 'hover:bg-zinc-900 text-zinc-400 hover:text-white' : 'hover:bg-zinc-200 text-zinc-600 hover:text-black'}`}>
+                  <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button 
                   onClick={() => navigate(createPageUrl('Trash'))}

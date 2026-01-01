@@ -76,8 +76,8 @@ export default function TrashPage() {
           <div className="flex items-center justify-between gap-2 relative">
             <div className="flex items-center gap-2">
               <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`${theme.textSecondary} hover:${theme.text} p-2`}>
-                <ArrowLeft className="w-5 h-5" />
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`p-2 rounded-xl transition-all ${darkMode ? 'hover:bg-zinc-900 text-zinc-400 hover:text-white' : 'hover:bg-zinc-200 text-zinc-600 hover:text-black'}`}>
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">

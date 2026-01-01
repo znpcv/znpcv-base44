@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { Home, Bell, Webhook, Copy, Check } from 'lucide-react';
+import { Home, Bell, Webhook, Copy, Check, ArrowLeft } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createPageUrl } from "@/utils";
@@ -92,7 +92,12 @@ export default function IntegrationsPage() {
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
         <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <DarkModeToggle />
+            <div className="flex items-center gap-2">
+              <DarkModeToggle />
+              <button onClick={() => navigate(createPageUrl('Account'))} className={`p-2 rounded-xl transition-all ${darkMode ? 'hover:bg-zinc-900 text-zinc-400 hover:text-white' : 'hover:bg-zinc-200 text-zinc-600 hover:text-black'}`}>
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            </div>
             
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img src={darkMode 

@@ -175,7 +175,7 @@ export default function TradeDetailPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1 sm:gap-2">
               <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className="bg-transparent text-zinc-400 p-1.5 rounded-lg sm:p-2 hover:text-white transition-colors hover:bg-zinc-900">
+              <button onClick={() => navigate(createPageUrl('TradeHistory'))} className={`p-2 rounded-xl transition-all ${darkMode ? 'hover:bg-zinc-900 text-zinc-400 hover:text-white' : 'hover:bg-zinc-200 text-zinc-600 hover:text-black'}`}>
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
