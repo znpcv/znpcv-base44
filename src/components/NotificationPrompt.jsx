@@ -210,9 +210,12 @@ export default function NotificationPrompt({ darkMode }) {
               onClick={requestNotificationPermission}
               className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-600 to-emerald-700 text-white rounded-xl font-bold text-sm tracking-wider hover:from-teal-700 hover:to-emerald-800 transition-all"
             >
-              <Bell className="w-4 h-4" />
-              Erinnerungen aktivieren
+              <Smartphone className="w-4 h-4" />
+              Push aktivieren
             </button>
+            <div className={`text-[10px] ${theme.textSecondary} font-sans text-center leading-relaxed`}>
+              Benachrichtigungen auf allen Geräten - auch wenn App geschlossen
+            </div>
           </div>
         </motion.div>
       )}
