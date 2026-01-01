@@ -3,21 +3,15 @@ import { LanguageProvider } from './components/LanguageContext';
 import ScrollToTop from './components/ScrollToTop';
 import QueryClientProvider from './components/QueryClientProvider';
 import OfflineManager from './components/offline/OfflineManager';
+import ServiceWorkerRegistration from './components/offline/ServiceWorkerRegistration';
 
 export default function Layout({ children, currentPageName }) {
-  useEffect(() => {
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('Service Worker registered'))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
-  }, []);
 
   return (
     <LanguageProvider>
       <QueryClientProvider>
         <OfflineManager>
+          <ServiceWorkerRegistration />
           <ScrollToTop />
       <style>
         {`

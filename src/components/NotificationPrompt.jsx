@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, X } from 'lucide-react';
+import { Bell, X, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
+
+const VAPID_PUBLIC_KEY = 'BNxS7H8Sh6Qh4vF0V8FqZxR5vNpQ3vY8K9wF5fH3yZ1dJ2kL6mN8pQ9rT2sU4vW6xY8zA1bC3dE5fG7hJ9kL0mN';
 
 const TRADING_QUOTES = [
   { quote: "Die Börse ist ein Ort, an dem Erfahrung wichtiger ist als Intelligenz.", author: "Peter Lynch" },
@@ -59,17 +61,73 @@ export default function NotificationPrompt({ darkMode }) {
     
     if (permission === 'granted') {
       setShow(false);
-      // Update user settings
+      
+      // Subscribe to push notifications
       try {
+        await subscribeToPush();
         await base44.auth.updateMe({ browser_notifications_enabled: true });
       } catch (err) {
-        console.error('Failed to update settings');
+        console.error('Failed to subscribe to push:', err);
       }
+      
       // Send welcome notification
       sendNotification();
       // Schedule daily notifications
       scheduleDailyNotifications();
     }
+  };
+
+  const subscribeToPush = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      console.log('Push notifications not supported');
+      return;
+    }
+
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      
+      // Check if already subscribed
+      let subscription = await registration.pushManager.getSubscription();
+      
+      if (!subscription) {
+        // Convert VAPID key
+        const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+        
+        // Subscribe
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidKey
+        });
+      }
+
+      // Get device info
+      const deviceInfo = `${navigator.platform} - ${navigator.userAgent.split(' ').pop()}`;
+
+      // Send subscription to backend
+      await base44.functions.invoke('subscribePush', {
+        subscription: subscription.toJSON(),
+        deviceInfo
+      });
+
+      console.log('Push subscription successful');
+    } catch (err) {
+      console.error('Push subscription failed:', err);
+    }
+  };
+
+  const urlBase64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+    
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
   };
 
   const sendNotification = () => {
@@ -138,10 +196,10 @@ export default function NotificationPrompt({ darkMode }) {
               </div>
               <div>
                 <h3 className={`text-base font-bold tracking-wider ${theme.text} mb-1`}>
-                  ERINNERUNGEN
+                  PUSH-BENACHRICHTIGUNGEN
                 </h3>
                 <p className={`text-xs ${theme.textSecondary} font-sans leading-relaxed`}>
-                  Erhalte täglich motivierende Trading-Sprüche als Browser-Benachrichtigung
+                  Erhalte Trading-Sprüche auf allen Geräten - auch wenn App geschlossen
                 </p>
               </div>
             </div>
