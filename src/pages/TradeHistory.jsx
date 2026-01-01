@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useOffline } from '@/components/offline/OfflineManager';
 import { offlineClient } from '@/components/offline/OfflineBase44Client';
-import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare, Archive } from 'lucide-react';
+import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare, Archive, Search, ArrowUpDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
@@ -25,6 +25,8 @@ export default function TradeHistoryPage() {
   const { t, isRTL, darkMode } = useLanguage();
   const { isOnline, updatePendingCount } = useOffline();
   const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('date-desc');
 
   useEffect(() => {
     offlineClient.setUpdateCallback(updatePendingCount);
@@ -236,15 +238,31 @@ export default function TradeHistoryPage() {
     const losses = executedTrades.filter((t) => t.outcome === 'loss').length;
     const breakeven = executedTrades.filter((t) => t.outcome === 'breakeven').length;
     const totalPnL = executedTrades.reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+    const totalGross = executedTrades.reduce((sum, t) => sum + Math.abs(parseFloat(t.actual_pnl || 0)), 0);
+    const totalWins = executedTrades.filter((t) => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+    const totalLosses = Math.abs(executedTrades.filter((t) => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0));
+    const profitFactor = totalLosses > 0 ? (totalWins / totalLosses).toFixed(2) : totalWins > 0 ? '∞' : 0;
     const winRate = executedTrades.length > 0 ? (wins / executedTrades.length * 100).toFixed(1) : 0;
     const avgWin = wins > 0 ? (executedTrades.filter((t) => t.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / wins).toFixed(2) : 0;
     const avgLoss = losses > 0 ? Math.abs(executedTrades.filter((t) => t.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0) / losses).toFixed(2) : 0;
 
-    return { wins, losses, breakeven, pending, totalPnL, winRate, avgWin, avgLoss, executedTrades, total: checklists.length, executed: executedTrades.length };
+    return { wins, losses, breakeven, pending, totalPnL, totalWins, totalLosses, profitFactor, winRate, avgWin, avgLoss, executedTrades, total: checklists.length, executed: executedTrades.length };
   }, [checklists]);
 
   const filteredTrades = useMemo(() => {
     let filtered = checklists;
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((t) => {
+        const pair = (t.pair || '').toLowerCase();
+        const date = format(new Date(t.trade_date || t.created_date), 'dd.MM.yyyy');
+        const direction = (t.direction || '').toLowerCase();
+        const outcome = (t.outcome || '').toLowerCase();
+        return pair.includes(query) || date.includes(query) || direction.includes(query) || outcome.includes(query);
+      });
+    }
 
     // Basic filter
     if (filter !== 'all') {
@@ -285,8 +303,28 @@ export default function TradeHistoryPage() {
       });
     }
 
-    return filtered;
-  }, [checklists, filter, advancedFilters]);
+    // Sorting
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'date-desc':
+          return new Date(b.trade_date || b.created_date) - new Date(a.trade_date || a.created_date);
+        case 'date-asc':
+          return new Date(a.trade_date || a.created_date) - new Date(b.trade_date || b.created_date);
+        case 'pnl-desc':
+          return parseFloat(b.actual_pnl || 0) - parseFloat(a.actual_pnl || 0);
+        case 'pnl-asc':
+          return parseFloat(a.actual_pnl || 0) - parseFloat(b.actual_pnl || 0);
+        case 'pair-asc':
+          return (a.pair || '').localeCompare(b.pair || '');
+        case 'pair-desc':
+          return (b.pair || '').localeCompare(a.pair || '');
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [checklists, filter, advancedFilters, searchQuery, sortBy]);
 
   const pieData = [
   { name: 'Wins', value: stats.wins, color: '#0d9488' },
@@ -389,27 +427,32 @@ export default function TradeHistoryPage() {
 
         </motion.div>
 
-        {/* Stats Grid - Wichtigste Metriken */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-          <div className={cn("border-2 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white" : "bg-rose-600 border-rose-600 text-white")}>
-            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4" />
-            <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2">${stats.totalPnL.toFixed(2)}</div>
-            <div className="text-[10px] sm:text-xs md:text-sm tracking-widest opacity-90">{t('pnl')}</div>
+        {/* Stats Grid - Erweiterte Metriken */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-6">
+          <div className={cn("border-2 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white" : "bg-rose-600 border-rose-600 text-white")}>
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mb-2" />
+            <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1">${stats.totalPnL.toFixed(2)}</div>
+            <div className="text-[10px] sm:text-xs tracking-widest opacity-90">GESAMT P&L</div>
           </div>
-          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8 ${theme.bgSecondary}`}>
-            <Award className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4 ${theme.text}`} />
-            <div className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{stats.winRate}%</div>
-            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>{t('win')}</div>
+          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 ${theme.bgSecondary}`}>
+            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 mb-2 text-emerald-700" />
+            <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 text-emerald-700">${stats.totalWins.toFixed(2)}</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>GEWINNE</div>
           </div>
-          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8 ${theme.bgSecondary}`}>
-            <Target className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4 ${theme.text}`} />
-            <div className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{stats.wins}/{stats.losses}</div>
-            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>{t('winLoss')}</div>
+          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 ${theme.bgSecondary}`}>
+            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 mb-2 text-rose-600" />
+            <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 text-rose-600">${stats.totalLosses.toFixed(2)}</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>VERLUSTE</div>
           </div>
-          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-8 ${theme.bgSecondary}`}>
-            <Calendar className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 mb-2 sm:mb-3 md:mb-4 ${theme.text}`} />
-            <div className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-1 sm:mb-1.5 md:mb-2 ${theme.text}`}>{stats.executed}</div>
-            <div className={`text-[10px] sm:text-xs md:text-sm tracking-widest ${theme.textMuted}`}>{t('exec')}</div>
+          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 ${theme.bgSecondary}`}>
+            <Award className={`w-4 h-4 sm:w-5 sm:h-5 mb-2 ${theme.text}`} />
+            <div className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 ${theme.text}`}>{stats.winRate}%</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>WINRATE</div>
+          </div>
+          <div className={`border-2 ${theme.border} rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 ${theme.bgSecondary}`}>
+            <Target className={`w-4 h-4 sm:w-5 sm:h-5 mb-2 ${theme.text}`} />
+            <div className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 ${theme.text}`}>{stats.profitFactor}</div>
+            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FAKTOR</div>
           </div>
         </motion.div>
 
@@ -418,9 +461,9 @@ export default function TradeHistoryPage() {
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
             className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
-              <div className={`p-3 sm:p-4 md:p-5 lg:p-6 border-b ${theme.border}`}>
-                <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4">
-                  <h3 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
+              <div className={`p-3 sm:p-4 md:p-5 border-b ${theme.border}`}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className={`text-sm sm:text-base md:text-lg tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
                   {filteredTrades.length > 0 &&
                   <button
                     onClick={toggleSelectAll}
@@ -433,6 +476,38 @@ export default function TradeHistoryPage() {
                     </button>
                   }
                 </div>
+
+                {/* Search */}
+                <div className="relative mb-3">
+                  <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme.textMuted}`} />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Suche nach Pair, Datum oder Typ..."
+                    className={`w-full pl-10 pr-3 py-2 rounded-lg border-2 ${theme.border} ${darkMode ? 'bg-zinc-900/50 text-white' : 'bg-white text-black'} text-sm placeholder:${theme.textMuted}`}
+                  />
+                </div>
+
+                {/* Sort & Filter */}
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 flex-1">
+                    <ArrowUpDown className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className={`text-xs px-2.5 py-1.5 rounded-lg border-2 ${theme.border} ${darkMode ? 'bg-zinc-900/50 text-white' : 'bg-white text-black'}`}
+                    >
+                      <option value="date-desc">Neueste zuerst</option>
+                      <option value="date-asc">Älteste zuerst</option>
+                      <option value="pnl-desc">Höchster Gewinn</option>
+                      <option value="pnl-asc">Höchster Verlust</option>
+                      <option value="pair-asc">Pair A-Z</option>
+                      <option value="pair-desc">Pair Z-A</option>
+                    </select>
+                  </div>
+                </div>
+
                 <TradeFilters filter={filter} setFilter={setFilter} darkMode={darkMode} stats={stats} />
               </div>
 
@@ -536,12 +611,13 @@ export default function TradeHistoryPage() {
             </motion.div>
           </div>
 
-          {/* Charts */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+          {/* Charts & Stats */}
+          <div className="space-y-3 sm:space-y-4">
+            {/* Win/Loss Pie */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-            className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary}`}>
-              <h3 className={`text-sm sm:text-base md:text-lg tracking-widest mb-2 sm:mb-3 md:mb-4 ${theme.text}`}>{t('winLoss')}</h3>
-              <div className="h-32 sm:h-36 md:h-40 lg:h-48">
+            className={`border-2 ${theme.border} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
+              <h3 className={`text-sm sm:text-base tracking-widest mb-3 ${theme.text}`}>{t('winLoss')}</h3>
+              <div className="h-32 sm:h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
                     <Pie data={pieData} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={4} dataKey="value">
@@ -551,16 +627,39 @@ export default function TradeHistoryPage() {
                   </RechartsPie>
                 </ResponsiveContainer>
               </div>
-              <div className="flex justify-center gap-2 sm:gap-3 md:gap-4 mt-2 sm:mt-3 md:mt-4">
+              <div className="flex justify-center gap-2 sm:gap-3 mt-3">
                 {pieData.map((item) =>
-                <div key={item.name} className="flex items-center gap-1.5 sm:gap-2">
-                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded" style={{ backgroundColor: item.color }} />
-                    <span className={`text-[10px] sm:text-xs md:text-sm ${theme.textMuted}`}>{item.name} ({item.value})</span>
+                <div key={item.name} className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded" style={{ backgroundColor: item.color }} />
+                    <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>{item.name} ({item.value})</span>
                   </div>
                 )}
               </div>
             </motion.div>
 
+            {/* Aggregierte Statistiken */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+            className={`border-2 ${theme.border} rounded-lg sm:rounded-xl p-3 sm:p-4 ${theme.bgSecondary}`}>
+              <h3 className={`text-sm sm:text-base tracking-widest mb-3 ${theme.text}`}>STATISTIKEN</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs ${theme.textMuted}`}>Ø Gewinn</span>
+                  <span className={`text-sm font-bold text-emerald-700`}>${stats.avgWin}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs ${theme.textMuted}`}>Ø Verlust</span>
+                  <span className={`text-sm font-bold text-rose-600`}>${stats.avgLoss}</span>
+                </div>
+                <div className={`flex items-center justify-between pt-2 border-t ${theme.border}`}>
+                  <span className={`text-xs ${theme.textMuted}`}>Profit Faktor</span>
+                  <span className={`text-base font-bold ${theme.text}`}>{stats.profitFactor}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs ${theme.textMuted}`}>Trades gesamt</span>
+                  <span className={`text-sm font-bold ${theme.text}`}>{stats.executed}</span>
+                </div>
+              </div>
+            </motion.div>
 
           </div>
         </div>
