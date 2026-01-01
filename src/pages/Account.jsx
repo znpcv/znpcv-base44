@@ -33,9 +33,7 @@ export default function AccountPage() {
     address_country: '',
     default_leverage: '100',
     default_risk_percent: '1',
-    daily_quote_enabled: false,
-    daily_quote_time: '09:00',
-    show_daily_quote_in_app: false,
+
     browser_notifications_enabled: false,
     notification_frequency: '1'
   });
@@ -62,9 +60,7 @@ export default function AccountPage() {
         address_country: userData.address_country || '',
         default_leverage: userData.default_leverage || '100',
         default_risk_percent: userData.default_risk_percent || '1',
-        daily_quote_enabled: userData.daily_quote_enabled || false,
-        daily_quote_time: userData.daily_quote_time || '09:00',
-        show_daily_quote_in_app: userData.show_daily_quote_in_app || false,
+
         browser_notifications_enabled: userData.browser_notifications_enabled || false,
         notification_frequency: userData.notification_frequency || '1'
       });
@@ -434,9 +430,7 @@ export default function AccountPage() {
                   address_country: user.address_country || '',
                   default_leverage: user.default_leverage || '100',
                   default_risk_percent: user.default_risk_percent || '1',
-                  daily_quote_enabled: user.daily_quote_enabled || false,
-                  daily_quote_time: user.daily_quote_time || '09:00',
-                  show_daily_quote_in_app: user.show_daily_quote_in_app || false,
+
                   browser_notifications_enabled: user.browser_notifications_enabled || false,
                   notification_frequency: user.notification_frequency || '1'
                 });

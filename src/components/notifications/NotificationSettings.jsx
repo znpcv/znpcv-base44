@@ -10,12 +10,6 @@ export default function NotificationSettings({ darkMode }) {
   const [settings, setSettings] = useState({
     browser_notifications_enabled: false,
     notification_frequency: '1',
-    notification_settings: {
-      daily_quote: true,
-      trade_alerts: true,
-      performance_summary: true,
-      system: true
-    },
     notification_snooze_duration: 30
   });
   const [loading, setLoading] = useState(true);
@@ -31,12 +25,6 @@ export default function NotificationSettings({ darkMode }) {
       setSettings({
         browser_notifications_enabled: user.browser_notifications_enabled || false,
         notification_frequency: user.notification_frequency || '1',
-        notification_settings: user.notification_settings || {
-          daily_quote: true,
-          trade_alerts: true,
-          performance_summary: true,
-          system: true
-        },
         notification_snooze_duration: user.notification_snooze_duration || 30
       });
     } catch (error) {
@@ -59,16 +47,6 @@ export default function NotificationSettings({ darkMode }) {
 
   const updateSetting = (key, value) => {
     setSettings(prev => ({ ...prev, [key]: value }));
-  };
-
-  const updateNotificationType = (type, enabled) => {
-    setSettings(prev => ({
-      ...prev,
-      notification_settings: {
-        ...prev.notification_settings,
-        [type]: enabled
-      }
-    }));
   };
 
   const theme = {
@@ -99,14 +77,14 @@ export default function NotificationSettings({ darkMode }) {
               settings.browser_notifications_enabled ? 
               darkMode ? 'bg-emerald-700' : 'bg-teal-500' : 
               darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}>
-              <Bell className={`w-6 h-6 sm:w-7 sm:h-7 ${settings.browser_notifications_enabled ? 'text-white' : darkMode ? 'text-zinc-400' : 'text-zinc-600'}`} />
+              <span className={`text-3xl ${settings.browser_notifications_enabled ? '' : 'opacity-50'}`}>💭</span>
             </div>
             <div className="flex-1 min-w-0">
               <Label className={`text-base sm:text-lg font-bold tracking-wider cursor-pointer ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
-                Push-Benachrichtigungen
+                Tägliche Trading-Sprüche
               </Label>
               <p className={`text-xs sm:text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} font-sans`}>
-                Erhalte Benachrichtigungen direkt im Browser
+                Erhalte motivierende Sprüche als Push-Mitteilung aufs Handy
               </p>
             </div>
           </div>
@@ -120,52 +98,6 @@ export default function NotificationSettings({ darkMode }) {
 
       {settings.browser_notifications_enabled && (
         <>
-          {/* Notification Types */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className={`w-1 h-6 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-              <h4 className={`${theme.text} text-base sm:text-lg font-bold tracking-wider`}>EREIGNISTYPEN</h4>
-            </div>
-            
-            <div className="space-y-2">
-              <NotificationType
-                icon="💭"
-                label="Trading Quotes"
-                description="Tägliche motivierende Zitate"
-                enabled={settings.notification_settings.daily_quote}
-                onChange={(checked) => updateNotificationType('daily_quote', checked)}
-                darkMode={darkMode}
-              />
-              
-              <NotificationType
-                icon="📊"
-                label="Trade Alerts"
-                description="Wichtige Handelssignale"
-                enabled={settings.notification_settings.trade_alerts}
-                onChange={(checked) => updateNotificationType('trade_alerts', checked)}
-                darkMode={darkMode}
-              />
-              
-              <NotificationType
-                icon="📈"
-                label="Performance Summaries"
-                description="Wöchentliche Zusammenfassungen"
-                enabled={settings.notification_settings.performance_summary}
-                onChange={(checked) => updateNotificationType('performance_summary', checked)}
-                darkMode={darkMode}
-              />
-              
-              <NotificationType
-                icon="⚙️"
-                label="System-Benachrichtigungen"
-                description="Updates und wichtige Infos"
-                enabled={settings.notification_settings.system}
-                onChange={(checked) => updateNotificationType('system', checked)}
-                darkMode={darkMode}
-              />
-            </div>
-          </div>
-
           {/* Frequency - Enhanced */}
           <div className={`p-5 sm:p-6 rounded-xl border-2 ${darkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-100'}`}>
             <div className="flex items-center gap-2 mb-3">
@@ -247,39 +179,6 @@ export default function NotificationSettings({ darkMode }) {
       >
         {saving ? '⏳ Speichern...' : '💾 Einstellungen speichern'}
       </Button>
-    </div>
-  );
-}
-
-function NotificationType({ icon, label, description, enabled, onChange, darkMode }) {
-  const theme = {
-    bg: darkMode ? 'bg-zinc-950' : 'bg-white',
-    border: darkMode ? 'border-zinc-800' : 'border-zinc-300',
-    text: darkMode ? 'text-white' : 'text-zinc-900',
-    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600'
-  };
-
-  return (
-    <div className={`p-4 sm:p-5 rounded-xl border-2 transition-all ${enabled 
-      ? darkMode ? 'border-emerald-600 bg-emerald-700/20' : 'border-teal-500 bg-teal-500/20'
-      : darkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-100'
-    }`}>
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 sm:gap-4 flex-1">
-          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all ${
-            enabled 
-              ? darkMode ? 'bg-emerald-700' : 'bg-teal-500'
-              : darkMode ? 'bg-zinc-800' : 'bg-zinc-300'
-          }`}>
-            <span className={`text-xl sm:text-2xl ${enabled ? '' : 'opacity-50'}`}>{icon}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className={`text-sm sm:text-base font-bold tracking-wider ${theme.text}`}>{label}</div>
-            <div className={`text-xs sm:text-sm ${theme.textSecondary} font-sans`}>{description}</div>
-          </div>
-        </div>
-        <Switch checked={enabled} onCheckedChange={onChange} className="scale-125" />
-      </div>
     </div>
   );
 }
