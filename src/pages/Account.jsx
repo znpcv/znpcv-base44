@@ -345,7 +345,7 @@ export default function AccountPage() {
           </div>
 
           {/* Action Bar */}
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {editing ? (
               <>
                 <Button 
@@ -356,9 +356,9 @@ export default function AccountPage() {
                     }
                   }} 
                   disabled={saving} 
-                  className={`flex-1 h-10 text-xs font-bold border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-                  <Save className="w-4 h-4 mr-2" />
-                  {saving ? '...' : t('save')}
+                  className={`h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Save className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">{saving ? '...' : t('save')}</span>
                 </Button>
                 <Button onClick={() => {
                   setEditing(false);
@@ -372,23 +372,24 @@ export default function AccountPage() {
                     address_postal_code: user.address_postal_code || '',
                     address_country: user.address_country || ''
                   });
-                }} variant="outline" className={`h-10 px-4 border-2 rounded-lg ${theme.border}`}>
-                  <X className="w-4 h-4" />
+                }} variant="outline" className={`h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 rounded-lg ${theme.border}`}>
+                  <X className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">ABBRECHEN</span>
                 </Button>
               </>
             ) : (
               <>
-                <Button onClick={() => navigate(createPageUrl('Home'))} className={`flex-1 h-10 text-xs tracking-wider border-2 rounded-lg ${darkMode ? 'bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800' : 'bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200'}`}>
-                  <HomeIcon className="w-4 h-4 mr-2" />
-                  HOME
+                <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-10 sm:h-11 text-xs sm:text-sm tracking-wider border-2 rounded-lg ${darkMode ? 'bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800' : 'bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200'}`}>
+                  <HomeIcon className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">HOME</span>
                 </Button>
-                <Button onClick={() => setEditing(true)} className={`h-10 px-5 text-xs tracking-wider border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-                  <Edit2 className="w-4 h-4 mr-2" />
-                  BEARBEITEN
+                <Button onClick={() => setEditing(true)} className={`h-10 sm:h-11 text-xs sm:text-sm tracking-wider border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Edit2 className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">BEARBEITEN</span>
                 </Button>
-                <Button onClick={handleLogout} className="h-10 px-5 text-xs tracking-wider border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600 rounded-lg">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  LOGOUT
+                <Button onClick={handleLogout} className="col-span-2 h-10 sm:h-11 text-xs sm:text-sm tracking-wider border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600 rounded-lg">
+                  <LogOut className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">LOGOUT</span>
                 </Button>
               </>
             )}
