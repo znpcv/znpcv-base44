@@ -474,7 +474,7 @@ export default function AccountPage() {
           )}
 
           {/* Navigation */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <HomeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
               <span className="hidden sm:inline">HOME</span>
@@ -482,10 +482,6 @@ export default function AccountPage() {
             <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
               <span className="hidden sm:inline">STATS</span>
-            </Button>
-            <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">TOOLS</span>
             </Button>
             <Button onClick={handleLogout} className="h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
               <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />

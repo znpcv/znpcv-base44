@@ -1,13 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Mail, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
-import { Button } from "@/components/ui/button";
 
 export default function ImpressumPage() {
   const navigate = useNavigate();
-  const { t, darkMode } = useLanguage();
+  const { darkMode, t } = useLanguage();
 
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
@@ -46,102 +45,63 @@ export default function ImpressumPage() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-16">
         <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-100/50'} rounded-2xl p-6 sm:p-8 md:p-10 mb-8 border-2 ${theme.border}`}>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">IMPRESSUM</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">{t('impressumTitle')}</h1>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>{t('effectiveDate')}</p>
         </div>
         
         <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
+
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Angaben gemäß § 5 TMG</h2>
-            <p><strong>Zainspective Group</strong><br/>
-            Inhaber: Zainspective Group<br/>
-            E-Mail: support@znpcv.com<br/>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>{t('companyInfo')}</h2>
+            <p><strong>{t('operator')}:</strong><br/>
+            <strong>Zainspective Group</strong><br/>
+            {t('operator')} von ZNPCV</p>
+          </section>
+
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>{t('contactInfo')}</h2>
+            <p>E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Vertreten durch</h2>
-            <p>Zainspective Group (Inhaber und Betreiber von ZNPCV)</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>{t('disclaimer')}</h2>
+            <p>{t('disclaimerContent')}</p>
+            <p className="mt-2">{t('liabilityContent')}</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Kontakt</h2>
-            <div className="flex items-center gap-2">
-              <Mail className="w-5 h-5" />
-              <a href="mailto:support@znpcv.com" className="underline">support@znpcv.com</a>
-            </div>
-            <p className="mt-2">Website: <a href="https://www.znpcv.com" className="underline">www.znpcv.com</a></p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>{t('copyright')}</h2>
+            <p>{t('copyrightContent')}</p>
           </section>
+        </div>
+      </main>
 
-          <section className={`${darkMode ? 'bg-teal-900/20 border-teal-800' : 'bg-teal-100 border-teal-300'} rounded-xl p-5 sm:p-6 md:p-8 border-2`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>{t('contact')}</h2>
-            <p className={`${theme.textSecondary} mb-4`}>
-              {t('contactUs')}
-            </p>
-            <button
-              onClick={() => navigate(createPageUrl('CodeExport'))}
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-bold text-sm"
-            >
-              {t('contact')}
+      {/* Footer */}
+      <footer className={`mt-12 sm:mt-16 md:mt-20 lg:mt-24 border-t ${theme.border}`}>
+        <div className="py-6 sm:py-8 md:py-10">
+          <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
+            <img src={darkMode 
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+            } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto opacity-40" />
+            <p className={`${theme.textSecondary} text-xs sm:text-sm tracking-widest`}>© {new Date().getFullYear()} ZNPCV</p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
+            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              {t('impressumTitle')}
             </button>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>EU-Streitschlichtung</h2>
-            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:<br/>
-            <a href="https://ec.europa.eu/consumers/odr" className="underline" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr</a><br/>
-            Unsere E-Mail-Adresse finden Sie oben im Impressum.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Verbraucherstreitbeilegung/Universalschlichtungsstelle</h2>
-            <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Haftung für Inhalte</h2>
-            <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
-            <p className="mt-2">Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Haftung für Links</h2>
-            <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-4 sm:p-6 border ${theme.border}`}>
-            <h2 className={`text-lg sm:text-xl md:text-2xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>Urheberrecht</h2>
-            <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
-          </section>
-
-
-            </div>
-            </main>
-
-            {/* Footer */}
-            <footer className={`mt-12 sm:mt-16 md:mt-20 lg:mt-24 border-t ${theme.border}`}>
-              <div className="py-6 sm:py-8 md:py-10">
-                <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
-                  <img src={darkMode 
-                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                  } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto opacity-40" />
-                  <p className={`${theme.textDimmed} text-xs sm:text-sm tracking-widest`}>© {new Date().getFullYear()} ZNPCV</p>
-                </div>
-                <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
-                  <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                    Impressum
-                  </button>
-                  <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                  <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                    Datenschutz
-                  </button>
-                  <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                  <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                    AGB
-                  </button>
-                </div>
-              </div>
-            </footer>
-            </div>
-            );
-            }
+            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              {t('privacyTitle')}
+            </button>
+            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              {t('termsTitle')}
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

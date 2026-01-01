@@ -1,13 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
-import { Button } from "@/components/ui/button";
 
 export default function DatenschutzPage() {
   const navigate = useNavigate();
-  const { darkMode } = useLanguage();
+  const { darkMode, t } = useLanguage();
 
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
@@ -46,137 +45,137 @@ export default function DatenschutzPage() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-16">
         <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-100/50'} rounded-2xl p-6 sm:p-8 md:p-10 mb-8 border-2 ${theme.border}`}>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">DATENSCHUTZ</h1>
-          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Stand: Januar 2025</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-4 text-center">{t('privacyTitle')}</h1>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>{t('effectiveDate')}</p>
         </div>
         
         <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>1. Datenschutz auf einen Blick</h2>
-            <h3 className={`text-lg ${theme.text} mb-2`}>Allgemeine Hinweise</h3>
-            <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Software nutzen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>1. {t('privacyOverview')}</h2>
+            <h3 className={`text-lg ${theme.text} mb-2`}>{t('generalInfo')}</h3>
+            <p>{t('generalInfoContent')}</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>2. Verantwortliche Stelle</h2>
-            <p>Verantwortlich für die Datenverarbeitung ist:</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>2. {t('responsibleParty')}</h2>
+            <p>{t('responsiblePartyContent')}</p>
             <p className="mt-2"><strong>Zainspective Group</strong><br/>
-            Betreiber von ZNPCV<br/>
+            {t('operator')} von ZNPCV<br/>
             E-Mail: support@znpcv.com<br/>
             Website: www.znpcv.com</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>3. Datenerfassung</h2>
-            <h3 className={`text-lg ${theme.text} mb-2`}>Welche Daten erfassen wir?</h3>
-            <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Registrierungsdaten:</strong> Name, E-Mail-Adresse, Passwort (verschlüsselt)</li>
-              <li><strong>Nutzungsdaten:</strong> Trading-Analysen, Checklisten, Notizen, Dashboard-Statistiken</li>
-              <li><strong>Technische Daten:</strong> IP-Adresse, Browser-Typ, Zugriffszeiten</li>
-            </ul>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>4. Zweck der Datenverarbeitung</h2>
-            <p>Ihre Daten werden verarbeitet für:</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>3. {t('dataCollection')}</h2>
+            <h3 className={`text-lg ${theme.text} mb-2`}>{t('whatDataCollect')}</h3>
             <ul className="list-disc pl-6 space-y-2 mt-2">
-              <li>Bereitstellung und Betrieb der Software</li>
-              <li>Verwaltung Ihres Benutzerkontos</li>
-              <li>Speicherung Ihrer Trading-Analysen</li>
-              <li>Technische Verbesserungen und Fehlerbehebung</li>
-              <li>Kommunikation mit Ihnen (z.B. Support, Updates)</li>
+              <li><strong>{t('registrationData').split(':')[0]}:</strong> {t('registrationData').split(':')[1]}</li>
+              <li><strong>{t('usageData').split(':')[0]}:</strong> {t('usageData').split(':')[1]}</li>
+              <li><strong>{t('technicalData').split(':')[0]}:</strong> {t('technicalData').split(':')[1]}</li>
             </ul>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>5. Rechtsgrundlage</h2>
-            <p>Die Verarbeitung erfolgt auf Grundlage von:</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>4. {t('purposeProcessing')}</h2>
+            <p>{t('dataUsedFor')}</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
-              <li>Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung)</li>
-              <li>Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)</li>
-              <li>Art. 6 Abs. 1 lit. a DSGVO (Einwilligung, sofern erteilt)</li>
+              <li>{t('providingSoftware')}</li>
+              <li>{t('accountManagement')}</li>
+              <li>{t('storingAnalyses')}</li>
+              <li>{t('technicalImprovements')}</li>
+              <li>{t('communicationSupport')}</li>
             </ul>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>6. Datenweitergabe</h2>
-            <p>Ihre Daten werden nur weitergegeben an:</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>5. {t('legalBasis')}</h2>
+            <p>{t('processingBased')}</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
-              <li><strong>Hosting-Provider:</strong> Zum Betrieb der Software-Infrastruktur</li>
+              <li>{t('contractFulfillment')}</li>
+              <li>{t('legitimateInterest')}</li>
+              <li>{t('consentGiven')}</li>
             </ul>
-            <p className="mt-2">Eine darüber hinausgehende Weitergabe erfolgt nicht, es sei denn, wir sind gesetzlich dazu verpflichtet.</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>7. Speicherdauer</h2>
-            <p>Ihre Daten werden gespeichert, solange Sie ein aktives Benutzerkonto haben. Nach Löschung Ihres Kontos werden Ihre personenbezogenen Daten innerhalb von 30 Tagen gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.</p>
-          </section>
-
-          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>8. Ihre Rechte</h2>
-            <p>Sie haben folgende Rechte:</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>6. {t('dataSharingTitle')}</h2>
+            <p>{t('dataSharingContent')}</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
-              <li><strong>Auskunft:</strong> Sie können Auskunft über Ihre gespeicherten Daten verlangen</li>
-              <li><strong>Berichtigung:</strong> Sie können die Berichtigung unrichtiger Daten verlangen</li>
-              <li><strong>Löschung:</strong> Sie können die Löschung Ihrer Daten verlangen</li>
-              <li><strong>Einschränkung:</strong> Sie können die Einschränkung der Verarbeitung verlangen</li>
-              <li><strong>Datenübertragbarkeit:</strong> Sie können Ihre Daten in einem gängigen Format erhalten</li>
-              <li><strong>Widerspruch:</strong> Sie können der Verarbeitung widersprechen</li>
-              <li><strong>Beschwerde:</strong> Sie können sich bei einer Datenschutzbehörde beschweren</li>
+              <li><strong>{t('hostingProvider').split(':')[0]}:</strong> {t('hostingProvider').split(':')[1]}</li>
+            </ul>
+            <p className="mt-2">{t('noFurtherSharing')}</p>
+          </section>
+
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>7. {t('storageDuration')}</h2>
+            <p>{t('storageDurationContent')}</p>
+          </section>
+
+          <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>8. {t('yourRights')}</h2>
+            <p>{t('youHaveRights')}</p>
+            <ul className="list-disc pl-6 space-y-2 mt-2">
+              <li><strong>{t('rightInformation').split(':')[0]}:</strong> {t('rightInformation').split(':')[1]}</li>
+              <li><strong>{t('rightCorrection').split(':')[0]}:</strong> {t('rightCorrection').split(':')[1]}</li>
+              <li><strong>{t('rightDeletion').split(':')[0]}:</strong> {t('rightDeletion').split(':')[1]}</li>
+              <li><strong>{t('rightRestriction').split(':')[0]}:</strong> {t('rightRestriction').split(':')[1]}</li>
+              <li><strong>{t('rightPortability').split(':')[0]}:</strong> {t('rightPortability').split(':')[1]}</li>
+              <li><strong>{t('rightObjection').split(':')[0]}:</strong> {t('rightObjection').split(':')[1]}</li>
+              <li><strong>{t('rightComplaint').split(':')[0]}:</strong> {t('rightComplaint').split(':')[1]}</li>
             </ul>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>9. Datensicherheit</h2>
-            <p>Wir verwenden SSL/TLS-Verschlüsselung für die Datenübertragung. Passwörter werden mit modernen Hashing-Verfahren gespeichert. Unsere Server sind gegen unbefugten Zugriff geschützt.</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>9. {t('dataSecurity')}</h2>
+            <p>{t('dataSecurityContent')}</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>10. Cookies und Tracking</h2>
-            <p>Unsere Software verwendet technisch notwendige Cookies für die Funktionalität (z.B. Session-Management, Login). Marketing- oder Tracking-Cookies setzen wir nicht ein.</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>10. {t('cookiesTracking')}</h2>
+            <p>{t('cookiesContent')}</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>11. Änderungen der Datenschutzerklärung</h2>
-            <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslage oder Änderungen unserer Leistungen anzupassen. Für neue Besuche gilt dann die neue Datenschutzerklärung.</p>
+            <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-3 sm:mb-4`}>11. {t('privacyChanges')}</h2>
+            <p>{t('privacyChangesContent')}</p>
           </section>
 
           <section className={`${darkMode ? 'bg-zinc-900/30' : 'bg-white'} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
-            <p className="font-bold mb-3">Kontakt Datenschutz:</p>
-            <p><strong>Zainspective Group</strong><br/>
-            Betreiber von ZNPCV<br/>
-            Bei Fragen zum Datenschutz wenden Sie sich bitte an:<br/>
+            <p className="font-bold mb-3">{t('privacyContact')}:</p>
+            <p>{t('privacyContactIntro')}<br/>
+            <strong>Zainspective Group</strong><br/>
+            {t('operator')} von ZNPCV<br/>
             E-Mail: support@znpcv.com</p>
           </section>
-          </div>
-          </main>
+        </div>
+      </main>
 
-          {/* Footer */}
-          <footer className={`mt-12 sm:mt-16 md:mt-20 lg:mt-24 border-t ${theme.border}`}>
-            <div className="py-6 sm:py-8 md:py-10">
-              <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
-                <img src={darkMode 
-                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto opacity-40" />
-                <p className={`${theme.textDimmed} text-xs sm:text-sm tracking-widest`}>© {new Date().getFullYear()} ZNPCV</p>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
-                <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                  Impressum
-                </button>
-                <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                  Datenschutz
-                </button>
-                <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-                  AGB
-                </button>
-              </div>
-            </div>
-          </footer>
+      {/* Footer */}
+      <footer className={`mt-12 sm:mt-16 md:mt-20 lg:mt-24 border-t ${theme.border}`}>
+        <div className="py-6 sm:py-8 md:py-10">
+          <div className="flex flex-col items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
+            <img src={darkMode 
+              ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+              : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+            } alt="ZNPCV" className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto opacity-40" />
+            <p className={`${theme.textSecondary} text-xs sm:text-sm tracking-widest`}>© {new Date().getFullYear()} ZNPCV</p>
           </div>
-          );
-          }
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
+            <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              {t('impressumTitle')}
+            </button>
+            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+            <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              {t('privacyTitle')}
+            </button>
+            <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+            <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
+              {t('termsTitle')}
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
