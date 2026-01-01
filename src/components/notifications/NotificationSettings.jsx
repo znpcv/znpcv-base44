@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 export default function NotificationSettings({ darkMode }) {
   const [settings, setSettings] = useState({
     browser_notifications_enabled: false,
-    notification_frequency: '1',
     notification_snooze_duration: 30
   });
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,6 @@ export default function NotificationSettings({ darkMode }) {
       const user = await base44.auth.me();
       setSettings({
         browser_notifications_enabled: user.browser_notifications_enabled || false,
-        notification_frequency: user.notification_frequency || '1',
         notification_snooze_duration: user.notification_snooze_duration || 30
       });
     } catch (error) {
@@ -83,29 +81,6 @@ export default function NotificationSettings({ darkMode }) {
 
       {settings.browser_notifications_enabled && (
         <>
-          {/* Frequency - Compact */}
-          <div className={`p-3 rounded-lg border ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-            <div className="flex items-center gap-2 mb-2">
-              <Clock className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
-              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>HÄUFIGKEIT</span>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {['1', '2', '3', '4'].map((freq) => (
-                <button
-                  key={freq}
-                  onClick={() => updateSetting('notification_frequency', freq)}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold transition-all ${
-                    settings.notification_frequency === freq
-                      ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
-                      : darkMode ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' : 'bg-zinc-200 text-zinc-600 hover:bg-zinc-300'
-                  }`}
-                >
-                  {freq}x
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Snooze Duration - Compact */}
           <div className={`p-3 rounded-lg border ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
             <div className="flex items-center gap-2 mb-2">
@@ -128,7 +103,8 @@ export default function NotificationSettings({ darkMode }) {
               ))}
             </div>
           </div>
-          )}
+        </>
+      )}
 
       <Button
         onClick={handleSave}
