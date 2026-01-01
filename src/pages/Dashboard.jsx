@@ -223,35 +223,23 @@ export default function DashboardPage() {
           <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
         </motion.div>
 
-        {/* Quick Actions - Advanced */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 mb-4 sm:mb-5 md:mb-8">
+        {/* Quick Action - Neue Analyse */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-5 md:mb-8">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
+            className={cn("w-full group relative p-5 sm:p-6 md:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.01] hover:shadow-2xl",
               darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900")}>
             <div className={cn("absolute inset-0 opacity-10", darkMode ? "bg-gradient-to-br from-teal-600 to-blue-600" : "bg-gradient-to-br from-teal-500 to-emerald-500")} />
-            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-emerald-700/10 rounded-full -translate-y-12 sm:-translate-y-16 translate-x-12 sm:translate-x-16 blur-2xl" />
-            <div className="relative z-10">
-              <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-700/10 rounded-full -translate-y-16 translate-x-16 blur-2xl" />
+            <div className="relative z-10 flex items-center gap-4 sm:gap-6">
+              <div className={cn("w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform",
                 darkMode ? "bg-black" : "bg-white shadow-lg")}>
-                <Plus className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8", darkMode ? "text-white" : "text-black")} />
+                <Plus className={cn("w-7 h-7 sm:w-8 sm:h-8", darkMode ? "text-white" : "text-black")} />
               </div>
-              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</div>
-              <div className={cn("text-xs sm:text-sm", darkMode ? "text-black/60" : "text-white/70")}>{t('startProfessional')}</div>
-            </div>
-          </button>
-
-          <button onClick={() => navigate(createPageUrl('TradeHistory'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl overflow-hidden border-2 text-left transition-all hover:scale-[1.02] hover:shadow-2xl",
-              darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-600/5 to-emerald-700/5" />
-            <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600/10 rounded-full translate-y-12 sm:translate-y-16 -translate-x-12 sm:-translate-x-16 blur-2xl" />
-            <div className="relative z-10">
-              <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
-                darkMode ? "bg-white" : "bg-zinc-900 shadow-lg")}>
-                <Activity className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8", darkMode ? "text-black" : "text-white")} />
+              <div className="flex-1">
+                <div className={cn("text-xl sm:text-2xl font-black tracking-wider mb-1", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</div>
+                <div className={cn("text-sm", darkMode ? "text-black/60" : "text-white/70")}>{t('startProfessional')}</div>
               </div>
-              <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-black tracking-wider mb-1", darkMode ? "text-white" : "text-black")}>{t('tradeJournal')}</div>
-              <div className={cn("text-xs sm:text-sm", darkMode ? "text-zinc-400" : "text-zinc-600")}>{t('performanceAnalytics')}</div>
+              <ChevronRight className={cn("w-6 h-6 group-hover:translate-x-2 transition-transform", darkMode ? "text-black" : "text-white")} />
             </div>
           </button>
         </motion.div>
@@ -294,7 +282,14 @@ export default function DashboardPage() {
                     <div className="w-1.5 h-6 bg-emerald-700 rounded-full" />
                     {t('recentTrades')}
                   </h3>
-                  <div className={`text-xs ${theme.textMuted}`}>{t('last8')}</div>
+                  <button
+                    onClick={() => navigate(createPageUrl('TradeHistory'))}
+                    className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all hover:scale-105",
+                      darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700" : "bg-white border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400")}
+                  >
+                    Alle anzeigen
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
                 <div className="flex gap-2">
                   {['all', 'win', 'loss', 'pending'].map((f) => (
