@@ -54,24 +54,28 @@ export default function NotificationPrompt({ darkMode }) {
       return;
     }
 
-    const permission = await Notification.requestPermission();
-    setNotificationsEnabled(permission === 'granted');
-    
-    if (permission === 'granted') {
-      setShow(false);
+    try {
+      const permission = await Notification.requestPermission();
+      setNotificationsEnabled(permission === 'granted');
       
-      // Subscribe to push notifications
-      try {
-        await subscribeToPush();
-        await base44.auth.updateMe({ browser_notifications_enabled: true });
-      } catch (err) {
-        console.error('Failed to subscribe to push:', err);
+      if (permission === 'granted') {
+        setShow(false);
+        
+        // Subscribe to push notifications
+        try {
+          await subscribeToPush();
+          await base44.auth.updateMe({ browser_notifications_enabled: true });
+        } catch (err) {
+          console.error('Failed to subscribe to push:', err);
+        }
+        
+        // Send welcome notification
+        sendNotification();
+        // Schedule daily notifications
+        scheduleDailyNotifications();
       }
-      
-      // Send welcome notification
-      sendNotification();
-      // Schedule daily notifications
-      scheduleDailyNotifications();
+    } catch (err) {
+      console.error('Failed to request notification permission:', err);
     }
   };
 
@@ -145,14 +149,18 @@ export default function NotificationPrompt({ darkMode }) {
   const sendNotification = () => {
     const randomQuote = TRADING_QUOTES[Math.floor(Math.random() * TRADING_QUOTES.length)];
     
-    if (Notification.permission === 'granted') {
-      new Notification('ZNPCV Trading Tipp', {
-        body: `${randomQuote.quote}\n\n— ${randomQuote.author}`,
-        icon: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
-        badge: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
-        tag: 'daily-quote',
-        requireInteraction: false
-      });
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification('ZNPCV Trading Tipp', {
+          body: `${randomQuote.quote}\n\n— ${randomQuote.author}`,
+          icon: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
+          badge: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
+          tag: 'daily-quote',
+          requireInteraction: false
+        });
+      } catch (err) {
+        console.error('Failed to show notification:', err);
+      }
     }
   };
 
