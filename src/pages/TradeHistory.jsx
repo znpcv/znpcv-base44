@@ -673,52 +673,35 @@ export default function TradeHistoryPage() {
             </motion.div>
           </div>
 
-          {/* Charts & Stats */}
+          {/* Gefilterte Statistiken */}
           <div className="space-y-3 sm:space-y-5">
-            {/* Win/Loss Pie */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.4 }}
             className={`border-2 ${theme.border} rounded-lg sm:rounded-2xl p-3 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
-              <h3 className={`text-xs sm:text-base tracking-widest mb-2 sm:mb-3 ${theme.text}`}>{t('winLoss')}</h3>
-              <div className="h-32 sm:h-40">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RechartsPie>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={4} dataKey="value">
-                      {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
-                    </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: darkMode ? '#18181b' : '#ffffff', border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, borderRadius: 12, fontSize: '11px' }} />
-                  </RechartsPie>
-                </ResponsiveContainer>
-              </div>
-              <div className="flex justify-center gap-2 sm:gap-3 mt-3">
-                {pieData.map((item) =>
-                <div key={item.name} className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded" style={{ backgroundColor: item.color }} />
-                    <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>{item.name} ({item.value})</span>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Aggregierte Statistiken */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.5 }}
-            className={`border-2 ${theme.border} rounded-lg sm:rounded-2xl p-3 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
-              <h3 className={`text-xs sm:text-base tracking-widest mb-2 sm:mb-3 ${theme.text}`}>STATISTIKEN</h3>
-              <div className="space-y-1.5 sm:space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Ø Gewinn</span>
-                  <span className={`text-xs sm:text-sm font-bold text-emerald-700`}>${stats.avgWin}</span>
+              <h3 className={`text-xs sm:text-base tracking-widest mb-2 sm:mb-3 ${theme.text}`}>GEFILTERTE ERGEBNISSE</h3>
+              <div className="space-y-2">
+                <div className={cn("flex items-center justify-between p-2.5 rounded-lg border",
+                  darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-300")}>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Trades angezeigt</span>
+                  <span className={`text-sm sm:text-base font-bold ${theme.text}`}>{filteredTrades.length}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Ø Verlust</span>
-                  <span className={`text-xs sm:text-sm font-bold text-rose-600`}>${stats.avgLoss}</span>
+                <div className={cn("flex items-center justify-between p-2.5 rounded-lg border",
+                  darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300")}>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Gefilterte Wins</span>
+                  <span className={`text-sm sm:text-base font-bold text-emerald-700`}>{filteredTrades.filter(t => t.outcome === 'win').length}</span>
                 </div>
-                <div className={`flex items-center justify-between pt-1.5 sm:pt-2 border-t ${theme.border}`}>
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Profit Faktor</span>
-                  <span className={`text-sm sm:text-base font-bold ${theme.text}`}>{stats.profitFactor}</span>
+                <div className={cn("flex items-center justify-between p-2.5 rounded-lg border",
+                  darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-rose-50 border-rose-300")}>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Gefilterte Losses</span>
+                  <span className={`text-sm sm:text-base font-bold text-rose-600`}>{filteredTrades.filter(t => t.outcome === 'loss').length}</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Trades gesamt</span>
-                  <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>{stats.executed}</span>
+                <div className={cn("flex items-center justify-between p-2.5 rounded-lg border",
+                  darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-300")}>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Gesamt P&L</span>
+                  <span className={cn("text-sm sm:text-base font-bold",
+                    filteredTrades.filter(t => t.actual_pnl).reduce((sum, t) => sum + parseFloat(t.actual_pnl), 0) >= 0 
+                      ? 'text-emerald-700' : 'text-rose-600')}>
+                    ${filteredTrades.filter(t => t.actual_pnl).reduce((sum, t) => sum + parseFloat(t.actual_pnl), 0).toFixed(2)}
+                  </span>
                 </div>
               </div>
             </motion.div>

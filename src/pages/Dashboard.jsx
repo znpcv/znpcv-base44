@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useOffline } from '@/components/offline/OfflineManager';
 import { offlineClient } from '@/components/offline/OfflineBase44Client';
-import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp, ArrowLeft } from 'lucide-react';
+import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp, ArrowLeft, Download, FileText } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, subMonths, addMonths } from 'date-fns';
@@ -73,6 +73,7 @@ export default function DashboardPage() {
 
   const [filter, setFilter] = useState('all');
   const [sessionFilter, setSessionFilter] = useState('all');
+  const [exporting, setExporting] = useState(false);
 
   const stats = useMemo(() => {
     const total = checklists.length;
@@ -80,6 +81,8 @@ export default function DashboardPage() {
     const inProgress = checklists.filter(c => c.status === 'in_progress').length;
     const executed = checklists.filter(c => c.outcome && c.outcome !== 'pending');
     const wins = executed.filter(c => c.outcome === 'win').length;
+    const losses = executed.filter(c => c.outcome === 'loss').length;
+    const breakeven = executed.filter(c => c.outcome === 'breakeven').length;
     const longs = checklists.filter(c => c.direction === 'bullish' || c.direction === 'long').length;
     const shorts = checklists.filter(c => c.direction === 'bearish' || c.direction === 'short').length;
     const withConfluence = checklists.filter(c => 
@@ -89,8 +92,13 @@ export default function DashboardPage() {
     const avgCompletion = total > 0 ? Math.round(checklists.reduce((acc, c) => acc + (c.completion_percentage || 0), 0) / total) : 0;
     const winRate = executed.length > 0 ? ((wins / executed.length) * 100).toFixed(0) : 0;
     const totalPnL = executed.reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+    const totalWins = executed.filter(c => c.outcome === 'win').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0);
+    const totalLosses = Math.abs(executed.filter(c => c.outcome === 'loss').reduce((sum, t) => sum + parseFloat(t.actual_pnl || 0), 0));
+    const avgWin = wins > 0 ? (totalWins / wins).toFixed(2) : 0;
+    const avgLoss = losses > 0 ? (totalLosses / losses).toFixed(2) : 0;
+    const profitFactor = totalLosses > 0 ? (totalWins / totalLosses).toFixed(2) : totalWins > 0 ? '∞' : 0;
     
-    return { total, ready, inProgress, longs, shorts, withConfluence, avgCompletion, winRate, totalPnL, executed: executed.length };
+    return { total, ready, inProgress, longs, shorts, wins, losses, breakeven, withConfluence, avgCompletion, winRate, totalPnL, totalWins, totalLosses, avgWin, avgLoss, profitFactor, executed: executed.length };
   }, [checklists]);
 
   const performanceData = useMemo(() => {
@@ -219,8 +227,56 @@ export default function DashboardPage() {
 
         {/* Title - Compact */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
-          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 md:mb-3 ${theme.text}`}>DASHBOARD</h1>
-          <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div>
+              <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 md:mb-3 ${theme.text}`}>DASHBOARD</h1>
+              <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
+            </div>
+            <div className="hidden sm:flex gap-2">
+              <Button onClick={async () => {
+                try {
+                  setExporting(true);
+                  const response = await base44.functions.invoke('exportTradesPDF', {});
+                  const blob = new Blob([response.data], { type: 'application/pdf' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `ZNPCV_Dashboard_${new Date().toISOString().split('T')[0]}.pdf`;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                } catch (error) {
+                  console.error('Export failed:', error);
+                } finally {
+                  setExporting(false);
+                }
+              }} disabled={exporting} className={cn("h-9 px-3 sm:px-4 text-xs border-2 font-bold rounded-xl transition-all",
+                darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400')}>
+                <Download className="w-4 h-4 mr-1.5" />
+                PDF
+              </Button>
+              <Button onClick={async () => {
+                try {
+                  setExporting(true);
+                  const response = await base44.functions.invoke('exportTradesExcel', {});
+                  const blob = new Blob([response.data], { type: 'text/csv' });
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `ZNPCV_Dashboard_${new Date().toISOString().split('T')[0]}.csv`;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                } catch (error) {
+                  console.error('Export failed:', error);
+                } finally {
+                  setExporting(false);
+                }
+              }} disabled={exporting} className={cn("h-9 px-3 sm:px-4 text-xs border-2 font-bold rounded-xl transition-all",
+                darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400')}>
+                <FileText className="w-4 h-4 mr-1.5" />
+                CSV
+              </Button>
+            </div>
+          </div>
         </motion.div>
 
         {/* Quick Action - Neue Analyse */}
@@ -519,7 +575,7 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Direction Analysis */}
+            {/* Win/Loss Distribution */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={cn("rounded-2xl p-6 sm:p-7 border-2",
                 darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
@@ -529,6 +585,82 @@ export default function DashboardPage() {
                   <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center",
                     darkMode ? "bg-zinc-900" : "bg-zinc-200")}>
                     <PieChart className={cn("w-5 h-5", theme.text)} />
+                  </div>
+                  <h3 className={`text-sm tracking-widest ${theme.text}`}>WIN/LOSS</h3>
+                </div>
+                <div className={cn("px-3 py-2 rounded-xl font-black text-xs border-2",
+                  darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-400" : "bg-white border-zinc-300 text-zinc-600")}>
+                  {stats.executed}
+                </div>
+              </div>
+              
+              <div className="h-48 sm:h-56 relative mb-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartsPie>
+                    <Pie 
+                      data={[
+                        { name: 'Wins', value: checklists.filter(c => c.outcome === 'win').length, color: '#0d9488' },
+                        { name: 'Losses', value: checklists.filter(c => c.outcome === 'loss').length, color: '#e11d48' },
+                        { name: 'Breakeven', value: checklists.filter(c => c.outcome === 'breakeven').length, color: '#6b7280' }
+                      ].filter(d => d.value > 0)}
+                      cx="50%" 
+                      cy="50%" 
+                      innerRadius={42} 
+                      outerRadius={68} 
+                      paddingAngle={6} 
+                      dataKey="value"
+                      label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {[
+                        { name: 'Wins', value: checklists.filter(c => c.outcome === 'win').length, color: '#0d9488' },
+                        { name: 'Losses', value: checklists.filter(c => c.outcome === 'loss').length, color: '#e11d48' },
+                        { name: 'Breakeven', value: checklists.filter(c => c.outcome === 'breakeven').length, color: '#6b7280' }
+                      ].filter(d => d.value > 0).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ 
+                        background: darkMode ? '#18181b' : '#ffffff',
+                        border: `2px solid ${darkMode ? '#27272a' : '#e4e4e7'}`, 
+                        borderRadius: 12, 
+                        padding: '10px'
+                      }}
+                      formatter={(value, name) => [value, name]}
+                    />
+                  </RechartsPie>
+                </ResponsiveContainer>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { name: 'Wins', value: checklists.filter(c => c.outcome === 'win').length, color: '#0d9488', bgClass: darkMode ? "bg-emerald-700/20 border-emerald-700" : "bg-teal-100 border-emerald-700" },
+                  { name: 'Losses', value: checklists.filter(c => c.outcome === 'loss').length, color: '#e11d48', bgClass: darkMode ? "bg-rose-600/20 border-rose-600" : "bg-rose-100 border-rose-600" },
+                  { name: 'BE', value: checklists.filter(c => c.outcome === 'breakeven').length, color: '#6b7280', bgClass: darkMode ? "bg-zinc-700/20 border-zinc-600" : "bg-zinc-200 border-zinc-400" }
+                ].filter(item => item.value > 0).map((item) => (
+                  <div 
+                    key={item.name}
+                    className={cn("p-3 rounded-xl border-2 text-center", item.bgClass)}>
+                    <div className={`text-2xl font-black mb-1`} style={{ color: item.color }}>{item.value}</div>
+                    <div className={`text-[9px] ${theme.textMuted} font-bold tracking-wide`}>
+                      {item.name.toUpperCase()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Direction Analysis */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+              className={cn("rounded-2xl p-6 sm:p-7 border-2",
+                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
+
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5">
+                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center",
+                    darkMode ? "bg-zinc-900" : "bg-zinc-200")}>
+                    <TrendingUp className={cn("w-5 h-5", theme.text)} />
                   </div>
                   <h3 className={`text-sm tracking-widest ${theme.text}`}>RICHTUNG</h3>
                 </div>
@@ -757,6 +889,36 @@ export default function DashboardPage() {
                     })()}
                   </div>
                   <div className={`text-[9px] tracking-wider mt-1 ${theme.textMuted} font-bold`}>P&L</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Detaillierte Statistiken */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
+              className={cn("rounded-2xl p-6 sm:p-7 border-2",
+                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center",
+                  darkMode ? "bg-zinc-900" : "bg-zinc-200")}>
+                  <BarChart3 className={cn("w-5 h-5", theme.text)} />
+                </div>
+                <h3 className={`text-sm tracking-widest ${theme.text}`}>STATISTIKEN</h3>
+              </div>
+              <div className="space-y-3">
+                <div className={cn("flex items-center justify-between p-3 rounded-xl border-2",
+                  darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300")}>
+                  <span className={`text-xs ${theme.textMuted}`}>Ø Gewinn</span>
+                  <span className={`text-base font-bold text-emerald-700`}>${stats.avgWin}</span>
+                </div>
+                <div className={cn("flex items-center justify-between p-3 rounded-xl border-2",
+                  darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-rose-50 border-rose-300")}>
+                  <span className={`text-xs ${theme.textMuted}`}>Ø Verlust</span>
+                  <span className={`text-base font-bold text-rose-600`}>${stats.avgLoss}</span>
+                </div>
+                <div className={cn("flex items-center justify-between p-3 rounded-xl border-2",
+                  darkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-zinc-300")}>
+                  <span className={`text-xs ${theme.textMuted}`}>Profit Faktor</span>
+                  <span className={`text-lg font-bold ${theme.text}`}>{stats.profitFactor}</span>
                 </div>
               </div>
             </motion.div>
