@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useOffline } from '@/components/offline/OfflineManager';
+import { offlineClient } from '@/components/offline/OfflineBase44Client';
 import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare, Archive } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
@@ -21,7 +23,12 @@ import TradeCompareModal from '@/components/advanced/TradeCompareModal';
 export default function TradeHistoryPage() {
   const navigate = useNavigate();
   const { t, isRTL, darkMode } = useLanguage();
+  const { isOnline, updatePendingCount } = useOffline();
   const [filter, setFilter] = useState('all');
+  
+  useEffect(() => {
+    offlineClient.setUpdateCallback(updatePendingCount);
+  }, [updatePendingCount]);
   const [editingTrade, setEditingTrade] = useState(null);
   const [creatingNew, setCreatingNew] = useState(false);
   const [selectedTrades, setSelectedTrades] = useState([]);
@@ -38,12 +45,13 @@ export default function TradeHistoryPage() {
   const { data: checklists = [], isLoading } = useQuery({
     queryKey: ['checklists'],
     queryFn: async () => {
-      const allTrades = await base44.entities.TradeChecklist.list('-created_date', 100);
+      const client = await offlineClient.TradeChecklist();
+      const allTrades = await client.list('-created_date', 100);
       return allTrades.filter((t) => !t.deleted);
     },
     staleTime: 0,
     refetchOnWindowFocus: true,
-    refetchInterval: 5000
+    refetchInterval: isOnline ? 5000 : false
   });
 
   const { data: deletedTrades = [] } = useQuery({
@@ -57,7 +65,10 @@ export default function TradeHistoryPage() {
   });
 
   const updateTradeMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.TradeChecklist.update(id, data),
+    mutationFn: async ({ id, data }) => {
+      const client = await offlineClient.TradeChecklist();
+      return client.update(id, data);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
       setEditingTrade(null);
@@ -66,7 +77,10 @@ export default function TradeHistoryPage() {
   });
 
   const createTradeMutation = useMutation({
-    mutationFn: (data) => base44.entities.TradeChecklist.create(data),
+    mutationFn: async (data) => {
+      const client = await offlineClient.TradeChecklist();
+      return client.create(data);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
       setCreatingNew(false);
@@ -75,10 +89,13 @@ export default function TradeHistoryPage() {
   });
 
   const deleteTradeMutation = useMutation({
-    mutationFn: (id) => base44.entities.TradeChecklist.update(id, {
-      deleted: true,
-      deleted_date: new Date().toISOString()
-    }),
+    mutationFn: async (id) => {
+      const client = await offlineClient.TradeChecklist();
+      return client.update(id, {
+        deleted: true,
+        deleted_date: new Date().toISOString()
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checklists'] });
       queryClient.invalidateQueries({ queryKey: ['deletedTrades'] });

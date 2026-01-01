@@ -21,18 +21,24 @@ import BestTradingTimes from '@/components/advanced/BestTradingTimes';
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { t, language, isRTL, darkMode } = useLanguage();
+  const { isOnline, updatePendingCount } = useOffline();
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [showDailyQuote, setShowDailyQuote] = useState(false);
+  
+  useEffect(() => {
+    offlineClient.setUpdateCallback(updatePendingCount);
+  }, [updatePendingCount]);
 
   const { data: checklists = [], isLoading, refetch } = useQuery({
     queryKey: ['checklists'],
     queryFn: async () => {
-      const all = await base44.entities.TradeChecklist.list('-created_date', 100);
+      const client = await offlineClient.TradeChecklist();
+      const all = await client.list('-created_date', 100);
       return all.filter(t => !t.deleted);
     },
     staleTime: 0,
     refetchOnWindowFocus: true,
-    refetchInterval: 5000
+    refetchInterval: isOnline ? 5000 : false
   });
 
   React.useEffect(() => {
@@ -51,7 +57,8 @@ export default function DashboardPage() {
     e.stopPropagation();
     if (window.confirm(t('confirmDelete') || 'Trade wirklich löschen?')) {
       try {
-        await base44.entities.TradeChecklist.update(tradeId, { 
+        const client = await offlineClient.TradeChecklist();
+        await client.update(tradeId, { 
           deleted: true, 
           deleted_date: new Date().toISOString() 
         });
