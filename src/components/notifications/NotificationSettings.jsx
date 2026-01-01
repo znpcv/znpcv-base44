@@ -128,8 +128,7 @@ export default function NotificationSettings({ darkMode }) {
               ))}
             </div>
           </div>
-        </>
-      )}
+          )}
 
       <Button
         onClick={handleSave}

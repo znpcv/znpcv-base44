@@ -282,22 +282,39 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Quick Action - Mobile Kompakt */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-4 md:mb-6">
+        {/* Quick Actions - Mobile Kompakt */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-6">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("w-full group relative p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left transition-all active:scale-[0.98] md:hover:scale-[1.01] touch-manipulation",
+            className={cn("group relative p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left transition-all active:scale-[0.98] md:hover:scale-[1.01] touch-manipulation",
               darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900")}>
             <div className={cn("absolute inset-0 opacity-10", darkMode ? "bg-gradient-to-br from-teal-600 to-blue-600" : "bg-gradient-to-br from-teal-500 to-emerald-500")} />
-            <div className="relative z-10 flex items-center gap-2.5 sm:gap-3 md:gap-4">
-              <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center",
+            <div className="relative z-10 flex items-center gap-2 sm:gap-2.5 md:gap-3">
+              <div className={cn("w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center",
                 darkMode ? "bg-black" : "bg-white shadow-lg")}>
-                <Plus className={cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7", darkMode ? "text-white" : "text-black")} />
+                <Plus className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6", darkMode ? "text-white" : "text-black")} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className={cn("text-base sm:text-lg md:text-xl font-black tracking-wider mb-0.5", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</div>
-                <div className={cn("text-[10px] sm:text-xs md:text-sm truncate", darkMode ? "text-black/60" : "text-white/70")}>{t('startProfessional')}</div>
+                <div className={cn("text-sm sm:text-base md:text-lg font-black tracking-wider mb-0.5", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</div>
+                <div className={cn("text-[9px] sm:text-[10px] md:text-xs truncate", darkMode ? "text-black/60" : "text-white/70")}>{t('startProfessional')}</div>
               </div>
-              <ChevronRight className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex-shrink-0", darkMode ? "text-black" : "text-white")} />
+              <ChevronRight className={cn("w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 flex-shrink-0", darkMode ? "text-black" : "text-white")} />
+            </div>
+          </button>
+
+          <button onClick={() => navigate(createPageUrl('TradeHistory'))}
+            className={cn("group relative p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl overflow-hidden border-2 text-left transition-all active:scale-[0.98] md:hover:scale-[1.01] touch-manipulation",
+              darkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+            <div className={cn("absolute inset-0 opacity-5", darkMode ? "bg-gradient-to-br from-purple-600 to-blue-600" : "bg-gradient-to-br from-purple-500 to-blue-500")} />
+            <div className="relative z-10 flex items-center gap-2 sm:gap-2.5 md:gap-3">
+              <div className={cn("w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center",
+                darkMode ? "bg-white" : "bg-zinc-900 shadow-lg")}>
+                <History className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className={cn("text-sm sm:text-base md:text-lg font-black tracking-wider mb-0.5", darkMode ? "text-white" : "text-black")}>TRADE HISTORY</div>
+                <div className={cn("text-[9px] sm:text-[10px] md:text-xs truncate", darkMode ? "text-zinc-400" : "text-zinc-600")}>Alle Trades verwalten</div>
+              </div>
+              <ChevronRight className={cn("w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 flex-shrink-0", darkMode ? "text-white" : "text-black")} />
             </div>
           </button>
         </motion.div>
