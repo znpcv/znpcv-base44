@@ -775,56 +775,27 @@ export default function TradeHistoryPage() {
             <div className={cn("flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 shadow-2xl backdrop-blur-xl",
               darkMode ? "bg-zinc-900/95 border-zinc-700" : "bg-white/95 border-zinc-300")}>
               
-              <div className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
-                <CheckSquare className={`w-3 h-3 sm:w-4 sm:h-4 ${theme.text}`} />
-                <span className={`text-[10px] sm:text-sm font-bold ${theme.text}`}>{selectedTrades.length}</span>
-              </div>
-
-              <div className="w-px h-5 sm:h-6 bg-zinc-700" />
+              <Button
+                onClick={handleBulkExportPDF}
+                disabled={exporting}
+                className={cn("h-7 sm:h-9 px-3 sm:px-5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 border-2 transition-all",
+                  darkMode ? "bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700 hover:border-zinc-600" : "bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400")}
+              >
+                <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span>Export ({selectedTrades.length})</span>
+              </Button>
 
               {selectedTrades.length === 2 && (
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                   <Button
                     onClick={handleCompareSelected}
-                    className="h-7 sm:h-9 px-2 sm:px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-blue-600/30"
+                    className="h-7 sm:h-9 px-3 sm:px-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-blue-600/30"
                   >
                     <GitCompare className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Vergleichen</span>
+                    <span>Vergleichen</span>
                   </Button>
                 </motion.div>
               )}
-
-              {selectedTrades.length === 1 && (
-                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                  <Button
-                    onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${selectedTrades[0]}`)}
-                    className="h-7 sm:h-9 px-2 sm:px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-purple-600/30"
-                  >
-                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Bearbeiten</span>
-                  </Button>
-                </motion.div>
-              )}
-
-              <Button
-                onClick={handleBulkExportPDF}
-                disabled={exporting}
-                className={cn("h-7 sm:h-9 px-2 sm:px-4 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 border-2 transition-all",
-                  darkMode ? "bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700 hover:border-zinc-600" : "bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400")}
-              >
-                <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Export</span>
-              </Button>
-
-              <Button
-                onClick={handleBulkDelete}
-                className="h-7 sm:h-9 px-2 sm:px-4 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-rose-600/30"
-              >
-                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Löschen</span>
-              </Button>
-
-              <div className="hidden sm:block w-px h-6 bg-zinc-700" />
 
               <button
                 onClick={() => {
