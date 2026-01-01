@@ -11,6 +11,7 @@ import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import CountrySelect, { COUNTRIES } from '@/components/CountrySelect';
 import { format } from 'date-fns';
+import PushNotificationManager from '@/components/PushNotificationManager';
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -475,63 +476,70 @@ export default function AccountPage() {
 
                   {/* Browser Push Notifications */}
                   <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="flex items-start gap-2 sm:gap-3 flex-1">
-                        <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
-                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
-                          </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>Browser Push-Notifications</h4>
-                          <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Desktop-Benachrichtigungen auch wenn App geschlossen</p>
-                        </div>
+                    <div className="flex items-start gap-2 sm:gap-3 mb-3">
+                      <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
+                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                        </svg>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.browser_notifications_enabled}
-                          onChange={(e) => setFormData({...formData, browser_notifications_enabled: e.target.checked})}
-                          className="sr-only peer"
-                        />
-                        <div className="w-9 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600"></div>
-                      </label>
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>Push-Benachrichtigungen</h4>
+                        <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Erhalte Benachrichtigungen auf allen Geräten - auch wenn App geschlossen</p>
+                      </div>
                     </div>
-                    {formData.browser_notifications_enabled && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className={`pt-3 border-t ${theme.border}`}>
-                        <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-2 block font-bold tracking-wider`}>HÄUFIGKEIT PRO TAG</label>
-                        <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
-                          <SelectTrigger className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm w-full`}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1" className="text-xs sm:text-sm">
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                <span>1x täglich (Empfohlen)</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="2" className="text-xs sm:text-sm">
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                <span>2x täglich</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="3" className="text-xs sm:text-sm">
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                <span>3x täglich</span>
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="4" className="text-xs sm:text-sm">
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-rose-500" />
-                                <span>4x täglich (Max)</span>
-                              </div>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </motion.div>
+                    
+                    {editing ? (
+                      <div className="space-y-3">
+                        <PushNotificationManager darkMode={darkMode} onSuccess={loadUser} />
+                        
+                        {formData.browser_notifications_enabled && (
+                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className={`pt-3 border-t ${theme.border}`}>
+                            <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-2 block font-bold tracking-wider`}>HÄUFIGKEIT PRO TAG</label>
+                            <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
+                              <SelectTrigger className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm w-full`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1" className="text-xs sm:text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                    <span>1x täglich (Empfohlen)</span>
+                                  </div>
+                                </SelectItem>
+                                <SelectItem value="2" className="text-xs sm:text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                    <span>2x täglich</span>
+                                  </div>
+                                </SelectItem>
+                                <SelectItem value="3" className="text-xs sm:text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                    <span>3x täglich</span>
+                                  </div>
+                                </SelectItem>
+                                <SelectItem value="4" className="text-xs sm:text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-rose-500" />
+                                    <span>4x täglich (Max)</span>
+                                  </div>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </motion.div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className={`text-xs sm:text-sm ${theme.text} font-sans`}>
+                        {user.browser_notifications_enabled ? (
+                          <div className="flex items-center gap-2 text-emerald-700">
+                            <Check className="w-4 h-4" />
+                            <span className="font-bold">Aktiv ({user.notification_frequency || '1'}x täglich)</span>
+                          </div>
+                        ) : (
+                          <span className={theme.textSecondary}>Nicht aktiviert</span>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>

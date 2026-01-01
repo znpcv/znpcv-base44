@@ -3,8 +3,6 @@ import { Bell, X, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 
-const VAPID_PUBLIC_KEY = 'BNxS7H8Sh6Qh4vF0V8FqZxR5vNpQ3vY8K9wF5fH3yZ1dJ2kL6mN8pQ9rT2sU4vW6xY8zA1bC3dE5fG7hJ9kL0mN';
-
 const TRADING_QUOTES = [
   { quote: "Die Börse ist ein Ort, an dem Erfahrung wichtiger ist als Intelligenz.", author: "Peter Lynch" },
   { quote: "Risikomanagement ist wichtiger als Gewinnmaximierung.", author: "Warren Buffett" },
@@ -84,6 +82,10 @@ export default function NotificationPrompt({ darkMode }) {
     }
 
     try {
+      // Get VAPID public key from backend
+      const { data: keyData } = await base44.functions.invoke('getVapidPublicKey');
+      const vapidPublicKey = keyData.publicKey;
+
       const registration = await navigator.serviceWorker.ready;
       
       // Check if already subscribed
@@ -91,7 +93,7 @@ export default function NotificationPrompt({ darkMode }) {
       
       if (!subscription) {
         // Convert VAPID key
-        const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
         
         // Subscribe
         subscription = await registration.pushManager.subscribe({
