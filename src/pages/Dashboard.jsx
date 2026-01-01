@@ -282,35 +282,45 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Quick Actions - Einheitliches Design */}
+        {/* Quick Actions - Schwarz/Weiß Design */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
             className={cn("group relative rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all active:scale-[0.98] md:hover:scale-[1.02] touch-manipulation p-4 sm:p-5 md:p-6",
-              darkMode ? "bg-gradient-to-br from-teal-600 to-emerald-700 border-emerald-600" : "bg-gradient-to-br from-teal-500 to-emerald-600 border-teal-500")}>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              darkMode ? "bg-white border-white" : "bg-zinc-900 border-zinc-900")}>
+            <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity",
+              darkMode ? "bg-gradient-to-br from-zinc-100 to-white" : "bg-gradient-to-br from-zinc-800 to-zinc-900")} />
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                <Plus className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" />
+              <div className={cn("w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
+                darkMode ? "bg-black" : "bg-white shadow-xl")}>
+                <Plus className={cn("w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10", darkMode ? "text-white" : "text-black")} />
               </div>
-              <div className="text-sm sm:text-base md:text-lg font-black tracking-wider text-white mb-1">
+              <div className={cn("text-sm sm:text-base md:text-lg font-black tracking-wider mb-1",
+                darkMode ? "text-black" : "text-white")}>
                 {t('newAnalysis').toUpperCase()}
               </div>
-              <div className="text-[9px] sm:text-[10px] text-white/70 font-sans">Analyse starten</div>
+              <div className={cn("text-[9px] sm:text-[10px] font-sans", darkMode ? "text-black/60" : "text-white/60")}>
+                Analyse starten
+              </div>
             </div>
           </button>
 
           <button onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all active:scale-[0.98] md:hover:scale-[1.02] touch-manipulation p-4 sm:p-5 md:p-6",
-              darkMode ? "bg-gradient-to-br from-purple-600 to-blue-600 border-purple-500" : "bg-gradient-to-br from-purple-500 to-blue-500 border-purple-400")}>
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              darkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+            <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity",
+              darkMode ? "bg-gradient-to-br from-zinc-800 to-zinc-900" : "bg-gradient-to-br from-zinc-200 to-zinc-100")} />
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                <History className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" />
+              <div className={cn("w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
+                darkMode ? "bg-white" : "bg-zinc-900 shadow-xl")}>
+                <History className={cn("w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10", darkMode ? "text-black" : "text-white")} />
               </div>
-              <div className="text-sm sm:text-base md:text-lg font-black tracking-wider text-white mb-1">
+              <div className={cn("text-sm sm:text-base md:text-lg font-black tracking-wider mb-1",
+                darkMode ? "text-white" : "text-black")}>
                 TRADE HISTORY
               </div>
-              <div className="text-[9px] sm:text-[10px] text-white/70 font-sans">Alle Trades</div>
+              <div className={cn("text-[9px] sm:text-[10px] font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                Alle Trades
+              </div>
             </div>
           </button>
         </motion.div>
@@ -601,88 +611,136 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Trade Performance Übersicht - Win/Loss + Richtung kombiniert */}
+            {/* Trade Performance Übersicht - Fortgeschritten */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-              className={cn("rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border-2",
+              className={cn("rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border-2",
                 darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
 
-              <div className="flex items-center gap-2 mb-4 sm:mb-5">
-                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center",
-                  darkMode ? "bg-zinc-900" : "bg-zinc-200")}>
-                  <Activity className={cn("w-4 h-4 sm:w-4.5 sm:h-4.5", theme.text)} />
+              {/* Header mit Stats */}
+              <div className="flex items-center justify-between mb-5 sm:mb-6">
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center",
+                    darkMode ? "bg-gradient-to-br from-zinc-900 to-zinc-800" : "bg-gradient-to-br from-zinc-200 to-zinc-100")}>
+                    <Activity className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5", theme.text)} />
+                  </div>
+                  <div>
+                    <h3 className={`text-sm sm:text-base tracking-widest ${theme.text} font-black`}>PERFORMANCE</h3>
+                    <div className={`text-[10px] sm:text-xs ${theme.textMuted} font-sans`}>{stats.executed} ausgeführte Trades</div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className={`text-xs sm:text-sm tracking-widest ${theme.text}`}>TRADE PERFORMANCE</h3>
-                  <div className={`text-[9px] sm:text-[10px] ${theme.textMuted}`}>{stats.executed} {t('exec')}</div>
+                <div className={cn("px-3 py-2 rounded-xl font-black text-sm sm:text-base",
+                  stats.winRate >= 50 
+                    ? darkMode ? "bg-emerald-700/20 text-emerald-700 border-2 border-emerald-700/30" : "bg-teal-100 text-emerald-700 border-2 border-teal-300"
+                    : darkMode ? "bg-rose-600/20 text-rose-600 border-2 border-rose-600/30" : "bg-rose-100 text-rose-600 border-2 border-rose-300")}>
+                  {stats.winRate}%
                 </div>
               </div>
 
-              {/* Win/Loss Section */}
-              <div className="mb-4 sm:mb-5">
-                <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textMuted} mb-2 sm:mb-3 font-bold flex items-center gap-1.5`}>
-                  <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                  ERGEBNIS
+              {/* Win/Loss Grid */}
+              <div className="mb-5 sm:mb-6">
+                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-3 sm:mb-4 font-bold flex items-center gap-2`}>
+                  <div className={`w-1.5 h-4 sm:h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                  ERGEBNIS-ÜBERSICHT
                 </div>
-                <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+                <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
                   {[
-                    { name: 'Wins', value: checklists.filter(c => c.outcome === 'win').length, color: '#0d9488', icon: '↑' },
-                    { name: 'Losses', value: checklists.filter(c => c.outcome === 'loss').length, color: '#e11d48', icon: '↓' },
-                    { name: 'BE', value: checklists.filter(c => c.outcome === 'breakeven').length, color: '#6b7280', icon: '→' }
+                    { 
+                      name: 'Wins', 
+                      value: checklists.filter(c => c.outcome === 'win').length, 
+                      color: '#0d9488', 
+                      icon: ArrowUpRight,
+                      pnl: stats.totalWins
+                    },
+                    { 
+                      name: 'Losses', 
+                      value: checklists.filter(c => c.outcome === 'loss').length, 
+                      color: '#e11d48', 
+                      icon: ArrowDownRight,
+                      pnl: -stats.totalLosses
+                    },
+                    { 
+                      name: 'BE', 
+                      value: checklists.filter(c => c.outcome === 'breakeven').length, 
+                      color: '#6b7280', 
+                      icon: Minus,
+                      pnl: 0
+                    }
                   ].filter(item => item.value > 0).map((item) => (
                     <div 
                       key={item.name}
-                      className={cn("relative overflow-hidden rounded-xl p-3 sm:p-4 border-2 transition-all hover:scale-105",
-                        item.name === 'Wins' ? darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300" :
-                        item.name === 'Losses' ? darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-rose-50 border-rose-300" :
-                        darkMode ? "bg-zinc-800/50 border-zinc-700" : "bg-zinc-100 border-zinc-300")}>
-                      <div className="absolute top-2 right-2 text-2xl opacity-20">{item.icon}</div>
-                      <div className={`text-2xl sm:text-3xl font-black mb-1`} style={{ color: item.color }}>{item.value}</div>
-                      <div className={`text-[8px] sm:text-[9px] ${theme.textMuted} font-bold tracking-wide uppercase`}>
+                      className={cn("relative overflow-hidden rounded-xl p-3 sm:p-4 border-2 transition-all hover:scale-105 cursor-default",
+                        item.name === 'Wins' ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400" :
+                        item.name === 'Losses' ? darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400" :
+                        darkMode ? "bg-zinc-800/50 border-zinc-700" : "bg-zinc-100 border-zinc-400")}>
+                      <div className="absolute top-2 right-2 opacity-10">
+                        <item.icon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: item.color }} />
+                      </div>
+                      <div className={`text-3xl sm:text-4xl font-black mb-1`} style={{ color: item.color }}>
+                        {item.value}
+                      </div>
+                      <div className={`text-[9px] sm:text-[10px] ${theme.textMuted} font-bold tracking-wide uppercase mb-1`}>
                         {item.name}
                       </div>
-                      <div className={`text-[10px] sm:text-xs font-bold mt-0.5`} style={{ color: item.color }}>
-                        {((item.value / stats.executed) * 100).toFixed(0)}%
+                      <div className={`text-xs sm:text-sm font-bold`} style={{ color: item.color }}>
+                        {((item.value / stats.executed) * 100).toFixed(1)}%
                       </div>
+                      {item.pnl !== 0 && (
+                        <div className={`text-[10px] sm:text-xs font-sans mt-1 ${theme.textMuted}`}>
+                          {item.pnl > 0 ? '+' : ''}${item.pnl.toFixed(2)}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Richtung Section */}
+              {/* Direction Grid */}
               <div>
-                <div className={`text-[10px] sm:text-xs tracking-wider ${theme.textMuted} mb-2 sm:mb-3 font-bold flex items-center gap-1.5`}>
-                  <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                  RICHTUNG
+                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-3 sm:mb-4 font-bold flex items-center gap-2`}>
+                  <div className={`w-1.5 h-4 sm:h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                  TRADE-RICHTUNG
                 </div>
-                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   {directionData.map((item) => (
                     <div 
                       key={item.name}
-                      className={cn("relative overflow-hidden rounded-xl p-3 sm:p-4 border-2 transition-all hover:scale-105",
+                      className={cn("relative overflow-hidden rounded-xl p-4 sm:p-5 border-2 transition-all hover:scale-105 cursor-default",
                         item.name === t('long')
-                          ? darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300"
-                          : darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-rose-50 border-rose-300")}>
+                          ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400"
+                          : darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400")}>
                       
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-1.5">
+                      {/* Background Icon */}
+                      <div className="absolute top-3 right-3 opacity-10">
+                        {item.name === t('long') ? 
+                          <ArrowUpRight className="w-12 h-12 sm:w-14 sm:h-14 text-emerald-700" /> : 
+                          <ArrowDownRight className="w-12 h-12 sm:w-14 sm:h-14 text-rose-600" />
+                        }
+                      </div>
+
+                      <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-2 sm:mb-3">
                           {item.name === t('long') ? 
-                            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" /> : 
-                            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" />
+                            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-700" /> : 
+                            <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6 text-rose-600" />
                           }
-                          <span className={cn("text-[10px] sm:text-xs font-black tracking-wider", 
+                          <span className={cn("text-xs sm:text-sm font-black tracking-wider", 
                             item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
                             {item.name.toUpperCase()}
                           </span>
                         </div>
-                      </div>
-                      
-                      <div className={cn("text-3xl sm:text-4xl font-black mb-1", 
-                        item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
-                        {item.value}
-                      </div>
-                      
-                      <div className={`text-xs sm:text-sm font-bold ${theme.textMuted}`}>
-                        {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(0)}% aller Trades
+                        
+                        <div className={cn("text-4xl sm:text-5xl font-black mb-2", 
+                          item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
+                          {item.value}
+                        </div>
+                        
+                        <div className={`text-sm sm:text-base font-bold ${theme.text} mb-1`}>
+                          {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
+                        </div>
+
+                        <div className={`text-[10px] sm:text-xs font-sans ${theme.textMuted}`}>
+                          von {stats.longs + stats.shorts} Trades
+                        </div>
                       </div>
                     </div>
                   ))}
