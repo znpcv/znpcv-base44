@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Clock, Volume2, VolumeX } from 'lucide-react';
+import { Bell, Clock, VolumeX } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -87,29 +87,45 @@ export default function NotificationSettings({ darkMode }) {
   }
 
   return (
-    <div className={`${theme.bg} rounded-xl p-4 sm:p-6 border ${theme.border} space-y-4 sm:space-y-6`}>
-      <div className="flex items-center gap-3">
-        <Bell className="w-5 h-5 text-teal-600" />
-        <h3 className={`text-lg font-bold tracking-wider ${theme.text}`}>BENACHRICHTIGUNGEN</h3>
-      </div>
+    <div className="space-y-5 sm:space-y-6">
 
-      {/* Master Toggle */}
-      <div className="flex items-center justify-between">
-        <div>
-          <Label className={`${theme.text} text-sm font-bold tracking-wider`}>Push-Benachrichtigungen</Label>
-          <p className={`${theme.textSecondary} text-xs font-sans`}>Aktiviere Browser-Benachrichtigungen</p>
+      {/* Master Toggle - Prominent */}
+      <div className={`p-5 sm:p-6 rounded-xl border-2 transition-all ${settings.browser_notifications_enabled ? 
+        darkMode ? 'border-emerald-600 bg-emerald-700/20' : 'border-teal-500 bg-teal-500/20' : 
+        darkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-100'}`}>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-1">
+            <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center transition-all ${
+              settings.browser_notifications_enabled ? 
+              darkMode ? 'bg-emerald-700' : 'bg-teal-500' : 
+              darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}>
+              <Bell className={`w-6 h-6 sm:w-7 sm:h-7 ${settings.browser_notifications_enabled ? 'text-white' : darkMode ? 'text-zinc-400' : 'text-zinc-600'}`} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <Label className={`text-base sm:text-lg font-bold tracking-wider cursor-pointer ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
+                Push-Benachrichtigungen
+              </Label>
+              <p className={`text-xs sm:text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} font-sans`}>
+                Erhalte Benachrichtigungen direkt im Browser
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={settings.browser_notifications_enabled}
+            onCheckedChange={(checked) => updateSetting('browser_notifications_enabled', checked)}
+            className="scale-125"
+          />
         </div>
-        <Switch
-          checked={settings.browser_notifications_enabled}
-          onCheckedChange={(checked) => updateSetting('browser_notifications_enabled', checked)}
-        />
       </div>
 
       {settings.browser_notifications_enabled && (
         <>
           {/* Notification Types */}
-          <div className="space-y-3">
-            <h4 className={`${theme.text} text-sm font-bold tracking-wider`}>EREIGNISTYPEN</h4>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className={`w-1 h-6 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+              <h4 className={`${theme.text} text-base sm:text-lg font-bold tracking-wider`}>EREIGNISTYPEN</h4>
+            </div>
             
             <div className="space-y-2">
               <NotificationType
@@ -150,45 +166,71 @@ export default function NotificationSettings({ darkMode }) {
             </div>
           </div>
 
-          {/* Frequency */}
-          <div>
-            <Label className={`${theme.text} text-sm font-bold tracking-wider block mb-2`}>
-              HÄUFIGKEIT PRO TAG
-            </Label>
-            <div className="grid grid-cols-4 gap-2">
+          {/* Frequency - Enhanced */}
+          <div className={`p-5 sm:p-6 rounded-xl border-2 ${darkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-100'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <Clock className={`w-5 h-5 ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`} />
+              <Label className={`${theme.text} text-base sm:text-lg font-bold tracking-wider`}>
+                HÄUFIGKEIT PRO TAG
+              </Label>
+            </div>
+            <div className="grid grid-cols-4 gap-2 sm:gap-3">
               {['1', '2', '3', '4'].map((freq) => (
                 <button
                   key={freq}
                   onClick={() => updateSetting('notification_frequency', freq)}
-                  className={`p-3 rounded-lg border-2 transition-all font-bold ${
+                  className={`p-4 sm:p-5 rounded-xl border-2 transition-all font-bold text-lg sm:text-xl ${
                     settings.notification_frequency === freq
-                      ? 'bg-teal-600 border-teal-600 text-white'
-                      : `${theme.border} ${theme.text} hover:border-teal-600/50`
+                      ? darkMode ? 'bg-emerald-700 border-emerald-700 text-white' : 'bg-teal-500 border-teal-500 text-white'
+                      : `${theme.border} ${theme.text} hover:border-emerald-600/50`
                   }`}
                 >
                   {freq}x
                 </button>
               ))}
             </div>
+            <p className={`text-xs sm:text-sm ${darkMode ? 'text-zinc-500' : 'text-zinc-600'} mt-3 font-sans`}>
+              Lege fest, wie oft du täglich Benachrichtigungen erhalten möchtest
+            </p>
           </div>
 
-          {/* Snooze Duration */}
-          <div>
-            <Label className={`${theme.text} text-sm font-bold tracking-wider flex items-center gap-2 mb-2`}>
-              <Clock className="w-4 h-4" />
-              SNOOZE-DAUER (MINUTEN)
-            </Label>
-            <Input
-              type="number"
-              min="5"
-              max="120"
-              step="5"
-              value={settings.notification_snooze_duration}
-              onChange={(e) => updateSetting('notification_snooze_duration', parseInt(e.target.value) || 30)}
-              className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black'}`}
-            />
-            <p className={`${theme.textSecondary} text-xs font-sans mt-1`}>
-              Benachrichtigungen werden für diese Dauer pausiert
+          {/* Snooze Duration - Enhanced */}
+          <div className={`p-5 sm:p-6 rounded-xl border-2 ${darkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-100'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <VolumeX className={`w-5 h-5 ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`} />
+              <Label className={`${theme.text} text-base sm:text-lg font-bold tracking-wider`}>
+                SNOOZE-DAUER
+              </Label>
+            </div>
+            <div className="flex items-center gap-3 mb-3">
+              <Input
+                type="number"
+                min="5"
+                max="120"
+                step="5"
+                value={settings.notification_snooze_duration}
+                onChange={(e) => updateSetting('notification_snooze_duration', parseInt(e.target.value) || 30)}
+                className={`flex-1 p-3 sm:p-4 rounded-xl border-2 font-bold text-lg sm:text-xl text-center ${darkMode ? 'bg-zinc-950 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black'}`}
+              />
+              <span className={`text-base sm:text-lg font-bold ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>Min</span>
+            </div>
+            <div className="flex gap-2">
+              {[15, 30, 60, 120].map((minutes) => (
+                <button
+                  key={minutes}
+                  onClick={() => updateSetting('notification_snooze_duration', minutes)}
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all ${
+                    settings.notification_snooze_duration === minutes
+                      ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
+                      : darkMode ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' : 'bg-zinc-200 text-zinc-600 hover:bg-zinc-300'
+                  }`}
+                >
+                  {minutes}m
+                </button>
+              ))}
+            </div>
+            <p className={`text-xs sm:text-sm ${darkMode ? 'text-zinc-500' : 'text-zinc-600'} mt-3 font-sans`}>
+              Wie lange sollen Benachrichtigungen pausiert werden?
             </p>
           </div>
         </>
@@ -197,9 +239,13 @@ export default function NotificationSettings({ darkMode }) {
       <Button
         onClick={handleSave}
         disabled={saving}
-        className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+        className={`w-full py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg tracking-wider transition-all border-2 ${
+          darkMode
+            ? 'bg-white text-black hover:bg-zinc-200 border-white'
+            : 'bg-zinc-900 text-white hover:bg-zinc-800 border-zinc-900'
+        } disabled:opacity-50`}
       >
-        {saving ? 'Speichert...' : 'Einstellungen speichern'}
+        {saving ? '⏳ Speichern...' : '💾 Einstellungen speichern'}
       </Button>
     </div>
   );
@@ -214,15 +260,26 @@ function NotificationType({ icon, label, description, enabled, onChange, darkMod
   };
 
   return (
-    <div className={`${theme.bg} border ${theme.border} rounded-lg p-3 flex items-center justify-between`}>
-      <div className="flex items-center gap-3 flex-1">
-        <span className="text-xl">{icon}</span>
-        <div>
-          <div className={`${theme.text} text-sm font-bold tracking-wider`}>{label}</div>
-          <div className={`${theme.textSecondary} text-xs font-sans`}>{description}</div>
+    <div className={`p-4 sm:p-5 rounded-xl border-2 transition-all ${enabled 
+      ? darkMode ? 'border-emerald-600 bg-emerald-700/20' : 'border-teal-500 bg-teal-500/20'
+      : darkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-100'
+    }`}>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 flex-1">
+          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all ${
+            enabled 
+              ? darkMode ? 'bg-emerald-700' : 'bg-teal-500'
+              : darkMode ? 'bg-zinc-800' : 'bg-zinc-300'
+          }`}>
+            <span className={`text-xl sm:text-2xl ${enabled ? '' : 'opacity-50'}`}>{icon}</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className={`text-sm sm:text-base font-bold tracking-wider ${theme.text}`}>{label}</div>
+            <div className={`text-xs sm:text-sm ${theme.textSecondary} font-sans`}>{description}</div>
+          </div>
         </div>
+        <Switch checked={enabled} onCheckedChange={onChange} className="scale-125" />
       </div>
-      <Switch checked={enabled} onCheckedChange={onChange} />
     </div>
   );
 }

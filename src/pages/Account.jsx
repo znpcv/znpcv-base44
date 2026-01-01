@@ -394,24 +394,24 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Notifications Section */}
-          <div className={`relative overflow-hidden ${theme.bgSecondary} border-2 ${theme.border} rounded-2xl`}>
-            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 rounded-full blur-3xl -z-0`} />
-            <div className="relative z-10 p-4 sm:p-5 md:p-6">
-              <div className="flex items-center justify-between mb-4 sm:mb-5">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className={`p-2 sm:p-2.5 rounded-xl ${darkMode ? 'bg-teal-500/20' : 'bg-teal-100'}`}>
-                    <Bell className={`w-4 h-4 sm:w-5 sm:h-5 text-teal-600`} />
-                  </div>
-                  <div>
-                    <h3 className={`text-sm sm:text-base font-bold tracking-wider ${theme.text}`}>ERINNERUNGEN</h3>
-                    <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary}`}>Personalisiere deine Benachrichtigungen</p>
-                  </div>
+          {/* Notification Settings - Prominent Section */}
+          <div className={`relative overflow-hidden border-2 rounded-2xl ${darkMode ? 'border-emerald-600/30 bg-emerald-700/5' : 'border-teal-500/30 bg-teal-500/5'}`}>
+            <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${darkMode ? 'from-emerald-700/20' : 'from-teal-500/20'} to-transparent rounded-full blur-3xl`} />
+            <div className="relative z-10 p-5 sm:p-6 md:p-8">
+              <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center ${darkMode ? 'bg-emerald-700' : 'bg-teal-500'}`}>
+                  <Bell className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className={`text-xl sm:text-2xl md:text-3xl font-bold tracking-wider ${theme.text}`}>BENACHRICHTIGUNGEN</h3>
+                  <p className={`text-xs sm:text-sm ${theme.textSecondary} font-sans`}>Stelle alle Erinnerungen individuell ein</p>
                 </div>
               </div>
               
-              {editing ? (
-                <div className="space-y-4 sm:space-y-5">
+              <NotificationSettings darkMode={darkMode} />
+              
+              {editing && (
+                <div className="space-y-4 sm:space-y-5 mt-6">
                   {/* Email Notifications */}
                   <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
                     <div className="flex items-start justify-between gap-3 mb-3">
@@ -650,7 +650,7 @@ export default function AccountPage() {
           )}
 
           {/* Navigation */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <HomeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
               <span className="hidden sm:inline">HOME</span>
@@ -658,10 +658,6 @@ export default function AccountPage() {
             <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
               <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
               <span className="hidden sm:inline">STATS</span>
-            </Button>
-            <Button onClick={() => navigate(createPageUrl('Integrations'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">TOOLS</span>
             </Button>
             <Button onClick={handleLogout} className="h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
               <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
