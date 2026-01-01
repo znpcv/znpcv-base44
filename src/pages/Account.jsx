@@ -26,7 +26,6 @@ export default function AccountPage() {
     phone: '',
     phone_country_code: '+49',
     bio: '',
-    country: '',
     address_street: '',
     address_city: '',
     address_postal_code: '',
@@ -55,7 +54,6 @@ export default function AccountPage() {
         phone: userData.phone || '',
         phone_country_code: userData.phone_country_code || '+49',
         bio: userData.bio || '',
-        country: userData.country || '',
         address_street: userData.address_street || '',
         address_city: userData.address_city || '',
         address_postal_code: userData.address_postal_code || '',
@@ -362,81 +360,90 @@ export default function AccountPage() {
           </div>
 
           {/* Trading Preferences */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
-                <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500`} />
-                <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>LEVERAGE</span>
-              </div>
-              {editing ?
-              <Input
-                value={formData.default_leverage}
-                onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
-                placeholder="100"
-                className={`${theme.border} h-8 sm:h-9 text-[10px] sm:text-xs`} /> :
-              <div className={`text-sm sm:text-base md:text-lg font-bold ${theme.text}`}>1:{user.default_leverage || '100'}</div>
-              }
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
+            <div className="flex items-center gap-2 mb-4 sm:mb-5">
+              <Settings className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>TRADING EINSTELLUNGEN</span>
             </div>
-
-            <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
-                <Percent className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500`} />
-                <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>RISK</span>
+            
+            <div className="grid grid-cols-2 gap-4 sm:gap-5">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500`} />
+                  <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>LEVERAGE</label>
+                </div>
+                {editing ?
+                <Input
+                  value={formData.default_leverage}
+                  onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
+                  placeholder="100"
+                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
+                <div className={`text-lg sm:text-xl md:text-2xl font-black ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  1:{user.default_leverage || '100'}
+                </div>
+                }
               </div>
-              {editing ?
-              <Input
-                value={formData.default_risk_percent}
-                onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
-                placeholder="1"
-                className={`${theme.border} h-8 sm:h-9 text-[10px] sm:text-xs`} /> :
-              <div className={`text-sm sm:text-base md:text-lg font-bold ${theme.text}`}>{user.default_risk_percent || '1'}%</div>
-              }
+
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Percent className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500`} />
+                  <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>RISK %</label>
+                </div>
+                {editing ?
+                <Input
+                  value={formData.default_risk_percent}
+                  onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
+                  placeholder="1"
+                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
+                <div className={`text-lg sm:text-xl md:text-2xl font-black ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {user.default_risk_percent || '1'}%
+                </div>
+                }
+              </div>
             </div>
           </div>
 
           {/* Push Notifications */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
-            <div className="flex items-center gap-2 mb-3">
-              <Bell className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>PUSH-BENACHRICHTIGUNGEN</span>
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
+            <div className="flex items-center gap-2 mb-4 sm:mb-5">
+              <Bell className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>BENACHRICHTIGUNGEN</span>
             </div>
             
             {editing ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <PushNotificationManager darkMode={darkMode} onSuccess={loadUser} />
                 
                 {formData.browser_notifications_enabled && (
-                  <>
-                    <div className={`p-2.5 rounded-lg border ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                      <div className={`text-[10px] ${theme.textSecondary} mb-2 tracking-wider`}>HÄUFIGKEIT</div>
-                      <div className="grid grid-cols-4 gap-1.5">
-                        {['1', '2', '3', '4'].map((freq) => (
-                          <button
-                            key={freq}
-                            onClick={() => setFormData({...formData, notification_frequency: freq})}
-                            className={`py-1.5 px-2 rounded text-xs font-bold transition-all ${
-                              formData.notification_frequency === freq
-                                ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
-                                : darkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'
-                            }`}
-                          >
-                            {freq}x
-                          </button>
-                        ))}
-                      </div>
+                  <div className={`p-3 sm:p-4 rounded-xl border ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                    <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 sm:mb-3 block tracking-wider font-bold`}>HÄUFIGKEIT</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {['1', '2', '3', '4'].map((freq) => (
+                        <button
+                          key={freq}
+                          onClick={() => setFormData({...formData, notification_frequency: freq})}
+                          className={`py-2 sm:py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${
+                            formData.notification_frequency === freq
+                              ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
+                              : darkMode ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' : 'bg-zinc-200 text-zinc-600 hover:bg-zinc-300'
+                          }`}
+                        >
+                          {freq}x
+                        </button>
+                      ))}
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             ) : (
-              <div className={`text-xs sm:text-sm ${theme.text} font-mono`}>
+              <div className={`p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
                 {user.browser_notifications_enabled ? (
                   <div className="flex items-center gap-2 text-emerald-700">
-                    <Check className="w-4 h-4" />
-                    <span className="font-bold">Aktiv ({user.notification_frequency || '1'}x täglich)</span>
+                    <Check className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="font-bold text-sm sm:text-base">Aktiv ({user.notification_frequency || '1'}x täglich)</span>
                   </div>
                 ) : (
-                  <span className={theme.textSecondary}>Nicht aktiviert</span>
+                  <span className={`${theme.textSecondary} text-sm sm:text-base`}>Nicht aktiviert</span>
                 )}
               </div>
             )}
@@ -457,7 +464,6 @@ export default function AccountPage() {
                   phone: user.phone || '',
                   phone_country_code: user.phone_country_code || '+49',
                   bio: user.bio || '',
-                  country: user.country || '',
                   address_street: user.address_street || '',
                   address_city: user.address_city || '',
                   address_postal_code: user.address_postal_code || '',
