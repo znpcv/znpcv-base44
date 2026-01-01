@@ -37,6 +37,32 @@ export default function TradeDetailPage() {
     if (tradeId) loadTrade();
   }, [tradeId]);
 
+  // Auto-save feature - saves 2 seconds after changes
+  useEffect(() => {
+    if (!tradeId || !editing) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        await base44.entities.TradeChecklist.update(tradeId, {
+          outcome: editData.outcome,
+          actual_pnl: editData.actual_pnl,
+          exit_date: editData.exit_date,
+          notes: editData.notes,
+          status: editData.outcome !== 'pending' ? 'closed' : trade.status
+        });
+        
+        // Force reload across all pages
+        if (window.queryClient) {
+          window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+        }
+      } catch (error) {
+        console.error('Auto-save failed:', error);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [editData, tradeId, editing]);
+
   const loadTrade = async () => {
     try {
       const data = await base44.entities.TradeChecklist.filter({ id: tradeId });
