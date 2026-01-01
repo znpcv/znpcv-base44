@@ -207,83 +207,83 @@ export default function AccountPage() {
 
           {/* Info Grid - Compact */}
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
-            {/* Contact Info */}
-            <div className={`border-2 ${theme.border} rounded-xl p-4`}>
-              <div className="flex items-center gap-2 mb-3">
-                <Phone className={`w-4 h-4 ${theme.textSecondary}`} />
-                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>KONTAKT</span>
-              </div>
-              
-              <div className="space-y-3">
-                {/* Phone */}
-                <div>
-                  <label className={`text-[9px] ${theme.textMuted} mb-1.5 block tracking-wider font-bold`}>TELEFON</label>
-                  {editing ?
-                  <div className="flex gap-2">
-                    <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
-                      <SelectTrigger className={`w-20 ${theme.border} h-9 text-sm rounded-lg`}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-[200px]">
-                        {COUNTRIES.map((c) =>
-                        <SelectItem key={c.dial} value={c.dial} className="text-sm">{c.dial}</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
-                      placeholder="123456789"
-                      className={`flex-1 ${theme.border} h-9 text-sm rounded-lg`} />
-                  </div> :
-                  <div className={`text-sm ${theme.text} font-mono p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                    {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
-                  </div>
-                  }
-                </div>
-              </div>
-            </div>
-
-            {/* Address Info */}
+            {/* Contact & Address Info */}
             <div className={`border-2 ${theme.border} rounded-xl p-4`}>
               <div className="flex items-center gap-2 mb-3">
                 <MapPin className={`w-4 h-4 ${theme.textSecondary}`} />
-                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>ADRESSE</span>
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>KONTAKT & ADRESSE</span>
               </div>
               
               {editing ? (
                 <div className="space-y-3">
-                  <Input
-                    value={formData.address_street}
-                    onChange={(e) => setFormData({...formData, address_street: e.target.value})}
-                    placeholder="Straße 123"
-                    className={`${theme.border} h-9 text-sm rounded-lg`} />
-                  <div className="grid grid-cols-2 gap-2">
-                    <Input
-                      value={formData.address_postal_code}
-                      onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
-                      placeholder="PLZ"
-                      className={`${theme.border} h-9 text-sm rounded-lg`} />
-                    <Input
-                      value={formData.address_city}
-                      onChange={(e) => setFormData({...formData, address_city: e.target.value})}
-                      placeholder="Stadt"
-                      className={`${theme.border} h-9 text-sm rounded-lg`} />
+                  {/* Phone */}
+                  <div>
+                    <label className={`text-[9px] ${theme.textMuted} mb-1.5 block tracking-wider font-bold`}>TELEFON</label>
+                    <div className="flex gap-2">
+                      <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
+                        <SelectTrigger className={`w-20 ${theme.border} h-9 text-sm rounded-lg`}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-[200px]">
+                          {COUNTRIES.map((c) =>
+                          <SelectItem key={c.dial} value={c.dial} className="text-sm">{c.dial}</SelectItem>
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
+                        placeholder="123456789"
+                        className={`flex-1 ${theme.border} h-9 text-sm rounded-lg`} />
+                    </div>
                   </div>
-                  <CountrySelect
-                    value={formData.address_country}
-                    onChange={(v) => setFormData({...formData, address_country: v})}
-                    className={`${theme.border} h-9 text-sm rounded-lg`} />
+                  {/* Address */}
+                  <div>
+                    <label className={`text-[9px] ${theme.textMuted} mb-1.5 block tracking-wider font-bold`}>ADRESSE</label>
+                    <div className="space-y-2">
+                      <Input
+                        value={formData.address_street}
+                        onChange={(e) => setFormData({...formData, address_street: e.target.value})}
+                        placeholder="Straße 123"
+                        className={`${theme.border} h-9 text-sm rounded-lg`} />
+                      <div className="grid grid-cols-2 gap-2">
+                        <Input
+                          value={formData.address_postal_code}
+                          onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
+                          placeholder="PLZ"
+                          className={`${theme.border} h-9 text-sm rounded-lg`} />
+                        <Input
+                          value={formData.address_city}
+                          onChange={(e) => setFormData({...formData, address_city: e.target.value})}
+                          placeholder="Stadt"
+                          className={`${theme.border} h-9 text-sm rounded-lg`} />
+                      </div>
+                      <CountrySelect
+                        value={formData.address_country}
+                        onChange={(v) => setFormData({...formData, address_country: v})}
+                        className={`${theme.border} h-9 text-sm rounded-lg`} />
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div className={`text-sm ${theme.text} p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'} space-y-1`}>
-                  <div>{user.address_street || '-'}</div>
-                  <div>{user.address_postal_code && user.address_city ? `${user.address_postal_code} ${user.address_city}` : '-'}</div>
-                  <div className="text-xs">{COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}</div>
+                <div className="space-y-3">
+                  <div>
+                    <div className={`text-[9px] ${theme.textMuted} mb-1.5 tracking-wider font-bold`}>TELEFON</div>
+                    <div className={`text-sm ${theme.text} font-mono p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                      {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
+                    </div>
+                  </div>
+                  <div>
+                    <div className={`text-[9px] ${theme.textMuted} mb-1.5 tracking-wider font-bold`}>ADRESSE</div>
+                    <div className={`text-sm ${theme.text} p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'} space-y-1`}>
+                      <div>{user.address_street || '-'}</div>
+                      <div>{user.address_postal_code && user.address_city ? `${user.address_postal_code} ${user.address_city}` : '-'}</div>
+                      <div className="text-xs">{COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}</div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
-          </div>
 
           {/* Security & Settings - Compact Grid */}
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
