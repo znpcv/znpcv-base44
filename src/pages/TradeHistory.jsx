@@ -25,7 +25,7 @@ export default function TradeHistoryPage() {
   const { t, isRTL, darkMode } = useLanguage();
   const { isOnline, updatePendingCount } = useOffline();
   const [filter, setFilter] = useState('all');
-  
+
   useEffect(() => {
     offlineClient.setUpdateCallback(updatePendingCount);
   }, [updatePendingCount]);
@@ -371,9 +371,9 @@ export default function TradeHistoryPage() {
               {filteredTrades.length >= 2 &&
               <Button
                 onClick={() => setCompareMode(!compareMode)}
-                variant="outline"
-                className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs",
-                compareMode ? "bg-emerald-700 text-white border-emerald-700" : theme.border)}>
+                variant="outline" className="bg-background text-slate-950 px-2 py-2 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm hover:bg-accent hover:text-accent-foreground h-8 sm:h-9 sm:px-3 border-2 border-zinc-800/50">
+
+
                   <GitCompare className="w-3.5 h-3.5 sm:mr-1.5" />
                   <span className="hidden sm:inline">{compareMode ? 'Fertig' : 'Vergleich'}</span>
                 </Button>
