@@ -105,15 +105,13 @@ class OfflineStorage {
 
 const storage = new OfflineStorage();
 
-const OfflineContext = createContext({
+export const OfflineContext = createContext({
   isOnline: true,
   pendingCount: 0,
   syncInProgress: false,
   storage: null,
   updatePendingCount: () => {}
 });
-
-export const useOffline = () => useContext(OfflineContext);
 
 export default function OfflineManager({ children }) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -280,3 +278,4 @@ export default function OfflineManager({ children }) {
 }
 
 export { storage, STORES };
+export { useOffline } from './useOffline';
