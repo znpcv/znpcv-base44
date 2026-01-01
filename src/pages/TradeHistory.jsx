@@ -34,7 +34,7 @@ export default function TradeHistoryPage() {
   const [editingTrade, setEditingTrade] = useState(null);
   const [creatingNew, setCreatingNew] = useState(false);
   const [selectedTrades, setSelectedTrades] = useState([]);
-  const [compareMode, setCompareMode] = useState(false);
+  const [showBulkActions, setShowBulkActions] = useState(false);
   const [advancedFilters, setAdvancedFilters] = useState({
     dateFrom: format(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
     dateTo: format(new Date(), 'yyyy-MM-dd'),
@@ -218,16 +218,49 @@ export default function TradeHistoryPage() {
   };
 
   const toggleTradeSelection = (tradeId) => {
-    setSelectedTrades((prev) =>
-    prev.includes(tradeId) ? prev.filter((id) => id !== tradeId) : [...prev, tradeId]
-    );
+    setSelectedTrades((prev) => {
+      const newSelection = prev.includes(tradeId) ? prev.filter((id) => id !== tradeId) : [...prev, tradeId];
+      setShowBulkActions(newSelection.length > 0);
+      return newSelection;
+    });
   };
 
   const toggleSelectAll = () => {
     if (selectedTrades.length === filteredTrades.length) {
       setSelectedTrades([]);
+      setShowBulkActions(false);
     } else {
       setSelectedTrades(filteredTrades.map((t) => t.id));
+      setShowBulkActions(true);
+    }
+  };
+
+  const handleBulkExportPDF = async () => {
+    try {
+      setExporting(true);
+      const selectedData = checklists.filter(t => selectedTrades.includes(t.id));
+      const response = await base44.functions.invoke('exportTradesPDF', { trades: selectedData });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ZNPCV_Selected_${selectedTrades.length}_Trades.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      toast.success(`${selectedTrades.length} Trades exportiert`);
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast.error('Export fehlgeschlagen');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleCompareSelected = () => {
+    if (selectedTrades.length === 2) {
+      // Modal wird automatisch geöffnet durch AnimatePresence
+    } else {
+      toast.error('Wähle genau 2 Trades zum Vergleichen');
     }
   };
 
@@ -406,15 +439,7 @@ export default function TradeHistoryPage() {
                 <FileText className="w-3.5 h-3.5 sm:mr-1.5" />
                 <span className="hidden sm:inline">CSV</span>
               </Button>
-              {filteredTrades.length >= 2 &&
-              <Button
-                onClick={() => setCompareMode(!compareMode)}
-                className={cn("h-8 sm:h-9 px-2 sm:px-3 border-2 text-xs font-bold rounded-xl transition-all",
-                compareMode ? "bg-emerald-700 text-white border-emerald-700 hover:bg-emerald-800" : darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700" : "bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400")}>
-                  <GitCompare className="w-3.5 h-3.5 sm:mr-1.5" />
-                  <span className="hidden sm:inline">{compareMode ? 'Fertig' : 'Vergleich'}</span>
-                </Button>
-              }
+
             </div>
           </div>
           
@@ -463,14 +488,22 @@ export default function TradeHistoryPage() {
             className={`border-2 ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
               <div className={`p-3 sm:p-4 md:p-5 border-b ${theme.border}`}>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className={`text-sm sm:text-base md:text-lg tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
+                  <div className="flex items-center gap-3">
+                    <h3 className={`text-sm sm:text-base md:text-lg tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
+                    {selectedTrades.length > 0 && (
+                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-700 text-white rounded-lg text-xs font-bold">
+                        <CheckSquare className="w-3.5 h-3.5" />
+                        {selectedTrades.length}
+                      </motion.div>
+                    )}
+                  </div>
                   {filteredTrades.length > 0 &&
                   <button
                     onClick={toggleSelectAll}
-                    className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border-2 transition-all",
+                    className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border-2 transition-all font-bold",
                     selectedTrades.length === filteredTrades.length ?
                     "bg-emerald-700 text-white border-emerald-700" :
-                    darkMode ? "border-zinc-800 text-zinc-400 hover:border-zinc-700" : "border-zinc-300 text-zinc-600 hover:border-zinc-400")}>
+                    darkMode ? "border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700" : "border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400")}>
                       <CheckSquare className="w-3.5 h-3.5" />
                       {selectedTrades.length === filteredTrades.length ? 'Alle abwählen' : 'Alle auswählen'}
                     </button>
@@ -524,34 +557,31 @@ export default function TradeHistoryPage() {
               <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[500px] sm:max-h-[550px] md:max-h-[600px] overflow-y-auto`}>
                   {filteredTrades.map((trade) =>
                 <div key={trade.id}
-                className={cn("p-3 sm:p-4 md:p-5 lg:p-6 transition-all group cursor-pointer relative",
-                compareMode && selectedTrades.includes(trade.id) && "ring-2 ring-emerald-700",
+                className={cn("p-3 sm:p-4 md:p-5 transition-all group relative",
+                selectedTrades.includes(trade.id) && "ring-2 ring-inset ring-emerald-700 bg-emerald-700/5",
                 darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70')}
-                onClick={(e) => {
-                  if (compareMode) {
-                    e.stopPropagation();
-                    if (selectedTrades.length < 2 || selectedTrades.includes(trade.id)) {
-                      toggleTradeSelection(trade.id);
-                    }
-                  } else {
-                    navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`);
-                  }
-                }}>
+                onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
                       <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-2.5 md:mb-3">
                         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1">
-                          {compareMode &&
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleTradeSelection(trade.id);
-                        }}
-                        className={cn("w-6 h-6 border-2 rounded flex items-center justify-center flex-shrink-0 cursor-pointer transition-all",
-                        selectedTrades.includes(trade.id) ?
-                        "bg-emerald-700 border-emerald-700" :
-                        darkMode ? "border-zinc-700 hover:border-zinc-600" : "border-zinc-400 hover:border-zinc-500")}>
-                              {selectedTrades.includes(trade.id) && <CheckSquare className="w-4 h-4 text-white" />}
-                            </div>
-                      }
+                          <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleTradeSelection(trade.id);
+                            }}
+                            className={cn("w-6 h-6 border-2 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer transition-all shadow-sm",
+                            selectedTrades.includes(trade.id) ?
+                            "bg-emerald-700 border-emerald-700" :
+                            darkMode ? "border-zinc-700 hover:border-emerald-700/50 bg-zinc-900" : "border-zinc-400 hover:border-emerald-600/50 bg-white")}>
+                              <AnimatePresence>
+                                {selectedTrades.includes(trade.id) && (
+                                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+                                    <CheckSquare className="w-4 h-4 text-white" />
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </motion.div>
                           <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg sm:rounded-xl border-2",
                       trade.outcome === 'win' ? 'bg-emerald-700 text-white border-emerald-700' :
                       trade.outcome === 'loss' ? 'bg-rose-600 text-white border-rose-600' :
@@ -703,28 +733,86 @@ export default function TradeHistoryPage() {
           onSave={handleSaveTrade}
           isCreating={creatingNew}
           darkMode={darkMode} />
-
         }
 
-        {compareMode && selectedTrades.length === 2 &&
+        {selectedTrades.length === 2 &&
         <TradeCompareModal
           trade1={checklists.find((t) => t.id === selectedTrades[0])}
           trade2={checklists.find((t) => t.id === selectedTrades[1])}
           onClose={() => {
-            setCompareMode(false);
             setSelectedTrades([]);
+            setShowBulkActions(false);
           }}
           darkMode={darkMode} />
-
         }
       </AnimatePresence>
 
-      {/* Bulk Delete Panel */}
-      <BulkDeletePanel
-        selectedCount={selectedTrades.length}
-        onDelete={handleBulkDelete}
-        onCancel={() => setSelectedTrades([])}
-        darkMode={darkMode} />
+      {/* Advanced Bulk Actions Bar */}
+      <AnimatePresence>
+        {showBulkActions && selectedTrades.length > 0 && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+          >
+            <div className={cn("flex items-center gap-2 px-4 py-3 rounded-2xl border-2 shadow-2xl backdrop-blur-xl",
+              darkMode ? "bg-zinc-900/95 border-zinc-700" : "bg-white/95 border-zinc-300")}>
+              
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
+                <CheckSquare className={`w-4 h-4 ${theme.text}`} />
+                <span className={`text-sm font-bold ${theme.text}`}>{selectedTrades.length} ausgewählt</span>
+              </div>
+
+              <div className="w-px h-6 bg-zinc-700" />
+
+              {selectedTrades.length === 2 && (
+                <Button
+                  onClick={handleCompareSelected}
+                  className="h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-xl text-sm font-bold flex items-center gap-2"
+                >
+                  <GitCompare className="w-4 h-4" />
+                  Vergleichen
+                </Button>
+              )}
+
+              <Button
+                onClick={handleBulkExportPDF}
+                disabled={exporting}
+                className={cn("h-9 px-4 rounded-xl text-sm font-bold flex items-center gap-2 border-2",
+                  darkMode ? "bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700" : "bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200")}
+              >
+                <Download className="w-4 h-4" />
+                Export
+              </Button>
+
+              <Button
+                onClick={handleBulkDelete}
+                className="h-9 px-4 bg-rose-600 hover:bg-rose-700 text-white border-0 rounded-xl text-sm font-bold flex items-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                Löschen
+              </Button>
+
+              <div className="w-px h-6 bg-zinc-700" />
+
+              <button
+                onClick={() => {
+                  setSelectedTrades([]);
+                  setShowBulkActions(false);
+                }}
+                className={cn("p-2 rounded-lg transition-colors",
+                  darkMode ? "hover:bg-zinc-800 text-zinc-400" : "hover:bg-zinc-200 text-zinc-600")}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>);
 
