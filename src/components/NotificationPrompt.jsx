@@ -83,8 +83,13 @@ export default function NotificationPrompt({ darkMode }) {
 
     try {
       // Get VAPID public key from backend
-      const { data: keyData } = await base44.functions.invoke('getVapidPublicKey');
-      const vapidPublicKey = keyData.publicKey;
+      const response = await base44.functions.invoke('getVapidPublicKey');
+      const vapidPublicKey = response.data?.publicKey;
+      
+      if (!vapidPublicKey) {
+        console.error('VAPID Public Key nicht verfügbar');
+        return;
+      }
 
       const registration = await navigator.serviceWorker.ready;
       
@@ -106,10 +111,15 @@ export default function NotificationPrompt({ darkMode }) {
       const deviceInfo = `${navigator.platform} - ${navigator.userAgent.split(' ').pop()}`;
 
       // Send subscription to backend
-      await base44.functions.invoke('subscribePush', {
+      const subscribeResponse = await base44.functions.invoke('subscribePush', {
         subscription: subscription.toJSON(),
         deviceInfo
       });
+
+      if (!subscribeResponse.data?.success) {
+        console.error('Subscription fehlgeschlagen');
+        return;
+      }
 
       console.log('Push subscription successful');
     } catch (err) {

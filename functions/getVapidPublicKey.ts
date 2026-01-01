@@ -5,12 +5,22 @@ Deno.serve(async (req) => {
     const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY');
 
     if (!vapidPublicKey) {
-      return Response.json({ error: 'VAPID key not configured' }, { status: 500 });
+      console.error('VAPID_PUBLIC_KEY nicht gesetzt');
+      return Response.json({ 
+        error: 'VAPID key not configured',
+        message: 'Bitte VAPID_PUBLIC_KEY in den Umgebungsvariablen setzen'
+      }, { status: 500 });
     }
 
-    return Response.json({ publicKey: vapidPublicKey });
+    return Response.json({ 
+      success: true,
+      publicKey: vapidPublicKey 
+    });
   } catch (error) {
     console.error('Get VAPID key failed:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ 
+      error: error.message,
+      success: false 
+    }, { status: 500 });
   }
 });

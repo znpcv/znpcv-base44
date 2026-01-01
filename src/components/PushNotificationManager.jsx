@@ -44,8 +44,12 @@ export default function PushNotificationManager({ darkMode, onSuccess }) {
       }
 
       // Get VAPID public key from backend
-      const { data: keyData } = await base44.functions.invoke('getVapidPublicKey');
-      const vapidPublicKey = keyData.publicKey;
+      const response = await base44.functions.invoke('getVapidPublicKey');
+      const vapidPublicKey = response.data?.publicKey;
+      
+      if (!vapidPublicKey) {
+        throw new Error('VAPID Public Key nicht verfügbar');
+      }
 
       // Wait for service worker
       const registration = await navigator.serviceWorker.ready;
@@ -68,10 +72,14 @@ export default function PushNotificationManager({ darkMode, onSuccess }) {
       const deviceInfo = `${navigator.platform} - ${navigator.userAgent.split(' ').pop()}`;
 
       // Send subscription to backend
-      await base44.functions.invoke('subscribePush', {
+      const subscribeResponse = await base44.functions.invoke('subscribePush', {
         subscription: subscription.toJSON(),
         deviceInfo
       });
+
+      if (!subscribeResponse.data?.success) {
+        throw new Error('Subscription fehlgeschlagen');
+      }
 
       // Update user settings
       await base44.auth.updateMe({ browser_notifications_enabled: true });

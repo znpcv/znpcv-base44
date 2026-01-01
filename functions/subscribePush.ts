@@ -9,10 +9,19 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { subscription, deviceInfo } = await req.json();
+    const body = await req.json();
+    const { subscription, deviceInfo } = body;
 
-    if (!subscription || !subscription.endpoint) {
-      return Response.json({ error: 'Invalid subscription' }, { status: 400 });
+    if (!subscription || !subscription.endpoint || !subscription.keys) {
+      return Response.json({ error: 'Invalid subscription data' }, { status: 400 });
+    }
+
+    // Validate subscription keys
+    if (!subscription.keys?.p256dh || !subscription.keys?.auth) {
+      return Response.json({ 
+        error: 'Invalid subscription keys',
+        success: false 
+      }, { status: 400 });
     }
 
     // Check if subscription already exists
@@ -28,7 +37,10 @@ Deno.serve(async (req) => {
         device_info: deviceInfo || 'Unknown',
         active: true
       });
-      return Response.json({ success: true, message: 'Subscription updated' });
+      return Response.json({ 
+        success: true, 
+        message: 'Subscription aktualisiert' 
+      });
     }
 
     // Create new subscription
@@ -40,7 +52,10 @@ Deno.serve(async (req) => {
       active: true
     });
 
-    return Response.json({ success: true, message: 'Subscription created' });
+    return Response.json({ 
+      success: true, 
+      message: 'Subscription erstellt' 
+    });
   } catch (error) {
     console.error('Subscribe push failed:', error);
     return Response.json({ error: error.message }, { status: 500 });
