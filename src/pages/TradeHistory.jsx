@@ -379,19 +379,18 @@ export default function TradeHistoryPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
         <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
-          <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-4 relative">
-            <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+          <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4 relative">
+            <div className="flex items-center gap-0.5 sm:gap-1.5 md:gap-2">
               <DarkModeToggle />
               <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1 sm:p-1.5 md:p-2`}>
-                <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <Home className="w-3.5 h-3.5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </button>
               <button
                 onClick={() => navigate(createPageUrl('Trash'))}
                 className={`relative ${theme.textSecondary} hover:${theme.text} transition-colors p-1 sm:p-1.5 md:p-2`}>
-
-                <Archive className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                <Archive className="w-3.5 h-3.5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 {deletedTrades.length > 0 &&
-                <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-[9px] sm:text-[10px] rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-bold">
+                <span className="absolute -top-0.5 -right-0.5 bg-rose-600 text-white text-[8px] sm:text-[10px] rounded-full w-3.5 h-3.5 sm:w-5 sm:h-5 flex items-center justify-center font-bold">
                     {deletedTrades.length}
                   </span>
                 }
@@ -402,7 +401,7 @@ export default function TradeHistoryPage() {
               <img src={darkMode ?
               "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png" :
               "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-              } alt="ZNPCV" className="h-7 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
+              } alt="ZNPCV" className="h-6 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
             </button>
 
             <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
@@ -413,20 +412,20 @@ export default function TradeHistoryPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-10">
+      <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-2 sm:py-4 md:py-6 lg:py-10">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-5 md:mb-6">
-          <div className="flex items-center justify-between gap-3 mb-4">
-            <div className="flex items-center gap-2 sm:gap-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-5 md:mb-6">
+          <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
+            <div className="flex items-center gap-1.5 sm:gap-3">
               <button
                 onClick={() => navigate(createPageUrl('Dashboard'))}
-                className={cn("border-2 rounded-xl p-2 sm:p-2.5 transition-all group",
+                className={cn("border-2 rounded-lg sm:rounded-xl p-1.5 sm:p-2.5 transition-all group",
                   darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400')}>
-                <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
+                <ArrowLeft className={`w-3.5 h-3.5 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
               </button>
               <div>
-                <h1 className={`text-2xl sm:text-3xl md:text-4xl tracking-widest ${theme.text}`}>{t('tradeHistory')}</h1>
-                <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
+                <h1 className={`text-xl sm:text-3xl md:text-4xl tracking-widest ${theme.text}`}>{t('tradeHistory')}</h1>
+                <p className={`${theme.textMuted} text-[10px] sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
               </div>
             </div>
 
@@ -454,46 +453,46 @@ export default function TradeHistoryPage() {
         </motion.div>
 
         {/* Stats Grid - Erweiterte Metriken */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.2 }} className="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5 md:mb-6">
-          <div className={cn("border-2 rounded-xl p-3 sm:p-4 transition-all hover:scale-105", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white shadow-lg shadow-emerald-700/20" : "bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-600/20")}>
-            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mb-2 opacity-90" />
-            <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1">${stats.totalPnL.toFixed(2)}</div>
-            <div className="text-[10px] sm:text-xs tracking-widest opacity-80">GESAMT P&L</div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.2 }} className="grid grid-cols-2 lg:grid-cols-5 gap-1.5 sm:gap-3 md:gap-4 mb-3 sm:mb-5 md:mb-6">
+          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white shadow-lg shadow-emerald-700/20" : "bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-600/20")}>
+            <TrendingUp className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 opacity-90" />
+            <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1">${stats.totalPnL.toFixed(2)}</div>
+            <div className="text-[8px] sm:text-xs tracking-widest opacity-80">GESAMT P&L</div>
           </div>
-          <div className={cn("border-2 rounded-xl p-3 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 mb-2 text-emerald-700" />
-            <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 text-emerald-700">${stats.totalWins.toFixed(2)}</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>GEWINNE</div>
+          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <ArrowUpRight className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 text-emerald-700" />
+            <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 text-emerald-700">${stats.totalWins.toFixed(2)}</div>
+            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>GEWINNE</div>
           </div>
-          <div className={cn("border-2 rounded-xl p-3 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 mb-2 text-rose-600" />
-            <div className="text-lg sm:text-xl md:text-2xl font-bold mb-1 text-rose-600">${stats.totalLosses.toFixed(2)}</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>VERLUSTE</div>
+          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <ArrowDownRight className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 text-rose-600" />
+            <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 text-rose-600">${stats.totalLosses.toFixed(2)}</div>
+            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>VERLUSTE</div>
           </div>
-          <div className={cn("border-2 rounded-xl p-3 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <Award className={`w-4 h-4 sm:w-5 sm:h-5 mb-2 ${theme.text}`} />
-            <div className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 ${theme.text}`}>{stats.winRate}%</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>WINRATE</div>
+          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <Award className={`w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 ${theme.text}`} />
+            <div className={`text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 ${theme.text}`}>{stats.winRate}%</div>
+            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>WINRATE</div>
           </div>
-          <div className={cn("border-2 rounded-xl p-3 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <Target className={`w-4 h-4 sm:w-5 sm:h-5 mb-2 ${theme.text}`} />
-            <div className={`text-lg sm:text-xl md:text-2xl font-bold mb-1 ${theme.text}`}>{stats.profitFactor}</div>
-            <div className={`text-[10px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FAKTOR</div>
+          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <Target className={`w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 ${theme.text}`} />
+            <div className={`text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 ${theme.text}`}>{stats.profitFactor}</div>
+            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FAKTOR</div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-6">
           {/* Trades List */}
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.3 }}
-            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl ${theme.bgSecondary} overflow-hidden shadow-lg`}>
-              <div className={`p-3 sm:p-4 md:p-5 border-b ${theme.border}`}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <h3 className={`text-sm sm:text-base md:text-lg tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
+            className={`border-2 ${theme.border} rounded-lg sm:rounded-2xl ${theme.bgSecondary} overflow-hidden shadow-lg`}>
+              <div className={`p-2 sm:p-4 md:p-5 border-b ${theme.border}`}>
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <div className="flex items-center gap-1.5 sm:gap-3">
+                    <h3 className={`text-xs sm:text-base md:text-lg tracking-widest ${theme.text}`}>{t('allTrades')}</h3>
                     {selectedTrades.length > 0 && (
-                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-700 text-white rounded-lg text-xs font-bold">
-                        <CheckSquare className="w-3.5 h-3.5" />
+                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-emerald-700 text-white rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold">
+                        <CheckSquare className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
                         {selectedTrades.length}
                       </motion.div>
                     )}
@@ -501,47 +500,48 @@ export default function TradeHistoryPage() {
                   {filteredTrades.length > 0 &&
                   <button
                     onClick={toggleSelectAll}
-                    className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border-2 transition-all font-bold",
+                    className={cn("flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs border-2 transition-all font-bold",
                     selectedTrades.length === filteredTrades.length ?
                     "bg-emerald-700 text-white border-emerald-700" :
                     darkMode ? "border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700" : "border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400")}>
-                      <CheckSquare className="w-3.5 h-3.5" />
-                      {selectedTrades.length === filteredTrades.length ? 'Alle abwählen' : 'Alle auswählen'}
+                      <CheckSquare className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
+                      <span className="hidden sm:inline">{selectedTrades.length === filteredTrades.length ? 'Alle abwählen' : 'Alle auswählen'}</span>
+                      <span className="sm:hidden">{selectedTrades.length === filteredTrades.length ? 'Abw.' : 'Alle'}</span>
                     </button>
                   }
                 </div>
 
                 {/* Search & Sort Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-2 sm:mb-3">
                   <div className="relative">
-                    <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme.textMuted}`} />
+                    <Search className={`absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 ${theme.textMuted}`} />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Suche nach Pair, Datum..."
-                      className={cn("w-full pl-10 pr-3 py-2 rounded-xl border-2 transition-all text-sm font-mono",
+                      placeholder="Suche..."
+                      className={cn("w-full pl-7 sm:pl-10 pr-2 sm:pr-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border-2 transition-all text-xs sm:text-sm font-mono",
                         theme.border,
                         searchQuery ? "ring-2 ring-emerald-700/30" : "",
                         darkMode ? 'bg-zinc-900/50 text-white placeholder:text-zinc-600' : 'bg-white text-black placeholder:text-zinc-400')}
                     />
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <ArrowUpDown className={`w-4 h-4 ${theme.textSecondary}`} />
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <ArrowUpDown className={`w-3 h-3 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className={cn("flex-1 text-xs px-3 py-2 rounded-xl border-2 font-bold transition-all",
+                      className={cn("flex-1 text-[10px] sm:text-xs px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border-2 font-bold transition-all",
                         theme.border,
                         darkMode ? 'bg-zinc-900/50 text-white' : 'bg-white text-black')}
                     >
-                      <option value="date-desc">Neueste zuerst</option>
-                      <option value="date-asc">Älteste zuerst</option>
-                      <option value="pnl-desc">Höchster Gewinn</option>
-                      <option value="pnl-asc">Höchster Verlust</option>
-                      <option value="pair-asc">Pair A-Z</option>
-                      <option value="pair-desc">Pair Z-A</option>
+                      <option value="date-desc">Neueste</option>
+                      <option value="date-asc">Älteste</option>
+                      <option value="pnl-desc">+ Gewinn</option>
+                      <option value="pnl-asc">- Verlust</option>
+                      <option value="pair-asc">A-Z</option>
+                      <option value="pair-desc">Z-A</option>
                     </select>
                   </div>
                 </div>
@@ -559,19 +559,19 @@ export default function TradeHistoryPage() {
                   </Button>
                 </div> :
 
-              <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[500px] sm:max-h-[550px] md:max-h-[600px] overflow-y-auto`}>
+              <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[450px] sm:max-h-[550px] md:max-h-[600px] overflow-y-auto`}>
                   {filteredTrades.map((trade, idx) =>
                 <motion.div 
                   key={trade.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.02 }}
-                  className={cn("p-3 sm:p-4 md:p-5 transition-all group relative cursor-pointer",
+                  className={cn("p-2 sm:p-4 md:p-5 transition-all group relative cursor-pointer",
                   selectedTrades.includes(trade.id) && "ring-2 ring-inset ring-emerald-700 bg-emerald-700/5",
                   darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70')}
                   onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
-                      <div className="flex items-center justify-between gap-2 sm:gap-3 mb-2 sm:mb-2.5">
-                        <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                      <div className="flex items-center justify-between gap-1.5 sm:gap-3 mb-1.5 sm:mb-2.5">
+                        <div className="flex items-center gap-1.5 sm:gap-3 flex-1">
                           <motion.div
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             whileTap={{ scale: 0.9 }}
@@ -579,7 +579,7 @@ export default function TradeHistoryPage() {
                               e.stopPropagation();
                               toggleTradeSelection(trade.id);
                             }}
-                            className={cn("w-7 h-7 border-2 rounded-xl flex items-center justify-center flex-shrink-0 cursor-pointer transition-all",
+                            className={cn("w-5 h-5 sm:w-7 sm:h-7 border-2 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 cursor-pointer transition-all",
                             selectedTrades.includes(trade.id) ?
                             "bg-gradient-to-br from-emerald-600 to-emerald-700 border-emerald-600 shadow-lg shadow-emerald-700/30" :
                             darkMode ? "border-zinc-700 hover:border-emerald-700/60 bg-zinc-900 hover:bg-zinc-800" : "border-zinc-300 hover:border-emerald-600/60 bg-white hover:bg-zinc-50")}>
@@ -591,34 +591,34 @@ export default function TradeHistoryPage() {
                                     exit={{ scale: 0, rotate: 180 }}
                                     transition={{ type: "spring", damping: 15 }}
                                   >
-                                    <CheckSquare className="w-4.5 h-4.5 text-white" />
+                                    <CheckSquare className="w-3 h-3 sm:w-4.5 sm:h-4.5 text-white" />
                                   </motion.div>
                                 )}
                               </AnimatePresence>
                             </motion.div>
-                          <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg sm:rounded-xl border-2",
+                          <div className={cn("w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg sm:rounded-xl border-2",
                       trade.outcome === 'win' ? 'bg-emerald-700 text-white border-emerald-700' :
                       trade.outcome === 'loss' ? 'bg-rose-600 text-white border-rose-600' :
                       trade.outcome === 'breakeven' ? 'bg-zinc-600 text-white border-zinc-600' :
                       trade.direction === 'long' ? 'border-2 border-emerald-700 text-emerald-700' : 'border-2 border-rose-600 text-rose-600')}>
                             {trade.outcome === 'win' && parseFloat(trade.actual_pnl || 0) > 0 || !trade.outcome && trade.direction === 'long' ?
-                        <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" /> : <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
+                        <ArrowUpRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7" /> : <ArrowDownRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
                           </div>
-                          <div className="flex-1">
-                            <div className={`text-base sm:text-lg md:text-xl font-bold tracking-wider ${theme.text} mb-0.5 sm:mb-1`}>{trade.pair || '-'}</div>
-                            <div className={`text-[10px] sm:text-xs md:text-sm ${theme.textMuted}`}>{format(new Date(trade.trade_date || trade.created_date), 'dd.MM.yyyy')}</div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-sm sm:text-lg md:text-xl font-bold tracking-wider ${theme.text} mb-0.5 truncate`}>{trade.pair || '-'}</div>
+                            <div className={`text-[9px] sm:text-xs md:text-sm ${theme.textMuted}`}>{format(new Date(trade.trade_date || trade.created_date), 'dd.MM.yyyy')}</div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
+                        <div className="flex items-center gap-1 sm:gap-2.5">
                           <div className="text-right">
                             {trade.outcome && trade.actual_pnl &&
                         <>
-                                <div className={cn("text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-0.5 sm:mb-1",
+                                <div className={cn("text-xs sm:text-lg md:text-xl lg:text-2xl font-bold mb-0.5",
                           parseFloat(trade.actual_pnl) > 0 ? 'text-emerald-700' :
                           parseFloat(trade.actual_pnl) < 0 ? 'text-rose-600' : theme.text)}>
                                   {parseFloat(trade.actual_pnl) > 0 ? '+' : ''}${trade.actual_pnl}
                                 </div>
-                                <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full",
+                                <div className={cn("text-[8px] sm:text-[10px] md:text-xs tracking-wider px-1 sm:px-2 py-0.5 rounded-full whitespace-nowrap",
                           trade.outcome === 'win' ? 'bg-emerald-700/20 text-emerald-700' :
                           trade.outcome === 'loss' ? 'bg-rose-600/20 text-rose-600' : 'bg-zinc-600/20 text-zinc-400')}>
                                   {trade.outcome === 'win' ? t('win') : trade.outcome === 'loss' ? t('loss') : t('breakeven')}
@@ -626,36 +626,36 @@ export default function TradeHistoryPage() {
                               </>
                         }
                             {!trade.outcome &&
-                        <span className="px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-blue-500 text-white text-[9px] sm:text-[10px] md:text-xs tracking-wider rounded-full font-bold">
+                        <span className="px-1.5 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-blue-500 text-white text-[8px] sm:text-[10px] md:text-xs tracking-wider rounded-full font-bold whitespace-nowrap">
                                 {trade.status === 'ready_to_trade' ? t('readyToTradeShort') : t('pending')}
                               </span>
                         }
                           </div>
-                          <div className="flex flex-col gap-1 sm:gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="flex flex-col gap-0.5 sm:gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button type="button" onClick={(e) => handleEditTrade(e, trade)}
-                        className={`p-1.5 sm:p-2 rounded-md sm:rounded-lg transition-colors ${darkMode ? 'hover:bg-emerald-700/20 text-teal-400 hover:text-teal-500' : 'hover:bg-teal-100 text-emerald-700 hover:text-teal-700'}`}>
-                              <Edit className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                        className={`p-1 sm:p-2 rounded-md sm:rounded-lg transition-colors ${darkMode ? 'hover:bg-emerald-700/20 text-teal-400 hover:text-teal-500' : 'hover:bg-teal-100 text-emerald-700 hover:text-teal-700'}`}>
+                              <Edit className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                             </button>
                             <button type="button" onClick={(e) => handleDeleteTrade(e, trade.id)}
-                        className={`p-1.5 sm:p-2 rounded-md sm:rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
-                              <Trash2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+                        className={`p-1 sm:p-2 rounded-md sm:rounded-lg transition-colors ${darkMode ? 'hover:bg-rose-600/20 text-rose-400 hover:text-rose-500' : 'hover:bg-red-100 text-red-600 hover:text-red-700'}`}>
+                              <Trash2 className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
                             </button>
                           </div>
                         </div>
                       </div>
-                      <div className={cn("flex flex-wrap items-center gap-2 sm:gap-3 text-[9px] sm:text-[10px] mt-2 pt-2 border-t", theme.border)}>
-                        <div className={cn("flex items-center gap-1.5 px-2 py-1 rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
-                          <Target className="w-3 h-3" />
-                          <span className={theme.textMuted}>{t('avgScore')}: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                      <div className={cn("flex flex-wrap items-center gap-1 sm:gap-3 text-[8px] sm:text-[10px] mt-1.5 sm:mt-2 pt-1.5 sm:pt-2 border-t", theme.border)}>
+                        <div className={cn("flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+                          <Target className="w-2 h-2 sm:w-3 sm:h-3" />
+                          <span className={theme.textMuted}><span className="hidden sm:inline">{t('avgScore')}: </span><span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
                         </div>
                         {trade.risk_percent && (
-                          <div className={cn("flex items-center gap-1.5 px-2 py-1 rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
-                            <span className={theme.textMuted}>{t('risk')}: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>
+                          <div className={cn("flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+                            <span className={theme.textMuted}><span className="hidden sm:inline">{t('risk')}: </span><span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>
                           </div>
                         )}
                         {trade.entry_price && (
-                          <div className={cn("flex items-center gap-1.5 px-2 py-1 rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
-                            <span className={theme.textMuted}>{t('entry')}: <span className={`font-bold ${theme.text}`}>{trade.entry_price}</span></span>
+                          <div className={cn("flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+                            <span className={theme.textMuted}><span className="hidden sm:inline">{t('entry')}: </span><span className={`font-bold ${theme.text}`}>{trade.entry_price}</span></span>
                           </div>
                         )}
                       </div>
@@ -667,11 +667,11 @@ export default function TradeHistoryPage() {
           </div>
 
           {/* Charts & Stats */}
-          <div className="space-y-4 sm:space-y-5">
+          <div className="space-y-3 sm:space-y-5">
             {/* Win/Loss Pie */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.4 }}
-            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
-              <h3 className={`text-sm sm:text-base tracking-widest mb-3 ${theme.text}`}>{t('winLoss')}</h3>
+            className={`border-2 ${theme.border} rounded-lg sm:rounded-2xl p-3 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
+              <h3 className={`text-xs sm:text-base tracking-widest mb-2 sm:mb-3 ${theme.text}`}>{t('winLoss')}</h3>
               <div className="h-32 sm:h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
@@ -694,24 +694,24 @@ export default function TradeHistoryPage() {
 
             {/* Aggregierte Statistiken */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.5 }}
-            className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl p-4 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
-              <h3 className={`text-sm sm:text-base tracking-widest mb-3 ${theme.text}`}>STATISTIKEN</h3>
-              <div className="space-y-2">
+            className={`border-2 ${theme.border} rounded-lg sm:rounded-2xl p-3 sm:p-5 ${theme.bgSecondary} shadow-lg`}>
+              <h3 className={`text-xs sm:text-base tracking-widest mb-2 sm:mb-3 ${theme.text}`}>STATISTIKEN</h3>
+              <div className="space-y-1.5 sm:space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className={`text-xs ${theme.textMuted}`}>Ø Gewinn</span>
-                  <span className={`text-sm font-bold text-emerald-700`}>${stats.avgWin}</span>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Ø Gewinn</span>
+                  <span className={`text-xs sm:text-sm font-bold text-emerald-700`}>${stats.avgWin}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className={`text-xs ${theme.textMuted}`}>Ø Verlust</span>
-                  <span className={`text-sm font-bold text-rose-600`}>${stats.avgLoss}</span>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Ø Verlust</span>
+                  <span className={`text-xs sm:text-sm font-bold text-rose-600`}>${stats.avgLoss}</span>
                 </div>
-                <div className={`flex items-center justify-between pt-2 border-t ${theme.border}`}>
-                  <span className={`text-xs ${theme.textMuted}`}>Profit Faktor</span>
-                  <span className={`text-base font-bold ${theme.text}`}>{stats.profitFactor}</span>
+                <div className={`flex items-center justify-between pt-1.5 sm:pt-2 border-t ${theme.border}`}>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Profit Faktor</span>
+                  <span className={`text-sm sm:text-base font-bold ${theme.text}`}>{stats.profitFactor}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className={`text-xs ${theme.textMuted}`}>Trades gesamt</span>
-                  <span className={`text-sm font-bold ${theme.text}`}>{stats.executed}</span>
+                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Trades gesamt</span>
+                  <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>{stats.executed}</span>
                 </div>
               </div>
             </motion.div>
@@ -782,24 +782,24 @@ export default function TradeHistoryPage() {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
           >
-            <div className={cn("flex items-center gap-2 px-4 py-3 rounded-2xl border-2 shadow-2xl backdrop-blur-xl",
+            <div className={cn("flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 shadow-2xl backdrop-blur-xl",
               darkMode ? "bg-zinc-900/95 border-zinc-700" : "bg-white/95 border-zinc-300")}>
               
-              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
-                <CheckSquare className={`w-4 h-4 ${theme.text}`} />
-                <span className={`text-sm font-bold ${theme.text}`}>{selectedTrades.length} ausgewählt</span>
+              <div className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
+                <CheckSquare className={`w-3 h-3 sm:w-4 sm:h-4 ${theme.text}`} />
+                <span className={`text-[10px] sm:text-sm font-bold ${theme.text}`}>{selectedTrades.length}</span>
               </div>
 
-              <div className="w-px h-6 bg-zinc-700" />
+              <div className="w-px h-5 sm:h-6 bg-zinc-700" />
 
               {selectedTrades.length === 2 && (
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                   <Button
                     onClick={handleCompareSelected}
-                    className="h-9 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-600/30"
+                    className="h-7 sm:h-9 px-2 sm:px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-blue-600/30"
                   >
-                    <GitCompare className="w-4 h-4" />
-                    Vergleichen
+                    <GitCompare className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Vergleichen</span>
                   </Button>
                 </motion.div>
               )}
@@ -808,10 +808,10 @@ export default function TradeHistoryPage() {
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                   <Button
                     onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${selectedTrades[0]}`)}
-                    className="h-9 px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white border-0 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-purple-600/30"
+                    className="h-7 sm:h-9 px-2 sm:px-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-purple-600/30"
                   >
-                    <Edit className="w-4 h-4" />
-                    Bearbeiten
+                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Bearbeiten</span>
                   </Button>
                 </motion.div>
               )}
@@ -819,32 +819,32 @@ export default function TradeHistoryPage() {
               <Button
                 onClick={handleBulkExportPDF}
                 disabled={exporting}
-                className={cn("h-9 px-4 rounded-xl text-sm font-bold flex items-center gap-2 border-2 transition-all",
+                className={cn("h-7 sm:h-9 px-2 sm:px-4 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 border-2 transition-all",
                   darkMode ? "bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700 hover:border-zinc-600" : "bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200 hover:border-zinc-400")}
               >
-                <Download className="w-4 h-4" />
-                Export PDF
+                <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Export</span>
               </Button>
 
               <Button
                 onClick={handleBulkDelete}
-                className="h-9 px-4 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white border-0 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg shadow-rose-600/30"
+                className="h-7 sm:h-9 px-2 sm:px-4 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white border-0 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1 sm:gap-2 shadow-lg shadow-rose-600/30"
               >
-                <Trash2 className="w-4 h-4" />
-                Löschen
+                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Löschen</span>
               </Button>
 
-              <div className="w-px h-6 bg-zinc-700" />
+              <div className="hidden sm:block w-px h-6 bg-zinc-700" />
 
               <button
                 onClick={() => {
                   setSelectedTrades([]);
                   setShowBulkActions(false);
                 }}
-                className={cn("p-2 rounded-lg transition-colors",
+                className={cn("p-1.5 sm:p-2 rounded-lg transition-colors",
                   darkMode ? "hover:bg-zinc-800 text-zinc-400" : "hover:bg-zinc-200 text-zinc-600")}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
