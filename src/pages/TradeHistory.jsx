@@ -414,32 +414,34 @@ export default function TradeHistoryPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 lg:py-10">
-        {/* Title mit Actions */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-          <div className="flex items-start justify-between gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4">
-            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+        {/* Title */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-5 md:mb-6">
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={() => navigate(createPageUrl('Dashboard'))}
-                className={`${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400'} border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 transition-all flex-shrink-0 group`}>
-                <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
+                className={cn("border-2 rounded-xl p-2 sm:p-2.5 transition-all group",
+                  darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400')}>
+                <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
               </button>
-              <div className="min-w-0">
-                <h1 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-widest mb-1 ${theme.text}`}>{t('tradeHistory')}</h1>
+              <div>
+                <h1 className={`text-2xl sm:text-3xl md:text-4xl tracking-widest ${theme.text}`}>{t('tradeHistory')}</h1>
                 <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
               </div>
             </div>
-            
-            {/* Export Buttons */}
-            <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
-              <Button onClick={handleExportPDF} disabled={exporting} className={`h-8 sm:h-9 px-2 sm:px-3 text-xs border-2 font-bold rounded-xl transition-all ${darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400'}`}>
-                <Download className="w-3.5 h-3.5 sm:mr-1.5" />
-                <span className="hidden sm:inline">PDF</span>
-              </Button>
-              <Button onClick={handleExportExcel} disabled={exporting} className={`h-8 sm:h-9 px-2 sm:px-3 text-xs border-2 font-bold rounded-xl transition-all ${darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400'}`}>
-                <FileText className="w-3.5 h-3.5 sm:mr-1.5" />
-                <span className="hidden sm:inline">CSV</span>
-              </Button>
 
+            {/* Export Buttons - Desktop */}
+            <div className="hidden sm:flex gap-2">
+              <Button onClick={handleExportPDF} disabled={exporting} className={cn("h-9 px-3 sm:px-4 text-xs border-2 font-bold rounded-xl transition-all",
+                darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400')}>
+                <Download className="w-4 h-4 mr-1.5" />
+                PDF
+              </Button>
+              <Button onClick={handleExportExcel} disabled={exporting} className={cn("h-9 px-3 sm:px-4 text-xs border-2 font-bold rounded-xl transition-all",
+                darkMode ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:text-black hover:border-zinc-400')}>
+                <FileText className="w-4 h-4 mr-1.5" />
+                CSV
+              </Button>
             </div>
           </div>
           
@@ -449,7 +451,6 @@ export default function TradeHistoryPage() {
             onFilterChange={setAdvancedFilters}
             onReset={() => setAdvancedFilters({ dateFrom: '', dateTo: '', pair: 'all', minRR: 'all' })}
             darkMode={darkMode} />
-
         </motion.div>
 
         {/* Stats Grid - Erweiterte Metriken */}
@@ -510,26 +511,30 @@ export default function TradeHistoryPage() {
                   }
                 </div>
 
-                {/* Search */}
-                <div className="relative mb-3">
-                  <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme.textMuted}`} />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Suche nach Pair, Datum oder Typ..."
-                    className={`w-full pl-10 pr-3 py-2 rounded-lg border-2 ${theme.border} ${darkMode ? 'bg-zinc-900/50 text-white' : 'bg-white text-black'} text-sm placeholder:${theme.textMuted}`}
-                  />
-                </div>
+                {/* Search & Sort Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                  <div className="relative">
+                    <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme.textMuted}`} />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Suche nach Pair, Datum..."
+                      className={cn("w-full pl-10 pr-3 py-2 rounded-xl border-2 transition-all text-sm font-mono",
+                        theme.border,
+                        searchQuery ? "ring-2 ring-emerald-700/30" : "",
+                        darkMode ? 'bg-zinc-900/50 text-white placeholder:text-zinc-600' : 'bg-white text-black placeholder:text-zinc-400')}
+                    />
+                  </div>
 
-                {/* Sort & Filter */}
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="flex items-center gap-2 flex-1">
-                    <ArrowUpDown className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
+                  <div className="flex items-center gap-2">
+                    <ArrowUpDown className={`w-4 h-4 ${theme.textSecondary}`} />
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className={`text-xs px-2.5 py-1.5 rounded-lg border-2 ${theme.border} ${darkMode ? 'bg-zinc-900/50 text-white' : 'bg-white text-black'}`}
+                      className={cn("flex-1 text-xs px-3 py-2 rounded-xl border-2 font-bold transition-all",
+                        theme.border,
+                        darkMode ? 'bg-zinc-900/50 text-white' : 'bg-white text-black')}
                     >
                       <option value="date-desc">Neueste zuerst</option>
                       <option value="date-asc">Älteste zuerst</option>
@@ -555,29 +560,38 @@ export default function TradeHistoryPage() {
                 </div> :
 
               <div className={`divide-y ${darkMode ? 'divide-zinc-800/30' : 'divide-zinc-200'} max-h-[500px] sm:max-h-[550px] md:max-h-[600px] overflow-y-auto`}>
-                  {filteredTrades.map((trade) =>
-                <div key={trade.id}
-                className={cn("p-3 sm:p-4 md:p-5 transition-all group relative",
-                selectedTrades.includes(trade.id) && "ring-2 ring-inset ring-emerald-700 bg-emerald-700/5",
-                darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70')}
-                onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
-                      <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-2.5 md:mb-3">
-                        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1">
+                  {filteredTrades.map((trade, idx) =>
+                <motion.div 
+                  key={trade.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.02 }}
+                  className={cn("p-3 sm:p-4 md:p-5 transition-all group relative cursor-pointer",
+                  selectedTrades.includes(trade.id) && "ring-2 ring-inset ring-emerald-700 bg-emerald-700/5",
+                  darkMode ? 'hover:bg-zinc-900/70' : 'hover:bg-zinc-200/70')}
+                  onClick={() => navigate(createPageUrl('TradeDetail') + `?id=${trade.id}`)}>
+                      <div className="flex items-center justify-between gap-2 sm:gap-3 mb-2 sm:mb-2.5">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-1">
                           <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleTradeSelection(trade.id);
                             }}
-                            className={cn("w-6 h-6 border-2 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer transition-all shadow-sm",
+                            className={cn("w-7 h-7 border-2 rounded-xl flex items-center justify-center flex-shrink-0 cursor-pointer transition-all",
                             selectedTrades.includes(trade.id) ?
-                            "bg-emerald-700 border-emerald-700" :
-                            darkMode ? "border-zinc-700 hover:border-emerald-700/50 bg-zinc-900" : "border-zinc-400 hover:border-emerald-600/50 bg-white")}>
+                            "bg-gradient-to-br from-emerald-600 to-emerald-700 border-emerald-600 shadow-lg shadow-emerald-700/30" :
+                            darkMode ? "border-zinc-700 hover:border-emerald-700/60 bg-zinc-900 hover:bg-zinc-800" : "border-zinc-300 hover:border-emerald-600/60 bg-white hover:bg-zinc-50")}>
                               <AnimatePresence>
                                 {selectedTrades.includes(trade.id) && (
-                                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                                    <CheckSquare className="w-4 h-4 text-white" />
+                                  <motion.div 
+                                    initial={{ scale: 0, rotate: -180 }} 
+                                    animate={{ scale: 1, rotate: 0 }} 
+                                    exit={{ scale: 0, rotate: 180 }}
+                                    transition={{ type: "spring", damping: 15 }}
+                                  >
+                                    <CheckSquare className="w-4.5 h-4.5 text-white" />
                                   </motion.div>
                                 )}
                               </AnimatePresence>
@@ -629,12 +643,23 @@ export default function TradeHistoryPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-[9px] sm:text-[10px] md:text-xs">
-                        <span className={theme.textMuted}>{t('avgScore')}: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
-                        {trade.risk_percent && <span className={theme.textMuted}>{t('risk')}: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>}
-                        {trade.entry_price && <span className={theme.textMuted}>{t('entry')}: <span className={`font-bold ${theme.text}`}>{trade.entry_price}</span></span>}
+                      <div className={cn("flex flex-wrap items-center gap-2 sm:gap-3 text-[9px] sm:text-[10px] mt-2 pt-2 border-t", theme.border)}>
+                        <div className={cn("flex items-center gap-1.5 px-2 py-1 rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+                          <Target className="w-3 h-3" />
+                          <span className={theme.textMuted}>{t('avgScore')}: <span className={`font-bold ${theme.text}`}>{Math.round(trade.completion_percentage || 0)}%</span></span>
+                        </div>
+                        {trade.risk_percent && (
+                          <div className={cn("flex items-center gap-1.5 px-2 py-1 rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+                            <span className={theme.textMuted}>{t('risk')}: <span className={`font-bold ${theme.text}`}>{trade.risk_percent}%</span></span>
+                          </div>
+                        )}
+                        {trade.entry_price && (
+                          <div className={cn("flex items-center gap-1.5 px-2 py-1 rounded-lg", darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+                            <span className={theme.textMuted}>{t('entry')}: <span className={`font-bold ${theme.text}`}>{trade.entry_price}</span></span>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    </motion.div>
                 )}
                 </div>
               }
