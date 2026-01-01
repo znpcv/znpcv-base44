@@ -285,8 +285,8 @@ export default function AccountPage() {
               )}
             </div>
 
-          {/* Security & Settings - Compact Grid */}
-          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+            {/* Security & Settings - Compact Grid */}
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             {/* Security */}
             <div className={`border-2 ${theme.border} rounded-xl p-4`}>
               <div className="flex items-center gap-2 mb-3">
@@ -342,7 +342,7 @@ export default function AccountPage() {
                 </div>
               )}
             </div>
-          </div>
+            </div>
 
           {/* Action Bar */}
           <div className="grid grid-cols-2 gap-2">
