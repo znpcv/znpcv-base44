@@ -391,225 +391,52 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Notifications Section */}
-          <div className={`relative overflow-hidden ${theme.bgSecondary} border-2 ${theme.border} rounded-2xl`}>
-            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 rounded-full blur-3xl -z-0`} />
-            <div className="relative z-10 p-4 sm:p-5 md:p-6">
-              <div className="flex items-center justify-between mb-4 sm:mb-5">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className={`p-2 sm:p-2.5 rounded-xl ${darkMode ? 'bg-teal-500/20' : 'bg-teal-100'}`}>
-                    <Bell className={`w-4 h-4 sm:w-5 sm:h-5 text-teal-600`} />
-                  </div>
-                  <div>
-                    <h3 className={`text-sm sm:text-base font-bold tracking-wider ${theme.text}`}>ERINNERUNGEN</h3>
-                    <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary}`}>Personalisiere deine Benachrichtigungen</p>
-                  </div>
-                </div>
-              </div>
-              
-              {editing ? (
-                <div className="space-y-4 sm:space-y-5">
-                  {/* Email Notifications */}
-                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="flex items-start gap-2 sm:gap-3 flex-1">
-                        <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
-                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                          </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>E-Mail Benachrichtigungen</h4>
-                          <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Erhalte Trading-Sprüche direkt in dein Postfach</p>
-                        </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.daily_quote_enabled}
-                          onChange={(e) => setFormData({...formData, daily_quote_enabled: e.target.checked})}
-                          className="sr-only peer"
-                        />
-                        <div className="w-9 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
-                      </label>
-                    </div>
-                    {formData.daily_quote_enabled && (
-                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className={`pt-3 border-t ${theme.border}`}>
-                        <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-2 block font-bold tracking-wider`}>UHRZEIT</label>
-                        <div className="flex items-center gap-2">
-                          <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-                          <Input
-                            type="time"
-                            value={formData.daily_quote_time}
-                            onChange={(e) => setFormData({...formData, daily_quote_time: e.target.value})}
-                            className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm flex-1`}
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-                  </div>
-
-                  {/* In-App Notifications */}
-                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-start gap-2 sm:gap-3 flex-1">
-                        <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
-                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/>
-                          </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>In-App Widget</h4>
-                          <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Zeige Sprüche auf Dashboard & Home</p>
-                        </div>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.show_daily_quote_in_app}
-                          onChange={(e) => setFormData({...formData, show_daily_quote_in_app: e.target.checked})}
-                          className="sr-only peer"
-                        />
-                        <div className="w-9 h-5 bg-zinc-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Browser Push Notifications */}
-                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3 sm:p-4`}>
-                    <div className="flex items-start gap-2 sm:gap-3 mb-3">
-                      <div className={`p-1.5 sm:p-2 rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} mt-0.5`}>
-                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className={`text-xs sm:text-sm font-bold ${theme.text} mb-0.5`}>Push-Benachrichtigungen</h4>
-                        <p className={`text-[9px] sm:text-[10px] ${theme.textSecondary} leading-relaxed`}>Erhalte Benachrichtigungen auf allen Geräten - auch wenn App geschlossen</p>
-                      </div>
-                    </div>
-                    
-                    {editing ? (
-                      <div className="space-y-3">
-                        <PushNotificationManager darkMode={darkMode} onSuccess={loadUser} />
-                        
-                        {formData.browser_notifications_enabled && (
-                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className={`pt-3 border-t ${theme.border}`}>
-                            <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-2 block font-bold tracking-wider`}>HÄUFIGKEIT PRO TAG</label>
-                            <Select value={formData.notification_frequency} onValueChange={(v) => setFormData({...formData, notification_frequency: v})}>
-                              <SelectTrigger className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm w-full`}>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="1" className="text-xs sm:text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                    <span>1x täglich (Empfohlen)</span>
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="2" className="text-xs sm:text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                    <span>2x täglich</span>
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="3" className="text-xs sm:text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                    <span>3x täglich</span>
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="4" className="text-xs sm:text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-rose-500" />
-                                    <span>4x täglich (Max)</span>
-                                  </div>
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </motion.div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className={`text-xs sm:text-sm ${theme.text} font-sans`}>
-                        {user.browser_notifications_enabled ? (
-                          <div className="flex items-center gap-2 text-emerald-700">
-                            <Check className="w-4 h-4" />
-                            <span className="font-bold">Aktiv ({user.notification_frequency || '1'}x täglich)</span>
-                          </div>
-                        ) : (
-                          <span className={theme.textSecondary}>Nicht aktiviert</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                  {/* Email Status */}
-                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <svg className="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-                      </svg>
-                      <span className={`text-[9px] sm:text-[10px] ${theme.textSecondary} font-bold tracking-wider`}>E-MAIL</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${user.daily_quote_enabled ? 'bg-teal-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                      <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>
-                        {user.daily_quote_enabled ? 'Aktiv' : 'Aus'}
-                      </span>
-                    </div>
-                    {user.daily_quote_enabled && (
-                      <div className={`flex items-center gap-1.5 mt-2 text-[9px] sm:text-[10px] ${theme.textSecondary}`}>
-                        <Clock className="w-3 h-3" />
-                        {user.daily_quote_time || '09:00'} Uhr
-                      </div>
-                    )}
-                  </div>
-
-                  {/* In-App Status */}
-                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <svg className="w-3.5 h-3.5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/>
-                      </svg>
-                      <span className={`text-[9px] sm:text-[10px] ${theme.textSecondary} font-bold tracking-wider`}>IN-APP</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${user.show_daily_quote_in_app ? 'bg-purple-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                      <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>
-                        {user.show_daily_quote_in_app ? 'Aktiv' : 'Aus'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Browser Status */}
-                  <div className={`${darkMode ? 'bg-zinc-900/50' : 'bg-white'} border ${theme.border} rounded-xl p-3`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
-                      </svg>
-                      <span className={`text-[9px] sm:text-[10px] ${theme.textSecondary} font-bold tracking-wider`}>BROWSER</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${user.browser_notifications_enabled ? 'bg-amber-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
-                      <span className={`text-xs sm:text-sm font-bold ${theme.text}`}>
-                        {user.browser_notifications_enabled ? 'Aktiv' : 'Aus'}
-                      </span>
-                    </div>
-                    {user.browser_notifications_enabled && (
-                      <div className={`flex items-center gap-1.5 mt-2 text-[9px] sm:text-[10px] ${theme.textSecondary}`}>
-                        <Zap className="w-3 h-3" />
-                        {user.notification_frequency || '1'}x täglich
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+          {/* Push Notifications */}
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-3 sm:p-4 md:p-5`}>
+            <div className="flex items-center gap-2 mb-3">
+              <Bell className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
+              <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textSecondary}`}>PUSH-BENACHRICHTIGUNGEN</span>
             </div>
+            
+            {editing ? (
+              <div className="space-y-3">
+                <PushNotificationManager darkMode={darkMode} onSuccess={loadUser} />
+                
+                {formData.browser_notifications_enabled && (
+                  <>
+                    <div className={`p-2.5 rounded-lg border ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                      <div className={`text-[10px] ${theme.textSecondary} mb-2 tracking-wider`}>HÄUFIGKEIT</div>
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {['1', '2', '3', '4'].map((freq) => (
+                          <button
+                            key={freq}
+                            onClick={() => setFormData({...formData, notification_frequency: freq})}
+                            className={`py-1.5 px-2 rounded text-xs font-bold transition-all ${
+                              formData.notification_frequency === freq
+                                ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
+                                : darkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'
+                            }`}
+                          >
+                            {freq}x
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className={`text-xs sm:text-sm ${theme.text} font-mono`}>
+                {user.browser_notifications_enabled ? (
+                  <div className="flex items-center gap-2 text-emerald-700">
+                    <Check className="w-4 h-4" />
+                    <span className="font-bold">Aktiv ({user.notification_frequency || '1'}x täglich)</span>
+                  </div>
+                ) : (
+                  <span className={theme.textSecondary}>Nicht aktiviert</span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Save/Cancel Buttons (only in edit mode) */}
