@@ -138,8 +138,7 @@ export default function TrashPage() {
                           permanentDeleteMutation.mutate(trade.id);
                         }
                       }}
-                      variant="outline" className="bg-background text-slate-950 px-3 py-2 text-sm font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm hover:bg-accent hover:text-accent-foreground h-9 border-2 border-zinc-800">
-
+                      className={`h-9 px-3 border-2 font-bold rounded-xl transition-all ${darkMode ? 'bg-rose-600/20 border-rose-600/50 text-rose-400 hover:bg-rose-600/30 hover:border-rose-600' : 'bg-red-100 border-red-300 text-red-600 hover:bg-red-200 hover:border-red-400'}`}>
                           <X className="w-4 h-4" />
                         </Button>
                       </div>
