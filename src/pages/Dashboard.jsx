@@ -282,43 +282,45 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Quick Actions - Schwarz/Weiß Design */}
+        {/* Quick Actions - Responsive Design */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <button onClick={() => navigate(createPageUrl('Checklist'))}
-            className={cn("group relative rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all active:scale-[0.98] md:hover:scale-[1.02] touch-manipulation p-4 sm:p-5 md:p-6",
+            className={cn("group relative rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all active:scale-[0.98] md:hover:scale-[1.02] touch-manipulation",
+              "p-3 sm:p-4 md:p-5 lg:p-6 min-h-[140px] sm:min-h-[160px] md:min-h-[180px]",
               darkMode ? "bg-white border-white" : "bg-zinc-900 border-zinc-900")}>
             <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity",
               darkMode ? "bg-gradient-to-br from-zinc-100 to-white" : "bg-gradient-to-br from-zinc-800 to-zinc-900")} />
-            <div className="relative z-10 flex flex-col items-center text-center">
-              <div className={cn("w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
+            <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
+              <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 transition-transform",
                 darkMode ? "bg-black" : "bg-white shadow-xl")}>
-                <Plus className={cn("w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10", darkMode ? "text-white" : "text-black")} />
+                <Plus className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10", darkMode ? "text-white" : "text-black")} />
               </div>
-              <div className={cn("text-sm sm:text-base md:text-lg font-black tracking-wider mb-1",
+              <div className={cn("text-xs sm:text-sm md:text-base lg:text-lg font-black tracking-wider mb-0.5 sm:mb-1",
                 darkMode ? "text-black" : "text-white")}>
                 {t('newAnalysis').toUpperCase()}
               </div>
-              <div className={cn("text-[9px] sm:text-[10px] font-sans", darkMode ? "text-black/60" : "text-white/60")}>
+              <div className={cn("text-[8px] sm:text-[9px] md:text-[10px] font-sans", darkMode ? "text-black/60" : "text-white/60")}>
                 Analyse starten
               </div>
             </div>
           </button>
 
           <button onClick={() => navigate(createPageUrl('TradeHistory'))}
-            className={cn("group relative rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all active:scale-[0.98] md:hover:scale-[1.02] touch-manipulation p-4 sm:p-5 md:p-6",
+            className={cn("group relative rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all active:scale-[0.98] md:hover:scale-[1.02] touch-manipulation",
+              "p-3 sm:p-4 md:p-5 lg:p-6 min-h-[140px] sm:min-h-[160px] md:min-h-[180px]",
               darkMode ? "bg-zinc-900 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
             <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity",
               darkMode ? "bg-gradient-to-br from-zinc-800 to-zinc-900" : "bg-gradient-to-br from-zinc-200 to-zinc-100")} />
-            <div className="relative z-10 flex flex-col items-center text-center">
-              <div className={cn("w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform",
+            <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
+              <div className={cn("w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 transition-transform",
                 darkMode ? "bg-white" : "bg-zinc-900 shadow-xl")}>
-                <History className={cn("w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10", darkMode ? "text-black" : "text-white")} />
+                <History className={cn("w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10", darkMode ? "text-black" : "text-white")} />
               </div>
-              <div className={cn("text-sm sm:text-base md:text-lg font-black tracking-wider mb-1",
+              <div className={cn("text-xs sm:text-sm md:text-base lg:text-lg font-black tracking-wider mb-0.5 sm:mb-1",
                 darkMode ? "text-white" : "text-black")}>
                 TRADE HISTORY
               </div>
-              <div className={cn("text-[9px] sm:text-[10px] font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+              <div className={cn("text-[8px] sm:text-[9px] md:text-[10px] font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 Alle Trades
               </div>
             </div>
@@ -611,12 +613,12 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Trade Performance Übersicht - Fortgeschritten */}
+            {/* Trade Performance Übersicht - Einheitlich */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={cn("rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border-2",
                 darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
 
-              {/* Header mit Stats */}
+              {/* Header */}
               <div className="flex items-center justify-between mb-5 sm:mb-6">
                 <div className="flex items-center gap-3">
                   <div className={cn("w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center",
@@ -636,7 +638,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Win/Loss Grid */}
+              {/* Win/Loss Grid - Einheitliche Größen */}
               <div className="mb-5 sm:mb-6">
                 <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-3 sm:mb-4 font-bold flex items-center gap-2`}>
                   <div className={`w-1.5 h-4 sm:h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
@@ -668,82 +670,128 @@ export default function DashboardPage() {
                   ].filter(item => item.value > 0).map((item) => (
                     <div 
                       key={item.name}
-                      className={cn("relative overflow-hidden rounded-xl p-3 sm:p-4 border-2 transition-all hover:scale-105 cursor-default",
+                      className={cn("relative overflow-hidden rounded-xl p-3 sm:p-4 border-2 transition-all hover:scale-105 cursor-default min-h-[120px] sm:min-h-[130px] flex flex-col justify-between",
                         item.name === 'Wins' ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400" :
                         item.name === 'Losses' ? darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400" :
                         darkMode ? "bg-zinc-800/50 border-zinc-700" : "bg-zinc-100 border-zinc-400")}>
                       <div className="absolute top-2 right-2 opacity-10">
                         <item.icon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: item.color }} />
                       </div>
-                      <div className={`text-3xl sm:text-4xl font-black mb-1`} style={{ color: item.color }}>
-                        {item.value}
-                      </div>
-                      <div className={`text-[9px] sm:text-[10px] ${theme.textMuted} font-bold tracking-wide uppercase mb-1`}>
-                        {item.name}
-                      </div>
-                      <div className={`text-xs sm:text-sm font-bold`} style={{ color: item.color }}>
-                        {((item.value / stats.executed) * 100).toFixed(1)}%
-                      </div>
-                      {item.pnl !== 0 && (
-                        <div className={`text-[10px] sm:text-xs font-sans mt-1 ${theme.textMuted}`}>
-                          {item.pnl > 0 ? '+' : ''}${item.pnl.toFixed(2)}
+                      <div className="relative z-10">
+                        <div className={`text-3xl sm:text-4xl font-black mb-1`} style={{ color: item.color }}>
+                          {item.value}
                         </div>
-                      )}
+                        <div className={`text-[9px] sm:text-[10px] ${theme.textMuted} font-bold tracking-wide uppercase`}>
+                          {item.name}
+                        </div>
+                      </div>
+                      <div className="relative z-10">
+                        <div className={`text-xs sm:text-sm font-bold mb-1`} style={{ color: item.color }}>
+                          {((item.value / stats.executed) * 100).toFixed(1)}%
+                        </div>
+                        {item.pnl !== 0 && (
+                          <div className={`text-[10px] sm:text-xs font-sans ${theme.textMuted}`}>
+                            {item.pnl > 0 ? '+' : ''}${item.pnl.toFixed(2)}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Direction Grid */}
+              {/* Direction - Kreis Visualisierung */}
               <div>
                 <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-3 sm:mb-4 font-bold flex items-center gap-2`}>
                   <div className={`w-1.5 h-4 sm:h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
                   TRADE-RICHTUNG
                 </div>
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                  {directionData.map((item) => (
-                    <div 
-                      key={item.name}
-                      className={cn("relative overflow-hidden rounded-xl p-4 sm:p-5 border-2 transition-all hover:scale-105 cursor-default",
-                        item.name === t('long')
-                          ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400"
-                          : darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400")}>
-                      
-                      {/* Background Icon */}
-                      <div className="absolute top-3 right-3 opacity-10">
-                        {item.name === t('long') ? 
-                          <ArrowUpRight className="w-12 h-12 sm:w-14 sm:h-14 text-emerald-700" /> : 
-                          <ArrowDownRight className="w-12 h-12 sm:w-14 sm:h-14 text-rose-600" />
-                        }
+                <div className={cn("rounded-xl p-4 sm:p-5 border-2 relative overflow-hidden",
+                  darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-300")}>
+                  
+                  {/* Circular Progress */}
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="relative w-32 h-32 sm:w-40 sm:h-40">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        {/* Background Circle */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="none"
+                          stroke={darkMode ? "#27272a" : "#e4e4e7"}
+                          strokeWidth="8"
+                        />
+                        {/* Long Progress */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="none"
+                          stroke="#0d9488"
+                          strokeWidth="8"
+                          strokeDasharray={`${(stats.longs / (stats.longs + stats.shorts)) * 251.2} 251.2`}
+                          strokeLinecap="round"
+                          className="transition-all duration-500"
+                        />
+                        {/* Short Progress */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="none"
+                          stroke="#e11d48"
+                          strokeWidth="8"
+                          strokeDasharray={`${(stats.shorts / (stats.longs + stats.shorts)) * 251.2} 251.2`}
+                          strokeDashoffset={`-${(stats.longs / (stats.longs + stats.shorts)) * 251.2}`}
+                          strokeLinecap="round"
+                          className="transition-all duration-500"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className={`text-2xl sm:text-3xl font-black ${theme.text}`}>
+                            {stats.longs + stats.shorts}
+                          </div>
+                          <div className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider`}>TRADES</div>
+                        </div>
                       </div>
+                    </div>
+                  </div>
 
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {directionData.map((item) => (
+                      <div 
+                        key={item.name}
+                        className={cn("rounded-xl p-3 sm:p-4 border-2 min-h-[100px] flex flex-col justify-between",
+                          item.name === t('long')
+                            ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400"
+                            : darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400")}>
+                        
+                        <div className="flex items-center gap-2 mb-2">
                           {item.name === t('long') ? 
-                            <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-700" /> : 
-                            <ArrowDownRight className="w-5 h-5 sm:w-6 sm:h-6 text-rose-600" />
+                            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" /> : 
+                            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" />
                           }
-                          <span className={cn("text-xs sm:text-sm font-black tracking-wider", 
+                          <span className={cn("text-[10px] sm:text-xs font-black tracking-wider", 
                             item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
                             {item.name.toUpperCase()}
                           </span>
                         </div>
                         
-                        <div className={cn("text-4xl sm:text-5xl font-black mb-2", 
-                          item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
-                          {item.value}
-                        </div>
-                        
-                        <div className={`text-sm sm:text-base font-bold ${theme.text} mb-1`}>
-                          {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
-                        </div>
-
-                        <div className={`text-[10px] sm:text-xs font-sans ${theme.textMuted}`}>
-                          von {stats.longs + stats.shorts} Trades
+                        <div>
+                          <div className={cn("text-3xl sm:text-4xl font-black mb-1", 
+                            item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
+                            {item.value}
+                          </div>
+                          <div className={`text-xs sm:text-sm font-bold ${theme.text}`}>
+                            {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>
