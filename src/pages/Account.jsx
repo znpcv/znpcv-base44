@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar, Bell, Clock, Check } from 'lucide-react';
+import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar, Bell, Clock, Check, Shield, Download, FileText, Lock } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +40,8 @@ export default function AccountPage() {
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
   useEffect(() => {
     loadUser();
@@ -66,6 +68,7 @@ export default function AccountPage() {
         browser_notifications_enabled: userData.browser_notifications_enabled || false,
         notification_frequency: userData.notification_frequency || '1'
       });
+      setTwoFactorEnabled(userData.two_factor_enabled || false);
     } catch (err) {
       console.error('Load user failed:', err);
       navigate(createPageUrl('Home'));
@@ -119,6 +122,24 @@ export default function AccountPage() {
           alert(t('deleteError'));
         }
       }
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      setExporting(true);
+      const response = await base44.functions.invoke('exportUserData', {});
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ZNPCV_Profile_${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -359,47 +380,105 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Trading Preferences */}
+          {/* Advanced Settings - Collapsible */}
+          {editing && (
+            <details className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl overflow-hidden`}>
+              <summary className={`cursor-pointer p-4 sm:p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'} transition-colors`}>
+                <div className="flex items-center gap-2">
+                  <Settings className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+                  <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>ADVANCED SETTINGS</span>
+                </div>
+                <span className={`text-xs ${theme.textMuted}`}>▼</span>
+              </summary>
+              
+              <div className="p-4 sm:p-5 pt-0 space-y-4">
+                <p className={`text-[10px] ${theme.textMuted} mb-4 font-sans`}>
+                  Diese Werte werden automatisch in neue Checklisten übernommen
+                </p>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500`} />
+                      <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>DEFAULT LEVERAGE</label>
+                    </div>
+                    <Input
+                      value={formData.default_leverage}
+                      onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
+                      placeholder="100"
+                      className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Percent className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500`} />
+                      <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>DEFAULT RISK %</label>
+                    </div>
+                    <Input
+                      value={formData.default_risk_percent}
+                      onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
+                      placeholder="1"
+                      className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
+                  </div>
+                </div>
+              </div>
+            </details>
+          )}
+
+          {/* Security & 2FA */}
           <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
             <div className="flex items-center gap-2 mb-4 sm:mb-5">
-              <Settings className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>TRADING EINSTELLUNGEN</span>
+              <Shield className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>SICHERHEIT</span>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 sm:gap-5">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500`} />
-                  <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>LEVERAGE</label>
+            <div className="space-y-4">
+              {/* 2FA Toggle */}
+              <div className={`flex items-center justify-between p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                <div className="flex items-center gap-3">
+                  <Lock className={`w-4 h-4 sm:w-5 sm:h-5 ${twoFactorEnabled ? 'text-emerald-700' : theme.textSecondary}`} />
+                  <div>
+                    <div className={`text-sm sm:text-base font-bold ${theme.text}`}>Two-Factor Auth</div>
+                    <div className={`text-[10px] ${theme.textMuted} font-sans`}>Zusätzliche Sicherheitsebene</div>
+                  </div>
                 </div>
-                {editing ?
-                <Input
-                  value={formData.default_leverage}
-                  onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
-                  placeholder="100"
-                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
-                <div className={`text-lg sm:text-xl md:text-2xl font-black ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  1:{user.default_leverage || '100'}
-                </div>
-                }
+                {editing ? (
+                  <button
+                    onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
+                    className={`relative w-12 h-6 rounded-full transition-all ${
+                      twoFactorEnabled ? 'bg-emerald-700' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'
+                    }`}
+                  >
+                    <div className={`absolute top-0.5 ${twoFactorEnabled ? 'right-0.5' : 'left-0.5'} w-5 h-5 bg-white rounded-full transition-all`} />
+                  </button>
+                ) : (
+                  <span className={`text-xs font-bold ${twoFactorEnabled ? 'text-emerald-700' : theme.textMuted}`}>
+                    {twoFactorEnabled ? 'AKTIV' : 'INAKTIV'}
+                  </span>
+                )}
               </div>
 
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Percent className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500`} />
-                  <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>RISK %</label>
+              {/* Export Data */}
+              <button
+                onClick={handleExportData}
+                disabled={exporting}
+                className={`w-full flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all ${
+                  darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-300 hover:border-zinc-400'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Download className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+                  <div className="text-left">
+                    <div className={`text-sm sm:text-base font-bold ${theme.text}`}>Daten exportieren</div>
+                    <div className={`text-[10px] ${theme.textMuted} font-sans`}>Alle Trades als PDF</div>
+                  </div>
                 </div>
-                {editing ?
-                <Input
-                  value={formData.default_risk_percent}
-                  onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
-                  placeholder="1"
-                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
-                <div className={`text-lg sm:text-xl md:text-2xl font-black ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.default_risk_percent || '1'}%
-                </div>
-                }
-              </div>
+                {exporting ? (
+                  <div className="animate-spin w-5 h-5 border-2 border-emerald-700 border-t-transparent rounded-full" />
+                ) : (
+                  <FileText className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+                )}
+              </button>
             </div>
           </div>
 
@@ -452,7 +531,15 @@ export default function AccountPage() {
           {/* Save/Cancel Buttons (only in edit mode) */}
           {editing && (
             <div className="flex gap-2 sm:gap-3">
-              <Button onClick={handleSave} disabled={saving} className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+              <Button 
+                onClick={async () => {
+                  await handleSave();
+                  if (twoFactorEnabled !== user.two_factor_enabled) {
+                    await base44.auth.updateMe({ two_factor_enabled: twoFactorEnabled });
+                  }
+                }} 
+                disabled={saving} 
+                className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                 <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-2" />
                 <span className="hidden sm:inline">{saving ? '...' : t('save')}</span>
                 <span className="sm:hidden">{saving ? '...' : 'OK'}</span>
