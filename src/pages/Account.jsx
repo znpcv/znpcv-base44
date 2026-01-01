@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
-import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar, Bell, Clock, Check, Shield, Download, FileText, Lock } from 'lucide-react';
+import { User, Camera, Save, Edit2, X, Phone, MapPin, Settings, LogOut, Home as HomeIcon, BarChart3, Zap, Percent, AlertTriangle, Trash2, Calendar, Bell, Clock, Check, Shield, Lock, Mail } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,7 +40,6 @@ export default function AccountPage() {
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [exporting, setExporting] = useState(false);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
   useEffect(() => {
@@ -125,24 +124,6 @@ export default function AccountPage() {
     }
   };
 
-  const handleExportData = async () => {
-    try {
-      setExporting(true);
-      const response = await base44.functions.invoke('exportUserData', {});
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `ZNPCV_Profile_${new Date().toISOString().split('T')[0]}.pdf`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Export failed:', error);
-    } finally {
-      setExporting(false);
-    }
-  };
-
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
     bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
@@ -189,194 +170,139 @@ export default function AccountPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 lg:py-12">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 sm:space-y-5 md:space-y-6">
+      <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 sm:space-y-4">
           
-          {/* Profile Card */}
-          <div className={`relative overflow-hidden ${theme.bgSecondary} border-2 ${theme.border} rounded-2xl`}>
-            <div className={`absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-teal-500/5 to-transparent rounded-full blur-3xl`} />
-            <div className="relative z-10 p-4 sm:p-5 md:p-6">
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
-                {/* Profile Image */}
+          {/* Profile Card - Ultra Compact */}
+          <div className={`relative overflow-hidden border-2 ${theme.border} rounded-xl`}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${darkMode ? 'from-zinc-900 via-black to-black' : 'from-zinc-100 via-white to-white'}`} />
+            <div className="relative z-10 p-4 sm:p-5">
+              <div className="flex items-center gap-4">
+                {/* Profile Image - Compact */}
                 <div className="relative group flex-shrink-0">
-                  <div className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
                     {user.profile_image ?
                     <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" /> :
-                    <User className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 ${darkMode ? 'text-black' : 'text-white'}`} />
+                    <User className={`w-8 h-8 sm:w-10 sm:h-10 ${darkMode ? 'text-black' : 'text-white'}`} />
                     }
                   </div>
-                  <label className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm rounded-2xl opacity-0 group-hover:opacity-100 transition-all cursor-pointer">
+                  <label className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm rounded-xl opacity-0 group-hover:opacity-100 transition-all cursor-pointer">
                     <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
                     {uploading ?
-                    <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full" /> :
-                    <Camera className="w-6 h-6 text-white" />
+                    <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" /> :
+                    <Camera className="w-5 h-5 text-white" />
                     }
                   </label>
                 </div>
 
-                {/* User Info */}
-                <div className="flex-1 min-w-0 text-center sm:text-left">
+                {/* User Info - Inline */}
+                <div className="flex-1 min-w-0">
                   {editing ?
                   <Input
                     value={formData.full_name}
                     onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                    className={`font-bold text-base sm:text-lg md:text-xl ${theme.border} mb-2 h-10 sm:h-11`}
+                    className={`font-bold text-base sm:text-lg ${theme.border} mb-2 h-9 sm:h-10 rounded-lg`}
                     placeholder={t('yourName')} /> :
-                  <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold ${theme.text} mb-1 sm:mb-2`}>{user.full_name || '-'}</h1>
+                  <h1 className={`text-lg sm:text-xl font-bold ${theme.text} mb-1 truncate`}>{user.full_name || '-'}</h1>
                   }
-                  <p className={`text-xs sm:text-sm ${theme.textSecondary} mb-3 sm:mb-4 truncate font-sans`}>{user.email}</p>
-                  
-                  {/* Stats Pills */}
-                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                    <div className={`flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'}`}>
-                      <User className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-                      {user.role?.toUpperCase()}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className={`flex items-center gap-1 text-xs ${theme.textSecondary} font-mono`}>
+                      <Mail className="w-3 h-3" />
+                      <span className="truncate max-w-[200px]">{user.email}</span>
                     </div>
-                    <div className={`flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-mono border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'}`}>
-                      <Calendar className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-                      {format(new Date(user.created_date), 'MMM yyyy')}
+                    <div className={`px-2 py-0.5 rounded text-[9px] font-bold ${darkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'}`}>
+                      {user.role?.toUpperCase()}
                     </div>
                   </div>
                 </div>
 
                 {/* Edit Button */}
                 {!editing && (
-                  <Button onClick={() => setEditing(true)} className={`h-9 sm:h-10 px-4 sm:px-5 text-xs sm:text-sm font-bold border-2 rounded-xl ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-                    <Edit2 className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">{t('edit')}</span>
+                  <Button onClick={() => setEditing(true)} className={`h-9 px-4 text-xs font-bold border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                    <Edit2 className="w-4 h-4" />
                   </Button>
                 )}
               </div>
+            </div>
+          </div>
 
-              {/* Bio */}
-              {editing ? (
-                <div className={`mt-4 sm:mt-5 pt-4 sm:pt-5 border-t ${theme.border}`}>
-                  <label className={`block text-xs ${theme.textSecondary} mb-2 tracking-wider font-bold`}>BIO</label>
-                  <Textarea
-                    value={formData.bio}
-                    onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                    placeholder={t('bioPlaceholder')}
-                    className={`${theme.border} h-24 sm:h-28 resize-none text-sm font-sans rounded-xl`} />
+          {/* Info Grid - Compact */}
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+            {/* Contact Info */}
+            <div className={`border-2 ${theme.border} rounded-xl p-4`}>
+              <div className="flex items-center gap-2 mb-3">
+                <Phone className={`w-4 h-4 ${theme.textSecondary}`} />
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>KONTAKT</span>
+              </div>
+              
+              <div className="space-y-3">
+                {/* Phone */}
+                <div>
+                  <label className={`text-[9px] ${theme.textMuted} mb-1.5 block tracking-wider font-bold`}>TELEFON</label>
+                  {editing ?
+                  <div className="flex gap-2">
+                    <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
+                      <SelectTrigger className={`w-20 ${theme.border} h-9 text-sm rounded-lg`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[200px]">
+                        {COUNTRIES.map((c) =>
+                        <SelectItem key={c.dial} value={c.dial} className="text-sm">{c.dial}</SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
+                      placeholder="123456789"
+                      className={`flex-1 ${theme.border} h-9 text-sm rounded-lg`} />
+                  </div> :
+                  <div className={`text-sm ${theme.text} font-mono p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                    {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
+                  </div>
+                  }
                 </div>
-              ) : user.bio && (
-                <div className={`mt-4 sm:mt-5 pt-4 sm:pt-5 border-t ${theme.border}`}>
-                  <p className={`text-sm sm:text-base ${theme.text} font-sans leading-relaxed`}>{user.bio}</p>
+              </div>
+            </div>
+
+            {/* Address Info */}
+            <div className={`border-2 ${theme.border} rounded-xl p-4`}>
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin className={`w-4 h-4 ${theme.textSecondary}`} />
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>ADRESSE</span>
+              </div>
+              
+              {editing ? (
+                <div className="space-y-3">
+                  <Input
+                    value={formData.address_street}
+                    onChange={(e) => setFormData({...formData, address_street: e.target.value})}
+                    placeholder="Straße 123"
+                    className={`${theme.border} h-9 text-sm rounded-lg`} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      value={formData.address_postal_code}
+                      onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
+                      placeholder="PLZ"
+                      className={`${theme.border} h-9 text-sm rounded-lg`} />
+                    <Input
+                      value={formData.address_city}
+                      onChange={(e) => setFormData({...formData, address_city: e.target.value})}
+                      placeholder="Stadt"
+                      className={`${theme.border} h-9 text-sm rounded-lg`} />
+                  </div>
+                  <CountrySelect
+                    value={formData.address_country}
+                    onChange={(v) => setFormData({...formData, address_country: v})}
+                    className={`${theme.border} h-9 text-sm rounded-lg`} />
+                </div>
+              ) : (
+                <div className={`text-sm ${theme.text} p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'} space-y-1`}>
+                  <div>{user.address_street || '-'}</div>
+                  <div>{user.address_postal_code && user.address_city ? `${user.address_postal_code} ${user.address_city}` : '-'}</div>
+                  <div className="text-xs">{COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}</div>
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* Adresse */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
-            <div className="flex items-center gap-2 mb-4 sm:mb-5">
-              <HomeIcon className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>ADRESSE</span>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {/* Street */}
-              <div className="sm:col-span-2">
-                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>STRASSE</label>
-                {editing ?
-                <Input
-                  value={formData.address_street}
-                  onChange={(e) => setFormData({...formData, address_street: e.target.value})}
-                  placeholder="Musterstraße 123"
-                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
-                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.address_street || '-'}
-                </div>
-                }
-              </div>
-
-              {/* Postal Code */}
-              <div>
-                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>PLZ</label>
-                {editing ?
-                <Input
-                  value={formData.address_postal_code}
-                  onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
-                  placeholder="12345"
-                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
-                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.address_postal_code || '-'}
-                </div>
-                }
-              </div>
-
-              {/* City */}
-              <div>
-                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>STADT</label>
-                {editing ?
-                <Input
-                  value={formData.address_city}
-                  onChange={(e) => setFormData({...formData, address_city: e.target.value})}
-                  placeholder="Berlin"
-                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
-                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.address_city || '-'}
-                </div>
-                }
-              </div>
-
-              {/* Country */}
-              <div className="sm:col-span-2">
-                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>LAND</label>
-                {editing ?
-                <CountrySelect
-                  value={formData.address_country}
-                  onChange={(v) => setFormData({...formData, address_country: v})}
-                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
-                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}
-                </div>
-                }
-              </div>
-            </div>
-          </div>
-
-          {/* Kontakt */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
-            <div className="flex items-center gap-2 mb-4 sm:mb-5">
-              <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>KONTAKT</span>
-            </div>
-            
-            <div className="space-y-4 sm:space-y-5">
-              {/* Email */}
-              <div>
-                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>E-MAIL</label>
-                <div className={`text-sm sm:text-base ${theme.text} font-mono p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.email}
-                </div>
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>TELEFON</label>
-                {editing ?
-                <div className="flex gap-2">
-                  <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
-                    <SelectTrigger className={`w-24 sm:w-28 ${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[200px]">
-                      {COUNTRIES.map((c) =>
-                      <SelectItem key={c.dial} value={c.dial} className="text-sm">{c.dial}</SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
-                    placeholder="123456789"
-                    className={`flex-1 ${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
-                </div> :
-                <div className={`text-sm sm:text-base ${theme.text} font-mono p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
-                </div>
-                }
-              </div>
             </div>
           </div>
 
@@ -425,27 +351,28 @@ export default function AccountPage() {
             </details>
           )}
 
-          {/* Security & 2FA */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
-            <div className="flex items-center gap-2 mb-4 sm:mb-5">
-              <Shield className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>SICHERHEIT</span>
-            </div>
-            
-            <div className="space-y-4">
+          {/* Security & Settings - Compact Grid */}
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+            {/* Security */}
+            <div className={`border-2 ${theme.border} rounded-xl p-4`}>
+              <div className="flex items-center gap-2 mb-3">
+                <Shield className={`w-4 h-4 ${theme.textSecondary}`} />
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>SECURITY</span>
+              </div>
+              
               {/* 2FA Toggle */}
-              <div className={`flex items-center justify-between p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                <div className="flex items-center gap-3">
-                  <Lock className={`w-4 h-4 sm:w-5 sm:h-5 ${twoFactorEnabled ? 'text-emerald-700' : theme.textSecondary}`} />
+              <div className={`flex items-center justify-between p-3 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                <div className="flex items-center gap-2">
+                  <Lock className={`w-4 h-4 ${twoFactorEnabled ? 'text-emerald-700' : theme.textSecondary}`} />
                   <div>
-                    <div className={`text-sm sm:text-base font-bold ${theme.text}`}>Two-Factor Auth</div>
-                    <div className={`text-[10px] ${theme.textMuted} font-sans`}>Zusätzliche Sicherheitsebene</div>
+                    <div className={`text-sm font-bold ${theme.text}`}>2FA</div>
+                    <div className={`text-[9px] ${theme.textMuted} font-sans`}>Two-Factor Auth</div>
                   </div>
                 </div>
                 {editing ? (
                   <button
                     onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
-                    className={`relative w-12 h-6 rounded-full transition-all ${
+                    className={`relative w-11 h-6 rounded-full transition-all ${
                       twoFactorEnabled ? 'bg-emerald-700' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'
                     }`}
                   >
@@ -453,136 +380,88 @@ export default function AccountPage() {
                   </button>
                 ) : (
                   <span className={`text-xs font-bold ${twoFactorEnabled ? 'text-emerald-700' : theme.textMuted}`}>
-                    {twoFactorEnabled ? 'AKTIV' : 'INAKTIV'}
+                    {twoFactorEnabled ? 'ON' : 'OFF'}
                   </span>
                 )}
               </div>
-
-              {/* Export Data */}
-              <button
-                onClick={handleExportData}
-                disabled={exporting}
-                className={`w-full flex items-center justify-between p-3 sm:p-4 border-2 rounded-xl transition-all ${
-                  darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-300 hover:border-zinc-400'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Download className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-                  <div className="text-left">
-                    <div className={`text-sm sm:text-base font-bold ${theme.text}`}>Daten exportieren</div>
-                    <div className={`text-[10px] ${theme.textMuted} font-sans`}>Alle Trades als PDF</div>
-                  </div>
-                </div>
-                {exporting ? (
-                  <div className="animate-spin w-5 h-5 border-2 border-emerald-700 border-t-transparent rounded-full" />
-                ) : (
-                  <FileText className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-                )}
-              </button>
             </div>
-          </div>
 
-          {/* Push Notifications */}
-          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
-            <div className="flex items-center gap-2 mb-4 sm:mb-5">
-              <Bell className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>BENACHRICHTIGUNGEN</span>
-            </div>
-            
-            {editing ? (
-              <div className="space-y-4">
+            {/* Notifications */}
+            <div className={`border-2 ${theme.border} rounded-xl p-4`}>
+              <div className="flex items-center gap-2 mb-3">
+                <Bell className={`w-4 h-4 ${theme.textSecondary}`} />
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>NOTIFICATIONS</span>
+              </div>
+              
+              {editing ? (
                 <PushNotificationManager darkMode={darkMode} onSuccess={loadUser} />
-                
-                {formData.browser_notifications_enabled && (
-                  <div className={`p-3 sm:p-4 rounded-xl border ${theme.border} ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                    <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 sm:mb-3 block tracking-wider font-bold`}>HÄUFIGKEIT</label>
-                    <div className="grid grid-cols-4 gap-2">
-                      {['1', '2', '3', '4'].map((freq) => (
-                        <button
-                          key={freq}
-                          onClick={() => setFormData({...formData, notification_frequency: freq})}
-                          className={`py-2 sm:py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${
-                            formData.notification_frequency === freq
-                              ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
-                              : darkMode ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700' : 'bg-zinc-200 text-zinc-600 hover:bg-zinc-300'
-                          }`}
-                        >
-                          {freq}x
-                        </button>
-                      ))}
+              ) : (
+                <div className={`p-3 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {user.browser_notifications_enabled ? (
+                    <div className="flex items-center gap-2 text-emerald-700">
+                      <Check className="w-4 h-4" />
+                      <span className="font-bold text-sm">Active</span>
                     </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className={`p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                {user.browser_notifications_enabled ? (
-                  <div className="flex items-center gap-2 text-emerald-700">
-                    <Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="font-bold text-sm sm:text-base">Aktiv ({user.notification_frequency || '1'}x täglich)</span>
-                  </div>
-                ) : (
-                  <span className={`${theme.textSecondary} text-sm sm:text-base`}>Nicht aktiviert</span>
-                )}
-              </div>
-            )}
+                  ) : (
+                    <span className={`${theme.textSecondary} text-sm`}>Off</span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
           </div>
 
-          {/* Save/Cancel Buttons (only in edit mode) */}
-          {editing && (
-            <div className="flex gap-2 sm:gap-3">
-              <Button 
-                onClick={async () => {
-                  await handleSave();
-                  if (twoFactorEnabled !== user.two_factor_enabled) {
-                    await base44.auth.updateMe({ two_factor_enabled: twoFactorEnabled });
-                  }
-                }} 
-                disabled={saving} 
-                className={`flex-1 h-10 sm:h-11 text-xs sm:text-sm font-bold border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-                <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-2" />
-                <span className="hidden sm:inline">{saving ? '...' : t('save')}</span>
-                <span className="sm:hidden">{saving ? '...' : 'OK'}</span>
-              </Button>
-              <Button onClick={() => {
-                setEditing(false);
-                setFormData({
-                  full_name: user.full_name || '',
-                  phone: user.phone || '',
-                  phone_country_code: user.phone_country_code || '+49',
-                  bio: user.bio || '',
-                  address_street: user.address_street || '',
-                  address_city: user.address_city || '',
-                  address_postal_code: user.address_postal_code || '',
-                  address_country: user.address_country || '',
-                  default_leverage: user.default_leverage || '100',
-                  default_risk_percent: user.default_risk_percent || '1',
-                  daily_quote_enabled: user.daily_quote_enabled || false,
-                  daily_quote_time: user.daily_quote_time || '09:00',
-                  show_daily_quote_in_app: user.show_daily_quote_in_app || false,
-                  browser_notifications_enabled: user.browser_notifications_enabled || false,
-                  notification_frequency: user.notification_frequency || '1'
-                });
-              }} variant="outline" className={`h-10 sm:h-11 px-3 sm:px-4 border-2 ${theme.border}`}>
-                <X className="w-4 h-4 sm:w-5 sm:h-5" />
-              </Button>
-            </div>
-          )}
-
-          {/* Navigation */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
-            <Button onClick={() => navigate(createPageUrl('Home'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <HomeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">HOME</span>
-            </Button>
-            <Button onClick={() => navigate(createPageUrl('Dashboard'))} className={`h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-              <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">STATS</span>
-            </Button>
-            <Button onClick={handleLogout} className="h-10 sm:h-11 text-[10px] sm:text-xs tracking-widest border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600">
-              <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 sm:mr-1.5" />
-              <span className="hidden sm:inline">OUT</span>
-            </Button>
+          {/* Action Bar */}
+          <div className="flex gap-2">
+            {editing ? (
+              <>
+                <Button 
+                  onClick={async () => {
+                    await handleSave();
+                    if (twoFactorEnabled !== user.two_factor_enabled) {
+                      await base44.auth.updateMe({ two_factor_enabled: twoFactorEnabled });
+                    }
+                  }} 
+                  disabled={saving} 
+                  className={`flex-1 h-10 text-xs font-bold border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Save className="w-4 h-4 mr-2" />
+                  {saving ? '...' : t('save')}
+                </Button>
+                <Button onClick={() => {
+                  setEditing(false);
+                  setFormData({
+                    full_name: user.full_name || '',
+                    phone: user.phone || '',
+                    phone_country_code: user.phone_country_code || '+49',
+                    bio: user.bio || '',
+                    address_street: user.address_street || '',
+                    address_city: user.address_city || '',
+                    address_postal_code: user.address_postal_code || '',
+                    address_country: user.address_country || '',
+                    default_leverage: user.default_leverage || '100',
+                    default_risk_percent: user.default_risk_percent || '1',
+                    daily_quote_enabled: user.daily_quote_enabled || false,
+                    daily_quote_time: user.daily_quote_time || '09:00',
+                    show_daily_quote_in_app: user.show_daily_quote_in_app || false,
+                    browser_notifications_enabled: user.browser_notifications_enabled || false,
+                    notification_frequency: user.notification_frequency || '1'
+                  });
+                }} variant="outline" className={`h-10 px-4 border-2 rounded-lg ${theme.border}`}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button onClick={() => navigate(createPageUrl('Home'))} className={`flex-1 h-10 text-xs tracking-wider border-2 rounded-lg ${darkMode ? 'bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800' : 'bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200'}`}>
+                  <HomeIcon className="w-4 h-4 mr-2" />
+                  HOME
+                </Button>
+                <Button onClick={handleLogout} className="h-10 px-5 text-xs tracking-wider border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600 rounded-lg">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  LOGOUT
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Danger Zone */}
