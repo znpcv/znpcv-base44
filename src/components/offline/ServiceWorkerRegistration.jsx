@@ -25,7 +25,8 @@ export default function ServiceWorkerRegistration() {
             body: 'Neue Benachrichtigung',
             icon: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
             badge: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
-            tag: 'znpcv-notification'
+            tag: 'znpcv-notification',
+            data: {}
           };
           
           if (event.data) {
@@ -42,14 +43,30 @@ export default function ServiceWorkerRegistration() {
               icon: data.icon,
               badge: data.badge,
               tag: data.tag,
-              vibrate: [200, 100, 200]
+              vibrate: [200, 100, 200],
+              data: data.data,
+              actions: [
+                { action: 'snooze', title: '💤 Snooze' },
+                { action: 'close', title: '✕ Schließen' }
+              ]
             })
           );
         });
         
         self.addEventListener('notificationclick', (event) => {
-          event.notification.close();
-          event.waitUntil(clients.openWindow('/'));
+          const notification = event.notification;
+          const action = event.action;
+
+          if (action === 'snooze') {
+            notification.close();
+            const snoozeDuration = (notification.data && notification.data.snoozeDuration) || 30;
+            console.log('Snoozed for ' + snoozeDuration + ' minutes');
+          } else if (action === 'close') {
+            notification.close();
+          } else {
+            notification.close();
+            event.waitUntil(clients.openWindow('/'));
+          }
         });
       `;
       
