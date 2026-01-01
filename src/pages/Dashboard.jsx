@@ -613,184 +613,201 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Trade Performance Übersicht - Einheitlich */}
+            {/* Trade Performance - Advanced */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-              className={cn("rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border-2",
+              className={cn("rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-7 border-2 relative overflow-hidden",
                 darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
 
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-5 pointer-events-none">
+                <div className="w-full h-full" style={{
+                  backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 1px)',
+                  backgroundSize: '20px 20px'
+                }} />
+              </div>
+
               {/* Header */}
-              <div className="flex items-center justify-between mb-5 sm:mb-6">
+              <div className="flex items-center justify-between mb-6 sm:mb-7 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className={cn("w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center",
+                  <div className={cn("w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center relative",
                     darkMode ? "bg-gradient-to-br from-zinc-900 to-zinc-800" : "bg-gradient-to-br from-zinc-200 to-zinc-100")}>
-                    <Activity className={cn("w-5 h-5 sm:w-5.5 sm:h-5.5", theme.text)} />
+                    <Activity className={cn("w-5 h-5 sm:w-6 sm:h-6", theme.text)} />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-700 rounded-full border-2 border-zinc-950" />
                   </div>
                   <div>
-                    <h3 className={`text-sm sm:text-base tracking-widest ${theme.text} font-black`}>PERFORMANCE</h3>
-                    <div className={`text-[10px] sm:text-xs ${theme.textMuted} font-sans`}>{stats.executed} ausgeführte Trades</div>
+                    <h3 className={`text-base sm:text-lg tracking-widest ${theme.text} font-black`}>PERFORMANCE</h3>
+                    <div className={`text-[10px] sm:text-xs ${theme.textMuted} font-sans`}>{stats.executed} Trades • {stats.winRate}% Win Rate</div>
                   </div>
                 </div>
-                <div className={cn("px-3 py-2 rounded-xl font-black text-sm sm:text-base",
-                  stats.winRate >= 50 
-                    ? darkMode ? "bg-emerald-700/20 text-emerald-700 border-2 border-emerald-700/30" : "bg-teal-100 text-emerald-700 border-2 border-teal-300"
-                    : darkMode ? "bg-rose-600/20 text-rose-600 border-2 border-rose-600/30" : "bg-rose-100 text-rose-600 border-2 border-rose-300")}>
-                  {stats.winRate}%
-                </div>
               </div>
 
-              {/* Win/Loss Grid - Einheitliche Größen */}
-              <div className="mb-5 sm:mb-6">
-                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-3 sm:mb-4 font-bold flex items-center gap-2`}>
-                  <div className={`w-1.5 h-4 sm:h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                  ERGEBNIS-ÜBERSICHT
+              {/* Performance Matrix - Direction x Outcome */}
+              <div className="mb-6 relative z-10">
+                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-4 font-bold flex items-center gap-2`}>
+                  <div className={`w-1.5 h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                  TRADE MATRIX
                 </div>
-                <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-                  {[
-                    { 
-                      name: 'Wins', 
-                      value: checklists.filter(c => c.outcome === 'win').length, 
-                      color: '#0d9488', 
-                      icon: ArrowUpRight,
-                      pnl: stats.totalWins
-                    },
-                    { 
-                      name: 'Losses', 
-                      value: checklists.filter(c => c.outcome === 'loss').length, 
-                      color: '#e11d48', 
-                      icon: ArrowDownRight,
-                      pnl: -stats.totalLosses
-                    },
-                    { 
-                      name: 'BE', 
-                      value: checklists.filter(c => c.outcome === 'breakeven').length, 
-                      color: '#6b7280', 
-                      icon: Minus,
-                      pnl: 0
-                    }
-                  ].filter(item => item.value > 0).map((item) => (
-                    <div 
-                      key={item.name}
-                      className={cn("relative overflow-hidden rounded-xl p-3 sm:p-4 border-2 transition-all hover:scale-105 cursor-default min-h-[120px] sm:min-h-[130px] flex flex-col justify-between",
-                        item.name === 'Wins' ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400" :
-                        item.name === 'Losses' ? darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400" :
-                        darkMode ? "bg-zinc-800/50 border-zinc-700" : "bg-zinc-100 border-zinc-400")}>
-                      <div className="absolute top-2 right-2 opacity-10">
-                        <item.icon className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: item.color }} />
-                      </div>
-                      <div className="relative z-10">
-                        <div className={`text-3xl sm:text-4xl font-black mb-1`} style={{ color: item.color }}>
-                          {item.value}
-                        </div>
-                        <div className={`text-[9px] sm:text-[10px] ${theme.textMuted} font-bold tracking-wide uppercase`}>
-                          {item.name}
-                        </div>
-                      </div>
-                      <div className="relative z-10">
-                        <div className={`text-xs sm:text-sm font-bold mb-1`} style={{ color: item.color }}>
-                          {((item.value / stats.executed) * 100).toFixed(1)}%
-                        </div>
-                        {item.pnl !== 0 && (
-                          <div className={`text-[10px] sm:text-xs font-sans ${theme.textMuted}`}>
-                            {item.pnl > 0 ? '+' : ''}${item.pnl.toFixed(2)}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* Direction - Kreis Visualisierung */}
-              <div>
-                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-3 sm:mb-4 font-bold flex items-center gap-2`}>
-                  <div className={`w-1.5 h-4 sm:h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                  TRADE-RICHTUNG
-                </div>
-                <div className={cn("rounded-xl p-4 sm:p-5 border-2 relative overflow-hidden",
+                <div className={cn("rounded-xl p-4 sm:p-5 border-2",
                   darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-300")}>
-                  
-                  {/* Circular Progress */}
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="relative w-32 h-32 sm:w-40 sm:h-40">
-                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                        {/* Background Circle */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          fill="none"
-                          stroke={darkMode ? "#27272a" : "#e4e4e7"}
-                          strokeWidth="8"
-                        />
-                        {/* Long Progress */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          fill="none"
-                          stroke="#0d9488"
-                          strokeWidth="8"
-                          strokeDasharray={`${(stats.longs / (stats.longs + stats.shorts)) * 251.2} 251.2`}
-                          strokeLinecap="round"
-                          className="transition-all duration-500"
-                        />
-                        {/* Short Progress */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          fill="none"
-                          stroke="#e11d48"
-                          strokeWidth="8"
-                          strokeDasharray={`${(stats.shorts / (stats.longs + stats.shorts)) * 251.2} 251.2`}
-                          strokeDashoffset={`-${(stats.longs / (stats.longs + stats.shorts)) * 251.2}`}
-                          strokeLinecap="round"
-                          className="transition-all duration-500"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className={`text-2xl sm:text-3xl font-black ${theme.text}`}>
-                            {stats.longs + stats.shorts}
+
+                  {/* Matrix Grid */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {/* Header Row */}
+                    <div />
+                    <div className={`text-[10px] font-black text-center ${theme.textMuted}`}>WIN</div>
+                    <div className={`text-[10px] font-black text-center ${theme.textMuted}`}>LOSS</div>
+                    <div className={`text-[10px] font-black text-center ${theme.textMuted}`}>BE</div>
+
+                    {/* Long Row */}
+                    <div className="flex items-center gap-1">
+                      <ArrowUpRight className="w-3 h-3 text-emerald-700" />
+                      <span className={`text-[10px] font-black text-emerald-700`}>LONG</span>
+                    </div>
+                    {(() => {
+                      const longTrades = checklists.filter(c => c.direction === 'long' || c.direction === 'bullish');
+                      const longWins = longTrades.filter(c => c.outcome === 'win').length;
+                      const longLosses = longTrades.filter(c => c.outcome === 'loss').length;
+                      const longBE = longTrades.filter(c => c.outcome === 'breakeven').length;
+                      return (
+                        <>
+                          <div className={cn("rounded-lg p-2 text-center border-2 transition-all hover:scale-105",
+                            longWins > 0 
+                              ? darkMode ? "bg-emerald-700/20 border-emerald-700/50" : "bg-teal-100 border-teal-400"
+                              : darkMode ? "bg-zinc-800/30 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+                            <div className={`text-lg font-black ${longWins > 0 ? 'text-emerald-700' : theme.textMuted}`}>{longWins}</div>
+                            {longWins > 0 && <div className={`text-[8px] ${theme.textMuted}`}>{((longWins/longTrades.length)*100).toFixed(0)}%</div>}
                           </div>
-                          <div className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider`}>TRADES</div>
-                        </div>
+                          <div className={cn("rounded-lg p-2 text-center border-2 transition-all hover:scale-105",
+                            longLosses > 0 
+                              ? darkMode ? "bg-rose-600/20 border-rose-600/50" : "bg-rose-100 border-rose-400"
+                              : darkMode ? "bg-zinc-800/30 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+                            <div className={`text-lg font-black ${longLosses > 0 ? 'text-rose-600' : theme.textMuted}`}>{longLosses}</div>
+                            {longLosses > 0 && <div className={`text-[8px] ${theme.textMuted}`}>{((longLosses/longTrades.length)*100).toFixed(0)}%</div>}
+                          </div>
+                          <div className={cn("rounded-lg p-2 text-center border-2 transition-all hover:scale-105",
+                            longBE > 0 
+                              ? darkMode ? "bg-zinc-700/50 border-zinc-600" : "bg-zinc-200 border-zinc-400"
+                              : darkMode ? "bg-zinc-800/30 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+                            <div className={`text-lg font-black ${longBE > 0 ? theme.text : theme.textMuted}`}>{longBE}</div>
+                            {longBE > 0 && <div className={`text-[8px] ${theme.textMuted}`}>{((longBE/longTrades.length)*100).toFixed(0)}%</div>}
+                          </div>
+                        </>
+                      );
+                    })()}
+
+                    {/* Short Row */}
+                    <div className="flex items-center gap-1">
+                      <ArrowDownRight className="w-3 h-3 text-rose-600" />
+                      <span className={`text-[10px] font-black text-rose-600`}>SHORT</span>
+                    </div>
+                    {(() => {
+                      const shortTrades = checklists.filter(c => c.direction === 'short' || c.direction === 'bearish');
+                      const shortWins = shortTrades.filter(c => c.outcome === 'win').length;
+                      const shortLosses = shortTrades.filter(c => c.outcome === 'loss').length;
+                      const shortBE = shortTrades.filter(c => c.outcome === 'breakeven').length;
+                      return (
+                        <>
+                          <div className={cn("rounded-lg p-2 text-center border-2 transition-all hover:scale-105",
+                            shortWins > 0 
+                              ? darkMode ? "bg-emerald-700/20 border-emerald-700/50" : "bg-teal-100 border-teal-400"
+                              : darkMode ? "bg-zinc-800/30 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+                            <div className={`text-lg font-black ${shortWins > 0 ? 'text-emerald-700' : theme.textMuted}`}>{shortWins}</div>
+                            {shortWins > 0 && <div className={`text-[8px] ${theme.textMuted}`}>{((shortWins/shortTrades.length)*100).toFixed(0)}%</div>}
+                          </div>
+                          <div className={cn("rounded-lg p-2 text-center border-2 transition-all hover:scale-105",
+                            shortLosses > 0 
+                              ? darkMode ? "bg-rose-600/20 border-rose-600/50" : "bg-rose-100 border-rose-400"
+                              : darkMode ? "bg-zinc-800/30 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+                            <div className={`text-lg font-black ${shortLosses > 0 ? 'text-rose-600' : theme.textMuted}`}>{shortLosses}</div>
+                            {shortLosses > 0 && <div className={`text-[8px] ${theme.textMuted}`}>{((shortLosses/shortTrades.length)*100).toFixed(0)}%</div>}
+                          </div>
+                          <div className={cn("rounded-lg p-2 text-center border-2 transition-all hover:scale-105",
+                            shortBE > 0 
+                              ? darkMode ? "bg-zinc-700/50 border-zinc-600" : "bg-zinc-200 border-zinc-400"
+                              : darkMode ? "bg-zinc-800/30 border-zinc-800" : "bg-zinc-100 border-zinc-300")}>
+                            <div className={`text-lg font-black ${shortBE > 0 ? theme.text : theme.textMuted}`}>{shortBE}</div>
+                            {shortBE > 0 && <div className={`text-[8px] ${theme.textMuted}`}>{((shortBE/shortTrades.length)*100).toFixed(0)}%</div>}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Summary Stats */}
+                  <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t-2 border-zinc-800/50">
+                    <div className="text-center">
+                      <div className={`text-xl sm:text-2xl font-black text-emerald-700`}>{stats.wins}</div>
+                      <div className={`text-[9px] ${theme.textMuted} tracking-wider mt-1`}>WINS</div>
+                    </div>
+                    <div className="text-center">
+                      <div className={`text-xl sm:text-2xl font-black text-rose-600`}>{stats.losses}</div>
+                      <div className={`text-[9px] ${theme.textMuted} tracking-wider mt-1`}>LOSSES</div>
+                    </div>
+                    <div className="text-center">
+                      <div className={`text-xl sm:text-2xl font-black ${theme.text}`}>{stats.breakeven}</div>
+                      <div className={`text-[9px] ${theme.textMuted} tracking-wider mt-1`}>BE</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Direction Distribution */}
+              <div className="relative z-10">
+                <div className={`text-xs sm:text-sm tracking-wider ${theme.textMuted} mb-4 font-bold flex items-center gap-2`}>
+                  <div className={`w-1.5 h-5 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                  TRADE-VERTEILUNG
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Long Stats */}
+                  <div className={cn("rounded-xl p-4 border-2 relative overflow-hidden",
+                    darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400")}>
+                    <div className="absolute -top-2 -right-2 w-20 h-20 bg-emerald-700/10 rounded-full blur-xl" />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 mb-3">
+                        <ArrowUpRight className="w-5 h-5 text-emerald-700" />
+                        <span className="text-xs font-black text-emerald-700 tracking-wider">LONG</span>
+                      </div>
+                      <div className="text-3xl sm:text-4xl font-black text-emerald-700 mb-1">{stats.longs}</div>
+                      <div className={`text-sm font-bold ${theme.text}`}>
+                        {((stats.longs / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className={cn("h-2 rounded-full mt-3 overflow-hidden",
+                        darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
+                        <div 
+                          className="h-full bg-gradient-to-r from-emerald-600 to-teal-500 transition-all duration-500"
+                          style={{ width: `${(stats.longs / (stats.longs + stats.shorts)) * 100}%` }}
+                        />
                       </div>
                     </div>
                   </div>
 
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {directionData.map((item) => (
-                      <div 
-                        key={item.name}
-                        className={cn("rounded-xl p-3 sm:p-4 border-2 min-h-[100px] flex flex-col justify-between",
-                          item.name === t('long')
-                            ? darkMode ? "bg-emerald-700/10 border-emerald-700/40" : "bg-teal-50 border-teal-400"
-                            : darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400")}>
-                        
-                        <div className="flex items-center gap-2 mb-2">
-                          {item.name === t('long') ? 
-                            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" /> : 
-                            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 text-rose-600" />
-                          }
-                          <span className={cn("text-[10px] sm:text-xs font-black tracking-wider", 
-                            item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
-                            {item.name.toUpperCase()}
-                          </span>
-                        </div>
-                        
-                        <div>
-                          <div className={cn("text-3xl sm:text-4xl font-black mb-1", 
-                            item.name === t('long') ? 'text-emerald-700' : 'text-rose-600')}>
-                            {item.value}
-                          </div>
-                          <div className={`text-xs sm:text-sm font-bold ${theme.text}`}>
-                            {((item.value / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
-                          </div>
-                        </div>
+                  {/* Short Stats */}
+                  <div className={cn("rounded-xl p-4 border-2 relative overflow-hidden",
+                    darkMode ? "bg-rose-600/10 border-rose-600/40" : "bg-rose-50 border-rose-400")}>
+                    <div className="absolute -top-2 -right-2 w-20 h-20 bg-rose-600/10 rounded-full blur-xl" />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 mb-3">
+                        <ArrowDownRight className="w-5 h-5 text-rose-600" />
+                        <span className="text-xs font-black text-rose-600 tracking-wider">SHORT</span>
                       </div>
-                    ))}
+                      <div className="text-3xl sm:text-4xl font-black text-rose-600 mb-1">{stats.shorts}</div>
+                      <div className={`text-sm font-bold ${theme.text}`}>
+                        {((stats.shorts / (stats.longs + stats.shorts)) * 100).toFixed(1)}%
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className={cn("h-2 rounded-full mt-3 overflow-hidden",
+                        darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
+                        <div 
+                          className="h-full bg-gradient-to-r from-rose-600 to-red-500 transition-all duration-500"
+                          style={{ width: `${(stats.shorts / (stats.longs + stats.shorts)) * 100}%` }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
