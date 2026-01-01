@@ -306,50 +306,55 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Advanced Settings - Collapsible */}
-          {editing && (
-            <details className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl overflow-hidden`}>
-              <summary className={`cursor-pointer p-4 sm:p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'} transition-colors`}>
-                <div className="flex items-center gap-2">
-                  <Settings className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>ADVANCED SETTINGS</span>
+          {/* Advanced Settings */}
+          <div className={`border-2 ${theme.border} rounded-xl p-4`}>
+            <div className="flex items-center gap-2 mb-3">
+              <Settings className={`w-4 h-4 ${theme.textSecondary}`} />
+              <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>ADVANCED SETTINGS</span>
+            </div>
+            
+            <p className={`text-[9px] ${theme.textMuted} mb-3 font-sans`}>
+              Diese Werte werden automatisch in neue Checklisten übernommen
+            </p>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <Zap className="w-3.5 h-3.5 text-purple-500" />
+                  <label className={`text-[9px] ${theme.textMuted} tracking-wider font-bold`}>LEVERAGE</label>
                 </div>
-                <span className={`text-xs ${theme.textMuted}`}>▼</span>
-              </summary>
-              
-              <div className="p-4 sm:p-5 pt-0 space-y-4">
-                <p className={`text-[10px] ${theme.textMuted} mb-4 font-sans`}>
-                  Diese Werte werden automatisch in neue Checklisten übernommen
-                </p>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500`} />
-                      <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>DEFAULT LEVERAGE</label>
-                    </div>
-                    <Input
-                      value={formData.default_leverage}
-                      onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
-                      placeholder="100"
-                      className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
+                {editing ? (
+                  <Input
+                    value={formData.default_leverage}
+                    onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
+                    placeholder="100"
+                    className={`${theme.border} h-9 text-sm rounded-lg`} />
+                ) : (
+                  <div className={`text-sm ${theme.text} font-mono p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                    {user.default_leverage || '100'}
                   </div>
-
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Percent className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500`} />
-                      <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>DEFAULT RISK %</label>
-                    </div>
-                    <Input
-                      value={formData.default_risk_percent}
-                      onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
-                      placeholder="1"
-                      className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
-                  </div>
-                </div>
+                )}
               </div>
-            </details>
-          )}
+
+              <div>
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <Percent className="w-3.5 h-3.5 text-amber-500" />
+                  <label className={`text-[9px] ${theme.textMuted} tracking-wider font-bold`}>RISK %</label>
+                </div>
+                {editing ? (
+                  <Input
+                    value={formData.default_risk_percent}
+                    onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
+                    placeholder="1"
+                    className={`${theme.border} h-9 text-sm rounded-lg`} />
+                ) : (
+                  <div className={`text-sm ${theme.text} font-mono p-2.5 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                    {user.default_risk_percent || '1'}%
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
           {/* Security & Settings - Compact Grid */}
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
