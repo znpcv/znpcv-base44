@@ -16,17 +16,43 @@ export default function Layout({ children, currentPageName }) {
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap');
-          
+
           * {
             font-family: 'Bebas Neue', sans-serif;
           }
-          
+
           input, textarea, select {
             font-family: 'Inter', sans-serif;
           }
-          
+
           .font-sans {
             font-family: 'Inter', sans-serif;
+          }
+
+          /* Mobile Touch Optimizations */
+          .touch-manipulation {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+          }
+
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+
+          /* Safe Area for iOS */
+          .safe-area-inset-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+          }
+
+          /* Smooth Scrolling */
+          html {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
           }
         `}
       </style>
