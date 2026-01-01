@@ -247,29 +247,103 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {/* Kontaktinformationen & Adresse - Vereinheitlicht */}
+          {/* Adresse */}
           <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
             <div className="flex items-center gap-2 mb-4 sm:mb-5">
-              <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>KONTAKTINFORMATIONEN</span>
+              <HomeIcon className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>ADRESSE</span>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              {/* Street */}
+              <div className="sm:col-span-2">
+                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>STRASSE</label>
+                {editing ?
+                <Input
+                  value={formData.address_street}
+                  onChange={(e) => setFormData({...formData, address_street: e.target.value})}
+                  placeholder="Musterstraße 123"
+                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
+                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {user.address_street || '-'}
+                </div>
+                }
+              </div>
+
+              {/* Postal Code */}
+              <div>
+                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>PLZ</label>
+                {editing ?
+                <Input
+                  value={formData.address_postal_code}
+                  onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
+                  placeholder="12345"
+                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
+                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {user.address_postal_code || '-'}
+                </div>
+                }
+              </div>
+
+              {/* City */}
+              <div>
+                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>STADT</label>
+                {editing ?
+                <Input
+                  value={formData.address_city}
+                  onChange={(e) => setFormData({...formData, address_city: e.target.value})}
+                  placeholder="Berlin"
+                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
+                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {user.address_city || '-'}
+                </div>
+                }
+              </div>
+
+              {/* Country */}
+              <div className="sm:col-span-2">
+                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>LAND</label>
+                {editing ?
+                <CountrySelect
+                  value={formData.address_country}
+                  onChange={(v) => setFormData({...formData, address_country: v})}
+                  className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} /> :
+                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          {/* Kontakt */}
+          <div className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl p-4 sm:p-5 md:p-6`}>
+            <div className="flex items-center gap-2 mb-4 sm:mb-5">
+              <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
+              <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>KONTAKT</span>
             </div>
             
             <div className="space-y-4 sm:space-y-5">
+              {/* Email */}
+              <div>
+                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>E-MAIL</label>
+                <div className={`text-sm sm:text-base ${theme.text} font-mono p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                  {user.email}
+                </div>
+              </div>
+
               {/* Phone */}
               <div>
-                <div className={`flex items-center gap-2 mb-2 sm:mb-3`}>
-                  <Phone className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textMuted} font-bold`}>TELEFON</span>
-                </div>
+                <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-2 block tracking-wider font-bold`}>TELEFON</label>
                 {editing ?
                 <div className="flex gap-2">
                   <Select value={formData.phone_country_code} onValueChange={(v) => setFormData({...formData, phone_country_code: v})}>
-                    <SelectTrigger className={`w-20 sm:w-24 ${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`}>
+                    <SelectTrigger className={`w-24 sm:w-28 ${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="max-h-[200px]">
                       {COUNTRIES.map((c) =>
-                      <SelectItem key={c.dial} value={c.dial} className="text-xs">{c.dial}</SelectItem>
+                      <SelectItem key={c.dial} value={c.dial} className="text-sm">{c.dial}</SelectItem>
                       )}
                     </SelectContent>
                   </Select>
@@ -277,98 +351,12 @@ export default function AccountPage() {
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/[^0-9]/g, '')})}
                     placeholder="123456789"
-                    className={`flex-1 ${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`} />
+                    className={`flex-1 ${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
                 </div> :
                 <div className={`text-sm sm:text-base ${theme.text} font-mono p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
                   {user.phone_country_code && user.phone ? `${user.phone_country_code} ${user.phone}` : '-'}
                 </div>
                 }
-              </div>
-
-              {/* Country */}
-              <div>
-                <div className={`flex items-center gap-2 mb-2 sm:mb-3`}>
-                  <MapPin className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textMuted} font-bold`}>LAND</span>
-                </div>
-                {editing ?
-                <CountrySelect
-                  value={formData.country}
-                  onChange={(v) => setFormData({...formData, country: v})}
-                  className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`} /> :
-                <div className={`text-sm sm:text-base ${theme.text} p-3 sm:p-4 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {COUNTRIES.find((c) => c.code === user.country)?.name || '-'}
-                </div>
-                }
-              </div>
-
-              {/* Address Divider */}
-              <div className={`border-t ${theme.border} pt-4 sm:pt-5`}>
-                <div className={`flex items-center gap-2 mb-3 sm:mb-4`}>
-                  <HomeIcon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${theme.textSecondary}`} />
-                  <span className={`text-[10px] sm:text-xs tracking-wider ${theme.textMuted} font-bold`}>ADRESSE</span>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {/* Street */}
-                  <div className="sm:col-span-2">
-                    <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-1.5 block tracking-wider`}>STRASSE</label>
-                    {editing ?
-                    <Input
-                      value={formData.address_street}
-                      onChange={(e) => setFormData({...formData, address_street: e.target.value})}
-                      placeholder={t('street')}
-                      className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`} /> :
-                    <div className={`text-xs sm:text-sm ${theme.text} p-3 sm:p-3.5 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                      {user.address_street || '-'}
-                    </div>
-                    }
-                  </div>
-
-                  {/* Postal Code */}
-                  <div>
-                    <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-1.5 block tracking-wider`}>PLZ</label>
-                    {editing ?
-                    <Input
-                      value={formData.address_postal_code}
-                      onChange={(e) => setFormData({...formData, address_postal_code: e.target.value})}
-                      placeholder={t('postalCode')}
-                      className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`} /> :
-                    <div className={`text-xs sm:text-sm ${theme.text} p-3 sm:p-3.5 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                      {user.address_postal_code || '-'}
-                    </div>
-                    }
-                  </div>
-
-                  {/* City */}
-                  <div>
-                    <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-1.5 block tracking-wider`}>STADT</label>
-                    {editing ?
-                    <Input
-                      value={formData.address_city}
-                      onChange={(e) => setFormData({...formData, address_city: e.target.value})}
-                      placeholder={t('city')}
-                      className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`} /> :
-                    <div className={`text-xs sm:text-sm ${theme.text} p-3 sm:p-3.5 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                      {user.address_city || '-'}
-                    </div>
-                    }
-                  </div>
-
-                  {/* Address Country */}
-                  <div className="sm:col-span-2">
-                    <label className={`text-[9px] sm:text-[10px] ${theme.textSecondary} mb-1.5 block tracking-wider`}>LAND</label>
-                    {editing ?
-                    <CountrySelect
-                      value={formData.address_country}
-                      onChange={(v) => setFormData({...formData, address_country: v})}
-                      className={`${theme.border} h-9 sm:h-10 text-xs sm:text-sm rounded-xl`} /> :
-                    <div className={`text-xs sm:text-sm ${theme.text} p-3 sm:p-3.5 border ${theme.border} rounded-xl ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                      {COUNTRIES.find((c) => c.code === user.address_country)?.name || '-'}
-                    </div>
-                    }
-                  </div>
-                </div>
               </div>
             </div>
           </div>
