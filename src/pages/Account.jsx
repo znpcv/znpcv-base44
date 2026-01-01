@@ -29,14 +29,7 @@ export default function AccountPage() {
     address_street: '',
     address_city: '',
     address_postal_code: '',
-    address_country: '',
-    default_leverage: '100',
-    default_risk_percent: '1',
-    daily_quote_enabled: false,
-    daily_quote_time: '09:00',
-    show_daily_quote_in_app: false,
-    browser_notifications_enabled: false,
-    notification_frequency: '1'
+    address_country: ''
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -58,14 +51,7 @@ export default function AccountPage() {
         address_street: userData.address_street || '',
         address_city: userData.address_city || '',
         address_postal_code: userData.address_postal_code || '',
-        address_country: userData.address_country || '',
-        default_leverage: userData.default_leverage || '100',
-        default_risk_percent: userData.default_risk_percent || '1',
-        daily_quote_enabled: userData.daily_quote_enabled || false,
-        daily_quote_time: userData.daily_quote_time || '09:00',
-        show_daily_quote_in_app: userData.show_daily_quote_in_app || false,
-        browser_notifications_enabled: userData.browser_notifications_enabled || false,
-        notification_frequency: userData.notification_frequency || '1'
+        address_country: userData.address_country || ''
       });
       setTwoFactorEnabled(userData.two_factor_enabled || false);
     } catch (err) {
@@ -215,13 +201,6 @@ export default function AccountPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* Edit Button */}
-                {!editing && (
-                  <Button onClick={() => setEditing(true)} className={`h-9 px-4 text-xs font-bold border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                )}
               </div>
             </div>
           </div>
@@ -305,51 +284,6 @@ export default function AccountPage() {
               )}
             </div>
           </div>
-
-          {/* Advanced Settings - Collapsible */}
-          {editing && (
-            <details className={`${theme.bgSecondary} border-2 ${theme.border} rounded-xl overflow-hidden`}>
-              <summary className={`cursor-pointer p-4 sm:p-5 flex items-center justify-between ${darkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-200/50'} transition-colors`}>
-                <div className="flex items-center gap-2">
-                  <Settings className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.textSecondary}`} />
-                  <span className={`text-xs sm:text-sm tracking-wider ${theme.textSecondary} font-bold`}>ADVANCED SETTINGS</span>
-                </div>
-                <span className={`text-xs ${theme.textMuted}`}>▼</span>
-              </summary>
-              
-              <div className="p-4 sm:p-5 pt-0 space-y-4">
-                <p className={`text-[10px] ${theme.textMuted} mb-4 font-sans`}>
-                  Diese Werte werden automatisch in neue Checklisten übernommen
-                </p>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Zap className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500`} />
-                      <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>DEFAULT LEVERAGE</label>
-                    </div>
-                    <Input
-                      value={formData.default_leverage}
-                      onChange={(e) => setFormData({...formData, default_leverage: e.target.value})}
-                      placeholder="100"
-                      className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
-                  </div>
-
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Percent className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500`} />
-                      <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} tracking-wider font-bold`}>DEFAULT RISK %</label>
-                    </div>
-                    <Input
-                      value={formData.default_risk_percent}
-                      onChange={(e) => setFormData({...formData, default_risk_percent: e.target.value})}
-                      placeholder="1"
-                      className={`${theme.border} h-10 sm:h-11 text-sm sm:text-base rounded-xl`} />
-                  </div>
-                </div>
-              </div>
-            </details>
-          )}
 
           {/* Security & Settings - Compact Grid */}
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
@@ -436,14 +370,7 @@ export default function AccountPage() {
                     address_street: user.address_street || '',
                     address_city: user.address_city || '',
                     address_postal_code: user.address_postal_code || '',
-                    address_country: user.address_country || '',
-                    default_leverage: user.default_leverage || '100',
-                    default_risk_percent: user.default_risk_percent || '1',
-                    daily_quote_enabled: user.daily_quote_enabled || false,
-                    daily_quote_time: user.daily_quote_time || '09:00',
-                    show_daily_quote_in_app: user.show_daily_quote_in_app || false,
-                    browser_notifications_enabled: user.browser_notifications_enabled || false,
-                    notification_frequency: user.notification_frequency || '1'
+                    address_country: user.address_country || ''
                   });
                 }} variant="outline" className={`h-10 px-4 border-2 rounded-lg ${theme.border}`}>
                   <X className="w-4 h-4" />
@@ -454,6 +381,10 @@ export default function AccountPage() {
                 <Button onClick={() => navigate(createPageUrl('Home'))} className={`flex-1 h-10 text-xs tracking-wider border-2 rounded-lg ${darkMode ? 'bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800' : 'bg-zinc-100 border-zinc-300 text-black hover:bg-zinc-200'}`}>
                   <HomeIcon className="w-4 h-4 mr-2" />
                   HOME
+                </Button>
+                <Button onClick={() => setEditing(true)} className={`h-10 px-5 text-xs tracking-wider border-2 rounded-lg ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  <Edit2 className="w-4 h-4 mr-2" />
+                  BEARBEITEN
                 </Button>
                 <Button onClick={handleLogout} className="h-10 px-5 text-xs tracking-wider border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600 rounded-lg">
                   <LogOut className="w-4 h-4 mr-2" />
