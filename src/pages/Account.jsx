@@ -409,7 +409,6 @@ export default function AccountPage() {
               )}
             </div>
           </div>
-          </div>
 
           {/* Action Bar */}
           <div className="flex gap-2">
