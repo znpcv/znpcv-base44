@@ -108,7 +108,9 @@ const storage = new OfflineStorage();
 const OfflineContext = createContext({
   isOnline: true,
   pendingCount: 0,
-  syncInProgress: false
+  syncInProgress: false,
+  storage: null,
+  updatePendingCount: () => {}
 });
 
 export const useOffline = () => useContext(OfflineContext);
