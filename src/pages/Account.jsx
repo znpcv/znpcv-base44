@@ -12,6 +12,8 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import CountrySelect, { COUNTRIES } from '@/components/CountrySelect';
 import { format } from 'date-fns';
 import PushNotificationManager from '@/components/PushNotificationManager';
+import NotificationSettings from '@/components/notifications/NotificationSettings';
+import NotificationHistory from '@/components/notifications/NotificationHistory';
 
 export default function AccountPage() {
   const navigate = useNavigate();
