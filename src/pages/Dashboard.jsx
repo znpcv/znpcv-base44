@@ -327,55 +327,32 @@ export default function DashboardPage() {
           </button>
         </motion.div>
 
-        {/* Stats - Mobile Optimiert */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
+        {/* Stats - Kompakt */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-5 mb-4 sm:mb-6 md:mb-8">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target, shortLabel: 'TOTAL' },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, shortLabel: 'READY' },
-            { label: t('winRate'), value: `${stats.winRate}%`, icon: BarChart3, shortLabel: 'WIN%' },
-            { label: t('exec'), value: stats.executed, icon: Activity, shortLabel: 'EXEC' },
-            { label: t('avgCompletion'), value: `${stats.avgCompletion}%`, icon: Target, highlight: stats.avgCompletion >= 85, shortLabel: 'AVG%' },
-          ].map((stat, index) => (
+            { label: t('winRate'), value: `${stats.winRate}%`, icon: BarChart3, shortLabel: 'WIN%', highlight: stats.winRate >= 50 },
+          ].map((stat) => (
             <motion.div key={stat.label} 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
               transition={{ duration: 0.1 }}
-              className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-3 md:p-4",
+              className={cn("border-2 rounded-xl p-3 sm:p-4 md:p-5",
                 stat.highlight 
                   ? darkMode ? "bg-emerald-700/20 border-emerald-700" : "bg-teal-100 border-emerald-700"
-                  : `${theme.border} ${theme.bgSecondary}`,
-                index >= 3 && "hidden md:flex md:flex-col")}>
-              <stat.icon className={cn("w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 mb-1 sm:mb-2", 
+                  : `${theme.border} ${theme.bgSecondary}`)}>
+              <stat.icon className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-2 sm:mb-3", 
                 stat.highlight ? "text-emerald-700" : theme.text)} />
-              <div className={cn("text-lg sm:text-xl md:text-2xl lg:text-3xl font-light mb-0.5 sm:mb-1", 
+              <div className={cn("text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-1 sm:mb-2", 
                 stat.highlight ? "text-emerald-700" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-[8px] sm:text-[9px] md:text-[10px] tracking-widest", theme.textMuted)}>
-                <span className="md:hidden">{stat.shortLabel}</span>
-                <span className="hidden md:inline">{stat.label}</span>
+              <div className={cn("text-[9px] sm:text-[10px] md:text-xs tracking-widest", theme.textMuted)}>
+                <span className="sm:hidden">{stat.shortLabel}</span>
+                <span className="hidden sm:inline">{stat.label}</span>
               </div>
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Mobile: Remaining Stats */}
-        <div className="grid grid-cols-2 gap-2 mb-4 md:hidden">
-          {[
-            { label: t('exec'), value: stats.executed, icon: Activity, shortLabel: 'EXEC' },
-            { label: t('avgCompletion'), value: `${stats.avgCompletion}%`, icon: Target, highlight: stats.avgCompletion >= 85, shortLabel: 'AVG%' },
-          ].map((stat) => (
-            <div key={stat.label}
-              className={cn("border-2 rounded-lg p-2",
-                stat.highlight 
-                  ? darkMode ? "bg-emerald-700/20 border-emerald-700" : "bg-teal-100 border-emerald-700"
-                  : `${theme.border} ${theme.bgSecondary}`)}>
-              <stat.icon className={cn("w-3.5 h-3.5 mb-1", 
-                stat.highlight ? "text-emerald-700" : theme.text)} />
-              <div className={cn("text-lg font-light mb-0.5", 
-                stat.highlight ? "text-emerald-700" : theme.text)}>{stat.value}</div>
-              <div className={cn("text-[8px] tracking-widest", theme.textMuted)}>{stat.shortLabel}</div>
-            </div>
-          ))}
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 mt-4 sm:mt-6">
           {/* Left */}
@@ -749,6 +726,25 @@ export default function DashboardPage() {
                       <div className={`text-[9px] ${theme.textMuted} tracking-wider mt-1`}>BE</div>
                     </div>
                   </div>
+
+                  {/* Advanced Metrics */}
+                  <div className="grid grid-cols-3 gap-2 mt-3">
+                    <div className={cn("text-center p-2 rounded-lg border",
+                      darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300")}>
+                      <div className="text-xs sm:text-sm font-black text-emerald-700">${stats.avgWin}</div>
+                      <div className={`text-[8px] ${theme.textMuted} mt-0.5`}>Ø WIN</div>
+                    </div>
+                    <div className={cn("text-center p-2 rounded-lg border",
+                      darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-rose-50 border-rose-300")}>
+                      <div className="text-xs sm:text-sm font-black text-rose-600">${stats.avgLoss}</div>
+                      <div className={`text-[8px] ${theme.textMuted} mt-0.5`}>Ø LOSS</div>
+                    </div>
+                    <div className={cn("text-center p-2 rounded-lg border",
+                      darkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-zinc-300")}>
+                      <div className={`text-xs sm:text-sm font-black ${theme.text}`}>{stats.profitFactor}</div>
+                      <div className={`text-[8px] ${theme.textMuted} mt-0.5`}>P-FACTOR</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -935,35 +931,7 @@ export default function DashboardPage() {
               </div>
             </motion.div>
 
-            {/* Detaillierte Statistiken - Kompakt */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-              className={cn("rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 border-2",
-                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200")}>
-              <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                <div className={cn("w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center",
-                  darkMode ? "bg-zinc-900" : "bg-zinc-200")}>
-                  <BarChart3 className={cn("w-3.5 h-3.5 sm:w-4 sm:h-4", theme.text)} />
-                </div>
-                <h3 className={`text-xs sm:text-sm tracking-widest ${theme.text}`}>STATS</h3>
-              </div>
-              <div className="space-y-2">
-                <div className={cn("flex items-center justify-between p-2 sm:p-2.5 rounded-lg border",
-                  darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300")}>
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Ø Win</span>
-                  <span className={`text-sm sm:text-base font-bold text-emerald-700`}>${stats.avgWin}</span>
-                </div>
-                <div className={cn("flex items-center justify-between p-2 sm:p-2.5 rounded-lg border",
-                  darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-rose-50 border-rose-300")}>
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>Ø Loss</span>
-                  <span className={`text-sm sm:text-base font-bold text-rose-600`}>${stats.avgLoss}</span>
-                </div>
-                <div className={cn("flex items-center justify-between p-2 sm:p-2.5 rounded-lg border",
-                  darkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-zinc-300")}>
-                  <span className={`text-[10px] sm:text-xs ${theme.textMuted}`}>P-Factor</span>
-                  <span className={`text-base sm:text-lg font-bold ${theme.text}`}>{stats.profitFactor}</span>
-                </div>
-              </div>
-            </motion.div>
+
 
             {/* Best Trading Times */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
