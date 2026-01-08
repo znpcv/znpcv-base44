@@ -3729,6 +3729,26 @@ const translations = {
     out: 'خروج',
 
     // FAQ Q&A
+    // Tooltip translations
+    tooltipAoiWeekly: 'قیمت باید در منطقه علاقه مشخص شده شما باشد یا آن را رد کند (سپورت برای LONG، رزیستنس برای SHORT)',
+    tooltipEmaWeekly: 'کندل‌ها در نمودار هفتگی میانگین متحرک نمایی را لمس یا رد می‌کنند',
+    tooltipCandlestickWeekly: 'به دنبال الگوهای Pinbar، Doji یا Hammer باشید که رد واضح قیمت را نشان می‌دهند',
+    tooltipPspWeekly: 'رد قیمت از نقطه ساختار قبلی (سطح سپورت/رزیستنس قدیمی)',
+    tooltipRoundWeekly: 'قیمت در اعداد گرد روانشناختی یا رد آنها (مثلاً 1.10000، 1.20000)',
+    tooltipSwingWeekly: 'قیمت به یک سقف سوئینگ مهم (برای SHORT) یا کف سوئینگ (برای LONG) رسیده است',
+    tooltipAoiDaily: 'تایم‌فریم روزانه قیمت در ناحیه AOI را تأیید می‌کند',
+    tooltipEmaDaily: 'کندل‌های روزانه EMA را لمس یا رد می‌کنند',
+    tooltipCandlestickDaily: 'کندل رد واضح (Pinbar، Doji، Hammer) در نمودار روزانه',
+    tooltipPspDaily: 'رد از ساختار قبلی در روزانه',
+    tooltipRoundDaily: 'عدد گرد روانشناختی در نمودار روزانه',
+    tooltipSwingDaily: 'سقف/کف سوئینگ روزانه رسیده',
+    tooltipAoi4H: 'تأیید قیمت 4 ساعته در ناحیه AOI',
+    tooltipCandlestick4H: 'الگوی کندل رد 4 ساعته قابل مشاهده',
+    tooltipPsp4H: 'رد 4 ساعته از ساختار قبلی',
+    tooltipSwing4H: 'تأیید سقف/کف سوئینگ 4 ساعته',
+    tooltipMssEntry: 'تغییر ساختار بازار تأیید شد - قیمت جهت را معکوس کرده است (نمودار 30 دقیقه-1 ساعت)',
+    tooltipEngulfingEntry: 'کندل انگالفینگ بعد از پولبک قابل مشاهده - تأیید برگشت قوی',
+    
     faqWhatIsZNPCV: 'ZNPCV چیست؟',
     faqWhatIsZNPCVAnswer: 'ZNPCV یک چک‌لیست معاملاتی حرفه‌ای است که شما را مجبور می‌کند به صورت ساختاریافته و منظم تحلیل کنید. دیگر معاملات احساسی نداریم - فقط تنظیمات A+++ با کنفلوئنس چند تایم‌فریم!',
     faqWhoIsZNPCVFor: 'ZNPCV برای چه کسانی است؟',
