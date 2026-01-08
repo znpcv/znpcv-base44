@@ -20,6 +20,7 @@ import AccountButton from '@/components/AccountButton';
 import BestTradingTimes from '@/components/advanced/BestTradingTimes';
 import SwipeNavigation from '@/components/mobile/SwipeNavigation';
 import BottomNav from '@/components/mobile/BottomNav';
+import NoTradeStats from '@/components/dashboard/NoTradeStats';
 
 
 export default function DashboardPage() {
@@ -936,6 +937,11 @@ export default function DashboardPage() {
             {/* Best Trading Times */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <BestTradingTimes trades={checklists} darkMode={darkMode} />
+            </motion.div>
+
+            {/* No-Trade Stats */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
+              <NoTradeStats darkMode={darkMode} />
             </motion.div>
           </div>
         </div>
