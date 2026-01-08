@@ -18,6 +18,7 @@ import ChecklistItemWithTooltip from '@/components/checklist/ChecklistItemWithTo
 import SectionProgressBar from '@/components/checklist/SectionProgressBar';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
+import NoTradeSkills from '@/components/checklist/NoTradeSkills';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
@@ -254,6 +255,38 @@ export default function ChecklistPage() {
   };
 
   const riskCalc = calculateRisk();
+
+  const handleNoTrade = async (conditions) => {
+    try {
+      const confluenceCount = [
+        formData.w_trend === formData.direction,
+        formData.d_trend === formData.direction,
+        formData.h4_trend === formData.direction
+      ].filter(Boolean).length;
+
+      const primaryReason = conditions.find(c => c.severity === 'high')?.id || conditions[0]?.id;
+
+      await base44.entities.NoTradeLog.create({
+        pair: formData.pair,
+        direction: formData.direction,
+        reason: primaryReason,
+        score: progress,
+        confluence_count: confluenceCount,
+        rr_ratio: riskCalc?.rr || '0',
+        notes: `No-Trade: ${conditions.map(c => c.title).join(', ')}`,
+        avoided_date: format(new Date(), 'yyyy-MM-dd')
+      });
+
+      // Invalidate queries
+      if (window.queryClient) {
+        window.queryClient.invalidateQueries({ queryKey: ['noTradeLogs'] });
+      }
+
+      navigate(createPageUrl('Dashboard'));
+    } catch (error) {
+      console.error('Log no-trade failed:', error);
+    }
+  };
 
   const handleSave = async (force = false) => {
     if (progress < 85 && !force && currentStep === STEPS.length - 1) {
@@ -963,6 +996,18 @@ export default function ChecklistPage() {
           {currentStep === 6 &&
           <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
+
+              {/* No-Trade Skills Check */}
+              <NoTradeSkills
+                formData={formData}
+                weeklyScore={weeklyScore}
+                dailyScore={dailyScore}
+                h4Score={h4Score}
+                entryScore={entryScore}
+                riskCalc={riskCalc}
+                darkMode={darkMode}
+                onNoTrade={handleNoTrade}
+              />
 
               {/* Confluence Banner */}
               {hasConfluence &&
