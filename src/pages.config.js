@@ -1,4 +1,5 @@
 import AGB from './pages/AGB';
+import Account from './pages/Account';
 import Checklist from './pages/Checklist';
 import CodeExport from './pages/CodeExport';
 import Dashboard from './pages/Dashboard';
@@ -11,12 +12,12 @@ import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
-import Account from './pages/Account';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AGB": AGB,
+    "Account": Account,
     "Checklist": Checklist,
     "CodeExport": CodeExport,
     "Dashboard": Dashboard,
@@ -29,7 +30,6 @@ export const PAGES = {
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
     "Trash": Trash,
-    "Account": Account,
 }
 
 export const pagesConfig = {

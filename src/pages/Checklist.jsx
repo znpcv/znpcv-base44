@@ -539,7 +539,7 @@ export default function ChecklistPage() {
               label={t('atAoiRejected')}
               weight={10}
               description={t('atAoiDesc')}
-              tooltip="Price must be at or rejecting your marked Area of Interest (support for LONG, resistance for SHORT)"
+              tooltip={t('tooltipAoiWeekly')}
               darkMode={darkMode}
               show={formData.w_trend !== ''} />
 
@@ -550,7 +550,7 @@ export default function ChecklistPage() {
               label={t('touchingEma')}
               weight={5}
               description={t('touchingEmaDesc')}
-              tooltip="Candles are touching or rejecting the Exponential Moving Average on weekly chart"
+              tooltip={t('tooltipEmaWeekly')}
               darkMode={darkMode}
               show={formData.w_at_aoi} />
 
@@ -561,7 +561,7 @@ export default function ChecklistPage() {
               label={t('candlestickRejection')}
               weight={10}
               description={t('candlestickDesc')}
-              tooltip="Look for Pinbar, Doji, or Hammer patterns showing clear price rejection"
+              tooltip={t('tooltipCandlestickWeekly')}
               darkMode={darkMode}
               show={formData.w_trend !== ''} />
 
@@ -572,7 +572,7 @@ export default function ChecklistPage() {
               label={t('rejectionPsp')}
               weight={10}
               description={t('rejectionPspDesc')}
-              tooltip="Price rejecting from Previous Structure Point (old support/resistance level)"
+              tooltip={t('tooltipPspWeekly')}
               darkMode={darkMode}
               show={formData.w_candlestick || formData.w_at_aoi} />
 
@@ -583,7 +583,7 @@ export default function ChecklistPage() {
               label={t('roundLevel')}
               weight={5}
               description={t('roundLevelDesc')}
-              tooltip="Price at or rejecting psychological round numbers (e.g., 1.10000, 1.20000)"
+              tooltip={t('tooltipRoundWeekly')}
               darkMode={darkMode}
               show={formData.w_trend !== ''} />
 
@@ -594,7 +594,7 @@ export default function ChecklistPage() {
               label={t('swingHighLow')}
               weight={5}
               description={t('swingDesc')}
-              tooltip="Price has reached a significant swing high (for SHORT) or swing low (for LONG)"
+              tooltip={t('tooltipSwingWeekly')}
               darkMode={darkMode}
               show={formData.w_trend !== ''} />
 
@@ -663,7 +663,7 @@ export default function ChecklistPage() {
               label={t('atAoiRejected')}
               weight={10}
               description={t('atAoiDesc')}
-              tooltip="Daily timeframe confirms price at AOI zone"
+              tooltip={t('tooltipAoiDaily')}
               darkMode={darkMode}
               show={formData.d_trend !== ''} />
 
@@ -674,7 +674,7 @@ export default function ChecklistPage() {
               label={t('touchingEma')}
               weight={5}
               description={t('touchingEmaDesc')}
-              tooltip="Daily candles touching or rejecting EMA"
+              tooltip={t('tooltipEmaDaily')}
               darkMode={darkMode}
               show={formData.d_at_aoi} />
 
@@ -685,7 +685,7 @@ export default function ChecklistPage() {
               label={t('candlestickRejection')}
               weight={10}
               description={t('candlestickDesc')}
-              tooltip="Clear rejection candle (Pinbar, Doji, Hammer) on daily chart"
+              tooltip={t('tooltipCandlestickDaily')}
               darkMode={darkMode}
               show={formData.d_trend !== ''} />
 
@@ -696,7 +696,7 @@ export default function ChecklistPage() {
               label={t('rejectionPsp')}
               weight={10}
               description={t('rejectionPspDesc')}
-              tooltip="Rejection from previous structure point on daily"
+              tooltip={t('tooltipPspDaily')}
               darkMode={darkMode}
               show={formData.d_candlestick || formData.d_at_aoi} />
 
@@ -707,7 +707,7 @@ export default function ChecklistPage() {
               label={t('roundLevel')}
               weight={5}
               description={t('roundLevelDesc')}
-              tooltip="Psychological round number on daily chart"
+              tooltip={t('tooltipRoundDaily')}
               darkMode={darkMode}
               show={formData.d_trend !== ''} />
 
@@ -718,7 +718,7 @@ export default function ChecklistPage() {
               label={t('swingHighLow')}
               weight={5}
               description={t('swingDesc')}
-              tooltip="Daily swing high/low reached"
+              tooltip={t('tooltipSwingDaily')}
               darkMode={darkMode}
               show={formData.d_trend !== ''} />
 
@@ -773,7 +773,7 @@ export default function ChecklistPage() {
               label={t('atAoiRejected')}
               weight={5}
               description={t('atAoiDesc')}
-              tooltip="4H price confirmation at AOI zone"
+              tooltip={t('tooltipAoi4H')}
               darkMode={darkMode}
               show={formData.h4_trend !== ''} />
 
@@ -784,7 +784,7 @@ export default function ChecklistPage() {
               label={t('candlestickRejection')}
               weight={10}
               description={t('candlestickDesc')}
-              tooltip="4H rejection candle pattern visible"
+              tooltip={t('tooltipCandlestick4H')}
               darkMode={darkMode}
               show={formData.h4_trend !== ''} />
 
@@ -795,7 +795,7 @@ export default function ChecklistPage() {
               label={t('rejectionPsp')}
               weight={5}
               description={t('rejectionPspDesc')}
-              tooltip="4H rejection from previous structure"
+              tooltip={t('tooltipPsp4H')}
               darkMode={darkMode}
               show={formData.h4_candlestick || formData.h4_at_aoi} />
 
@@ -806,7 +806,7 @@ export default function ChecklistPage() {
               label={t('swingHighLow')}
               weight={5}
               description={t('swingDesc')}
-              tooltip="4H swing high/low confirmation"
+              tooltip={t('tooltipSwing4H')}
               darkMode={darkMode}
               show={formData.h4_trend !== ''} />
 
@@ -846,7 +846,7 @@ export default function ChecklistPage() {
               label={t('mssShift')}
               weight={10}
               description={t('mssDesc')}
-              tooltip="Market Structure Shift confirmed - price has reversed direction (30min-1H chart)"
+              tooltip={t('tooltipMssEntry')}
               darkMode={darkMode} />
 
               
@@ -856,7 +856,7 @@ export default function ChecklistPage() {
               label={t('engulfingCandle')}
               weight={10}
               description={t('engulfingDesc')}
-              tooltip="Engulfing candle visible after pullback - strong reversal confirmation"
+              tooltip={t('tooltipEngulfingEntry')}
               darkMode={darkMode}
               show={formData.entry_sos} />
 
