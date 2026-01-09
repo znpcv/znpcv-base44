@@ -134,27 +134,21 @@ export default function NoTradeSkills({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className={cn("border-2 rounded-xl overflow-hidden relative", 
+        className={cn("border-2 rounded-lg overflow-hidden relative", 
           darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-500/10 border-emerald-600/30"
         )}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-700/5 to-transparent pointer-events-none" />
-        <div className="relative z-10 p-3 sm:p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-700 flex items-center justify-center flex-shrink-0">
-              <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+        <div className="p-2 sm:p-2.5">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-emerald-700 flex items-center justify-center flex-shrink-0">
+              <CheckCircle2 className="w-4 h-4 text-white" />
             </div>
-            <div className="flex-1">
-              <div className="text-emerald-600 font-bold text-sm sm:text-base tracking-wider mb-0.5">NO-TRADE CONDITIONS CLEAR</div>
-              <div className={`${theme.textSecondary} text-[10px] sm:text-xs font-sans flex items-center gap-2`}>
-                <Shield className="w-3 h-3" />
-                All checks passed • Score: {totalScore}%
-              </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-emerald-600 font-bold text-[10px] tracking-wider">NO-TRADE CLEAR</div>
+              <div className={`${theme.textSecondary} text-[8px] font-sans`}>{totalScore}%</div>
             </div>
             {totalScore >= 85 && (
-              <div className="px-2.5 py-1 bg-emerald-700 text-white text-[10px] font-bold rounded-md">
-                READY
-              </div>
+              <div className="px-1.5 py-0.5 bg-emerald-700 text-white text-[8px] font-bold rounded">OK</div>
             )}
           </div>
         </div>
@@ -166,52 +160,36 @@ export default function NoTradeSkills({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={cn("border-2 rounded-xl overflow-hidden relative",
-        criticalCount > 0 
-          ? "border-rose-600"
-          : highSeverityCount > 0 
-          ? "border-orange-600"
-          : darkMode ? "border-amber-600" : "border-amber-500"
+      className={cn("border-2 rounded-lg overflow-hidden",
+        criticalCount > 0 ? "border-rose-600" : "border-amber-500"
       )}
     >
-      {/* Animated Background Pattern */}
-      <div className={cn("absolute inset-0 opacity-5 pointer-events-none",
-        criticalCount > 0 ? "bg-rose-600" : "bg-amber-500"
-      )}>
-        <div className="w-full h-full" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 1px)',
-          backgroundSize: '16px 16px'
-        }} />
-      </div>
-
-      {/* Header - Compact */}
-      <div className={cn("p-3 sm:p-3.5 flex items-center justify-between relative z-10")}>
-        <div className="flex items-center gap-2 flex-1">
-          <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
+      {/* Header - Ultra Compact */}
+      <div className="p-2 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <div className={cn("w-6 h-6 rounded flex items-center justify-center flex-shrink-0",
             criticalCount > 0 ? "bg-rose-600" : "bg-amber-500"
           )}>
-            <XOctagon className="w-5 h-5 text-white" />
+            <XOctagon className="w-3.5 h-3.5 text-white" />
           </div>
-          <div className="text-left flex-1 min-w-0">
-            <div className={cn("font-bold tracking-wider text-xs sm:text-sm",
+          <div>
+            <div className={cn("font-bold tracking-wider text-[10px]",
               criticalCount > 0 ? "text-rose-600" : "text-amber-500"
             )}>
-              NO-TRADE SKILL
+              NO-TRADE
             </div>
-            <div className={`${theme.textSecondary} text-[9px] sm:text-[10px] font-sans`}>
-              {conditions.length} issue{conditions.length !== 1 ? 's' : ''} • {totalScore}%
-            </div>
+            <div className={`${theme.textSecondary} text-[8px] font-sans`}>{conditions.length} • {totalScore}%</div>
           </div>
         </div>
-        <div className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold",
+        <div className={cn("px-1.5 py-0.5 rounded text-[9px] font-bold",
           criticalCount > 0 ? "bg-rose-600 text-white" : "bg-amber-500 text-white"
         )}>
           {conditions.length}
         </div>
       </div>
 
-      {/* Conditions List - Compact */}
-      <div className={cn("border-t-2 p-2 sm:p-2.5 space-y-1",
+      {/* Conditions - Ultra Compact */}
+      <div className={cn("border-t p-1.5 space-y-0.5",
         darkMode ? "border-zinc-800 bg-zinc-950/50" : "border-zinc-200 bg-white/50"
       )}>
         {conditions.map((condition) => {
@@ -219,21 +197,16 @@ export default function NoTradeSkills({
           const colors = getSeverityColor(condition.severity);
           
           return (
-            <div
-              key={condition.id}
-              className={cn("flex items-center gap-2 p-2 rounded-lg border",
-                darkMode ? `${colors.bg}/10 ${colors.border}/30` : `${colors.bg}/5 ${colors.border}/50`
-              )}
-            >
-              <div className={cn("w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0", colors.bg)}>
-                <Icon className="w-3.5 h-3.5 text-white" />
+            <div key={condition.id} className={cn("flex items-center gap-1.5 p-1.5 rounded border",
+              darkMode ? `${colors.bg}/10 ${colors.border}/30` : `${colors.bg}/5 ${colors.border}/50`
+            )}>
+              <div className={cn("w-5 h-5 rounded flex items-center justify-center flex-shrink-0", colors.bg)}>
+                <Icon className="w-3 h-3 text-white" />
               </div>
-              <div className="flex-1 min-w-0">
-                <div className={cn("font-bold text-[10px] sm:text-xs tracking-wider", colors.text)}>
-                  {t('language') === 'de' ? condition.titleDe : condition.title}
-                </div>
+              <div className={cn("font-bold text-[9px] tracking-wider flex-1 truncate", colors.text)}>
+                {t('language') === 'de' ? condition.titleDe : condition.title}
               </div>
-              <div className={cn("px-1.5 py-0.5 rounded text-[8px] font-bold text-white flex-shrink-0",
+              <div className={cn("px-1 py-0.5 rounded text-[7px] font-bold text-white",
                 condition.severity === 'critical' ? 'bg-rose-600' :
                 condition.severity === 'high' ? 'bg-orange-600' : 'bg-amber-500'
               )}>
@@ -243,17 +216,16 @@ export default function NoTradeSkills({
           );
         })}
 
-        {/* Action Button - Compact */}
-        <button
-          onClick={() => onNoTrade(conditions)}
-          className={cn("w-full mt-2 p-2.5 rounded-lg font-bold text-xs sm:text-sm tracking-wider transition-all border-2",
+        {/* Action Button - Ultra Compact */}
+        <button onClick={() => onNoTrade(conditions)}
+          className={cn("w-full mt-1 p-2 rounded font-bold text-[10px] tracking-wider border",
             criticalCount > 0
               ? "bg-rose-600 hover:bg-rose-700 text-white border-rose-500"
               : "bg-amber-500 hover:bg-amber-600 text-white border-amber-400"
           )}
         >
-          <XOctagon className="w-4 h-4 inline-block mr-1.5" />
-          LOG NO-TRADE & EXIT
+          <XOctagon className="w-3 h-3 inline-block mr-1" />
+          LOG & EXIT
         </button>
       </div>
     </motion.div>
