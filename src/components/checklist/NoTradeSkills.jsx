@@ -239,188 +239,77 @@ export default function NoTradeSkills({
         }} />
       </div>
 
-      {/* Header */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className={cn("w-full p-4 sm:p-5 flex items-center justify-between transition-all relative z-10",
-          darkMode ? "hover:bg-zinc-900/50" : "hover:bg-zinc-100/50"
-        )}
-      >
-        <div className="flex items-center gap-3 flex-1">
-          <div className={cn("w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center flex-shrink-0",
-            criticalCount > 0 
-              ? "bg-gradient-to-br from-rose-600 to-red-700"
-              : highSeverityCount > 0
-              ? "bg-gradient-to-br from-orange-600 to-amber-700"
-              : "bg-gradient-to-br from-amber-500 to-yellow-600"
+      {/* Header - Compact */}
+      <div className={cn("p-3 sm:p-3.5 flex items-center justify-between relative z-10")}>
+        <div className="flex items-center gap-2 flex-1">
+          <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
+            criticalCount > 0 ? "bg-rose-600" : "bg-amber-500"
           )}>
-            <XOctagon className="w-6 h-6 text-white" />
+            <XOctagon className="w-5 h-5 text-white" />
           </div>
           <div className="text-left flex-1 min-w-0">
-            <div className={cn("font-black tracking-wider text-sm sm:text-base mb-0.5",
-              criticalCount > 0 ? "text-rose-600" : highSeverityCount > 0 ? "text-orange-600" : "text-amber-500"
+            <div className={cn("font-bold tracking-wider text-xs sm:text-sm",
+              criticalCount > 0 ? "text-rose-600" : "text-amber-500"
             )}>
-              NO-TRADE SKILL ACTIVATED
+              NO-TRADE SKILL
             </div>
-            <div className={`${theme.textSecondary} text-[10px] sm:text-xs font-sans flex items-center gap-2`}>
-              <AlertTriangle className="w-3 h-3" />
-              {conditions.length} condition{conditions.length !== 1 ? 's' : ''} detected • Score: {totalScore}%
+            <div className={`${theme.textSecondary} text-[9px] sm:text-[10px] font-sans`}>
+              {conditions.length} issue{conditions.length !== 1 ? 's' : ''} • {totalScore}%
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {criticalCount > 0 && (
-            <div className="px-2.5 py-1.5 bg-rose-600 text-white text-[10px] font-bold rounded-md flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3" />
-              {criticalCount}
-            </div>
-          )}
-          <div className={cn("px-3 py-1.5 rounded-full text-xs font-bold border-2",
-            criticalCount > 0 
-              ? "bg-rose-600 text-white border-rose-500"
-              : "bg-amber-500 text-white border-amber-400"
-          )}>
-            {conditions.length}
-          </div>
+        <div className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold",
+          criticalCount > 0 ? "bg-rose-600 text-white" : "bg-amber-500 text-white"
+        )}>
+          {conditions.length}
         </div>
-      </button>
+      </div>
 
-      {/* Conditions List - Advanced */}
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden relative"
-          >
-            <div className={cn("border-t-2 p-3 sm:p-4 space-y-2",
-              darkMode ? "border-zinc-800 bg-zinc-950/80" : "border-zinc-200 bg-white/80"
-            )}>
-              {/* Summary Stats */}
-              <div className="grid grid-cols-3 gap-2 mb-3">
-                <div className={cn("p-2.5 rounded-lg text-center border-2",
-                  criticalCount > 0 
-                    ? darkMode ? "bg-rose-600/10 border-rose-600/30" : "bg-red-50 border-red-300"
-                    : darkMode ? "bg-zinc-800 border-zinc-700" : "bg-zinc-100 border-zinc-300"
-                )}>
-                  <div className={cn("text-lg font-black", criticalCount > 0 ? "text-rose-600" : theme.textMuted)}>
-                    {criticalCount}
-                  </div>
-                  <div className="text-[9px] text-rose-600 tracking-wider font-bold">CRITICAL</div>
-                </div>
-                <div className={cn("p-2.5 rounded-lg text-center border-2",
-                  highSeverityCount > 0
-                    ? darkMode ? "bg-orange-600/10 border-orange-600/30" : "bg-orange-50 border-orange-300"
-                    : darkMode ? "bg-zinc-800 border-zinc-700" : "bg-zinc-100 border-zinc-300"
-                )}>
-                  <div className={cn("text-lg font-black", highSeverityCount > 0 ? "text-orange-600" : theme.textMuted)}>
-                    {highSeverityCount}
-                  </div>
-                  <div className="text-[9px] text-orange-600 tracking-wider font-bold">HIGH</div>
-                </div>
-                <div className={cn("p-2.5 rounded-lg text-center border-2",
-                  totalScore < 85
-                    ? darkMode ? "bg-amber-500/10 border-amber-500/30" : "bg-amber-50 border-amber-300"
-                    : darkMode ? "bg-emerald-700/10 border-emerald-700/30" : "bg-teal-50 border-teal-300"
-                )}>
-                  <div className={cn("text-lg font-black", totalScore < 85 ? "text-amber-500" : "text-emerald-600")}>
-                    {totalScore}%
-                  </div>
-                  <div className={cn("text-[9px] tracking-wider font-bold", totalScore < 85 ? "text-amber-500" : "text-emerald-600")}>SCORE</div>
+      {/* Conditions List - Compact */}
+      <div className={cn("border-t-2 p-2 sm:p-2.5 space-y-1",
+        darkMode ? "border-zinc-800 bg-zinc-950/50" : "border-zinc-200 bg-white/50"
+      )}>
+        {conditions.map((condition, index) => {
+          const Icon = condition.icon;
+          const colors = getSeverityColor(condition.severity);
+          
+          return (
+            <div
+              key={condition.id}
+              className={cn("flex items-center gap-2 p-2 rounded-lg border",
+                darkMode ? `${colors.bg}/10 ${colors.border}/30` : `${colors.bg}/5 ${colors.border}/50`
+              )}
+            >
+              <div className={cn("w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0", colors.bg)}>
+                <Icon className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className={cn("font-bold text-[10px] sm:text-xs tracking-wider", colors.text)}>
+                  {t('language') === 'de' ? condition.titleDe : condition.title}
                 </div>
               </div>
-
-              {/* Detailed Conditions */}
-              {conditions.map((condition, index) => {
-                const Icon = condition.icon;
-                const colors = getSeverityColor(condition.severity);
-                
-                return (
-                  <motion.div
-                    key={condition.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={cn("rounded-xl border-2 overflow-hidden",
-                      darkMode ? `${colors.bg}/10 ${colors.border}/30` : `${colors.bg}/5 ${colors.border}/50`
-                    )}
-                  >
-                    <div className="p-3 sm:p-3.5">
-                      <div className="flex items-start gap-3 mb-2">
-                        <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
-                          `bg-gradient-to-br ${colors.bg} ${colors.bg.replace('600', '700')}`
-                        )}>
-                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className={cn("font-black text-xs sm:text-sm tracking-wider", colors.text)}>
-                              {t('language') === 'de' ? condition.titleDe : condition.title}
-                            </div>
-                            <div className={cn("px-2 py-0.5 rounded text-[8px] font-bold text-white",
-                              condition.severity === 'critical' ? 'bg-rose-600' :
-                              condition.severity === 'high' ? 'bg-orange-600' : 'bg-amber-500'
-                            )}>
-                              {condition.impact}
-                            </div>
-                          </div>
-                          <div className={`${theme.textSecondary} text-[10px] sm:text-xs font-sans leading-relaxed mb-2`}>
-                            {t('language') === 'de' ? condition.descriptionDe : condition.description}
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <div className={cn("px-2 py-1 rounded-md text-[9px] font-bold border",
-                              darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-300"
-                            )}>
-                              <span className={theme.textMuted}>Reason:</span> <span className={theme.text}>{condition.reason}</span>
-                            </div>
-                            {condition.score !== undefined && (
-                              <div className={cn("px-2 py-1 rounded-md text-[9px] font-bold border",
-                                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-white border-zinc-300"
-                              )}>
-                                <span className={theme.textMuted}>Score:</span> <span className={colors.text}>{condition.score}%</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-
-              {/* Action Button - Enhanced */}
-              <div className={cn("mt-4 p-3 rounded-xl border-2",
-                darkMode ? "bg-zinc-900/50 border-zinc-800" : "bg-zinc-50 border-zinc-300"
+              <div className={cn("px-1.5 py-0.5 rounded text-[8px] font-bold text-white flex-shrink-0",
+                condition.severity === 'critical' ? 'bg-rose-600' :
+                condition.severity === 'high' ? 'bg-orange-600' : 'bg-amber-500'
               )}>
-                <div className="flex items-center gap-2 mb-3">
-                  <Shield className={`w-4 h-4 ${theme.text}`} />
-                  <div className="flex-1">
-                    <div className={`text-xs font-bold tracking-wider ${theme.text}`}>DECISION REQUIRED</div>
-                    <div className={`text-[9px] ${theme.textSecondary} font-sans`}>Save capital by avoiding this trade</div>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={() => onNoTrade(conditions)}
-                  className={cn("w-full p-3 sm:p-3.5 rounded-xl font-bold text-sm tracking-wider transition-all border-2 relative overflow-hidden group",
-                    criticalCount > 0
-                      ? "bg-rose-600 hover:bg-rose-700 text-white border-rose-500"
-                      : "bg-amber-500 hover:bg-amber-600 text-white border-amber-400"
-                  )}
-                >
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="relative z-10 flex items-center justify-center gap-2">
-                    <XOctagon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    LOG NO-TRADE & EXIT
-                  </div>
-                </button>
-
-                <div className={`text-center text-[9px] ${theme.textSecondary} font-sans mt-2 flex items-center justify-center gap-1`}>
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  Smart decision protects your capital
-                </div>
+                {condition.severity === 'critical' ? '!!!' : condition.severity === 'high' ? '!!' : '!'}
               </div>
+            </div>
+          );
+        })}
+
+              {/* Action Button - Compact */}
+              <button
+                onClick={() => onNoTrade(conditions)}
+                className={cn("w-full mt-2 p-2.5 rounded-lg font-bold text-xs sm:text-sm tracking-wider transition-all border-2",
+                  criticalCount > 0
+                    ? "bg-rose-600 hover:bg-rose-700 text-white border-rose-500"
+                    : "bg-amber-500 hover:bg-amber-600 text-white border-amber-400"
+                )}
+              >
+                <XOctagon className="w-4 h-4 inline-block mr-1.5" />
+                LOG NO-TRADE & EXIT
+              </button>
             </div>
           </motion.div>
         )}
