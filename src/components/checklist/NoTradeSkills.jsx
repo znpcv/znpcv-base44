@@ -17,18 +17,21 @@ export default function NoTradeSkills({
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(true);
 
-  // Umfassende No-Trade Analyse aller 7 Checklist Levels
+  // PROFESSIONELLE No-Trade Analyse - Alle 7 Checklist Levels
   const conditions = useMemo(() => {
     const detected = [];
     const totalScore = weeklyScore + dailyScore + h4Score + entryScore;
 
-    // LEVEL 1 & 2: PAIR & DIRECTION - Grundvoraussetzungen
+    // ==================== LEVEL 1 & 2: PAIR & DIRECTION ====================
     if (!formData.pair || !formData.direction) {
-      return detected; // Keine Analyse möglich ohne Pair/Direction
+      return detected; // Stop: Keine Analyse ohne Grunddaten
     }
 
-    // LEVEL 2: WEEKLY ANALYSIS - Trend Konflikte
+    // ==================== LEVEL 2-4: TREND ANALYSIS ====================
+    // Check 1: Fehlende Trends (NO DATA)
     const hasNoTrends = !formData.w_trend || !formData.d_trend || !formData.h4_trend;
+    
+    // Check 2: Widersprüchliche Trends (CHOPPY MARKET)
     const hasMixedTrends = formData.w_trend && formData.d_trend && formData.h4_trend &&
       (formData.w_trend !== formData.d_trend || formData.d_trend !== formData.h4_trend);
     
@@ -39,11 +42,19 @@ export default function NoTradeSkills({
         title: 'CHOPPY MARKET',
         titleDe: 'UNKLARER MARKT',
         severity: 'critical',
+        details: hasNoTrends ? 'Missing trend data' : 'Conflicting trends across timeframes'
       });
     }
 
-    // LEVEL 2-4: WEEKLY/DAILY/4H - AOI Bestätigung
-    const aoiCount = [formData.w_at_aoi, formData.d_at_aoi, formData.h4_at_aoi].filter(Boolean).length;
+    // ==================== LEVEL 2-4: AOI CONFIRMATION ====================
+    const aoiChecks = {
+      weekly: formData.w_at_aoi,
+      daily: formData.d_at_aoi,
+      h4: formData.h4_at_aoi
+    };
+    const aoiCount = Object.values(aoiChecks).filter(Boolean).length;
+    
+    // Critical: Kein einziger AOI Rejection
     if (aoiCount === 0 && formData.w_trend) {
       detected.push({
         id: 'mid_range',
@@ -51,15 +62,17 @@ export default function NoTradeSkills({
         title: 'MID-RANGE PRICE',
         titleDe: 'PREIS IN DER MITTE',
         severity: 'critical',
+        details: '0/3 timeframes at AOI'
       });
     }
 
-    // LEVEL 2-4: CONFLUENCE Check über alle Timeframes
-    const confluenceCount = [
-      formData.w_trend === formData.direction,
-      formData.d_trend === formData.direction,
-      formData.h4_trend === formData.direction
-    ].filter(Boolean).length;
+    // ==================== LEVEL 2-4: CONFLUENCE VALIDATION ====================
+    const confluenceChecks = {
+      weekly: formData.w_trend === formData.direction,
+      daily: formData.d_trend === formData.direction,
+      h4: formData.h4_trend === formData.direction
+    };
+    const confluenceCount = Object.values(confluenceChecks).filter(Boolean).length;
 
     if (confluenceCount < 2) {
       detected.push({
@@ -68,10 +81,18 @@ export default function NoTradeSkills({
         title: 'LOW CONFLUENCE',
         titleDe: 'GERINGE ÜBEREINSTIMMUNG',
         severity: confluenceCount === 0 ? 'critical' : 'high',
+        details: `${confluenceCount}/3 timeframes aligned`
       });
     }
 
-    // LEVEL 2-5: GESAMTSCORE unter ZNPCV Standard
+    // ==================== LEVEL 2-5: SCORE VALIDATION ====================
+    // Einzelne Timeframe Scores prüfen
+    const weakTimeframes = [];
+    if (weeklyScore < 40) weakTimeframes.push('W');
+    if (dailyScore < 40) weakTimeframes.push('D');
+    if (h4Score < 25) weakTimeframes.push('4H');
+    if (entryScore < 15) weakTimeframes.push('Entry');
+
     if (totalScore < 85 && totalScore > 0) {
       detected.push({
         id: 'low_score',
@@ -79,10 +100,32 @@ export default function NoTradeSkills({
         title: 'LOW SCORE',
         titleDe: 'NIEDRIGER SCORE',
         severity: totalScore < 70 ? 'critical' : 'high',
+        details: weakTimeframes.length > 0 ? `Weak: ${weakTimeframes.join(', ')}` : `${totalScore}% < 85%`
       });
     }
 
-    // LEVEL 6: RISK MANAGEMENT - R:R Violation
+    // ==================== LEVEL 5: ENTRY VALIDATION ====================
+    // Entry Bestätigungen prüfen
+    const entryConfirmations = {
+      sos: formData.entry_sos,
+      engulfing: formData.entry_engulfing,
+      pattern: formData.entry_pattern && formData.entry_pattern !== 'none'
+    };
+    const entryCount = Object.values(entryConfirmations).filter(Boolean).length;
+    
+    if (entryCount < 2 && formData.w_trend) {
+      detected.push({
+        id: 'weak_entry',
+        icon: Target,
+        title: 'WEAK ENTRY',
+        titleDe: 'SCHWACHER EINSTIEG',
+        severity: 'high',
+        details: `${entryCount}/3 entry signals confirmed`
+      });
+    }
+
+    // ==================== LEVEL 6: RISK MANAGEMENT ====================
+    // R:R Ratio Check
     if (riskCalc && parseFloat(riskCalc.rr) < 2.5 && formData.entry_price && formData.stop_loss && formData.take_profit) {
       detected.push({
         id: 'poor_rr',
@@ -90,10 +133,24 @@ export default function NoTradeSkills({
         title: 'POOR R:R',
         titleDe: 'SCHLECHTES R:R',
         severity: 'critical',
+        details: `R:R ${riskCalc.rr} < 2.5 minimum`
       });
     }
 
-    // LEVEL 7: FINAL - ZNPCV Golden Rule nicht bestätigt
+    // Risk Management Daten fehlen
+    if (!formData.entry_price || !formData.stop_loss || !formData.take_profit) {
+      detected.push({
+        id: 'missing_risk',
+        icon: AlertTriangle,
+        title: 'INCOMPLETE RISK',
+        titleDe: 'UNVOLLSTÄNDIGES RISIKO',
+        severity: 'high',
+        details: 'Missing entry/SL/TP levels'
+      });
+    }
+
+    // ==================== LEVEL 7: FINAL CONFIRMATION ====================
+    // Golden Rule nicht bestätigt
     if (formData.direction && !formData.confirms_rule) {
       detected.push({
         id: 'rule_violation',
@@ -101,7 +158,30 @@ export default function NoTradeSkills({
         title: 'RULE NOT CONFIRMED',
         titleDe: 'REGEL NICHT BESTÄTIGT',
         severity: 'high',
+        details: 'ZNPCV Golden Rule must be confirmed'
       });
+    }
+
+    // ==================== ZUSÄTZLICHE VALIDIERUNGEN ====================
+    // Pattern Konsistenz prüfen
+    const patterns = [formData.w_pattern, formData.d_pattern, formData.h4_pattern, formData.entry_pattern]
+      .filter(p => p && p !== 'none');
+    
+    if (patterns.length > 0) {
+      const allBullish = patterns.every(p => ['double_bottom', 'inv_head_shoulders'].includes(p));
+      const allBearish = patterns.every(p => ['double_top', 'head_shoulders'].includes(p));
+      const isLong = formData.direction === 'long';
+      
+      if ((isLong && patterns.length > 1 && !allBullish) || (!isLong && patterns.length > 1 && !allBearish)) {
+        detected.push({
+          id: 'pattern_conflict',
+          icon: Layers,
+          title: 'PATTERN CONFLICT',
+          titleDe: 'PATTERN KONFLIKT',
+          severity: 'medium',
+          details: 'Mixed bullish/bearish patterns detected'
+        });
+      }
     }
 
     return detected;
