@@ -17,145 +17,90 @@ export default function NoTradeSkills({
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(true);
 
-  // Calculate comprehensive no-trade conditions
+  // Umfassende No-Trade Analyse aller 7 Checklist Levels
   const conditions = useMemo(() => {
     const detected = [];
+    const totalScore = weeklyScore + dailyScore + h4Score + entryScore;
 
-    // 1. CHOPPY MARKET - Keine klaren Trends über Zeitrahmen
+    // LEVEL 1 & 2: PAIR & DIRECTION - Grundvoraussetzungen
+    if (!formData.pair || !formData.direction) {
+      return detected; // Keine Analyse möglich ohne Pair/Direction
+    }
+
+    // LEVEL 2: WEEKLY ANALYSIS - Trend Konflikte
     const hasNoTrends = !formData.w_trend || !formData.d_trend || !formData.h4_trend;
     const hasMixedTrends = formData.w_trend && formData.d_trend && formData.h4_trend &&
       (formData.w_trend !== formData.d_trend || formData.d_trend !== formData.h4_trend);
     
     if (hasNoTrends || hasMixedTrends) {
-      const trendDetails = [
-        formData.w_trend ? `W: ${formData.w_trend}` : 'W: none',
-        formData.d_trend ? `D: ${formData.d_trend}` : 'D: none',
-        formData.h4_trend ? `4H: ${formData.h4_trend}` : '4H: none'
-      ].join(' • ');
-      
       detected.push({
         id: 'choppy_market',
         icon: TrendingDown,
         title: 'CHOPPY MARKET',
         titleDe: 'UNKLARER MARKT',
-        description: `No clear trend alignment: ${trendDetails}`,
-        descriptionDe: `Keine klare Trendausrichtung: ${trendDetails}`,
         severity: 'critical',
-        impact: 'Very High',
-        score: 0,
-        reason: hasMixedTrends ? 'Conflicting trends' : 'Missing trend data'
       });
     }
 
-    // 2. MID-RANGE - Nicht am AOI
+    // LEVEL 2-4: WEEKLY/DAILY/4H - AOI Bestätigung
     const aoiCount = [formData.w_at_aoi, formData.d_at_aoi, formData.h4_at_aoi].filter(Boolean).length;
-    const noAoiConfirmation = aoiCount === 0;
-    
-    if (noAoiConfirmation && formData.w_trend) {
+    if (aoiCount === 0 && formData.w_trend) {
       detected.push({
         id: 'mid_range',
         icon: MapPin,
         title: 'MID-RANGE PRICE',
         titleDe: 'PREIS IN DER MITTE',
-        description: `Price not at AOI on any timeframe (0/3 confirmed)`,
-        descriptionDe: `Preis nicht am AOI auf keinem Zeitrahmen (0/3 bestätigt)`,
         severity: 'critical',
-        impact: 'Very High',
-        score: weeklyScore + dailyScore + h4Score,
-        reason: 'No AOI rejection confirmed'
-      });
-    } else if (aoiCount === 1 && formData.w_trend) {
-      detected.push({
-        id: 'mid_range',
-        icon: MapPin,
-        title: 'WEAK AOI CONFIRMATION',
-        titleDe: 'SCHWACHE AOI BESTÄTIGUNG',
-        description: `Only ${aoiCount}/3 timeframes at AOI`,
-        descriptionDe: `Nur ${aoiCount}/3 Zeitrahmen am AOI`,
-        severity: 'high',
-        impact: 'High',
-        score: weeklyScore + dailyScore + h4Score,
-        reason: 'Insufficient AOI confirmation'
       });
     }
 
-    // 3. LOW CONFLUENCE - Weniger als 2 Timeframes aligned
+    // LEVEL 2-4: CONFLUENCE Check über alle Timeframes
     const confluenceCount = [
       formData.w_trend === formData.direction,
       formData.d_trend === formData.direction,
       formData.h4_trend === formData.direction
     ].filter(Boolean).length;
 
-    if (confluenceCount < 2 && formData.direction) {
+    if (confluenceCount < 2) {
       detected.push({
         id: 'low_confluence',
         icon: Layers,
         title: 'LOW CONFLUENCE',
         titleDe: 'GERINGE ÜBEREINSTIMMUNG',
-        description: `Only ${confluenceCount}/3 timeframes aligned with ${formData.direction} direction`,
-        descriptionDe: `Nur ${confluenceCount}/3 Zeitrahmen mit ${formData.direction} Richtung ausgerichtet`,
         severity: confluenceCount === 0 ? 'critical' : 'high',
-        impact: confluenceCount === 0 ? 'Very High' : 'High',
-        score: weeklyScore + dailyScore + h4Score,
-        reason: 'Timeframe confluence too low'
       });
     }
 
-    // 4. LOW OVERALL SCORE - Unter 85%
-    const totalScore = weeklyScore + dailyScore + h4Score + entryScore;
+    // LEVEL 2-5: GESAMTSCORE unter ZNPCV Standard
     if (totalScore < 85 && totalScore > 0) {
       detected.push({
         id: 'low_score',
         icon: Activity,
-        title: 'LOW CHECKLIST SCORE',
-        titleDe: 'NIEDRIGER CHECKLIST SCORE',
-        description: `Score ${totalScore}% below ZNPCV standard (85% minimum)`,
-        descriptionDe: `Score ${totalScore}% unter ZNPCV Standard (85% minimum)`,
+        title: 'LOW SCORE',
+        titleDe: 'NIEDRIGER SCORE',
         severity: totalScore < 70 ? 'critical' : 'high',
-        impact: totalScore < 70 ? 'Very High' : 'High',
-        score: totalScore,
-        reason: 'Insufficient technical setup'
       });
     }
 
-    // 5. POOR R:R - Unter 1:2.5
+    // LEVEL 6: RISK MANAGEMENT - R:R Violation
     if (riskCalc && parseFloat(riskCalc.rr) < 2.5 && formData.entry_price && formData.stop_loss && formData.take_profit) {
       detected.push({
         id: 'poor_rr',
         icon: DollarSign,
-        title: 'POOR RISK:REWARD',
-        titleDe: 'SCHLECHTES RISK:REWARD',
-        description: `R:R ${riskCalc.rr} below minimum 2.5 (${Math.round(parseFloat(riskCalc.rr) / 2.5 * 100)}% of target)`,
-        descriptionDe: `R:R ${riskCalc.rr} unter Minimum 2.5 (${Math.round(parseFloat(riskCalc.rr) / 2.5 * 100)}% vom Ziel)`,
+        title: 'POOR R:R',
+        titleDe: 'SCHLECHTES R:R',
         severity: 'critical',
-        impact: 'Very High',
-        score: totalScore,
-        reason: 'Risk management violation'
       });
     }
 
-    // 6. NEWS RISK - Zeitfenster mit typischen News-Events
-    const now = new Date();
-    const hour = now.getHours();
-    const day = now.getDay();
-    
-    // London Session: 8:00-10:00 UTC (News heavy)
-    // New York Session: 13:00-15:00 UTC (News heavy)
-    const isHighNewsTime = (hour >= 8 && hour <= 10) || (hour >= 13 && hour <= 15);
-    const isWeekday = day >= 1 && day <= 5;
-    
-    if (isHighNewsTime && isWeekday && formData.pair) {
+    // LEVEL 7: FINAL - ZNPCV Golden Rule nicht bestätigt
+    if (formData.direction && !formData.confirms_rule) {
       detected.push({
-        id: 'major_news',
-        icon: Calendar,
-        title: 'HIGH NEWS RISK WINDOW',
-        titleDe: 'HOHES NEWS-RISIKO ZEITFENSTER',
-        description: `Trading during high-impact news window (${hour}:00 UTC)`,
-        descriptionDe: `Trading während High-Impact News Fenster (${hour}:00 UTC)`,
-        severity: 'medium',
-        impact: 'Medium',
-        score: totalScore,
-        reason: 'Major economic releases possible'
+        id: 'rule_violation',
+        icon: Shield,
+        title: 'RULE NOT CONFIRMED',
+        titleDe: 'REGEL NICHT BESTÄTIGT',
+        severity: 'high',
       });
     }
 
