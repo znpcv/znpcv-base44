@@ -269,7 +269,7 @@ export default function NoTradeSkills({
       <div className={cn("border-t-2 p-2 sm:p-2.5 space-y-1",
         darkMode ? "border-zinc-800 bg-zinc-950/50" : "border-zinc-200 bg-white/50"
       )}>
-        {conditions.map((condition, index) => {
+        {conditions.map((condition) => {
           const Icon = condition.icon;
           const colors = getSeverityColor(condition.severity);
           
@@ -298,22 +298,19 @@ export default function NoTradeSkills({
           );
         })}
 
-              {/* Action Button - Compact */}
-              <button
-                onClick={() => onNoTrade(conditions)}
-                className={cn("w-full mt-2 p-2.5 rounded-lg font-bold text-xs sm:text-sm tracking-wider transition-all border-2",
-                  criticalCount > 0
-                    ? "bg-rose-600 hover:bg-rose-700 text-white border-rose-500"
-                    : "bg-amber-500 hover:bg-amber-600 text-white border-amber-400"
-                )}
-              >
-                <XOctagon className="w-4 h-4 inline-block mr-1.5" />
-                LOG NO-TRADE & EXIT
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Action Button - Compact */}
+        <button
+          onClick={() => onNoTrade(conditions)}
+          className={cn("w-full mt-2 p-2.5 rounded-lg font-bold text-xs sm:text-sm tracking-wider transition-all border-2",
+            criticalCount > 0
+              ? "bg-rose-600 hover:bg-rose-700 text-white border-rose-500"
+              : "bg-amber-500 hover:bg-amber-600 text-white border-amber-400"
+          )}
+        >
+          <XOctagon className="w-4 h-4 inline-block mr-1.5" />
+          LOG NO-TRADE & EXIT
+        </button>
+      </div>
     </motion.div>
   );
 }

@@ -74,13 +74,13 @@ export default function NoTradeStats({ darkMode }) {
 
   if (totalNoTrades === 0) {
     return (
-      <div className={cn("border-2 rounded-xl p-4", theme.border, theme.bg)}>
-        <div className="flex items-center gap-2 mb-2">
-          <Shield className={cn("w-5 h-5", theme.textMuted)} />
-          <h3 className={cn("font-bold tracking-wider text-sm", theme.text)}>NO-TRADE SKILL</h3>
-        </div>
-        <div className={cn("text-xs font-sans", theme.textMuted)}>
-          No saved trades yet. Start logging smart no-trade decisions!
+      <div className={cn("border-2 rounded-xl p-3", theme.border, theme.bg)}>
+        <div className="flex items-center gap-2">
+          <Shield className={cn("w-4 h-4", theme.textMuted)} />
+          <div>
+            <h3 className={cn("font-bold tracking-wider text-xs", theme.text)}>NO-TRADE SKILL</h3>
+            <div className={cn("text-[9px] font-sans", theme.textMuted)}>No logs yet</div>
+          </div>
         </div>
       </div>
     );
@@ -92,34 +92,33 @@ export default function NoTradeStats({ darkMode }) {
       animate={{ opacity: 1, y: 0 }}
       className={cn("border-2 rounded-xl", theme.border, theme.bg)}
     >
-      <div className="p-3 sm:p-3.5">
-        <div className="flex items-center justify-between mb-2.5">
+      <div className="p-3">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center",
-              darkMode ? "bg-white" : "bg-zinc-900"
-            )}>
-              <Shield className={cn("w-4 h-4", darkMode ? "text-black" : "text-white")} />
-            </div>
+            <Shield className={cn("w-4 h-4", darkMode ? "text-white" : "text-black")} />
             <div>
-              <h3 className={cn("font-bold tracking-wider text-xs sm:text-sm", theme.text)}>NO-TRADE SKILL</h3>
+              <h3 className={cn("font-bold tracking-wider text-xs", theme.text)}>NO-TRADE</h3>
               <div className={cn("text-[9px] font-sans", theme.textMuted)}>{totalNoTrades} saved</div>
             </div>
           </div>
-          <div className={cn("text-xl font-bold", theme.text)}>{last30Days}</div>
+          <div className="text-right">
+            <div className={cn("text-lg font-bold", theme.text)}>{last30Days}</div>
+            <div className={cn("text-[8px]", theme.textMuted)}>30d</div>
+          </div>
         </div>
 
-        {/* Top Reasons - Compact */}
-        <div className="space-y-1">
+        {/* Top Reasons - Ultra Compact */}
+        <div className="space-y-0.5">
           {Object.entries(reasonCounts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([reason, count]) => {
             const Icon = reasonIcons[reason];
             
             return (
               <div key={reason} className="flex items-center gap-1.5">
                 <Icon className={cn("w-3 h-3 flex-shrink-0", reasonColors[reason])} />
-                <div className={cn("text-[10px] font-bold flex-1 truncate", reasonColors[reason])}>
+                <div className={cn("text-[9px] font-bold flex-1 truncate", reasonColors[reason])}>
                   {reasonLabels[reason]}
                 </div>
-                <div className={cn("text-xs font-bold", theme.text)}>{count}</div>
+                <div className={cn("text-[10px] font-bold", theme.text)}>{count}</div>
               </div>
             );
           })}
