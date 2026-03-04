@@ -514,6 +514,9 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
+      {/* Admin Export Block */}
+      <AdminExportBlock darkMode={darkMode} user={currentUser} />
+
       {/* Notification Prompt */}
       <NotificationPrompt darkMode={darkMode} />
     </div>
