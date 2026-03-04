@@ -28,7 +28,7 @@ export default function AdminExportBlock({ darkMode }) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'base44-export.md';
+      a.download = 'znpcv-export.md';
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
