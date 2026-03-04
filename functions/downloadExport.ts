@@ -12,14 +12,14 @@ const EXPORT_CONTENT = `# ZNPCV TRADING CHECKLIST — VOLLSTÄNDIGER REBUILD-EXP
 | Feld | Wert |
 |------|------|
 | App-Name | ZNPCV Trading Checklist |
-| Build-Plattform | Base44 (React + Vite + Tailwind CSS + Deno Backend) |
+| Build-Plattform | React + Vite + Tailwind CSS + Deno Backend |
 | Betreiber | Zainspective Group |
 | Support-E-Mail | support@znpcv.com |
 | Sprachen | DE, EN, ZH, ES, FR, HI, JA, PT, AR (RTL: AR) |
 | Default-Sprache | Deutsch (de) |
 | Default-Theme | Dark Mode |
 | PII-Daten | JA — Name, E-Mail, Telefon, Adresse, Profilbild-URL, Geo-IP-Nutzung implizit |
-| Auth-Modell | Base44 Auth (JWT-basiert, keine eigene OAuth-Implementierung) |
+| Auth-Modell | JWT-basiert (keine eigene OAuth-Implementierung) |
 
 ### Kern-Journeys
 
@@ -529,10 +529,10 @@ title(NOT NULL), body(NOT NULL), read(default:false), clicked(default:false), sn
 
 | Integration | Zweck | ENV |
 |-------------|-------|-----|
-| Base44 Auth | JWT-Auth, Session | (automatisch) |
-| Base44 File Storage | Screenshots + Avatar | (automatisch) |
-| Base44 SendEmail | Wochenberichte, Daily Quotes | (automatisch) |
-| Base44 InvokeLLM | KI-Performance-Analyse | (automatisch) |
+| JWT Auth | JWT-Auth, Session | (automatisch) |
+| File Storage | Screenshots + Avatar | (automatisch) |
+| SendEmail | Wochenberichte, Daily Quotes | (automatisch) |
+| InvokeLLM | KI-Performance-Analyse | (automatisch) |
 | Web Push (VAPID) | Browser-Push-Notifications | VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_EMAIL |
 | Telegram Bot API | Trade-Alerts | TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID |
 | WhatsApp API | Trade-Alerts | WHATSAPP_API_KEY, WHATSAPP_PHONE_NUMBER |
@@ -1019,7 +1019,7 @@ Deno.serve(async (req) => {
       status: 200,
       headers: {
         'Content-Type': 'text/markdown; charset=utf-8',
-        'Content-Disposition': 'attachment; filename="base44-export.md"',
+        'Content-Disposition': 'attachment; filename="znpcv-export.md"',
         'Cache-Control': 'no-cache'
       }
     });
