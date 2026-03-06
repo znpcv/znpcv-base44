@@ -66,6 +66,7 @@ import PWAAdmin from './pages/PWAAdmin';
 import SetupBuilder from './pages/SetupBuilder';
 import TradeJournal from './pages/TradeJournal';
 import TradingInsights from './pages/TradingInsights';
+import TradingSettingsPage from './pages/TradingSettingsPage';
 import __Layout from './Layout.jsx';
 
 
@@ -89,6 +90,7 @@ export const PAGES = {
     "SetupBuilder": SetupBuilder,
     "TradeJournal": TradeJournal,
     "TradingInsights": TradingInsights,
+    "TradingSettingsPage": TradingSettingsPage,
 }
 
 export const pagesConfig = {
