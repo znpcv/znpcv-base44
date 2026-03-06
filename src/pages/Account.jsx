@@ -328,20 +328,35 @@ export default function AccountPage() {
                 <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>NOTIFICATIONS</span>
               </div>
               
-              {editing ? (
-                <PushNotificationManager darkMode={darkMode} onSuccess={loadUser} />
-              ) : (
-                <div className={`p-3 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
-                  {user.browser_notifications_enabled ? (
+              <div className={`p-3 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
+                {user.browser_notifications_enabled ? (
+                  <div className="space-y-2">
                     <div className="flex items-center gap-2 text-emerald-700">
                       <Check className="w-4 h-4" />
-                      <span className="font-bold text-sm">Active</span>
+                      <span className="font-bold text-sm">Push aktiv</span>
                     </div>
-                  ) : (
-                    <span className={`${theme.textSecondary} text-sm`}>Off</span>
-                  )}
-                </div>
-              )}
+                    <button
+                      onClick={async () => {
+                        try {
+                          if ('serviceWorker' in navigator) {
+                            const reg = await navigator.serviceWorker.ready;
+                            const sub = await reg.pushManager.getSubscription();
+                            if (sub) await sub.unsubscribe();
+                          }
+                          await base44.auth.updateMe({ browser_notifications_enabled: false, push_topics: [] });
+                          base44.analytics.track({ eventName: 'push_unsubscribed' });
+                          await loadUser();
+                        } catch (err) { console.error(err); }
+                      }}
+                      className={`flex items-center gap-1.5 text-[10px] font-bold tracking-wider border rounded-lg px-2.5 py-1.5 transition-colors ${darkMode ? 'border-zinc-700 text-zinc-400 hover:border-rose-600 hover:text-rose-400' : 'border-zinc-300 text-zinc-500 hover:border-red-500 hover:text-red-500'}`}
+                    >
+                      <BellOff className="w-3 h-3" /> ABBESTELLEN
+                    </button>
+                  </div>
+                ) : (
+                  <span className={`${theme.textSecondary} text-sm`}>Off</span>
+                )}
+              </div>
             </div>
             </div>
 
