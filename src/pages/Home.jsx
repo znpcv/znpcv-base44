@@ -163,6 +163,11 @@ export default function HomePage() {
           </div>
         )}
 
+        {/* Trading OS Widget */}
+        <div className="mb-6 sm:mb-8">
+          <TradingOSWidget darkMode={darkMode} />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
