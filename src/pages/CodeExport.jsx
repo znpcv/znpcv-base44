@@ -360,7 +360,7 @@ FRONTEND_URL=https://your-frontend-url.com`
     },
     
     frontend: {
-      'api-client.js': `// Frontend API Client - Replace Base44 SDK
+      'api-client.js': `// Frontend API Client
 
 import axios from 'axios';
 
@@ -690,7 +690,7 @@ CMD ["npm", "start"]`,
             <li>• Führe <code className={`${theme.bgCode} px-2 py-1 rounded`}>npm install</code> aus</li>
             <li>• Erstelle die .env Datei mit deinen Werten</li>
             <li>• Erstelle die PostgreSQL Datenbank mit database.sql</li>
-            <li>• Frontend: Ersetze alle <code className={`${theme.bgCode} px-2 py-1 rounded`}>base44</code> Imports mit <code className={`${theme.bgCode} px-2 py-1 rounded`}>apiClient</code></li>
+            <li>• Frontend: Ersetze die API-Imports mit <code className={`${theme.bgCode} px-2 py-1 rounded`}>apiClient</code></li>
             <li>• Deploye Backend auf Railway (siehe railway-setup.md)</li>
             <li>• Deploye Frontend auf Vercel/Netlify</li>
           </ul>
