@@ -35,15 +35,19 @@ export default function NotificationPrompt({ darkMode }) {
     const permission = Notification.permission;
     setNotificationsEnabled(permission === 'granted');
     
-    // Show prompt if user is logged in and hasn't decided yet
-    if (permission === 'default') {
+    // Only show if already granted (no cold-call prompting)
+    if (permission === 'granted') {
       try {
         const isAuth = await base44.auth.isAuthenticated();
         if (isAuth) {
-          setShow(true);
+          const user = await base44.auth.me();
+          // Only show if not already subscribed via the new flow
+          if (!user.push_opted_in_at) {
+            setShow(true);
+          }
         }
       } catch (err) {
-        console.error('Auth check failed');
+        // ignore
       }
     }
   };
