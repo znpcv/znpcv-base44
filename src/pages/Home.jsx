@@ -12,6 +12,7 @@ import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
 import AdminExportBlock from '@/components/AdminExportBlock';
+import TradingOSWidget from '@/components/trading/TradingOSWidget';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
