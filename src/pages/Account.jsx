@@ -431,9 +431,25 @@ export default function AccountPage() {
           </div>
         </motion.div>
 
+        {/* Admin PWA Link */}
+        {user?.role === 'admin' && (
+          <div className={`border ${theme.border} rounded-xl p-3 flex items-center justify-between`}>
+            <div className="flex items-center gap-2">
+              <LineChart className={`w-4 h-4 ${theme.textMuted}`} />
+              <span className={`text-xs tracking-wider font-bold ${theme.textSecondary}`}>PWA / PUSH ANALYTICS</span>
+            </div>
+            <button
+              onClick={() => navigate(createPageUrl('PWAAdmin'))}
+              className={`text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg border-2 transition-colors ${darkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-900' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-100'}`}
+            >
+              ÖFFNEN
+            </button>
+          </div>
+        )}
+
         {/* Footer */}
         <footer className={`mt-10 sm:mt-12 md:mt-16 pt-6 sm:pt-8 border-t ${theme.border}`}>
-          <div className="flex flex-wrap items-center justify-center gap-3 text-[10px] sm:text-xs">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-[10px] sm:text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
               Impressum
             </button>
