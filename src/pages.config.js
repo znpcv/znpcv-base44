@@ -65,6 +65,7 @@ import Trash from './pages/Trash';
 import PWAAdmin from './pages/PWAAdmin';
 import SetupBuilder from './pages/SetupBuilder';
 import TradeJournal from './pages/TradeJournal';
+import TradingInsights from './pages/TradingInsights';
 import __Layout from './Layout.jsx';
 
 
@@ -87,6 +88,7 @@ export const PAGES = {
     "PWAAdmin": PWAAdmin,
     "SetupBuilder": SetupBuilder,
     "TradeJournal": TradeJournal,
+    "TradingInsights": TradingInsights,
 }
 
 export const pagesConfig = {
