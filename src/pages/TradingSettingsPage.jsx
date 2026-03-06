@@ -67,7 +67,7 @@ export default function TradingSettingsPage() {
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
   };
 
-  const Section = ({ icon: Icon, title, children }) => (
+  const Section = ({ icon: SectionIcon, title, children }) => (
     <div className={`p-4 rounded-xl border ${theme.border} ${theme.bgCard} space-y-3`}>
       <div className="flex items-center gap-2 mb-1">
         <Icon className={`w-4 h-4 ${theme.textMuted}`} />
