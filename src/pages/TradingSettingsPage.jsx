@@ -70,7 +70,7 @@ export default function TradingSettingsPage() {
   const Section = ({ icon: SectionIcon, title, children }) => (
     <div className={`p-4 rounded-xl border ${theme.border} ${theme.bgCard} space-y-3`}>
       <div className="flex items-center gap-2 mb-1">
-        <Icon className={`w-4 h-4 ${theme.textMuted}`} />
+        <SectionIcon className={`w-4 h-4 ${theme.textMuted}`} />
         <div className={`text-xs tracking-widest font-bold ${theme.textMuted}`}>{title}</div>
       </div>
       {children}
