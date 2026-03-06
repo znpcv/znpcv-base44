@@ -17,10 +17,11 @@ import TradingQuote from '@/components/TradingQuote';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
 import AccountButton from '@/components/AccountButton';
-import BestTradingTimes from '@/components/advanced/BestTradingTimes';
-import SwipeNavigation from '@/components/mobile/SwipeNavigation';
-import BottomNav from '@/components/mobile/BottomNav';
-import NoTradeStats from '@/components/dashboard/NoTradeStats';
+import { lazy, Suspense } from 'react';
+const BestTradingTimes = lazy(() => import('@/components/advanced/BestTradingTimes'));
+const SwipeNavigation = lazy(() => import('@/components/mobile/SwipeNavigation'));
+const BottomNav = lazy(() => import('@/components/mobile/BottomNav'));
+const NoTradeStats = lazy(() => import('@/components/dashboard/NoTradeStats'));
 
 
 export default function DashboardPage() {
