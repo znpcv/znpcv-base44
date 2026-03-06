@@ -189,6 +189,7 @@ export default function DashboardPage() {
   };
 
   return (
+    <Suspense fallback={null}>
     <SwipeNavigation currentPage="Dashboard">
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'} pb-20 md:pb-0`} style={{ transition: 'none' }}>
       {/* Header */}
@@ -981,5 +982,6 @@ export default function DashboardPage() {
       <BottomNav darkMode={darkMode} />
     </div>
     </SwipeNavigation>
+    </Suspense>
   );
 }
