@@ -49,6 +49,7 @@
  */
 import AGB from './pages/AGB';
 import Account from './pages/Account';
+import Charts from './pages/Charts';
 import Checklist from './pages/Checklist';
 import CodeExport from './pages/CodeExport';
 import Dashboard from './pages/Dashboard';
@@ -61,13 +62,14 @@ import Register from './pages/Register';
 import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
-import Charts from './pages/Charts';
+import PWAAdmin from './pages/PWAAdmin';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AGB": AGB,
     "Account": Account,
+    "Charts": Charts,
     "Checklist": Checklist,
     "CodeExport": CodeExport,
     "Dashboard": Dashboard,
@@ -80,7 +82,7 @@ export const PAGES = {
     "TradeDetail": TradeDetail,
     "TradeHistory": TradeHistory,
     "Trash": Trash,
-    "Charts": Charts,
+    "PWAAdmin": PWAAdmin,
 }
 
 export const pagesConfig = {
