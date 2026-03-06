@@ -1,57 +1,76 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+
+// Rate limiter: 30 req/min per userId (webhook)
+const rateLimitMap = new Map();
+function checkRateLimit(key, limit = 30, windowMs = 60000) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key) || { count: 0, reset: now + windowMs };
+  if (now > entry.reset) { entry.count = 0; entry.reset = now + windowMs; }
+  entry.count++;
+  rateLimitMap.set(key, entry);
+  return entry.count <= limit;
+}
+
+// Erlaubte Pair-Zeichen (Whitelist)
+const VALID_PAIR = /^[A-Z0-9/_.-]{2,20}$/i;
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
-    // Validate webhook secret from query params
     const url = new URL(req.url);
     const secret = url.searchParams.get('secret');
     const userId = url.searchParams.get('user');
-    
-    if (!secret || !userId) {
-      return Response.json({ error: 'Missing secret or user' }, { status: 401 });
+
+    if (!secret || !userId || secret.length > 100 || userId.length > 100) {
+      return Response.json({ error: 'Ungültige Anfrage' }, { status: 401 });
     }
 
-    // Get user and verify secret
+    if (!checkRateLimit(`webhook_${userId}`)) {
+      return Response.json({ error: 'Zu viele Anfragen.' }, { status: 429 });
+    }
+
     const users = await base44.asServiceRole.entities.User.filter({ id: userId });
     const user = users[0];
-    
+
     if (!user || user.webhook_secret !== secret) {
-      return Response.json({ error: 'Invalid secret' }, { status: 401 });
+      return Response.json({ error: 'Ungültig' }, { status: 401 });
     }
 
     const data = await req.json();
-    
-    // Parse TradingView webhook format
+
+    // Input-Validierung
+    const rawPair = String(data.ticker || data.symbol || '').toUpperCase().substring(0, 20);
+    if (!rawPair || !VALID_PAIR.test(rawPair)) {
+      return Response.json({ error: 'Ungültiges Währungspaar' }, { status: 400 });
+    }
+
+    const rawAction = String(data.strategy?.order_action || data.action || '').toLowerCase();
+    const direction = rawAction === 'buy' ? 'long' : rawAction === 'sell' ? 'short' : null;
+    if (!direction) {
+      return Response.json({ error: 'Ungültige Handelsrichtung' }, { status: 400 });
+    }
+
     const tradeData = {
-      pair: data.ticker || data.symbol,
-      direction: data.strategy?.order_action === 'buy' ? 'long' : 'short',
-      entry_price: data.strategy?.order_price?.toString(),
-      stop_loss: data.strategy?.order_contracts?.toString(),
-      take_profit: '',
-      account_size: user.account_size || '10000',
-      risk_percent: user.default_risk || '1',
-      leverage: user.default_leverage || '100',
+      pair: rawPair,
+      direction,
+      entry_price: String(data.strategy?.order_price || '').substring(0, 30) || null,
+      stop_loss: null,
+      take_profit: null,
+      account_size: String(user.account_size || '10000').substring(0, 20),
+      risk_percent: String(user.default_risk_percent || '1').substring(0, 10),
+      leverage: String(user.default_leverage || '100').substring(0, 10),
       status: 'executed',
-      notes: `Auto-imported from TradingView\nStrategy: ${data.strategy?.order_id || 'N/A'}`,
+      notes: `Automatisch importiert`,
       created_by: user.email,
       trade_date: new Date().toISOString().split('T')[0]
     };
 
-    // Create checklist
     const checklist = await base44.asServiceRole.entities.TradeChecklist.create(tradeData);
 
-    // Send alert if configured
-    if (user.telegram_chat_id) {
-      await base44.asServiceRole.functions.invoke('sendTelegramAlert', {
-        message: `New trade signal received from TradingView!`,
-        trade: checklist
-      });
-    }
-
-    return Response.json({ success: true, trade: checklist });
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({ success: true, id: checklist.id });
+  } catch (_error) {
+    const errorId = `E${Date.now().toString(36).toUpperCase()}`;
+    console.error(`[${errorId}] tradingViewWebhook error`);
+    return Response.json({ error: 'Webhook-Verarbeitung fehlgeschlagen.', errorId }, { status: 500 });
   }
 });
