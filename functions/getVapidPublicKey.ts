@@ -1,26 +1,19 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 Deno.serve(async (req) => {
   try {
-    const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY');
+    // Auth-Check: Nur authentifizierte User
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    if (!user) return Response.json({ error: 'Nicht autorisiert' }, { status: 401 });
 
+    const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY');
     if (!vapidPublicKey) {
-      console.error('VAPID_PUBLIC_KEY nicht gesetzt');
-      return Response.json({ 
-        error: 'VAPID key not configured',
-        message: 'Bitte VAPID_PUBLIC_KEY in den Umgebungsvariablen setzen'
-      }, { status: 500 });
+      return Response.json({ error: 'Push-Notifications nicht konfiguriert' }, { status: 503 });
     }
 
-    return Response.json({ 
-      success: true,
-      publicKey: vapidPublicKey 
-    });
-  } catch (error) {
-    console.error('Get VAPID key failed:', error);
-    return Response.json({ 
-      error: error.message,
-      success: false 
-    }, { status: 500 });
+    return Response.json({ publicKey: vapidPublicKey });
+  } catch (_error) {
+    return Response.json({ error: 'Anfrage fehlgeschlagen' }, { status: 500 });
   }
 });
