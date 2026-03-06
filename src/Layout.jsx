@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LanguageProvider } from './components/LanguageContext';
 import ScrollToTop from './components/ScrollToTop';
 import QueryClientProvider from './components/QueryClientProvider';
 import OfflineManager from './components/offline/OfflineManager';
 import ServiceWorkerRegistration from './components/offline/ServiceWorkerRegistration';
+import PWAInstallBanner from './components/pwa/PWAInstallBanner';
+import PushOptInModal from './components/pwa/PushOptInModal';
+import { base44 } from './api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
 
