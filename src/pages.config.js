@@ -64,6 +64,7 @@ import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
 import PWAAdmin from './pages/PWAAdmin';
 import SetupBuilder from './pages/SetupBuilder';
+import TradeJournal from './pages/TradeJournal';
 import __Layout from './Layout.jsx';
 
 
@@ -85,6 +86,7 @@ export const PAGES = {
     "Trash": Trash,
     "PWAAdmin": PWAAdmin,
     "SetupBuilder": SetupBuilder,
+    "TradeJournal": TradeJournal,
 }
 
 export const pagesConfig = {
