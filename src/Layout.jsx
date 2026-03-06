@@ -114,6 +114,8 @@ export default function Layout({ children, currentPageName }) {
           }
         `}
       </style>
+      <PWAInstallBanner darkMode={darkMode} />
+      <PushOptInTrigger darkMode={darkMode} />
       <div className="min-h-screen bg-black">
         {children}
       </div>
