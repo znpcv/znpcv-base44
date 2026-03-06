@@ -32,7 +32,16 @@ Deno.serve(async (req) => {
     const durationMin = Math.max(5, Math.min(10080, parseInt(duration) || 30));
 
     // Ownership check: Notification muss dem User gehören
-    const notifications = await base44.entities.Notification.filter({ id: notificationId });
+    // Erst Validierung ob es eine hex-like ID ist, bevor wir die DB anfragen
+    if (!/^[a-f0-9]{20,30}$/i.test(notificationId)) {
+      return Response.json({ error: 'Nicht gefunden' }, { status: 404 });
+    }
+    let notifications;
+    try {
+      notifications = await base44.entities.Notification.filter({ id: notificationId });
+    } catch (_e) {
+      return Response.json({ error: 'Nicht gefunden' }, { status: 404 });
+    }
     if (!notifications.length || notifications[0].user_email !== user.email) {
       return Response.json({ error: 'Nicht gefunden' }, { status: 404 });
     }

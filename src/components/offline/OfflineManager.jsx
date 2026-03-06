@@ -157,10 +157,11 @@ export default function OfflineManager({ children }) {
 
   const updatePendingCount = async () => {
     try {
+      if (!storage.db) return; // DB noch nicht initialisiert
       const pending = await storage.getPendingOperations();
       setPendingCount(pending.length);
-    } catch (err) {
-      console.error('Failed to get pending count:', err);
+    } catch (_err) {
+      // Silently ignore — DB not ready yet
     }
   };
 

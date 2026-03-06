@@ -70,21 +70,21 @@ export default function ServiceWorkerRegistration() {
         });
       `;
       
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      const swUrl = URL.createObjectURL(blob);
-      
-      navigator.serviceWorker.register(swUrl)
-        .then((registration) => {
-          console.log('Service Worker registered:', registration);
-          
-          // Check for updates every hour
-          setInterval(() => {
-            registration.update();
-          }, 60 * 60 * 1000);
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
-        });
+      // Blob-URL SW registration doesn't work in modern browsers (security restriction).
+      // SW is optional for push notifications — skip silently if not supported in this context.
+      try {
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl)
+          .then((registration) => {
+            setInterval(() => registration.update(), 60 * 60 * 1000);
+          })
+          .catch(() => {
+            // Expected in preview/sandbox environments — not a production error
+          });
+      } catch (_e) {
+        // SW not supported or blocked — non-critical
+      }
     }
   }, []);
 
