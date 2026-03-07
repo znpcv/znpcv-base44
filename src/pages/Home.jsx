@@ -12,7 +12,6 @@ import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
 import AdminExportBlock from '@/components/AdminExportBlock';
-import TradingOSWidget from '@/components/trading/TradingOSWidget';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
@@ -162,11 +161,6 @@ export default function HomePage() {
             <DailyQuoteWidget darkMode={darkMode} />
           </div>
         )}
-
-        {/* Trading OS Widget */}
-        <div className="mb-6 sm:mb-8">
-          <TradingOSWidget darkMode={darkMode} />
-        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
