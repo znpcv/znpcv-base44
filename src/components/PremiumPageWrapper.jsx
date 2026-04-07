@@ -6,7 +6,7 @@ import { createPageUrl } from '@/utils';
 import { Lock, ArrowRight } from 'lucide-react';
 
 export default function PremiumPageWrapper({ children }) {
-  const { loading, entitled, isAdmin } = useEntitlement();
+  const { loading, entitled, isAdmin, status } = useEntitlement();
   const { darkMode } = useLanguage();
   const navigate = useNavigate();
 
@@ -20,6 +20,26 @@ export default function PremiumPageWrapper({ children }) {
 
   if (entitled || isAdmin) {
     return <>{children}</>;
+  }
+
+  // Network/server error — do not show upgrade wall, show retry instead
+  if (status === 'network_error' || status === 'error') {
+    return (
+      <div className={`min-h-screen flex flex-col items-center justify-center p-6 ${darkMode ? 'bg-black text-white' : 'bg-white text-zinc-900'}`}>
+        <div className={`max-w-sm w-full text-center p-8 rounded-2xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-50 border-zinc-200'}`}>
+          <h2 className="text-xl tracking-wider mb-3">Verbindungsfehler</h2>
+          <p className={`text-sm font-sans mb-7 leading-relaxed ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+            Die Zugriffsprüfung konnte nicht abgeschlossen werden. Bitte Seite neu laden.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className={`w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold tracking-widest text-sm transition-all mb-3 ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
+          >
+            NEU LADEN
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

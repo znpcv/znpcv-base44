@@ -18,13 +18,12 @@ Deno.serve(async (req) => {
 
   let event;
   try {
-    if (webhookSecret && sig) {
-      event = await stripe.webhooks.constructEventAsync(body, sig, webhookSecret);
-    } else {
-      // Dev mode: no signature verification
-      console.warn('[stripeWebhook] No webhook secret set — skipping signature verification');
-      event = JSON.parse(body);
+    if (!webhookSecret || !sig) {
+      // In production, missing secret = reject. Never bypass in silence.
+      console.error('[stripeWebhook] Missing STRIPE_WEBHOOK_SECRET or stripe-signature header — request rejected');
+      return new Response('Webhook configuration error', { status: 400 });
     }
+    event = await stripe.webhooks.constructEventAsync(body, sig, webhookSecret);
   } catch (err) {
     console.error('[stripeWebhook] Signature verification failed:', err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });

@@ -35,8 +35,14 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const successUrl = body.success_url || `${body.origin || 'https://app.znpcv.com'}/PaymentSuccess`;
-    const cancelUrl  = body.cancel_url  || `${body.origin || 'https://app.znpcv.com'}/Upgrade`;
+
+    // Guard against open-redirect: only allow same-origin or known domains
+    const ALLOWED_ORIGINS = ['https://app.znpcv.com', 'https://znpcv.com'];
+    const rawOrigin = body.origin || '';
+    const safeOrigin = ALLOWED_ORIGINS.includes(rawOrigin) ? rawOrigin : ALLOWED_ORIGINS[0];
+
+    const successUrl = `${safeOrigin}/PaymentSuccess`;
+    const cancelUrl  = `${safeOrigin}/Upgrade`;
 
     // Create a pending BillingEvent before session
     const billingEvent = await base44.asServiceRole.entities.BillingEvent.create({

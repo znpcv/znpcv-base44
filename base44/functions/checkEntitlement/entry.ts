@@ -31,17 +31,8 @@ Deno.serve(async (req) => {
     });
 
     if (entitlements.length === 0) {
-      // Audit: log access denial (non-blocking, best-effort)
-      try {
-        await base44.asServiceRole.entities.AccessAuditLog.create({
-          user_email: user.email,
-          action: 'access_denied_no_entitlement',
-          actor_type: 'system',
-          actor_id: 'checkEntitlement',
-          reason: 'No active full_app_access entitlement found'
-        });
-      } catch (_) { /* audit failure must not block response */ }
-
+      // Only log access denial for explicit premium feature attempts, not routine checks.
+      // Avoid DB spam: no audit log on every unauthenticated page load.
       return Response.json({
         entitled: false,
         reason: 'no_active_entitlement',

@@ -61,6 +61,12 @@ export function useEntitlement() {
       const res = await base44.functions.invoke('checkEntitlement', {});
       const data = res.data;
 
+      if (!data || typeof data.entitled !== 'boolean') {
+        // Malformed response — do not cache, fail safe (deny access)
+        setState({ loading: false, entitled: false, status: 'error', isAdmin: false, error: 'Ungültige Server-Antwort.' });
+        return;
+      }
+
       const result = {
         loading: false,
         entitled: data.entitled === true,
@@ -73,7 +79,8 @@ export function useEntitlement() {
       setState(result);
     } catch (err) {
       console.error('[useEntitlement] check failed:', err.message);
-      setState({ loading: false, entitled: false, status: 'error', isAdmin: false, error: err.message });
+      // Network/server error: fail closed (no access granted), do not cache
+      setState({ loading: false, entitled: false, status: 'network_error', isAdmin: false, error: 'Verbindungsfehler. Bitte Seite neu laden.' });
     }
   }, []);
 

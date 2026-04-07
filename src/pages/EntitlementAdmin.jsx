@@ -47,9 +47,9 @@ function EntitlementAdminContent() {
     setLoading(true);
     try {
       const [ents, bills, audits] = await Promise.all([
-        base44.entities.UserEntitlement.list('-created_date', 200),
-        base44.entities.BillingEvent.list('-created_date', 200),
-        base44.entities.AccessAuditLog.list('-created_date', 100),
+        base44.asServiceRole.entities.UserEntitlement.list('-created_date', 200),
+        base44.asServiceRole.entities.BillingEvent.list('-created_date', 200),
+        base44.asServiceRole.entities.AccessAuditLog.list('-created_date', 100),
       ]);
       setEntitlements(ents);
       setBillingEvents(bills);
@@ -62,21 +62,25 @@ function EntitlementAdminContent() {
   };
 
   const handleManualGrant = async () => {
-    if (!grantEmail.trim()) return;
+    const emailClean = grantEmail.trim().toLowerCase();
+    if (!emailClean || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
+      setGrantError('Bitte eine gültige E-Mail-Adresse eingeben.');
+      return;
+    }
     setGrantLoading(true);
     setGrantError(null);
     try {
       const me = await base44.auth.me();
-      const ent = await base44.entities.UserEntitlement.create({
-        user_email: grantEmail.trim().toLowerCase(),
+      const ent = await base44.asServiceRole.entities.UserEntitlement.create({
+        user_email: emailClean,
         entitlement_key: 'full_app_access',
         status: 'active',
         granted_at: new Date().toISOString(),
         source: 'manual_admin',
         notes: `Manually granted by admin ${me.email}`
       });
-      await base44.entities.AccessAuditLog.create({
-        user_email: grantEmail.trim().toLowerCase(),
+      await base44.asServiceRole.entities.AccessAuditLog.create({
+        user_email: emailClean,
         action: 'manual_grant',
         actor_type: 'admin',
         actor_id: me.email,
@@ -93,15 +97,15 @@ function EntitlementAdminContent() {
   };
 
   const handleRevoke = async (ent) => {
-    if (!window.confirm(`Entitlement für ${ent.user_email} wirklich widerrufen?`)) return;
+    if (!window.confirm(`Zugang für ${ent.user_email} wirklich widerrufen? Diese Aktion kann nicht rückgängig gemacht werden.`)) return;
     setRevokeId(ent.id);
     try {
       const me = await base44.auth.me();
-      await base44.entities.UserEntitlement.update(ent.id, {
+      await base44.asServiceRole.entities.UserEntitlement.update(ent.id, {
         status: 'revoked',
         revoked_at: new Date().toISOString()
       });
-      await base44.entities.AccessAuditLog.create({
+      await base44.asServiceRole.entities.AccessAuditLog.create({
         user_email: ent.user_email,
         action: 'entitlement_revoked',
         actor_type: 'admin',
@@ -111,7 +115,8 @@ function EntitlementAdminContent() {
       }).catch(() => {});
       await loadAll();
     } catch (err) {
-      alert('Fehler beim Widerrufen: ' + err.message);
+      alert('Fehler beim Widerrufen. Bitte erneut versuchen.');
+      console.error('[EntitlementAdmin] revoke error:', err.message);
     } finally {
       setRevokeId(null);
     }
