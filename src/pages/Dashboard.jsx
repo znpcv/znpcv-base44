@@ -22,9 +22,9 @@ const BestTradingTimes = lazy(() => import('@/components/advanced/BestTradingTim
 const SwipeNavigation = lazy(() => import('@/components/mobile/SwipeNavigation'));
 const BottomNav = lazy(() => import('@/components/mobile/BottomNav'));
 const NoTradeStats = lazy(() => import('@/components/dashboard/NoTradeStats'));
+import PremiumPageWrapper from '@/components/PremiumPageWrapper';
 
-
-export default function DashboardPage() {
+function DashboardPageInner() {
   const navigate = useNavigate();
   const { t, language, isRTL, darkMode } = useLanguage();
   const { isOnline, updatePendingCount } = useOffline();
@@ -984,4 +984,8 @@ export default function DashboardPage() {
     </SwipeNavigation>
     </Suspense>
   );
+}
+
+export default function DashboardPage() {
+  return <PremiumPageWrapper><DashboardPageInner /></PremiumPageWrapper>;
 }

@@ -19,8 +19,9 @@ import TradeFilters from '@/components/advanced/TradeFilters';
 import AdvancedTradeFilters from '@/components/advanced/AdvancedTradeFilters';
 import BulkDeletePanel from '@/components/advanced/BulkDeletePanel';
 import TradeCompareModal from '@/components/advanced/TradeCompareModal';
+import PremiumPageWrapper from '@/components/PremiumPageWrapper';
 
-export default function TradeHistoryPage() {
+function TradeHistoryPageInner() {
   const navigate = useNavigate();
   const { t, isRTL, darkMode } = useLanguage();
   const { isOnline, updatePendingCount } = useOffline();
@@ -816,4 +817,8 @@ export default function TradeHistoryPage() {
 
     </div>);
 
+}
+
+export default function TradeHistoryPage() {
+  return <PremiumPageWrapper><TradeHistoryPageInner /></PremiumPageWrapper>;
 }

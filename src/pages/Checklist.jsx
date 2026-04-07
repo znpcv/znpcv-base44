@@ -21,10 +21,11 @@ import SectionProgressBar from '@/components/checklist/SectionProgressBar';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
 import NoTradeSkills from '@/components/checklist/NoTradeSkills';
+import PremiumPageWrapper from '@/components/PremiumPageWrapper';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
-export default function ChecklistPage() {
+function ChecklistPageInner() {
   const navigate = useNavigate();
   const { t, isRTL, darkMode } = useLanguage();
   const [searchParams] = useSearchParams();
@@ -1440,6 +1441,10 @@ function SummaryRow({ label, value, color }) {
       <span className={cn("font-bold text-xs sm:text-sm", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
     </div>);
 
+}
+
+export default function ChecklistPage() {
+  return <PremiumPageWrapper><ChecklistPageInner /></PremiumPageWrapper>;
 }
 
 function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete, darkMode, variant }) {
