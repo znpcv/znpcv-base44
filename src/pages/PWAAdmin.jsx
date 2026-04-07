@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, TrendingUp, Smartphone, Bell, UserCheck, UserX, RefreshCw } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Smartphone, Bell, UserCheck, UserX, RefreshCw, CreditCard } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
@@ -114,7 +114,19 @@ function PWAAdminContent() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {stats ? (
+        {/* Entitlement Admin Link */}
+      <button
+        onClick={() => navigate(createPageUrl('EntitlementAdmin'))}
+        className={cn('w-full flex items-center gap-3 p-4 rounded-xl border-2 text-left transition-all hover:border-emerald-600/50', theme.bgCard, theme.border)}
+      >
+        <CreditCard className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+        <div>
+          <div className={`text-sm font-bold tracking-widest ${theme.text}`}>ENTITLEMENT & BILLING</div>
+          <div className={`text-xs font-sans ${theme.textMuted}`}>Lizenzen verwalten · Zahlungen · Audit Log</div>
+        </div>
+      </button>
+
+      {stats ? (
           <>
             {/* KPI Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

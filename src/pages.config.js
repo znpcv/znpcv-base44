@@ -63,6 +63,9 @@ import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
 import PWAAdmin from './pages/PWAAdmin';
+import Upgrade from './pages/Upgrade';
+import PaymentSuccess from './pages/PaymentSuccess';
+import EntitlementAdmin from './pages/EntitlementAdmin';
 import __Layout from './Layout.jsx';
 
 
@@ -83,6 +86,9 @@ export const PAGES = {
     "TradeHistory": TradeHistory,
     "Trash": Trash,
     "PWAAdmin": PWAAdmin,
+    "Upgrade": Upgrade,
+    "PaymentSuccess": PaymentSuccess,
+    "EntitlementAdmin": EntitlementAdmin,
 }
 
 export const pagesConfig = {
