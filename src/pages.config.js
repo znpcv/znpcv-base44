@@ -48,6 +48,8 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AGB from './pages/AGB';
+import Landing from './pages/Landing';
+import Access from './pages/Access';
 import Account from './pages/Account';
 import Charts from './pages/Charts';
 import Checklist from './pages/Checklist';
@@ -71,6 +73,8 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "AGB": AGB,
+    "Landing": Landing,
+    "Access": Access,
     "Account": Account,
     "Charts": Charts,
     "Checklist": Checklist,
@@ -92,7 +96,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Checklist",
+    mainPage: "Landing",
     Pages: PAGES,
     Layout: __Layout,
 };
