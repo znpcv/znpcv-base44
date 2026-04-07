@@ -1,0 +1,115 @@
+{
+  "name": "BillingEvent",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID at time of payment"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "checkout_created",
+        "payment_succeeded",
+        "payment_failed",
+        "payment_cancelled",
+        "refunded",
+        "dispute_opened",
+        "manual_grant",
+        "manual_revoke"
+      ],
+      "description": "Type of billing event"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount in smallest currency unit (cents)"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code e.g. eur"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "stripe",
+        "manual"
+      ],
+      "default": "stripe"
+    },
+    "provider_session_id": {
+      "type": "string",
+      "description": "Stripe checkout session ID"
+    },
+    "provider_payment_intent": {
+      "type": "string",
+      "description": "Stripe payment intent ID"
+    },
+    "provider_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "succeeded",
+        "failed",
+        "cancelled",
+        "refunded"
+      ],
+      "default": "pending"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When payment was server-side verified"
+    },
+    "entitlement_id": {
+      "type": "string",
+      "description": "Linked UserEntitlement ID after activation"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Prevents duplicate processing of same event"
+    }
+  },
+  "required": [
+    "user_email",
+    "event_type",
+    "provider",
+    "payment_status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

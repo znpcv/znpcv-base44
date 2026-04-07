@@ -1,0 +1,84 @@
+{
+  "name": "AccessAuditLog",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Affected user email"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "entitlement_granted",
+        "entitlement_revoked",
+        "entitlement_suspended",
+        "payment_confirmed",
+        "payment_failed",
+        "manual_grant",
+        "manual_revoke",
+        "access_denied_no_entitlement",
+        "access_denied_revoked",
+        "checkout_initiated",
+        "refund_processed"
+      ],
+      "description": "What happened"
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": [
+        "system",
+        "admin",
+        "stripe_webhook",
+        "user"
+      ],
+      "description": "Who performed the action"
+    },
+    "actor_id": {
+      "type": "string",
+      "description": "ID or email of actor"
+    },
+    "entitlement_id": {
+      "type": "string",
+      "description": "Related entitlement ID"
+    },
+    "billing_event_id": {
+      "type": "string",
+      "description": "Related billing event ID"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Human-readable reason"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional structured context"
+    }
+  },
+  "required": [
+    "user_email",
+    "action",
+    "actor_type"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "name": "UserEntitlement",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the entitled user"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID"
+    },
+    "entitlement_key": {
+      "type": "string",
+      "enum": [
+        "full_app_access"
+      ],
+      "description": "Which entitlement this record grants"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "revoked",
+        "suspended",
+        "refunded",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Current status of entitlement"
+    },
+    "granted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When entitlement was activated"
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When entitlement was revoked"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "stripe_payment",
+        "manual_admin",
+        "migration"
+      ],
+      "description": "How this entitlement was granted"
+    },
+    "source_reference": {
+      "type": "string",
+      "description": "Stripe session ID, payment intent, or admin reference"
+    },
+    "billing_event_id": {
+      "type": "string",
+      "description": "Reference to BillingEvent record"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes (admin only)"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Who created this record"
+    },
+    "updated_by": {
+      "type": "string",
+      "description": "Who last updated this record"
+    }
+  },
+  "required": [
+    "user_email",
+    "entitlement_key",
+    "status",
+    "source"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "user_email": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
