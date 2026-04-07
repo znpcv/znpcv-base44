@@ -5,8 +5,9 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
 import { cn } from '@/lib/utils';
+import AdminGuard from '@/components/AdminGuard';
 
-export default function PWAAdminPage() {
+function PWAAdminContent() {
   const navigate = useNavigate();
   const { darkMode } = useLanguage();
   const [user, setUser] = useState(null);
@@ -210,5 +211,13 @@ export default function PWAAdminPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function PWAAdminPage() {
+  return (
+    <AdminGuard>
+      <PWAAdminContent />
+    </AdminGuard>
   );
 }

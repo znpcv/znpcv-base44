@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Calculator, DollarSign, Target, Zap, TrendingUp, AlertTriangle, Check, Layers } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { LIMITS, PRICE_RANGE, RISK_RANGE, LEVERAGE_RANGE, ACCOUNT_RANGE } from '@/lib/inputValidation';
 
 export default function AdvancedLotCalculator({ pair, direction, onDataChange, initialData = {}, darkMode }) {
   const [accountSize, setAccountSize] = useState(initialData?.account_size || '');
@@ -114,7 +115,13 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
           ))}
         </div>
         <Input type="number" placeholder="Custom (USD)" value={customAccount}
-          onChange={(e) => { setCustomAccount(e.target.value); if (e.target.value) setAccountSize(e.target.value); }}
+          min={ACCOUNT_RANGE.MIN} max={ACCOUNT_RANGE.MAX}
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v.length > LIMITS.ACCOUNT) return;
+            setCustomAccount(v);
+            if (v) setAccountSize(v);
+          }}
           className={`${theme.input} text-xs sm:text-sm text-center mb-1.5 sm:mb-2 h-8 sm:h-9 md:h-10`} />
         {accountSize && (
           <div className="text-center p-1.5 sm:p-2 bg-emerald-700/10 border border-emerald-600/20 rounded-md sm:rounded-lg">
@@ -139,7 +146,13 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
           ))}
         </div>
         <Input type="number" placeholder="Custom" value={customLeverage}
-          onChange={(e) => { setCustomLeverage(e.target.value); if (e.target.value) setLeverage(e.target.value); }}
+          min={LEVERAGE_RANGE.MIN} max={LEVERAGE_RANGE.MAX}
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v.length > LIMITS.LEVERAGE) return;
+            setCustomLeverage(v);
+            if (v) setLeverage(v);
+          }}
           className={`${theme.input} text-xs sm:text-sm text-center h-8 sm:h-9 md:h-10`} />
       </div>
 
@@ -161,7 +174,13 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
           ))}
         </div>
         <Input type="number" step="0.1" placeholder="Custom" value={customRisk}
-          onChange={(e) => { setCustomRisk(e.target.value); if (e.target.value) setRiskPercent(e.target.value); }}
+          min={RISK_RANGE.MIN} max={RISK_RANGE.MAX}
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v.length > LIMITS.PERCENT) return;
+            setCustomRisk(v);
+            if (v) setRiskPercent(v);
+          }}
           className={`${theme.input} text-xs sm:text-sm text-center mb-1.5 sm:mb-2 h-8 sm:h-9 md:h-10`} />
         <div className="p-1.5 sm:p-2 rounded-md sm:rounded-lg text-[10px] sm:text-xs flex items-center gap-1.5 sm:gap-2 bg-emerald-700/10 text-emerald-500 border border-emerald-600/20">
           <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -178,18 +197,24 @@ export default function AdvancedLotCalculator({ pair, direction, onDataChange, i
         <div className="space-y-1.5 sm:space-y-2">
           <div>
             <label className={`text-[9px] sm:text-[10px] ${theme.textMuted} mb-1 block`}>ENTRY</label>
-            <Input type="number" step="0.00001" value={entryPrice} onChange={(e) => setEntryPrice(e.target.value)}
+            <Input type="number" step="0.00001" value={entryPrice}
+              min={PRICE_RANGE.MIN} max={PRICE_RANGE.MAX}
+              onChange={(e) => { if (e.target.value.length <= LIMITS.PRICE) setEntryPrice(e.target.value); }}
               placeholder="0.00000" className={`${theme.input} text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10`} />
           </div>
           <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
             <div>
               <label className="text-[9px] sm:text-[10px] text-rose-600 mb-1 block">SL</label>
-              <Input type="number" step="0.00001" value={stopLoss} onChange={(e) => setStopLoss(e.target.value)}
+              <Input type="number" step="0.00001" value={stopLoss}
+                min={PRICE_RANGE.MIN} max={PRICE_RANGE.MAX}
+                onChange={(e) => { if (e.target.value.length <= LIMITS.PRICE) setStopLoss(e.target.value); }}
                 placeholder="0.00000" className="bg-rose-600/10 border-rose-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
             </div>
             <div>
               <label className="text-[9px] sm:text-[10px] text-emerald-600 mb-1 block">TP</label>
-              <Input type="number" step="0.00001" value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)}
+              <Input type="number" step="0.00001" value={takeProfit}
+                min={PRICE_RANGE.MIN} max={PRICE_RANGE.MAX}
+                onChange={(e) => { if (e.target.value.length <= LIMITS.PRICE) setTakeProfit(e.target.value); }}
                 placeholder="0.00000" className="bg-emerald-700/10 border-emerald-600/30 text-center text-xs sm:text-sm h-8 sm:h-9 md:h-10" />
             </div>
           </div>

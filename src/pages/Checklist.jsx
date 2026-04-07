@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2, Check, ChevronRight, ChevronLeft, Home, ArrowUp, AlertTriangle, XOctagon, Calculator, TrendingUp, TrendingDown, Shield, Target, DollarSign, Percent, Info, Layers, Upload, Image as ImageIcon, X as XIcon } from 'lucide-react';
+import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
+import { sanitizeFormData, validateText, LIMITS } from '@/lib/inputValidation';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -33,6 +35,8 @@ export default function ChecklistPage() {
   const [isLoading, setIsLoading] = useState(!!checklistId);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [saveError, setSaveError] = useState(null);
 
   const [uploading, setUploading] = useState(false);
 
@@ -127,7 +131,12 @@ export default function ChecklistPage() {
     }
   };
 
-  const update = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
+  const update = (key, value) => {
+    // Enforce field-level length limits on free-text fields
+    if (key === 'pair' && typeof value === 'string' && value.length > LIMITS.PAIR) return;
+    if (key === 'notes' && typeof value === 'string' && value.length > LIMITS.NOTES) return;
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   // Calculate scores - FINAL CORRECTED (MOVED BEFORE EFFECTS)
@@ -160,20 +169,25 @@ export default function ChecklistPage() {
 
     const timer = setTimeout(async () => {
       try {
+        const sanitized = sanitizeFormData(formData);
         const data = {
-          ...formData,
-          trade_date: formData.trade_date || format(new Date(), 'yyyy-MM-dd'),
+          ...sanitized,
+          trade_date: sanitized.trade_date || format(new Date(), 'yyyy-MM-dd'),
           completion_percentage: progress,
           status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
         };
         await base44.entities.TradeChecklist.update(checklistId, data);
-        
-        // Force reload across all pages
+        setSaveError(null);
         if (window.queryClient) {
           window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
         }
       } catch (error) {
-        console.error('Auto-save failed:', error);
+        // RLS block or ownership error — stop silently, show clear message
+        if (error?.status === 403 || error?.status === 401) {
+          setSaveError('Keine Berechtigung. Diese Analyse gehört nicht deinem Account.');
+        } else {
+          setSaveError('Automatisches Speichern fehlgeschlagen. Bitte manuell speichern.');
+        }
       }
     }, 2000);
 
@@ -296,30 +310,36 @@ export default function ChecklistPage() {
 
     try {
       setSaving(true);
+      setSaveError(null);
+      const sanitized = sanitizeFormData(formData);
       const data = {
-        ...formData,
-        trade_date: formData.trade_date || format(new Date(), 'yyyy-MM-dd'),
+        ...sanitized,
+        trade_date: sanitized.trade_date || format(new Date(), 'yyyy-MM-dd'),
         completion_percentage: progress,
         status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
       };
 
-      if (checklistId) await base44.entities.TradeChecklist.update(checklistId, data);else
-      await base44.entities.TradeChecklist.create(data);
+      if (checklistId) await base44.entities.TradeChecklist.update(checklistId, data);
+      else await base44.entities.TradeChecklist.create(data);
 
-      // Force reload across all pages
       if (window.queryClient) {
         window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
       }
 
       navigate(createPageUrl('Dashboard'));
     } catch (error) {
-      console.error('Save failed:', error);
+      if (error?.status === 403 || error?.status === 401) {
+        setSaveError('Keine Berechtigung. Diese Analyse gehört nicht deinem Account.');
+      } else {
+        setSaveError('Speichern fehlgeschlagen. Bitte erneut versuchen.');
+      }
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async () => {
+    setShowDeleteModal(false);
     try {
       if (checklistId) {
         await base44.entities.TradeChecklist.update(checklistId, {
@@ -327,9 +347,16 @@ export default function ChecklistPage() {
           deleted_date: new Date().toISOString()
         });
       }
+      if (window.queryClient) {
+        window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      }
       navigate(createPageUrl('Dashboard'));
     } catch (error) {
-      console.error('Delete failed:', error);
+      if (error?.status === 403 || error?.status === 401) {
+        setSaveError('Keine Berechtigung. Diese Analyse kann nicht gelöscht werden.');
+      } else {
+        setSaveError('Löschen fehlgeschlagen. Bitte erneut versuchen.');
+      }
     }
   };
 
@@ -405,6 +432,13 @@ export default function ChecklistPage() {
           </div>
         </div>
         
+        {/* Save Error Banner */}
+        {saveError && (
+          <div className="bg-rose-600 text-white text-xs font-bold tracking-wider text-center py-2 px-4 font-sans">
+            {saveError}
+          </div>
+        )}
+
         {/* Progress Bar */}
         <div className={theme.progressBg}>
           <motion.div className={cn("h-1", gradeInfo.color)} initial={{ width: 0 }} animate={{ width: `${Math.min(progress, 100)}%` }} transition={{ duration: 0.5 }} />
@@ -1151,8 +1185,19 @@ export default function ChecklistPage() {
               {/* 7. NOTES - Optional */}
               <div className={`border ${theme.borderCard} rounded-lg p-2 sm:p-2.5 ${theme.bgSecondary}`}>
                 <label className={`block ${theme.textMuted} tracking-widest text-[10px] sm:text-xs mb-1.5`}>{t('notesOptional')}</label>
-                <Textarea value={formData.notes} onChange={(e) => update('notes', e.target.value)} placeholder={t('notesPlaceholderLong')}
-                  className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400'} min-h-[100px] rounded-lg font-sans text-xs`} />
+                <Textarea
+                  value={formData.notes}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw.length <= LIMITS.NOTES) update('notes', raw);
+                  }}
+                  placeholder={t('notesPlaceholderLong')}
+                  maxLength={LIMITS.NOTES}
+                  className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400'} min-h-[100px] rounded-lg font-sans text-xs`}
+                />
+                <div className={`text-right text-[10px] font-sans mt-1 ${(formData.notes?.length || 0) >= LIMITS.NOTES * 0.9 ? 'text-amber-500' : darkMode ? 'text-zinc-700' : 'text-zinc-400'}`}>
+                  {formData.notes?.length || 0}/{LIMITS.NOTES}
+                </div>
               </div>
 
               <TradingQuote variant="minimal" />
@@ -1194,7 +1239,7 @@ export default function ChecklistPage() {
 
           <div className="flex-1 flex gap-1.5 sm:gap-2">
               {checklistId &&
-            <Button onClick={handleDelete} variant="outline"
+            <Button onClick={() => setShowDeleteModal(true)} variant="outline"
             className={`rounded-lg sm:rounded-xl px-2.5 sm:px-3 md:px-4 h-10 sm:h-11 md:h-12 border-2 ${
             darkMode ?
             'border-rose-600 text-rose-400 hover:bg-rose-600/10' :
@@ -1216,6 +1261,14 @@ export default function ChecklistPage() {
           }
         </div>
       </main>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmDeleteModal
+        open={showDeleteModal}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteModal(false)}
+        darkMode={darkMode}
+      />
 
       {/* Warning Modal */}
       <AnimatePresence>
