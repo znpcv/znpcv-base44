@@ -11,7 +11,6 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
-import AdminExportBlock from '@/components/AdminExportBlock';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
@@ -520,9 +519,6 @@ export default function HomePage() {
           </motion.button>
         )}
       </AnimatePresence>
-
-      {/* Admin Export Block */}
-      <AdminExportBlock darkMode={darkMode} />
 
       {/* Notification Prompt */}
       <NotificationPrompt darkMode={darkMode} />
