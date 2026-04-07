@@ -2,26 +2,39 @@ import React from 'react';
 
 const UserNotRegisteredError = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-slate-50">
-      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-lg border border-slate-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
+      <div className="max-w-md w-full p-8 bg-zinc-950 rounded-2xl border-2 border-zinc-800 mx-4">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-orange-100">
-            <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <div className="inline-flex items-center justify-center w-14 h-14 mb-6 rounded-xl bg-zinc-900 border border-zinc-700">
+            <svg className="w-7 h-7 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Access Restricted</h1>
-          <p className="text-slate-600 mb-8">
-            You are not registered to use this application. Please contact the app administrator to request access.
+          <div className="text-xs tracking-widest text-zinc-500 mb-3">ZUGRIFF NICHT MÖGLICH</div>
+          <h1 className="text-2xl font-light text-white tracking-wider mb-4">Kein Zugriff</h1>
+          <p className="text-zinc-400 text-sm font-sans leading-relaxed mb-8">
+            Dein Konto ist für diese Anwendung nicht registriert. Bitte kontaktiere den Administrator für Zugang.
           </p>
-          <div className="p-4 bg-slate-50 rounded-md text-sm text-slate-600">
-            <p>If you believe this is an error, you can:</p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Verify you are logged in with the correct account</li>
-              <li>Contact the app administrator for access</li>
-              <li>Try logging out and back in again</li>
+          <div className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 text-left">
+            <p className="text-xs text-zinc-500 font-sans mb-2">Mögliche Ursachen:</p>
+            <ul className="space-y-1.5">
+              <li className="text-xs text-zinc-400 font-sans flex items-start gap-2">
+                <span className="text-zinc-600 mt-0.5">—</span>
+                <span>Du bist mit einer anderen E-Mail-Adresse angemeldet</span>
+              </li>
+              <li className="text-xs text-zinc-400 font-sans flex items-start gap-2">
+                <span className="text-zinc-600 mt-0.5">—</span>
+                <span>Der Zugang wurde noch nicht freigeschaltet</span>
+              </li>
+              <li className="text-xs text-zinc-400 font-sans flex items-start gap-2">
+                <span className="text-zinc-600 mt-0.5">—</span>
+                <span>Einmalig aus- und wieder einloggen kann helfen</span>
+              </li>
             </ul>
           </div>
+          <p className="text-xs text-zinc-600 font-sans mt-6">
+            Fragen? <a href="mailto:support@znpcv.com" className="text-zinc-400 underline">support@znpcv.com</a>
+          </p>
         </div>
       </div>
     </div>

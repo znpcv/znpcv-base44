@@ -60,7 +60,7 @@ export default function AdminExportBlock({ darkMode }) {
           }`}
         >
           <Download className="w-3 h-3" />
-          {downloading ? '...' : 'Export-Datei herunterladen'}
+          {downloading ? 'Wird exportiert…' : 'Exportieren'}
         </button>
       </div>
     </div>

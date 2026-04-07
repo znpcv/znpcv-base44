@@ -12,12 +12,12 @@ import { useEntitlement } from '@/hooks/useEntitlement';
 import { cn } from '@/lib/utils';
 
 const FEATURES = [
-  { icon: ClipboardCheck, text: 'Multi-Timeframe Analyse (W-D-4H)' },
-  { icon: BarChart3, text: 'Trading Dashboard & Performance Tracking' },
-  { icon: History, text: 'Trade Journal & History' },
-  { icon: Shield, text: 'Lot Size & Risiko Kalkulator' },
-  { icon: Zap, text: 'No-Trade Skill & Scoring System' },
-  { icon: Star, text: 'Alle zukünftigen Updates inklusive' },
+  { icon: ClipboardCheck, text: 'Multi-Timeframe Analyse — W, D, 4H' },
+  { icon: BarChart3, text: 'Trading Dashboard und Performance-Tracking' },
+  { icon: History, text: 'Trade Journal mit vollständiger Historie' },
+  { icon: Shield, text: 'Positionsrechner und Risiko-Management' },
+  { icon: Zap, text: 'No-Trade Skill und strukturiertes Scoring' },
+  { icon: Star, text: 'Alle künftigen Updates ohne Aufpreis' },
 ];
 
 export default function UpgradePage() {
@@ -44,7 +44,7 @@ export default function UpgradePage() {
 
   const handleCheckout = async () => {
     if (isInIframe) {
-      alert('Checkout ist nur in der veröffentlichten App verfügbar. Bitte öffne die App in einem neuen Tab.');
+      alert('Der Kauf ist nur in der veröffentlichten App verfügbar. Bitte öffne ZNPCV direkt im Browser.');
       return;
     }
 
@@ -136,10 +136,10 @@ export default function UpgradePage() {
           </div>
           <h1 className={`text-3xl sm:text-4xl md:text-5xl tracking-wider mb-3 ${theme.text}`}>ZNPCV</h1>
           <p className={`text-base sm:text-lg font-sans ${theme.textSecondary} mb-2`}>
-            Die ultimative Trading-Checkliste — einmalig freischalten.
+            Das professionelle Analyse-System für strukturierte Handelsentscheidungen.
           </p>
           <p className={`text-sm font-sans ${theme.textMuted}`}>
-            Kein Abo. Kein Ablaufdatum. Einmal zahlen — für immer nutzen.
+            Einmalige Zahlung. Kein Abo. Dauerhafter Vollzugriff.
           </p>
         </div>
 
@@ -184,7 +184,7 @@ export default function UpgradePage() {
 
             {isInIframe && (
               <div className={cn('mb-4 px-4 py-2 rounded-lg text-xs font-sans text-center border', darkMode ? 'bg-zinc-100 border-zinc-300 text-zinc-600' : 'bg-zinc-800 border-zinc-700 text-zinc-400')}>
-                ⚠️ Checkout ist nur in der veröffentlichten App verfügbar.
+                Der Kauf ist nur in der veröffentlichten App verfügbar.
               </div>
             )}
 
@@ -202,7 +202,7 @@ export default function UpgradePage() {
               ) : (
                 <>
                   <Zap className="w-4 h-4" />
-                  {user ? 'JETZT FREISCHALTEN — 99 €' : 'ANMELDEN & KAUFEN'}
+                  {user ? 'FREISCHALTEN — 99 €' : 'ANMELDEN & FORTFAHREN'}
                 </>
               )}
             </button>
@@ -216,7 +216,7 @@ export default function UpgradePage() {
         {/* Trust signals */}
         <div className={cn('grid grid-cols-3 gap-3 text-center', theme.textMuted)}>
           {[
-            { icon: Shield, label: 'SSL Sicher' },
+            { icon: Shield, label: 'SSL gesichert' },
             { icon: Lock, label: 'Kein Abo' },
             { icon: Star, label: 'Dauerhaft' },
           ].map(({ icon: Icon, label }) => (
@@ -229,12 +229,12 @@ export default function UpgradePage() {
 
         {/* FAQ */}
         <div className={cn('mt-8 p-6 rounded-xl border', theme.border, theme.bgCard)}>
-          <h3 className={`text-sm tracking-widest mb-4 ${theme.text}`}>HÄUFIGE FRAGEN</h3>
+          <h3 className={`text-sm tracking-widest mb-4 ${theme.text}`}>FRAGEN ZUM KAUF</h3>
           <div className="space-y-4">
             {[
-              { q: 'Gibt es ein Abo?', a: 'Nein. Du zahlst einmalig 99 € und hast dauerhaften Zugriff — auch auf alle zukünftigen Updates.' },
-              { q: 'Welche Zahlungsmethoden?', a: 'Kreditkarte, SEPA-Lastschrift, Apple Pay, Google Pay und mehr — alles über Stripe.' },
-              { q: 'Was, wenn ich Probleme habe?', a: 'Schreib uns unter support@znpcv.com — wir helfen dir innerhalb von 24h.' },
+              { q: 'Ist das ein Abonnement?', a: 'Nein. Eine einmalige Zahlung von 99 € gibt dir dauerhaften Zugriff, inklusive aller künftigen Updates.' },
+              { q: 'Welche Zahlungsmethoden werden akzeptiert?', a: 'Kreditkarte, SEPA-Lastschrift, Apple Pay, Google Pay — die Abwicklung erfolgt sicher über Stripe.' },
+              { q: 'An wen wende ich mich bei Problemen?', a: 'Schreib direkt an support@znpcv.com — Rückmeldung innerhalb von 24 Stunden.' },
             ].map(({ q, a }) => (
               <div key={q}>
                 <div className={`text-xs tracking-wider mb-1 ${theme.text}`}>{q}</div>

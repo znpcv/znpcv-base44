@@ -62,8 +62,8 @@ export default function PaymentSuccessPage() {
         {status === 'verifying' && (
           <>
             <Loader2 className={`w-12 h-12 mx-auto mb-4 animate-spin ${theme.textMuted}`} />
-            <h1 className={`text-2xl tracking-wider mb-2 ${theme.text}`}>WIRD BESTÄTIGT…</h1>
-            <p className={`text-sm font-sans ${theme.textMuted}`}>Bitte warte einen Moment.</p>
+            <h1 className={`text-2xl tracking-wider mb-2 ${theme.text}`}>WIRD VERIFIZIERT</h1>
+            <p className={`text-sm font-sans ${theme.textMuted}`}>Einen Moment bitte.</p>
           </>
         )}
 
@@ -73,18 +73,18 @@ export default function PaymentSuccessPage() {
               <CheckCircle2 className="w-10 h-10 text-emerald-600" />
             </div>
             <div className={`text-xs tracking-widest mb-2 ${theme.textMuted}`}>ZAHLUNG ERFOLGREICH</div>
-            <h1 className={`text-3xl sm:text-4xl tracking-wider mb-3 ${theme.text}`}>WILLKOMMEN!</h1>
+            <h1 className={`text-3xl sm:text-4xl tracking-wider mb-3 ${theme.text}`}>ZUGRIFF AKTIV</h1>
             <p className={`text-sm font-sans mb-2 ${theme.textSecondary}`}>
-              Dein ZNPCV Full Access ist jetzt aktiv.
+              Dein ZNPCV Full Access wurde aktiviert.
             </p>
             <p className={`text-xs font-sans mb-8 ${theme.textMuted}`}>
-              Du hast dauerhaften Zugriff auf alle Features — kein Abo, kein Ablaufdatum.
+              Kein Abo, kein Ablaufdatum — dauerhafter Vollzugriff auf alle Funktionen.
             </p>
             <button
               onClick={() => navigate(createPageUrl('Home'))}
               className="flex items-center gap-2 px-8 py-4 bg-white text-black rounded-xl font-bold tracking-widest text-sm hover:bg-zinc-100 transition-all mx-auto group"
             >
-              APP STARTEN
+              WEITER ZU ZNPCV
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <p className={`text-xs font-sans mt-4 ${theme.textMuted}`}>
@@ -96,13 +96,13 @@ export default function PaymentSuccessPage() {
         {status === 'error' && (
           <>
             <div className={`text-xs tracking-widest mb-2 text-red-500`}>FEHLER</div>
-            <h1 className={`text-2xl tracking-wider mb-3 ${theme.text}`}>BESTÄTIGUNG FEHLGESCHLAGEN</h1>
+            <h1 className={`text-2xl tracking-wider mb-3 ${theme.text}`}>VERIFIZIERUNG FEHLGESCHLAGEN</h1>
             <p className={`text-sm font-sans mb-6 ${theme.textSecondary}`}>{error}</p>
             <button
               onClick={() => navigate(createPageUrl('Home'))}
               className={`px-6 py-3 rounded-xl border-2 font-bold tracking-widest text-sm transition-all ${theme.border} ${theme.text}`}
             >
-              ZUR STARTSEITE
+              ZUR ÜBERSICHT
             </button>
           </>
         )}

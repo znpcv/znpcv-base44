@@ -145,7 +145,7 @@ export default function AGBPage() {
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
             <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              {t('termsTitle')}
+              Nutzungsbedingungen
             </button>
           </div>
         </div>

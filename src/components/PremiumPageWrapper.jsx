@@ -1,23 +1,9 @@
-/**
- * PremiumPageWrapper — Full-page entitlement guard.
- * Wraps an entire page: shows spinner while checking,
- * redirects to /Upgrade if not entitled.
- *
- * Security boundary note:
- * This is a CLIENT-SIDE guard. It protects the UI and prevents
- * casual access. Real enforcement is server-side via:
- *   - checkEntitlement backend function (cryptographic, DB-backed)
- *   - Entity RLS (TradeChecklist, NoTradeLog) enforced by Base44 platform
- * A determined user who manipulates localStorage cannot bypass the
- * backend function or RLS rules — only the UI would be visible,
- * all API calls would still be rejected by the server.
- */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEntitlement } from '@/hooks/useEntitlement';
 import { useLanguage } from '@/components/LanguageContext';
 import { createPageUrl } from '@/utils';
-import { Lock, Zap, ArrowRight } from 'lucide-react';
+import { Lock, ArrowRight } from 'lucide-react';
 
 export default function PremiumPageWrapper({ children }) {
   const { loading, entitled, isAdmin } = useEntitlement();
@@ -36,25 +22,23 @@ export default function PremiumPageWrapper({ children }) {
     return <>{children}</>;
   }
 
-  // Not entitled — full-page upgrade wall
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center p-6 ${darkMode ? 'bg-black text-white' : 'bg-white text-zinc-900'}`}>
-      <div className={`max-w-sm w-full text-center p-8 rounded-3xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-50 border-zinc-200'}`}>
-        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
-          <Lock className={`w-8 h-8 ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`} />
+      <div className={`max-w-sm w-full text-center p-8 rounded-2xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-50 border-zinc-200'}`}>
+        <div className={`w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 ${darkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+          <Lock className={`w-7 h-7 ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`} />
         </div>
-        <div className={`text-xs tracking-widest mb-2 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>PREMIUM ACCESS</div>
-        <h2 className="text-2xl tracking-wider mb-3">ZNPCV Full Access</h2>
+        <div className={`text-xs tracking-widest mb-2 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>ZNPCV FULL ACCESS</div>
+        <h2 className="text-xl tracking-wider mb-3">Zugriff gesperrt</h2>
         <p className={`text-sm font-sans mb-7 leading-relaxed ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-          Diese Funktion erfordert ZNPCV Full Access.<br />
-          Einmalige Zahlung — dauerhafter Zugriff.
+          Dieser Bereich erfordert ZNPCV Full Access.<br />
+          Einmalige Zahlung — kein Ablaufdatum.
         </p>
         <button
           onClick={() => navigate(createPageUrl('Upgrade'))}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-black rounded-xl font-bold tracking-widest text-sm hover:bg-zinc-100 transition-all group mb-3"
+          className={`w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold tracking-widest text-sm transition-all group mb-3 ${darkMode ? 'bg-white text-black hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
         >
-          <Zap className="w-4 h-4" />
-          JETZT UPGRADEN
+          FREISCHALTEN
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
         <button
