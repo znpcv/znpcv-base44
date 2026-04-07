@@ -1,69 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import {
-  ArrowRight, BarChart3, ClipboardCheck, Shield, Target,
-  ArrowUp, CheckCircle2, Activity, History, LineChart,
-  HelpCircle, Lock, ShieldCheck, Globe, ChevronRight,
-  TrendingUp, Filter, BookOpen, BarChart2, Layers
+import { 
+  ArrowRight, BarChart3, ClipboardCheck, TrendingUp, Shield, Target,
+  Lock, ShieldCheck, Globe, Zap, ArrowUp, ChevronRight, CheckCircle2,
+  Activity, Award, HelpCircle, Calendar, History, LineChart
 } from 'lucide-react';
 import { createPageUrl } from "@/utils";
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import AccountButton from '@/components/AccountButton';
+import DailyQuoteWidget from '@/components/DailyQuoteWidget';
+import NotificationPrompt from '@/components/NotificationPrompt';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
-const MODULES = [
-  {
-    icon: Layers,
-    title: 'Multi-Timeframe Analyse',
-    desc: 'Wöchentlich, täglich, 4H und Entry-Ebene. Jede Zeiteinheit hat ihren definierten Beitrag zum Gesamtscore.',
-  },
-  {
-    icon: Filter,
-    title: 'Konfluenz & Score',
-    desc: 'Nur wenn alle relevanten Ebenen übereinstimmen, wird ein Trade freigegeben. Kein Score unter 85% — kein Trade.',
-  },
-  {
-    icon: Shield,
-    title: 'Risikomanagement',
-    desc: 'Positionsgröße, SL/TP und R:R-Verhältnis werden direkt in der Analyse berechnet.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Trade Journal',
-    desc: 'Jeder Trade wird mit Setup, Ergebnis und Screenshots dokumentiert. Kein Lernen ohne Rückblick.',
-  },
-  {
-    icon: BarChart2,
-    title: 'Performance Review',
-    desc: 'Winrate, Profit Factor, durchschnittliches R:R und Konsistenz über Zeit — messbar und transparent.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'GO / NO-GO Entscheid',
-    desc: 'Das System gibt eine klare Empfehlung. Nicht auf Basis von Bauchgefühl, sondern auf Basis von Regelwerk.',
-  },
-];
-
-const PRINCIPLES = [
-  { label: 'Kein Trade ohne Konfluenz.' },
-  { label: 'Kein Einstieg an Resistance, kein Verkauf an Support.' },
-  { label: 'Jeder Trade folgt einem definierten Regelwerk.' },
-  { label: 'Disziplin wird durch Struktur erzwungen, nicht durch Willenskraft.' },
-  { label: 'Performance entsteht durch Wiederholbarkeit, nicht durch Glück.' },
+const SESSIONS = [
+  { name: 'SYDNEY', timezone: 'Australia/Sydney', emoji: '🇦🇺', openHour: 7, closeHour: 16 },
+  { name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
+  { name: 'LONDON', timezone: 'Europe/London', emoji: '🇬🇧', openHour: 8, closeHour: 17 },
+  { name: 'NEW YORK', timezone: 'America/New_York', emoji: '🇺🇸', openHour: 9, closeHour: 17 },
 ];
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { t, isRTL, darkMode } = useLanguage();
+  const [times, setTimes] = useState({});
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [localTime, setLocalTime] = useState(new Date());
+  const [serverStatus, setServerStatus] = useState('operational');
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showDailyQuote, setShowDailyQuote] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    const updateTimes = () => {
+      const now = new Date();
+      setCurrentTime(now);
+      setLocalTime(now);
+      const newTimes = {};
+      SESSIONS.forEach(session => {
+        newTimes[session.name] = now.toLocaleTimeString('de-DE', {
+          timeZone: session.timezone,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        });
+      });
+      setTimes(newTimes);
+    };
+    updateTimes();
+    const interval = setInterval(updateTimes, 1000);
+
+    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
 
+    // Check if user wants to show daily quote
     const checkUserSettings = async () => {
       try {
         const isAuth = await base44.auth.isAuthenticated();
@@ -71,486 +61,445 @@ export default function HomePage() {
           const userData = await base44.auth.me();
           setShowDailyQuote(userData.show_daily_quote_in_app || false);
         }
-      } catch {}
+      } catch (err) {
+        console.error('Failed to load user settings');
+      }
     };
     checkUserSettings();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  const theme = {
-    bg: darkMode ? 'bg-black' : 'bg-white',
-    bgSub: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
-    bgCard: darkMode ? 'bg-zinc-900' : 'bg-zinc-100',
-    text: darkMode ? 'text-white' : 'text-zinc-900',
-    textSec: darkMode ? 'text-zinc-400' : 'text-zinc-500',
-    textDim: darkMode ? 'text-zinc-600' : 'text-zinc-400',
-    border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
-    borderSub: darkMode ? 'border-zinc-800/60' : 'border-zinc-200',
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const isSessionOpen = (session) => {
+    const now = new Date();
+    const localTime = new Date(now.toLocaleString('en-US', { timeZone: session.timezone }));
+    const hour = localTime.getHours();
+    const day = localTime.getDay();
+    if (day === 0 || day === 6) return false;
+    return hour >= session.openHour && hour < session.closeHour;
   };
 
-  const logoSrc = darkMode
-    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
-    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png";
+  // Theme classes
+  const theme = {
+    bg: darkMode ? 'bg-black' : 'bg-white',
+    bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
+    bgCard: darkMode ? 'bg-zinc-900' : 'bg-zinc-50',
+    text: darkMode ? 'text-white' : 'text-zinc-900',
+    textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
+    textMuted: darkMode ? 'text-zinc-500' : 'text-zinc-500',
+    textDimmed: darkMode ? 'text-zinc-600' : 'text-zinc-400',
+    border: darkMode ? 'border-zinc-800/50' : 'border-zinc-200',
+    borderCard: darkMode ? 'border-zinc-800' : 'border-zinc-300',
+  };
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
+      {/* Header - Ultra Compact */}
+      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-4">
+            <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+              <DarkModeToggle />
+              <div className={`flex items-center gap-0.5 sm:gap-1 md:gap-2 px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 rounded-md sm:rounded-lg md:rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                <span className={`text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
+                  {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                </span>
+              </div>
+              </div>
 
-      {/* ── HEADER ── */}
-      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50 backdrop-blur-sm`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
-          {/* Left */}
-          <div className="flex items-center gap-2">
-            <DarkModeToggle />
-          </div>
+              <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
+              <img 
+                src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                }
+                alt="ZNPCV" 
+                className="h-7 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+              </button>
 
-          {/* Center — Logo */}
-          <button
-            onClick={() => navigate(createPageUrl('Home'))}
-            className="absolute left-1/2 -translate-x-1/2"
-          >
-            <img
-              src={logoSrc}
-              alt="ZNPCV"
-              className="h-8 sm:h-9 md:h-10 w-auto hover:opacity-75 transition-opacity"
-            />
-          </button>
-
-          {/* Right */}
-          <div className="flex items-center gap-2">
-            <LanguageToggle />
-            <AccountButton />
+              <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
+              <LanguageToggle />
+              <AccountButton />
+              </div>
           </div>
         </div>
       </header>
 
-      {/* ── HERO ── */}
-      <section className={`${theme.bg} border-b ${theme.borderSub}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-28 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-            {/* Hero Copy */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs tracking-widest mb-8 font-sans ${darkMode ? 'border-zinc-700 text-zinc-400 bg-zinc-900' : 'border-zinc-300 text-zinc-500 bg-zinc-100'}`}>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block" />
-                TRADING DECISION SYSTEM
-              </div>
-
-              <h1 className={`text-4xl sm:text-5xl md:text-6xl tracking-wider leading-tight mb-6 ${theme.text}`}>
-                Regelbasierte<br />
-                Entscheidungen.<br />
-                <span className={theme.textSec}>Jeder Trade.</span>
-              </h1>
-
-              <p className={`text-base sm:text-lg font-sans leading-relaxed mb-3 max-w-xl ${theme.textSec}`}>
-                ZNPCV ist ein strukturiertes Analyse- und Entscheidungssystem für disziplinierte Trader. Keine Signale, keine Spekulation. Konfluenz, Regelwerk, GO / NO-GO.
-              </p>
-
-              <p className={`text-sm font-sans leading-relaxed mb-10 max-w-xl ${theme.textDim}`}>
-                Multi-Timeframe Analyse · Konfluenz-Score · Risikomanagement · Trade Journal · Performance Review
-              </p>
-
-              {/* Trust Points */}
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mb-10">
-                {[
-                  'Mindestens 85% Konfluenz',
-                  'W · D · 4H · Entry',
-                  'GO / NO-GO Entscheid',
-                  'Integriertes Journaling',
-                ].map(p => (
-                  <div key={p} className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                    <span className={`text-xs font-sans ${theme.textSec}`}>{p}</span>
+      {/* Market Sessions Bar - Compact */}
+      <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
+        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-5">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-x-auto scrollbar-hide">
+            <Globe className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 flex-shrink-0 ${theme.textMuted}`} />
+            {SESSIONS.map((session) => {
+              const isOpen = isSessionOpen(session);
+              return (
+                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
+                  <span className="text-sm sm:text-base md:text-base">{session.emoji}</span>
+                  <div className={`text-xs sm:text-sm md:text-sm lg:text-sm font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
+                    {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
-                ))}
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => navigate(createPageUrl('Checklist'))}
-                  className={cn(
-                    "flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold tracking-widest text-sm transition-all group",
-                    darkMode ? "bg-white text-black hover:bg-zinc-100" : "bg-zinc-900 text-white hover:bg-zinc-800"
-                  )}
-                >
-                  Analyse starten
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button
-                  onClick={() => navigate(createPageUrl('Dashboard'))}
-                  className={cn(
-                    "flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold tracking-widest text-sm transition-all border",
-                    darkMode ? "border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white" : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-zinc-900"
-                  )}
-                >
-                  Dashboard öffnen
-                </button>
-              </div>
-            </motion.div>
-
-            {/* Hero Visual — Product Window */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="hidden lg:block"
-            >
-              <div className={cn(
-                "rounded-2xl border overflow-hidden shadow-2xl",
-                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200"
-              )}>
-                {/* Window chrome */}
-                <div className={cn("flex items-center gap-2 px-4 py-3 border-b", darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-200 bg-zinc-100")}>
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-600" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-600" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-600" />
-                  <span className={`ml-3 text-xs font-sans tracking-wider ${theme.textDim}`}>ZNPCV · Analyse · EUR/USD</span>
+                  <div className={`w-1.5 h-1.5 sm:w-1.5 sm:h-1.5 rounded-full ${isOpen ? 'bg-emerald-700 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
-
-                {/* Mock content */}
-                <div className="p-5 space-y-4">
-                  {/* Pair + direction */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className={`text-xl tracking-wider ${theme.text}`}>EUR/USD</div>
-                      <div className={`text-xs font-sans mt-0.5 ${theme.textDim}`}>LONG · Weekly Bullish</div>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600/20 border border-emerald-600/40 rounded-lg">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-xs text-emerald-500 font-sans font-bold tracking-wider">GO</span>
-                    </div>
-                  </div>
-
-                  {/* Score bars */}
-                  <div className="space-y-2.5">
-                    {[
-                      { label: 'Weekly', score: 55, max: 60 },
-                      { label: 'Daily', score: 50, max: 60 },
-                      { label: '4H', score: 30, max: 35 },
-                      { label: 'Entry', score: 20, max: 25 },
-                    ].map(row => (
-                      <div key={row.label} className="flex items-center gap-3">
-                        <span className={`text-xs font-sans w-12 flex-shrink-0 ${theme.textDim}`}>{row.label}</span>
-                        <div className={cn("flex-1 h-1.5 rounded-full overflow-hidden", darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
-                          <div
-                            className="h-full rounded-full bg-emerald-600"
-                            style={{ width: `${(row.score / row.max) * 100}%` }}
-                          />
-                        </div>
-                        <span className={`text-xs font-mono w-14 text-right flex-shrink-0 ${theme.textSec}`}>
-                          {row.score}/{row.max}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Total score */}
-                  <div className={cn("flex items-center justify-between px-4 py-3 rounded-xl border", darkMode ? "border-zinc-700 bg-zinc-900" : "border-zinc-300 bg-white")}>
-                    <span className={`text-xs tracking-widest ${theme.textDim}`}>GESAMTSCORE</span>
-                    <span className="text-2xl tracking-wider text-emerald-500">89%</span>
-                  </div>
-
-                  {/* Risk row */}
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { label: 'SL', value: '1.0820' },
-                      { label: 'TP', value: '1.1120' },
-                      { label: 'R:R', value: '1 : 3.0' },
-                    ].map(r => (
-                      <div key={r.label} className={cn("px-3 py-2.5 rounded-lg border text-center", darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-200 bg-white")}>
-                        <div className={`text-[10px] tracking-widest mb-1 ${theme.textDim}`}>{r.label}</div>
-                        <div className={`text-sm font-mono ${theme.text}`}>{r.value}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              );
+            })}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* ── HOW IT WORKS ── */}
-      <section className={`${theme.bgSub} border-b ${theme.borderSub}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24">
-          <div className="text-center mb-12 md:mb-16">
-            <div className={`text-xs tracking-widest mb-4 ${theme.textDim}`}>DER PROZESS</div>
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl tracking-wider ${theme.text}`}>
-              Struktur statt Impuls
-            </h2>
+      {/* Hero Section - Compact for Mobile */}
+      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
+        {showDailyQuote && (
+          <div className="mb-6 sm:mb-8 md:mb-10">
+            <DailyQuoteWidget darkMode={darkMode} />
+          </div>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8 sm:mb-10 md:mb-14 lg:mb-16"
+        >
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-emerald-700/10 border border-emerald-600/30 rounded-full text-emerald-600 text-[10px] sm:text-xs mb-2 sm:mb-3 md:mb-5">
+            <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5" />
+            <span className="tracking-widest">{t('tradingTools')}</span>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-6 md:gap-8 relative">
-            {/* Connector line (desktop) */}
-            <div className={cn("hidden sm:block absolute top-8 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px", darkMode ? "bg-zinc-800" : "bg-zinc-200")} />
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider mb-1.5 sm:mb-2 md:mb-3 font-light">
+            ZNPCV
+          </h1>
+          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.textSecondary} mb-2 sm:mb-3 md:mb-5`}>
+            {t('ultimateChecklist')}
+          </h2>
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
+            „{t('disciplineQuote')}"
+          </p>
+          <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</p>
+        </motion.div>
 
-            {[
-              {
-                step: '01',
-                title: 'Markt strukturieren',
-                desc: 'Zeitrahmen analysieren, Trend bestimmen, AOI definieren. Klares Bild vor jedem Schritt.',
-              },
-              {
-                step: '02',
-                title: 'Regelwerk prüfen',
-                desc: 'Konfluenz auf Weekly, Daily, 4H und Entry-Ebene. Jedes Kriterium zählt zum Score.',
-              },
-              {
-                step: '03',
-                title: 'GO oder NO-GO',
-                desc: 'Erst bei mindestens 85% Konfluenz wird ein Trade freigegeben. Darunter: kein Trade.',
-              },
-            ].map((s, i) => (
-              <motion.div
-                key={s.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative text-center"
-              >
-                <div className={cn(
-                  "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-lg tracking-wider border relative z-10",
-                  darkMode ? "bg-zinc-900 border-zinc-800 text-white" : "bg-white border-zinc-200 text-zinc-900"
-                )}>
-                  {s.step}
-                </div>
-                <h3 className={`text-base sm:text-lg tracking-wider mb-2 ${theme.text}`}>{s.title}</h3>
-                <p className={`text-sm font-sans leading-relaxed max-w-xs mx-auto ${theme.textSec}`}>{s.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── MODULES ── */}
-      <section className={`${theme.bg} border-b ${theme.borderSub}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12 md:mb-16">
-            <div>
-              <div className={`text-xs tracking-widest mb-4 ${theme.textDim}`}>KERNMODULE</div>
-              <h2 className={`text-2xl sm:text-3xl md:text-4xl tracking-wider ${theme.text}`}>
-                Ein vollständiges System
-              </h2>
-            </div>
-            <p className={`text-sm font-sans max-w-sm ${theme.textSec}`}>
-              Analyse, Entscheidung, Risiko, Dokumentation und Review — in einer konsistenten Plattform.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-            {MODULES.map((mod, i) => (
-              <motion.div
-                key={mod.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.07 }}
-                className={cn(
-                  "p-6 rounded-2xl border transition-colors group",
-                  darkMode
-                    ? "bg-zinc-950 border-zinc-800 hover:border-zinc-700"
-                    : "bg-zinc-50 border-zinc-200 hover:border-zinc-300"
-                )}
-              >
-                <div className={cn(
-                  "w-10 h-10 rounded-xl flex items-center justify-center mb-5 transition-colors",
-                  darkMode ? "bg-zinc-800 group-hover:bg-zinc-700" : "bg-zinc-200 group-hover:bg-zinc-300"
-                )}>
-                  <mod.icon className={`w-5 h-5 ${theme.text}`} />
-                </div>
-                <h3 className={`text-base tracking-wider mb-2 ${theme.text}`}>{mod.title}</h3>
-                <p className={`text-sm font-sans leading-relaxed ${theme.textSec}`}>{mod.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRINCIPLES ── */}
-      <section className={`${theme.bgSub} border-b ${theme.borderSub}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
-              <div className={`text-xs tracking-widest mb-4 ${theme.textDim}`}>ZNPCV PRINZIPIEN</div>
-              <h2 className={`text-2xl sm:text-3xl md:text-4xl tracking-wider mb-6 ${theme.text}`}>
-                Disziplin ist kein Charakter.<br />
-                <span className={theme.textSec}>Sie ist ein Prozess.</span>
-              </h2>
-              <p className={`text-sm font-sans leading-relaxed max-w-md ${theme.textSec}`}>
-                ZNPCV ist kein Signal-Tool. Kein Indikator-Set. Es ist ein Entscheidungssystem, das impulsives Handeln durch definierte Struktur ersetzt.
-              </p>
-            </div>
-            <div className="space-y-3">
-              {PRINCIPLES.map((p, i) => (
-                <motion.div
-                  key={p.label}
-                  initial={{ opacity: 0, x: 12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  className={cn(
-                    "flex items-center gap-4 px-5 py-4 rounded-xl border",
-                    darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"
-                  )}
-                >
-                  <div className="w-1 h-6 rounded-full bg-emerald-600 flex-shrink-0" />
-                  <span className={`text-sm font-sans ${theme.text}`}>{p.label}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section className={`${theme.bg} border-b ${theme.borderSub}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8">
-            {[
-              { value: '85%+', label: 'Mindest-Konfluenz für einen Trade' },
-              { value: 'W · D · 4H', label: 'Analysierte Zeitrahmen vor Entry' },
-              { value: '7', label: 'Schritte im strukturierten Prozess' },
-              { value: '4', label: 'Erkannte Chart-Muster im System' },
-            ].map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="text-center"
-              >
-                <div className={`text-3xl sm:text-4xl tracking-wider mb-2 ${theme.text}`}>{s.value}</div>
-                <div className={`text-xs font-sans leading-snug ${theme.textDim}`}>{s.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className={`${theme.bgSub} border-b ${theme.borderSub}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+        {/* Main Actions - Compact for Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="grid md:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-6 sm:mb-8 md:mb-12 lg:mb-16"
+        >
+          {/* New Analysis - Compact */}
+          <button
+            onClick={() => navigate(createPageUrl('Checklist'))}
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
+              darkMode ? "bg-white text-black" : "bg-black text-white")}
           >
-            <div className={`text-xs tracking-widest mb-6 ${theme.textDim}`}>BEREIT ZU BEGINNEN</div>
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl tracking-wider mb-5 ${theme.text}`}>
-              Strukturierte Analyse.<br />
-              <span className={theme.textSec}>Ab dem ersten Trade.</span>
-            </h2>
-            <p className={`text-sm font-sans mb-10 max-w-md mx-auto leading-relaxed ${theme.textSec}`}>
-              Kein Setup. Keine Lernkurve für das Grundprinzip. Starte die erste Analyse und folge dem Regelwerk.
-            </p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <button
-                onClick={() => navigate(createPageUrl('Checklist'))}
-                className={cn(
-                  "flex items-center gap-2.5 px-8 py-4 rounded-xl font-bold tracking-widest text-sm transition-all group",
-                  darkMode ? "bg-white text-black hover:bg-zinc-100" : "bg-zinc-900 text-white hover:bg-zinc-800"
-                )}
-              >
-                Erste Analyse starten
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button
-                onClick={() => navigate(createPageUrl('FAQ'))}
-                className={cn(
-                  "flex items-center gap-2.5 px-8 py-4 rounded-xl font-bold tracking-widest text-sm transition-all border",
-                  darkMode ? "border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white" : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-zinc-900"
-                )}
-              >
-                Mehr erfahren
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 bg-black/5 rounded-full -translate-y-12 sm:-translate-y-16 md:-translate-y-20 translate-x-12 sm:translate-x-16 md:translate-x-20" />
+            <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-black/5 rounded-full translate-y-10 sm:translate-y-12 md:translate-y-16 -translate-x-10 sm:-translate-x-12 md:-translate-x-16" />
 
-      {/* ── FOOTER ── */}
-      <footer className={`${theme.bg} border-t ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-10 md:mb-12">
-
-            {/* Brand */}
-            <div className="md:col-span-4">
-              <img src={logoSrc} alt="ZNPCV" className="h-10 w-auto mb-4" />
-              <p className={`text-sm font-sans leading-relaxed mb-6 max-w-xs ${theme.textSec}`}>
-                Ein regelbasiertes Trading-Entscheidungssystem. Entwickelt für Trader, die Klarheit und Struktur über Impuls und Zufall stellen.
-              </p>
-              <div className="flex items-center gap-3">
-                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-sans ${darkMode ? 'border-zinc-800 text-zinc-500' : 'border-zinc-200 text-zinc-500'}`}>
-                  <Lock className="w-3 h-3" />
-                  SSL
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-black" : "bg-white")}>
+                  <ClipboardCheck className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-sans ${darkMode ? 'border-zinc-800 text-zinc-500' : 'border-zinc-200 text-zinc-500'}`}>
-                  <ShieldCheck className="w-3 h-3" />
-                  DSGVO
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-emerald-700 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
+                  START
+                </div>
+              </div>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
+                {t('newAnalysisDesc')}
+              </p>
+
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('startNow')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-black text-white" : "bg-white text-black")}>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
+          </button>
+
+          {/* Dashboard - Compact */}
+          <button
+            onClick={() => navigate(createPageUrl('Dashboard'))}
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+              darkMode ? "bg-black text-white border-zinc-800" : "bg-white text-black border-zinc-300")}
+          >
+            {/* Decorative grid */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full" style={{backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px'}} />
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-white" : "bg-black")}>
+                  <BarChart3 className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-zinc-800 text-zinc-300 text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse" />
+                  LIVE
+                </div>
+              </div>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('dashboardDesc')}
+              </p>
+
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-white text-black" : "bg-black text-white")}>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </div>
+            </div>
+          </button>
+
+          {/* Trade History */}
+            <button
+              onClick={() => navigate(createPageUrl('TradeHistory'))}
+            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+              darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}
+          >
+            <div className="absolute inset-0 opacity-5">
+              <div className="w-full h-full" style={{backgroundImage: 'linear-gradient(45deg, currentColor 25%, transparent 25%, transparent 75%, currentColor 75%, currentColor), linear-gradient(45deg, currentColor 25%, transparent 25%, transparent 75%, currentColor 75%, currentColor)', backgroundSize: '10px 10px', backgroundPosition: '0 0, 5px 5px'}} />
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+                  darkMode ? "bg-white" : "bg-black")}>
+                  <History className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
+                </div>
+                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-purple-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
+                  LOG
+                </div>
+              </div>
+
+              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
+              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('performanceAnalytics')}
+              </p>
+
+              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+                  darkMode ? "bg-white text-black" : "bg-black text-white")}>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+              </div>
+            </div>
+          </button>
+        </motion.div>
+
+        {/* Features - Compact */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-6 sm:mb-8 md:mb-12 lg:mb-16"
+        >
+          <div className="text-center mb-3 sm:mb-4 md:mb-6">
+            <h3 className="text-sm sm:text-base md:text-lg tracking-widest mb-1 sm:mb-1.5">{t('features')}</h3>
+            <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm`}>{t('featuresDesc')}</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+            {[
+              { icon: Target, titleKey: 'preciseAnalysis', descKey: 'preciseAnalysisDesc' },
+              { icon: Shield, titleKey: 'riskManagement', descKey: 'riskManagementDesc' },
+              { icon: Activity, titleKey: 'performanceTracking', descKey: 'performanceTrackingDesc' },
+            ].map((item, index) => (
+              <motion.div 
+                  key={item.titleKey} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.1 }}
+                className={`p-3 sm:p-4 md:p-5 lg:p-6 ${theme.bgSecondary} border ${theme.border} rounded-xl sm:rounded-2xl hover:border-emerald-600/50 transition-all group`}
+              >
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform ${darkMode ? 'bg-white' : 'bg-zinc-900'}`}>
+                  <item.icon className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${darkMode ? 'text-black' : 'text-white'}`} />
+                </div>
+                <h3 className={`text-sm sm:text-base md:text-lg tracking-wider mb-1 sm:mb-2 ${theme.text}`}>{t(item.titleKey)}</h3>
+                <p className={`text-xs sm:text-sm ${theme.textMuted} leading-relaxed font-sans`}>{t(item.descKey)}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Stats - Compact */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6"
+        >
+          {[
+            { value: '85%+', labelKey: 'znpcvStandard', icon: Award },
+            { value: '7', labelKey: 'stepChecklist', icon: CheckCircle2 },
+            { value: '4', labelKey: 'chartPatterns', icon: Activity },
+          ].map((stat) => (
+            <div key={stat.labelKey} className={`text-center p-2.5 sm:p-3 md:p-4 lg:p-5 border ${theme.border} rounded-lg sm:rounded-xl md:rounded-2xl ${theme.bgSecondary}`}>
+              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-1.5 sm:mb-2 md:mb-3 ${theme.text}`} />
+              <div className={`text-lg sm:text-xl md:text-2xl font-light mb-0.5 sm:mb-1 ${theme.text}`}>{stat.value}</div>
+              <div className={`text-[9px] sm:text-[10px] md:text-xs ${theme.textDimmed} tracking-widest`}>{t(stat.labelKey)}</div>
+            </div>
+          ))}
+        </motion.div>
+      </main>
+
+      {/* Footer */}
+      <footer className={`${theme.bgSecondary} border-t ${theme.border}`}>
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10">
+
+          {/* Main Footer Content */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-10">
+
+            {/* Brand & Description */}
+            <div className="md:col-span-4 text-center md:text-left">
+              <img 
+                src={darkMode 
+                  ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                  : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                }
+                alt="ZNPCV" 
+                className="h-14 sm:h-16 md:h-20 w-auto mb-3 sm:mb-4 mx-auto md:mx-0"
+              />
+              <p className={`${theme.textMuted} text-xs sm:text-sm font-sans leading-relaxed mb-4 sm:mb-5`}>
+                {t('footerDesc')}
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-5">
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <div className="w-1.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                  <Lock className="w-3 h-3 text-emerald-600" />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL</span>
+                </div>
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SECURE</span>
+                </div>
+                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                  <Globe className="w-3 h-3 text-emerald-600" />
+                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
+                </div>
+              </div>
+
+              </div>
 
             {/* Navigation */}
-            <div className="md:col-span-4">
-              <h4 className={`text-xs tracking-widest mb-5 ${theme.textDim}`}>BEREICHE</h4>
-              <div className="space-y-3">
-                {[
-                  { label: 'Analyse starten', page: 'Checklist', icon: ClipboardCheck },
-                  { label: 'Dashboard', page: 'Dashboard', icon: BarChart3 },
-                  { label: 'Trade History', page: 'TradeHistory', icon: History },
-                  { label: 'Live Charts', page: 'Charts', icon: LineChart },
-                  { label: 'FAQ', page: 'FAQ', icon: HelpCircle },
-                ].map(item => (
-                  <button
-                    key={item.page}
-                    onClick={() => navigate(createPageUrl(item.page))}
-                    className={`flex items-center gap-3 text-sm font-sans transition-colors group ${theme.textSec} hover:${theme.text}`}
-                  >
-                    <item.icon className={`w-4 h-4 ${theme.textDim} group-hover:text-emerald-600 transition-colors`} />
-                    {item.label}
-                    <ChevronRight className={`w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity ${theme.textDim}`} />
-                  </button>
-                ))}
+            <div className="md:col-span-3">
+              <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
+                <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                BEREICHE
+              </h4>
+              <div className="space-y-2">
+                <button onClick={() => navigate(createPageUrl('Checklist'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <ClipboardCheck className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('newAnalysis')}</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
+                <button onClick={() => navigate(createPageUrl('Dashboard'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <BarChart3 className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('dashboard')}</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
+                <button onClick={() => navigate(createPageUrl('TradeHistory'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <History className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Trade History</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
+                <button onClick={() => navigate(createPageUrl('Charts'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <LineChart className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Live-Charts</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
+                <button onClick={() => navigate(createPageUrl('FAQ'))} 
+                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
+                  <HelpCircle className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>FAQ & Hilfe</span>
+                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
+                </button>
               </div>
             </div>
 
             {/* Contact */}
-            <div className="md:col-span-4">
-              <h4 className={`text-xs tracking-widest mb-5 ${theme.textDim}`}>KONTAKT</h4>
-              <a
-                href="mailto:support@znpcv.com"
-                className={`block text-sm font-sans mb-2 transition-colors hover:text-emerald-600 ${theme.textSec}`}
-              >
-                support@znpcv.com
-              </a>
-              <p className={`text-xs font-sans leading-relaxed mt-6 ${theme.textDim}`}>
-                Fragen zum System, zur Analyse-Methodik oder zum Zugang beantwortet unser Support.
-              </p>
+            <div className="md:col-span-5">
+              <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
+                <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                {t('contact')}
+              </h4>
+              <div className="space-y-2">
+                <a href="mailto:support@znpcv.com" className={`flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-700/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-emerald-600 text-xs sm:text-sm">@</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
+                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-emerald-600 transition-colors truncate`}>support@znpcv.com</div>
+                  </div>
+                </a>
+                <button onClick={() => navigate(createPageUrl('FAQ'))} className={`w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>SUPPORT</div>
+                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
+                  </div>
+                </button>
+                </div>
             </div>
           </div>
 
-          {/* Bottom */}
-          <div className={`pt-8 border-t ${theme.border} flex flex-col sm:flex-row items-center justify-between gap-4`}>
-            <div className="flex flex-wrap items-center gap-4 text-xs font-sans">
-              <span className={theme.textDim}>© {new Date().getFullYear()} ZNPCV</span>
-              <span className={theme.textDim}>·</span>
-              <button onClick={() => navigate(createPageUrl('Impressum'))} className={`transition-colors hover:text-emerald-600 ${theme.textDim}`}>Impressum</button>
-              <span className={theme.textDim}>·</span>
-              <button onClick={() => navigate(createPageUrl('Datenschutz'))} className={`transition-colors hover:text-emerald-600 ${theme.textDim}`}>Datenschutz</button>
-              <span className={theme.textDim}>·</span>
-              <button onClick={() => navigate(createPageUrl('AGB'))} className={`transition-colors hover:text-emerald-600 ${theme.textDim}`}>Nutzungsbedingungen</button>
+          {/* Bottom Bar */}
+          <div className={`pt-6 sm:pt-8 border-t ${theme.border}`}>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+                <img 
+                  src={darkMode 
+                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                  }
+                  alt="ZNPCV" 
+                  className="h-8 sm:h-10 w-auto opacity-50"
+                />
+                <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
+                <div className={`h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textDimmed} text-xs hidden sm:block`}>{t('allRights')}</p>
+              </div>
+              <p className={`${theme.textDimmed} text-[10px] font-sans text-center md:text-right max-w-md leading-relaxed`}>
+                {t('riskWarning')}
+              </p>
             </div>
-            <p className={`text-xs font-sans ${theme.textDim} text-center sm:text-right max-w-sm`}>
-              Trading birgt Risiken. Vergangene Ergebnisse sind keine Garantie für zukünftige Gewinne.
-            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
+              <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
+                Impressum
+              </button>
+              <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+              <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
+                Datenschutz
+              </button>
+              <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+              <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
+                Nutzungsbedingungen
+              </button>
+            </div>
           </div>
         </div>
       </footer>
@@ -562,13 +511,17 @@ export default function HomePage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className={`fixed bottom-6 right-6 w-10 h-10 rounded-full flex items-center justify-center shadow-lg z-50 transition-colors ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
+            transition={{ duration: 0.1 }}
+            onClick={scrollToTop}
+            className={`fixed bottom-6 right-6 w-11 h-11 flex items-center justify-center shadow-lg transition-colors z-50 rounded-full ${darkMode ? 'bg-white text-black hover:bg-zinc-200' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
           >
-            <ArrowUp className="w-4 h-4" />
+            <ArrowUp className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* Notification Prompt */}
+      <NotificationPrompt darkMode={darkMode} />
     </div>
   );
 }
