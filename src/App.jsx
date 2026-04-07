@@ -5,10 +5,11 @@ import { queryClientInstance } from '@/lib/query-client'
 import VisualEditAgent from '@/lib/VisualEditAgent'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import Landing from './pages/Landing';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -30,12 +31,15 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
-  if (authError) {
+  // Handle authentication errors — but never block public routes
+  const publicPaths = ['/home', '/Home', '/Landing', '/Access', '/FAQ', '/Impressum', '/Datenschutz', '/AGB', '/Upgrade', '/PaymentSuccess'];
+  const currentPath = window.location.pathname;
+  const isPublicPath = publicPaths.some(p => currentPath === p || currentPath.startsWith(p + '/'));
+
+  if (authError && !isPublicPath) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
       navigateToLogin();
       return null;
     }
@@ -44,9 +48,11 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey}>
-          <MainPage />
+      {/* / and /home both show the public Landing page */}
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="/home" element={
+        <LayoutWrapper currentPageName="Landing">
+          <Landing />
         </LayoutWrapper>
       } />
       {Object.entries(Pages).map(([path, Page]) => (

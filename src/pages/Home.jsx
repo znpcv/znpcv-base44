@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PremiumPageWrapper from '@/components/PremiumPageWrapper';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -22,7 +21,7 @@ const SESSIONS = [
   { name: 'NEW YORK', timezone: 'America/New_York', emoji: '🇺🇸', openHour: 9, closeHour: 17 },
 ];
 
-function HomePageInner() {
+export default function HomePage() {
   const navigate = useNavigate();
   const { t, isRTL, darkMode } = useLanguage();
   const [times, setTimes] = useState({});
@@ -524,13 +523,5 @@ function HomePageInner() {
       {/* Notification Prompt */}
       <NotificationPrompt darkMode={darkMode} />
     </div>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <PremiumPageWrapper>
-      <HomePageInner />
-    </PremiumPageWrapper>
   );
 }
