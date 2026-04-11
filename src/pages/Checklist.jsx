@@ -21,6 +21,7 @@ import SectionProgressBar from '@/components/checklist/SectionProgressBar';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
 import NoTradeSkills from '@/components/checklist/NoTradeSkills';
+import PaywallScreen from '@/components/PaywallScreen';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
@@ -32,11 +33,12 @@ export default function ChecklistPage() {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [saving, setSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(!!checklistId);
+  const [isLoading, setIsLoading] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [hasAccess, setHasAccess] = useState(false);
 
   const [uploading, setUploading] = useState(false);
 
@@ -98,10 +100,22 @@ export default function ChecklistPage() {
   });
 
   useEffect(() => {
-    if (checklistId) loadChecklist();else
-    {
-      loadDefaults();
-    }
+    const init = async () => {
+      try {
+        const user = await base44.auth.me();
+        // Admins always have access
+        if (user.stripe_subscription_active || user.role === 'admin') {
+          setHasAccess(true);
+        }
+      } catch {}
+      if (checklistId) {
+        await loadChecklist();
+      } else {
+        await loadDefaults();
+        setIsLoading(false);
+      }
+    };
+    init();
   }, [checklistId]);
 
   const loadDefaults = async () => {
@@ -405,7 +419,11 @@ export default function ChecklistPage() {
           <div className={`${theme.text} text-xl tracking-widest`}>{t('loading')}</div>
         </motion.div>
       </div>);
+  }
 
+  // Paywall — Checklist ist gesperrt bis Zahlung erfolgt
+  if (!hasAccess) {
+    return <PaywallScreen darkMode={darkMode} />;
   }
 
   return (
