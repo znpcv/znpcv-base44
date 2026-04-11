@@ -171,7 +171,7 @@ export default function DatenschutzPage() {
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
             <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              Nutzungsbedingungen
+              {t('termsTitle')}
             </button>
           </div>
         </div>

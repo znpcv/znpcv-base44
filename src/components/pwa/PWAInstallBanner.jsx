@@ -104,9 +104,9 @@ export default function PWAInstallBanner({ darkMode }) {
   };
 
   const BENEFITS = [
-    { icon: Zap, text: 'Direktzugriff vom Home Screen' },
-    { icon: Smartphone, text: 'Schnelleres Laden' },
-    { icon: WifiOff, text: 'Grundfunktionen auch offline' },
+    { icon: Zap, text: '1-Tap Zugriff vom Home Screen' },
+    { icon: Smartphone, text: 'Schnellere Ladezeiten' },
+    { icon: WifiOff, text: 'Offline-Basis verfügbar' },
   ];
 
   return (
@@ -134,8 +134,8 @@ export default function PWAInstallBanner({ darkMode }) {
                   />
                 </div>
                 <div>
-                  <div className={`text-sm font-bold tracking-wider ${theme.text}`}>ALS APP INSTALLIEREN</div>
-                  <div className={`text-[10px] font-sans ${theme.textMuted}`}>ZNPCV — Trading Analyse-System</div>
+                  <div className={`text-sm font-bold tracking-wider ${theme.text}`}>APP INSTALLIEREN</div>
+                  <div className={`text-[10px] font-sans ${theme.textMuted}`}>ZNPCV Trading Checklist</div>
                 </div>
               </div>
 
@@ -163,7 +163,7 @@ export default function PWAInstallBanner({ darkMode }) {
                 </button>
               </div>
               <p className={`text-[9px] font-sans text-center mt-2 ${theme.textMuted}`}>
-                Wird 7 Tage nicht mehr angezeigt
+                Nicht erneut fragen für 7 Tage
               </p>
             </div>
           )}
@@ -173,23 +173,23 @@ export default function PWAInstallBanner({ darkMode }) {
               <button onClick={() => setStep('banner')} className={`absolute top-3 right-3 ${theme.textMuted}`}>
                 <X className="w-4 h-4" />
               </button>
-              <div className={`text-sm font-bold tracking-wider mb-3 ${theme.text}`}>INSTALLATION AUF IOS</div>
+              <div className={`text-sm font-bold tracking-wider mb-3 ${theme.text}`}>AUF IOS INSTALLIEREN</div>
               <ol className={`space-y-2 text-xs font-sans ${theme.textSecondary}`}>
                 <li className="flex items-start gap-2">
                   <span className="w-5 h-5 rounded-full bg-black text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">1</span>
-                  <span>Tippe auf das <strong>Teilen-Symbol</strong> in der Safari-Navigationsleiste</span>
+                  <span>Tippe auf das <strong>Teilen-Symbol</strong> (Quadrat mit Pfeil) in der Safari-Navigationsleiste unten</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-5 h-5 rounded-full bg-black text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">2</span>
-                  <span>Wähle <strong>"Zum Home-Bildschirm"</strong></span>
+                  <span>Scrolle und tippe auf <strong>"Zum Home-Bildschirm"</strong></span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-5 h-5 rounded-full bg-black text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">3</span>
-                  <span>Bestätige mit <strong>"Hinzufügen"</strong></span>
+                  <span>Tippe auf <strong>"Hinzufügen"</strong> – fertig!</span>
                 </li>
               </ol>
               <button onClick={handleDismiss} className={cn('w-full mt-4 py-2.5 rounded-xl text-xs font-bold border-2 transition-colors', theme.border, theme.textSecondary)}>
-                Schließen
+                Verstanden
               </button>
             </div>
           )}

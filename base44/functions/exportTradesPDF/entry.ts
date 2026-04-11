@@ -19,16 +19,6 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Nicht autorisiert' }, { status: 401 });
 
-    // Server-side entitlement check — cannot be bypassed by frontend
-    if (user.role !== 'admin') {
-      const entitlements = await base44.asServiceRole.entities.UserEntitlement.filter({
-        user_email: user.email, entitlement_key: 'full_app_access', status: 'active'
-      });
-      if (entitlements.length === 0) {
-        return Response.json({ error: 'Premium required', code: 'ENTITLEMENT_REQUIRED' }, { status: 403 });
-      }
-    }
-
     if (!checkRateLimit(user.id)) {
       return Response.json({ error: 'Zu viele Anfragen. Bitte warte eine Minute.' }, { status: 429 });
     }

@@ -8,9 +8,9 @@ const LS_KEY_PUSH_DISMISSED = 'znpcv_push_pre_dismissed_at';
 const PUSH_COOLDOWN_DAYS = 14;
 
 const TOPICS = [
-  { key: 'setup_alerts', label: 'Setup-Signale', desc: 'Hinweise zu neuen Trade-Setups', icon: '📊' },
-  { key: 'reminders', label: 'Analyse-Erinnerung', desc: 'Tägliche Erinnerung zur Checkliste', icon: '⏰' },
-  { key: 'product_updates', label: 'Updates', desc: 'Neue Funktionen und Verbesserungen', icon: '🔔' },
+  { key: 'setup_alerts', label: 'Setup Alerts', desc: 'Neue Trade-Setup Signale', icon: '📊' },
+  { key: 'reminders', label: 'Checkliste Reminder', desc: 'Tägliche Erinnerung zur Analyse', icon: '⏰' },
+  { key: 'product_updates', label: 'Produkt Updates', desc: 'Neue Features & Verbesserungen', icon: '🚀' },
 ];
 
 function urlBase64ToUint8Array(base64String) {
@@ -142,8 +142,8 @@ export default function PushOptInModal({ darkMode, onClose }) {
                   <Bell className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <div className={`text-sm font-bold tracking-wider ${theme.text}`}>BENACHRICHTIGUNGEN</div>
-                  <div className={`text-[10px] font-sans ${theme.textMuted}`}>Nur relevante Inhalte, jederzeit abschaltbar</div>
+                  <div className={`text-sm font-bold tracking-wider ${theme.text}`}>PUSH AKTIVIEREN</div>
+                  <div className={`text-[10px] font-sans ${theme.textMuted}`}>Nur relevante Infos, kein Spam</div>
                 </div>
               </div>
               <button onClick={handleDismiss} className={theme.textMuted}>
@@ -182,7 +182,8 @@ export default function PushOptInModal({ darkMode, onClose }) {
             <div className={cn('flex items-start gap-2 p-2.5 rounded-lg mb-4', theme.bgCard)}>
               <Info className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
               <p className={`text-[10px] font-sans leading-relaxed ${theme.textMuted}`}>
-                Benachrichtigungen können jederzeit in den Einstellungen deaktiviert werden. Keine Datenweitergabe.
+                Du kannst Push jederzeit in den Einstellungen deaktivieren.
+                Keine Weitergabe deiner Daten. <span className="underline cursor-pointer">Datenschutz</span>
               </p>
             </div>
 
@@ -192,7 +193,7 @@ export default function PushOptInModal({ darkMode, onClose }) {
               className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-700 text-white text-xs font-bold tracking-wider hover:from-teal-700 hover:to-emerald-800 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Bell className="w-4 h-4" />}
-              {loading ? 'Wird aktiviert…' : 'Benachrichtigungen aktivieren'}
+              {loading ? 'Aktiviere…' : 'Push aktivieren'}
             </button>
 
             <button onClick={handleDismiss} className={`w-full mt-2 py-2 text-[10px] font-sans ${theme.textMuted} hover:underline`}>
@@ -207,12 +208,12 @@ export default function PushOptInModal({ darkMode, onClose }) {
             <div className="w-16 h-16 rounded-full bg-emerald-700 flex items-center justify-center mx-auto mb-4">
               <Check className="w-8 h-8 text-white" />
             </div>
-            <div className={`text-base font-bold tracking-wider mb-2 ${theme.text}`}>AKTIVIERT</div>
+            <div className={`text-base font-bold tracking-wider mb-2 ${theme.text}`}>PUSH AKTIV!</div>
             <p className={`text-xs font-sans ${theme.textMuted} mb-4`}>
-              Du erhältst Benachrichtigungen zu den gewählten Themen.
+              Du erhältst ab jetzt Benachrichtigungen zu den gewählten Themen.
             </p>
             <button onClick={onClose} className="w-full py-2.5 rounded-xl bg-black text-white text-xs font-bold tracking-wider">
-              SCHLIESSEN
+              FERTIG
             </button>
           </div>
         )}
@@ -220,17 +221,17 @@ export default function PushOptInModal({ darkMode, onClose }) {
         {/* Denied */}
         {step === 'denied' && (
           <div className="p-5">
-            <div className={`text-sm font-bold tracking-wider mb-2 ${theme.text}`}>ZUGRIFF VERWEIGERT</div>
+            <div className={`text-sm font-bold tracking-wider mb-2 ${theme.text}`}>BENACHRICHTIGUNGEN BLOCKIERT</div>
             <p className={`text-xs font-sans ${theme.textSecondary} mb-4 leading-relaxed`}>
-              Benachrichtigungen wurden blockiert. So kannst du den Zugriff wieder erlauben:
+              Du hast Push-Benachrichtigungen blockiert. Um sie später zu aktivieren:
             </p>
             <ol className={`space-y-2 text-xs font-sans ${theme.textSecondary} mb-4`}>
-              <li>1. Klicke auf das Schloss-Symbol in der Adressleiste</li>
-              <li>2. Wähle "Benachrichtigungen" und setze es auf "Erlauben"</li>
-              <li>3. Seite neu laden und erneut versuchen</li>
+              <li>1. Klicke auf das Schloss/Info-Symbol in der Adressleiste</li>
+              <li>2. Wähle "Benachrichtigungen" → "Erlauben"</li>
+              <li>3. Lade die Seite neu und versuche es erneut</li>
             </ol>
             <button onClick={handleDismiss} className={cn('w-full py-2.5 rounded-xl text-xs font-bold border-2', theme.border, theme.textSecondary)}>
-              Schließen
+              Verstanden
             </button>
           </div>
         )}
@@ -238,15 +239,15 @@ export default function PushOptInModal({ darkMode, onClose }) {
         {/* iOS hint */}
         {step === 'ios_hint' && (
           <div className="p-5">
-            <div className={`text-sm font-bold tracking-wider mb-2 ${theme.text}`}>HINWEIS FÜR IOS</div>
+            <div className={`text-sm font-bold tracking-wider mb-2 ${theme.text}`}>IOS PUSH HINWEIS</div>
             <p className={`text-xs font-sans ${theme.textSecondary} mb-4 leading-relaxed`}>
-              Push-Benachrichtigungen auf iOS erfordern, dass ZNPCV auf dem Home Screen installiert ist (iOS 16.4 oder neuer).
+              Push-Benachrichtigungen auf iOS sind nur verfügbar, wenn die App auf deinem Home Screen installiert ist (iOS 16.4+).
             </p>
             <p className={`text-xs font-sans ${theme.textSecondary} mb-4`}>
-              Safari öffnen → Teilen → "Zum Home-Bildschirm" — danach Push aktivieren.
+              Installiere die App erst über Safari → Teilen → Zum Home-Bildschirm, dann kannst du Push aktivieren.
             </p>
             <button onClick={handleDismiss} className={cn('w-full py-2.5 rounded-xl text-xs font-bold border-2', theme.border, theme.textSecondary)}>
-              Schließen
+              Verstanden
             </button>
           </div>
         )}

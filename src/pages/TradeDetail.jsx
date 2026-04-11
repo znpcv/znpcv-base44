@@ -14,9 +14,8 @@ import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
 import TradeSnapshot from '@/components/advanced/TradeSnapshot';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
-import PremiumPageWrapper from '@/components/PremiumPageWrapper';
 
-function TradeDetailPageInner() {
+export default function TradeDetailPage() {
   const navigate = useNavigate();
   const { t, darkMode } = useLanguage();
   const [searchParams] = useSearchParams();
@@ -508,8 +507,4 @@ function TradeDetailPageInner() {
       </main>
     </div>);
 
-}
-
-export default function TradeDetailPage() {
-  return <PremiumPageWrapper><TradeDetailPageInner /></PremiumPageWrapper>;
 }

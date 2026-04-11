@@ -48,8 +48,6 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AGB from './pages/AGB';
-import Landing from './pages/Landing';
-import Access from './pages/Access';
 import Account from './pages/Account';
 import Charts from './pages/Charts';
 import Checklist from './pages/Checklist';
@@ -65,16 +63,11 @@ import TradeDetail from './pages/TradeDetail';
 import TradeHistory from './pages/TradeHistory';
 import Trash from './pages/Trash';
 import PWAAdmin from './pages/PWAAdmin';
-import Upgrade from './pages/Upgrade';
-import PaymentSuccess from './pages/PaymentSuccess';
-import EntitlementAdmin from './pages/EntitlementAdmin';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AGB": AGB,
-    "Landing": Landing,
-    "Access": Access,
     "Account": Account,
     "Charts": Charts,
     "Checklist": Checklist,
@@ -90,13 +83,10 @@ export const PAGES = {
     "TradeHistory": TradeHistory,
     "Trash": Trash,
     "PWAAdmin": PWAAdmin,
-    "Upgrade": Upgrade,
-    "PaymentSuccess": PaymentSuccess,
-    "EntitlementAdmin": EntitlementAdmin,
 }
 
 export const pagesConfig = {
-    mainPage: "Landing",
+    mainPage: "Checklist",
     Pages: PAGES,
     Layout: __Layout,
 };

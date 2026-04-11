@@ -292,7 +292,7 @@ export default function AccountPage() {
             <div className={`border-2 ${theme.border} rounded-xl p-4`}>
               <div className="flex items-center gap-2 mb-3">
                 <Shield className={`w-4 h-4 ${theme.textSecondary}`} />
-                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>SICHERHEIT</span>
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>SECURITY</span>
               </div>
               
               {/* 2FA Toggle */}
@@ -301,7 +301,7 @@ export default function AccountPage() {
                   <Lock className={`w-4 h-4 ${twoFactorEnabled ? 'text-emerald-700' : theme.textSecondary}`} />
                   <div>
                     <div className={`text-sm font-bold ${theme.text}`}>2FA</div>
-                    <div className={`text-[9px] ${theme.textMuted} font-sans`}>Zwei-Faktor-Authentifizierung</div>
+                    <div className={`text-[9px] ${theme.textMuted} font-sans`}>Two-Factor Auth</div>
                   </div>
                 </div>
                 {editing ? (
@@ -325,7 +325,7 @@ export default function AccountPage() {
             <div className={`border-2 ${theme.border} rounded-xl p-4`}>
               <div className="flex items-center gap-2 mb-3">
                 <Bell className={`w-4 h-4 ${theme.textSecondary}`} />
-                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>BENACHRICHTIGUNGEN</span>
+                <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>NOTIFICATIONS</span>
               </div>
               
               <div className={`p-3 border ${theme.border} rounded-lg ${darkMode ? 'bg-zinc-900/50' : 'bg-white'}`}>
@@ -404,8 +404,8 @@ export default function AccountPage() {
                   <span className="hidden sm:inline">BEARBEITEN</span>
                 </Button>
                 <Button onClick={handleLogout} className="col-span-2 h-10 sm:h-11 text-xs sm:text-sm tracking-wider border-2 bg-rose-600 hover:bg-rose-700 text-white border-rose-600 rounded-lg">
-                 <LogOut className="w-4 h-4 sm:mr-2" />
-                 <span className="hidden sm:inline">ABMELDEN</span>
+                  <LogOut className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">LOGOUT</span>
                 </Button>
               </>
             )}
@@ -436,7 +436,7 @@ export default function AccountPage() {
           <div className={`border ${theme.border} rounded-xl p-3 flex items-center justify-between`}>
             <div className="flex items-center gap-2">
               <LineChart className={`w-4 h-4 ${theme.textMuted}`} />
-              <span className={`text-xs tracking-wider font-bold ${theme.textSecondary}`}>PUSH & ANALYTICS</span>
+              <span className={`text-xs tracking-wider font-bold ${theme.textSecondary}`}>PWA / PUSH ANALYTICS</span>
             </div>
             <button
               onClick={() => navigate(createPageUrl('PWAAdmin'))}
@@ -459,7 +459,7 @@ export default function AccountPage() {
             </button>
             <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
             <button onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>
-              Nutzungsbedingungen
+              AGB
             </button>
           </div>
         </footer>

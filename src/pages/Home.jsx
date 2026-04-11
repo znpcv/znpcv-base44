@@ -11,6 +11,7 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
+import AdminExportBlock from '@/components/AdminExportBlock';
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
 
@@ -178,7 +179,7 @@ export default function HomePage() {
             {t('ultimateChecklist')}
           </h2>
           <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
-            „{t('disciplineQuote')}"
+            "{t('disciplineQuote')}"
           </p>
           <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
@@ -401,7 +402,7 @@ export default function HomePage() {
             <div className="md:col-span-3">
               <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
                 <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                BEREICHE
+                NAVIGATION
               </h4>
               <div className="space-y-2">
                 <button onClick={() => navigate(createPageUrl('Checklist'))} 
@@ -425,13 +426,13 @@ export default function HomePage() {
                 <button onClick={() => navigate(createPageUrl('Charts'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
                   <LineChart className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Live-Charts</span>
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Live Charts</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
                 <button onClick={() => navigate(createPageUrl('FAQ'))} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
                   <HelpCircle className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>FAQ & Hilfe</span>
+                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>FAQ & Help</span>
                   <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
                 </button>
               </div>
@@ -497,7 +498,7 @@ export default function HomePage() {
               </button>
               <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
               <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
-                Nutzungsbedingungen
+                AGB
               </button>
             </div>
           </div>
@@ -519,6 +520,9 @@ export default function HomePage() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* Admin Export Block */}
+      <AdminExportBlock darkMode={darkMode} />
 
       {/* Notification Prompt */}
       <NotificationPrompt darkMode={darkMode} />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, TrendingUp, Smartphone, Bell, UserCheck, UserX, RefreshCw, CreditCard } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Smartphone, Bell, UserCheck, UserX, RefreshCw } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
@@ -100,8 +100,8 @@ function PWAAdminContent() {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <div className="text-sm font-bold tracking-widest">PUSH & ANALYTICS</div>
-              <div className={`text-[10px] ${theme.textMuted}`}>Admin</div>
+              <div className="text-sm font-bold tracking-widest">PWA / PUSH ANALYTICS</div>
+              <div className={`text-[10px] ${theme.textMuted}`}>Admin — Conversion Dashboard</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -114,19 +114,7 @@ function PWAAdminContent() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {/* Entitlement Admin Link */}
-      <button
-        onClick={() => navigate(createPageUrl('EntitlementAdmin'))}
-        className={cn('w-full flex items-center gap-3 p-4 rounded-xl border-2 text-left transition-all hover:border-emerald-600/50', theme.bgCard, theme.border)}
-      >
-        <CreditCard className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-        <div>
-          <div className={`text-sm font-bold tracking-widest ${theme.text}`}>ZUGÄNGE & ZAHLUNGEN</div>
-          <div className={`text-xs font-sans ${theme.textMuted}`}>Lizenzen · Zahlungen · Protokoll</div>
-        </div>
-      </button>
-
-      {stats ? (
+        {stats ? (
           <>
             {/* KPI Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
