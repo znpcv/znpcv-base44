@@ -1,0 +1,289 @@
+{
+  "name": "TradeChecklist",
+  "type": "object",
+  "properties": {
+    "pair": {
+      "type": "string",
+      "description": "Trading pair (e.g. EUR/USD)"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "long",
+        "short"
+      ],
+      "description": "Trade direction"
+    },
+    "trade_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the trade"
+    },
+    "w_trend": {
+      "type": "string",
+      "enum": [
+        "bullish",
+        "bearish"
+      ],
+      "description": "Weekly trend"
+    },
+    "w_at_aoi": {
+      "type": "boolean",
+      "description": "Weekly at AOI (10%)"
+    },
+    "w_ema_touch": {
+      "type": "boolean",
+      "description": "Weekly EMA touch (5%)"
+    },
+    "w_candlestick": {
+      "type": "boolean",
+      "description": "Weekly candlestick rejection (10%)"
+    },
+    "w_psp_rejection": {
+      "type": "boolean",
+      "description": "Weekly PSP rejection (10%)"
+    },
+    "w_round_level": {
+      "type": "boolean",
+      "description": "Weekly round level (5%)"
+    },
+    "w_swing": {
+      "type": "boolean",
+      "description": "Weekly swing high/low (10%)"
+    },
+    "w_pattern": {
+      "type": "string",
+      "description": "Weekly pattern (10%)"
+    },
+    "d_trend": {
+      "type": "string",
+      "enum": [
+        "bullish",
+        "bearish"
+      ],
+      "description": "Daily trend"
+    },
+    "d_at_aoi": {
+      "type": "boolean",
+      "description": "Daily at AOI (10%)"
+    },
+    "d_ema_touch": {
+      "type": "boolean",
+      "description": "Daily EMA touch (5%)"
+    },
+    "d_candlestick": {
+      "type": "boolean",
+      "description": "Daily candlestick rejection (10%)"
+    },
+    "d_psp_rejection": {
+      "type": "boolean",
+      "description": "Daily PSP rejection (10%)"
+    },
+    "d_round_level": {
+      "type": "boolean",
+      "description": "Daily round level (5%)"
+    },
+    "d_swing": {
+      "type": "boolean",
+      "description": "Daily swing high/low (10%)"
+    },
+    "d_pattern": {
+      "type": "string",
+      "description": "Daily pattern (10%)"
+    },
+    "h4_trend": {
+      "type": "string",
+      "enum": [
+        "bullish",
+        "bearish"
+      ],
+      "description": "4H trend"
+    },
+    "h4_at_aoi": {
+      "type": "boolean",
+      "description": "4H at AOI (5%)"
+    },
+    "h4_candlestick": {
+      "type": "boolean",
+      "description": "4H candlestick rejection (10%)"
+    },
+    "h4_psp_rejection": {
+      "type": "boolean",
+      "description": "4H PSP rejection (5%)"
+    },
+    "h4_swing": {
+      "type": "boolean",
+      "description": "4H swing high/low (5%)"
+    },
+    "h4_pattern": {
+      "type": "string",
+      "description": "4H pattern (10%)"
+    },
+    "entry_sos": {
+      "type": "boolean",
+      "description": "Entry SOS confirmed (10%)"
+    },
+    "entry_engulfing": {
+      "type": "boolean",
+      "description": "Entry engulfing confirmed (10%)"
+    },
+    "entry_pattern": {
+      "type": "string",
+      "description": "Entry pattern (5%)"
+    },
+    "entry_type": {
+      "type": "string",
+      "description": "Entry type"
+    },
+    "entry_price": {
+      "type": "string",
+      "description": "Entry price"
+    },
+    "stop_loss": {
+      "type": "string",
+      "description": "Stop loss price"
+    },
+    "take_profit": {
+      "type": "string",
+      "description": "Take profit price"
+    },
+    "account_size": {
+      "type": "string",
+      "description": "Account size"
+    },
+    "risk_percent": {
+      "type": "string",
+      "description": "Risk percentage"
+    },
+    "leverage": {
+      "type": "string",
+      "default": "100",
+      "description": "Trading leverage (e.g. 100, 500)"
+    },
+    "confirms_rule": {
+      "type": "boolean",
+      "description": "Confirms ZNPCV golden rule"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    },
+    "screenshots_before": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Screenshots before entry (setup analysis)"
+    },
+    "screenshots_after": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Screenshots after exit (results)"
+    },
+    "screenshots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Legacy screenshot URLs (deprecated, use screenshots_before/after)"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "win",
+        "loss",
+        "breakeven",
+        "pending"
+      ],
+      "description": "Trade outcome"
+    },
+    "actual_pnl": {
+      "type": "string",
+      "description": "Actual profit/loss in dollars"
+    },
+    "exit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when trade was closed"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_progress",
+        "ready_to_trade",
+        "executed",
+        "closed"
+      ],
+      "default": "in_progress"
+    },
+    "completion_percentage": {
+      "type": "number",
+      "description": "Percentage of checklist completed"
+    },
+    "deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft delete flag"
+    },
+    "deleted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the trade was deleted"
+    },
+    "free_checklist": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this entry belongs to the free $99 Checklist product (not the strategy)"
+    },
+    "notes_json": {
+      "type": "string",
+      "description": "Serialized JSON for free checklist sections, notes and learnings"
+    }
+  },
+  "required": [
+    "pair"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
