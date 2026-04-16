@@ -21,6 +21,7 @@ import ProductPaywall from '@/components/ProductPaywall';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import AccountButton from '@/components/AccountButton';
+import LivePriceTag from '@/components/checklist/LivePriceTag';
 
 // ─── TEMPLATES ────────────────────────────────────────────────────────────────
 const TEMPLATES = {
@@ -839,6 +840,7 @@ export default function FreeChecklistPage() {
                       placeholder="z. B. EUR/USD"
                       className={`w-full h-9 px-3 rounded-lg border-2 text-sm font-mono tracking-wider outline-none ${theme.input}`}
                     />
+                    <LivePriceTag instrument={instrument} darkMode={darkMode} />
                   </div>
                   <div>
                     <label className={`text-[10px] tracking-wider ${theme.textMuted} mb-1 block`}>DATUM</label>
