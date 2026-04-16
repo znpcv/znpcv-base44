@@ -20,30 +20,51 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
-const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, isAuthenticated, navigateToLogin } = useAuth();
+/**
+ * Erkennt, ob die aktuelle Domain die öffentliche Hauptseite (znpcv.com)
+ * oder der geschützte App-Bereich (znpcv.de / andere) ist.
+ *
+ * znpcv.com  → public landing world
+ * znpcv.de   → protected app world (default für alle anderen Domains / localhost)
+ */
+const isPublicDomain = () => {
+  const host = window.location.hostname;
+  return host === 'znpcv.com' || host === 'www.znpcv.com';
+};
 
-  // Show loading spinner while checking app public settings or auth
+/**
+ * Öffentliche Route-Welt für znpcv.com
+ * Nur Landing-Seite + statische Unterseiten — keine App-Routen, kein Login-Flow.
+ */
+const PublicRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Landing />} />
+    <Route path="/Landing" element={<Landing />} />
+    {/* Alle anderen Pfade auf .com → zurück zur Landing */}
+    <Route path="*" element={<Landing />} />
+  </Routes>
+);
+
+/**
+ * Geschützte App-Route-Welt für znpcv.de
+ * Enthält alle Produkt-, Login- und Access-Routen.
+ */
+const AppRoutes = () => {
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      <div className="fixed inset-0 flex items-center justify-center bg-black">
+        <div className="w-8 h-8 border-4 border-zinc-700 border-t-white rounded-full animate-spin" />
       </div>
     );
   }
 
-  // Handle authentication errors
   if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
-    }
+    if (authError.type === 'user_not_registered') return <UserNotRegisteredError />;
+    if (authError.type === 'auth_required') { navigateToLogin(); return null; }
   }
 
-  // Render the main app
   return (
     <Routes>
       <Route path="/" element={
@@ -77,9 +98,27 @@ const AuthenticatedApp = () => {
   );
 };
 
+const AuthenticatedApp = () => {
+  // znpcv.com → nur öffentliche Landing-Welt (kein Auth-Wrapper nötig)
+  if (isPublicDomain()) return <PublicRoutes />;
+  // znpcv.de und alle anderen → geschützte App-Welt
+  return <AppRoutes />;
+};
+
 
 function App() {
+  const isPublic = isPublicDomain();
 
+  // znpcv.com — öffentliche Welt: kein Auth-Provider, kein Auth-Check
+  if (isPublic) {
+    return (
+      <Router>
+        <PublicRoutes />
+      </Router>
+    );
+  }
+
+  // znpcv.de — geschützte App-Welt: voller Auth- und Query-Stack
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
@@ -91,7 +130,7 @@ function App() {
         <VisualEditAgent />
       </QueryClientProvider>
     </AuthProvider>
-  )
+  );
 }
 
 export default App

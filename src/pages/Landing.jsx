@@ -14,7 +14,14 @@ import { cn } from '@/lib/utils';
 import { useLanguage, DarkModeToggle, LanguageToggle } from '@/components/LanguageContext';
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
-const APP_URL = 'https://znpcv.de';
+// Im Preview (localhost / base44.app) öffnet goToApp() dieselbe App mit dem Pfad,
+// damit alle Links testbar bleiben. Auf znpcv.com wird zu znpcv.de geleitet.
+const APP_URL = (() => {
+  const host = window.location.hostname;
+  if (host === 'znpcv.com' || host === 'www.znpcv.com') return 'https://znpcv.de';
+  // Preview / Staging: selbe Origin, andere Route
+  return window.location.origin;
+})();
 
 // ─── FAQ DATA — keine Strategie-Inhalte ───────────────────────────────────────
 const FAQ = [
