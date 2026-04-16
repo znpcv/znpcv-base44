@@ -21,7 +21,7 @@ import SectionProgressBar from '@/components/checklist/SectionProgressBar';
 import LivePriceDisplay from '@/components/LivePriceDisplay';
 import MarketChart from '@/components/MarketChart';
 import NoTradeSkills from '@/components/checklist/NoTradeSkills';
-import PaywallScreen from '@/components/PaywallScreen';
+import ProductPaywall from '@/components/ProductPaywall';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
@@ -103,8 +103,9 @@ export default function ChecklistPage() {
     const init = async () => {
       try {
         const user = await base44.auth.me();
-        // Admins always have access
-        if (user.stripe_subscription_active || user.role === 'admin') {
+        // strategy_access → ZNPCV Strategie ($2,499)
+        // Admins have full access
+        if (user.strategy_access || user.role === 'admin') {
           setHasAccess(true);
         }
       } catch {}
@@ -421,9 +422,9 @@ export default function ChecklistPage() {
       </div>);
   }
 
-  // Paywall — Checklist ist gesperrt bis Zahlung erfolgt
+  // Guard — nur strategy_access darf die ZNPCV Strategie sehen
   if (!hasAccess) {
-    return <PaywallScreen darkMode={darkMode} />;
+    return <ProductPaywall darkMode={darkMode} mode="strategy" />;
   }
 
   return (
