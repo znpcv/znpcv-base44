@@ -337,21 +337,12 @@ export default function FreeChecklistPage() {
     navBg: darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50',
   };
 
-  // ── Access guard ──
-  if (accessLoading) {
-    return (
-      <div className={`min-h-screen ${theme.bg} flex items-center justify-center`}>
-        <div className="w-8 h-8 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-  if (!isAuthenticated) { base44.auth.redirectToLogin(); return null; }
-  if (!hasChecklistAccess) return <ProductPaywall darkMode={darkMode} mode="checklist" />;
-
   // ── Load history ──
   useEffect(() => {
-    loadHistory();
-  }, []);
+    if (!accessLoading && isAuthenticated && hasChecklistAccess) {
+      loadHistory();
+    }
+  }, [accessLoading, isAuthenticated, hasChecklistAccess]);
 
   const loadHistory = async () => {
     setHistoryLoading(true);
@@ -502,6 +493,17 @@ export default function FreeChecklistPage() {
   };
 
   const toggleCollapse = (id) => setCollapsed(prev => ({ ...prev, [id]: !prev[id] }));
+
+  // ── Access guard (after all hooks) ──
+  if (accessLoading) {
+    return (
+      <div className={`min-h-screen ${theme.bg} flex items-center justify-center`}>
+        <div className="w-8 h-8 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!isAuthenticated) { base44.auth.redirectToLogin(); return null; }
+  if (!hasChecklistAccess) return <ProductPaywall darkMode={darkMode} mode="checklist" />;
 
   const result = computeResult(sections);
 
