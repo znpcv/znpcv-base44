@@ -8,6 +8,7 @@ import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import FreeChecklist from './pages/FreeChecklist';
+import Landing from './pages/Landing';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -64,6 +65,11 @@ const AuthenticatedApp = () => {
       <Route path="/FreeChecklist" element={
         <LayoutWrapper currentPageName="FreeChecklist">
           <FreeChecklist />
+        </LayoutWrapper>
+      } />
+      <Route path="/Landing" element={
+        <LayoutWrapper currentPageName="Landing">
+          <Landing />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />
