@@ -1,169 +1,221 @@
 /**
- * LivePriceTag — zeigt den aktuellen Preis für ein Symbol (Forex, Crypto, Aktien, Gold usw.)
- * Nutzt mehrere kostenlose APIs als Fallback-Kette.
+ * LivePriceTag — Echtzeitpreise für Forex, Crypto, Aktien, Gold, Indizes
+ * 
+ * Strategie:
+ * - Crypto  → Binance REST API (zuverlässig, kein Auth)
+ * - Forex/Gold/Silber → frankfurter.app (ECB-Daten, kein Auth)
+ * - Aktien/ETFs/Indizes → Yahoo Finance via allorigins proxy
  */
 import React, { useEffect, useState, useRef } from 'react';
-import { TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Loader2, RefreshCw } from 'lucide-react';
 
-// Symbole → API-Typ ermitteln
-function detectType(raw) {
+// ─── Bekannte Crypto-Bases ──────────────────────────────────────────────────
+const CRYPTO_BASES = new Set([
+  'BTC','ETH','BNB','SOL','XRP','ADA','DOGE','AVAX','DOT','LINK',
+  'LTC','BCH','MATIC','ATOM','UNI','OP','ARB','SUI','TON','TRX',
+  'SHIB','PEPE','NEAR','FTM','ALGO','VET','SAND','MANA','AXS','CRV',
+  'AAVE','COMP','MKR','SNX','YFI','1INCH','ENJ','CHZ','HOT','IOTA',
+  'EOS','XLM','DASH','ZEC','XMR','THETA','FIL','ICP','EGLD','FLOW',
+  'HBAR','RUNE','KAVA','BAND','BAL','REN','LRC','SKL','CELO','ICX',
+]);
+
+// ─── Erkennung ───────────────────────────────────────────────────────────────
+function detect(raw) {
+  // Bereinigen: Sonderzeichen entfernen
   const s = raw.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  // Crypto-Liste (häufigste)
-  const CRYPTO = ['BTC','ETH','BNB','SOL','XRP','ADA','DOGE','AVAX','DOT','LINK','LTC','BCH','MATIC','ATOM','UNI','OP','ARB','SUI','TON','TRX'];
-  // Gold / Silber / Rohstoffe (typisch für TradingView-Symbole)
-  const COMMODITIES_FX = { XAUUSD: 'XAUUSD', XAGUSD: 'XAGUSD', XAUEUR: 'XAUEUR' };
 
-  // Crypto pairs wie BTCUSD, BTCUSDT, ETHUSDT etc.
-  for (const c of CRYPTO) {
-    if (s.startsWith(c) || s === c) return { type: 'crypto', base: c };
+  // Crypto prüfen: wenn Base bekannt
+  for (const base of CRYPTO_BASES) {
+    if (s === base || s === `${base}USDT` || s === `${base}USD` || s === `${base}BTC`) {
+      return { type: 'crypto', base };
+    }
   }
-  // Forex / Gold – 6 Zeichen (EURUSD, GBPJPY, XAUUSD ...)
-  if (s.length === 6 && /^[A-Z]{6}$/.test(s)) return { type: 'forex', symbol: s };
-  // Stocks (1-5 Buchstaben)
-  if (s.length <= 5 && /^[A-Z]+$/.test(s)) return { type: 'stock', symbol: s };
 
-  return { type: 'unknown', symbol: s };
-}
+  // Gold / Silber
+  if (s === 'XAUUSD' || s === 'GOLD') return { type: 'gold', from: 'XAU', to: 'USD' };
+  if (s === 'XAGUSD' || s === 'SILVER') return { type: 'gold', from: 'XAG', to: 'USD' };
+  if (s === 'XAUEUR') return { type: 'gold', from: 'XAU', to: 'EUR' };
 
-async function fetchForex(symbol) {
-  // Binance Forex (nur Pairs mit USDT-Equivalent) → skip
-  // Verwende exchangerate-api (kostenlos, kein Key) für FX
-  const base = symbol.slice(0, 3);
-  const quote = symbol.slice(3, 6);
-  // Gold/Silver special
-  if (base === 'XAU' || base === 'XAG') {
-    // Verwende Metals-API über frankfurter (unterstützt XAU als Basis nicht direkt)
-    // Fallback: Open Exchange Rates (kostenlos, limitiert)
-    const res = await fetch(`https://api.frankfurter.app/latest?from=${base}&to=${quote}`);
-    if (!res.ok) throw new Error('no data');
-    const data = await res.json();
-    return { price: data.rates?.[quote], source: 'Frankfurt' };
+  // Forex: 6 Buchstaben, bekannte Quote-Währungen
+  const FOREX_QUOTES = ['USD','EUR','GBP','JPY','CHF','AUD','NZD','CAD','SEK','NOK','DKK','HKD','SGD','CNY','MXN','ZAR','TRY','PLN','CZK','HUF'];
+  if (s.length === 6 && /^[A-Z]{6}$/.test(s)) {
+    const from = s.slice(0, 3);
+    const to = s.slice(3, 6);
+    if (FOREX_QUOTES.includes(from) && FOREX_QUOTES.includes(to)) {
+      return { type: 'forex', from, to };
+    }
   }
-  const res = await fetch(`https://api.frankfurter.app/latest?from=${base}&to=${quote}`);
-  if (!res.ok) throw new Error('no forex data');
-  const data = await res.json();
-  const price = data.rates?.[quote];
-  if (!price) throw new Error('no rate');
-  return { price, source: 'FX' };
+
+  // Alles andere → Aktie/ETF/Index (Yahoo Finance)
+  return { type: 'stock', symbol: s.length > 0 ? s : raw.toUpperCase().trim() };
 }
 
-async function fetchCrypto(base) {
-  // Binance API – immer verfügbar, kein Key
-  const symbol = `${base}USDT`;
-  const res = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`);
-  if (!res.ok) throw new Error('binance error');
-  const d = await res.json();
-  return {
-    price: parseFloat(d.lastPrice),
-    change24h: parseFloat(d.priceChangePercent),
-    source: 'Binance',
-  };
+// ─── Fetch-Funktionen ─────────────────────────────────────────────────────────
+async function getCrypto(base) {
+  // Versuche USDT, dann USD
+  const pairs = [`${base}USDT`, `${base}USD`, `${base}BUSD`];
+  for (const sym of pairs) {
+    try {
+      const r = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}`, { signal: AbortSignal.timeout(5000) });
+      if (!r.ok) continue;
+      const d = await r.json();
+      if (d.lastPrice) {
+        return {
+          price: parseFloat(d.lastPrice),
+          change: parseFloat(d.priceChangePercent),
+          currency: 'USD',
+          source: 'Binance',
+        };
+      }
+    } catch { /* try next */ }
+  }
+  throw new Error('Crypto not found');
 }
 
-async function fetchStock(symbol) {
-  // Yahoo Finance inoffizielle API (CORS-frei über allorigins)
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-  const res = await fetch(proxy);
-  const wrapper = await res.json();
+async function getForex(from, to) {
+  // frankfurter.app — ECB Kurse, täglich aktualisiert
+  const r = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`, { signal: AbortSignal.timeout(5000) });
+  if (!r.ok) throw new Error('Forex API error');
+  const d = await r.json();
+  const price = d.rates?.[to];
+  if (!price) throw new Error('No rate');
+  return { price, change: null, currency: to, source: 'ECB' };
+}
+
+async function getGold(from, to) {
+  // Für Gold/Silber: verwende open.er-api.com mit USD als Basis
+  // XAU/XAG werden dort unterstützt
+  try {
+    const r = await fetch(`https://open.er-api.com/v6/latest/${from}`, { signal: AbortSignal.timeout(5000) });
+    if (!r.ok) throw new Error();
+    const d = await r.json();
+    const price = d.rates?.[to];
+    if (!price) throw new Error();
+    return { price, change: null, currency: to, source: 'ER-API' };
+  } catch {
+    // Fallback: Frankfurter (unterstützt XAU nicht, aber Versuch)
+    const r2 = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`, { signal: AbortSignal.timeout(5000) });
+    if (!r2.ok) throw new Error('Gold API error');
+    const d2 = await r2.json();
+    const price2 = d2.rates?.[to];
+    if (!price2) throw new Error('No gold rate');
+    return { price: price2, change: null, currency: to, source: 'ECB' };
+  }
+}
+
+async function getStock(symbol) {
+  // Yahoo Finance via allorigins (CORS-Bypass)
+  const yUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(yUrl)}`;
+  const r = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error('Proxy error');
+  const wrapper = await r.json();
   const data = JSON.parse(wrapper.contents);
   const meta = data?.chart?.result?.[0]?.meta;
-  if (!meta) throw new Error('no stock data');
+  if (!meta?.regularMarketPrice) throw new Error('No stock data');
+  const change = meta.previousClose
+    ? ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100
+    : null;
   return {
     price: meta.regularMarketPrice,
-    change24h: ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose * 100),
-    source: 'Yahoo',
+    change,
     currency: meta.currency || 'USD',
+    source: 'Yahoo',
   };
 }
 
-function formatPrice(price, type, symbol) {
-  if (!price) return '—';
-  const s = symbol?.toUpperCase() || '';
-  // JPY pairs: no decimals
-  if (type === 'forex' && (s.endsWith('JPY') || s.includes('JPY'))) return price.toFixed(3);
+// ─── Formatierung ─────────────────────────────────────────────────────────────
+function fmt(price, type, from) {
+  if (price === null || price === undefined) return '—';
+  // JPY-Paare: 3 Dezimalstellen
+  if (type === 'forex' && from?.endsWith('JPY')) return price.toFixed(3);
   if (type === 'forex') return price.toFixed(5);
+  if (type === 'gold') return price.toFixed(2);
   if (type === 'crypto') {
-    if (price > 10000) return price.toFixed(0);
+    if (price > 10000) return price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     if (price > 1) return price.toFixed(2);
     return price.toFixed(6);
   }
-  if (price > 1000) return price.toFixed(2);
   return price.toFixed(2);
 }
 
+// ─── Komponente ───────────────────────────────────────────────────────────────
 export default function LivePriceTag({ instrument, darkMode }) {
-  const [state, setState] = useState({ loading: false, price: null, change24h: null, error: null, source: '', currency: 'USD' });
-  const timerRef = useRef(null);
-  const abortRef = useRef(null);
+  const [state, setState] = useState({ loading: false, price: null, change: null, currency: '', source: '', error: null, type: null, from: null });
+  const debounceRef = useRef(null);
 
-  useEffect(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    if (!instrument || instrument.trim().length < 2) {
-      setState({ loading: false, price: null, change24h: null, error: null, source: '', currency: 'USD' });
+  const load = async (raw) => {
+    if (!raw || raw.trim().length < 2) {
+      setState({ loading: false, price: null, change: null, currency: '', source: '', error: null, type: null, from: null });
       return;
     }
-    // Debounce 800ms
-    timerRef.current = setTimeout(() => loadPrice(instrument.trim()), 800);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [instrument]);
-
-  const loadPrice = async (raw) => {
     setState(s => ({ ...s, loading: true, error: null }));
-    const info = detectType(raw);
+    const info = detect(raw.trim());
     try {
       let result;
-      if (info.type === 'crypto') {
-        result = await fetchCrypto(info.base);
-        result.currency = 'USD';
-      } else if (info.type === 'forex') {
-        result = await fetchForex(info.symbol);
-        result.currency = info.symbol.slice(3, 6);
-      } else if (info.type === 'stock') {
-        result = await fetchStock(info.symbol);
-      } else {
-        // Try crypto first, then stock
-        try {
-          result = await fetchCrypto(raw.toUpperCase().replace(/[^A-Z0-9]/g, ''));
-          result.currency = 'USD';
-        } catch {
-          result = await fetchStock(raw.toUpperCase());
-        }
-      }
-      setState({ loading: false, price: result.price, change24h: result.change24h ?? null, error: null, source: result.source, currency: result.currency || 'USD' });
-    } catch {
-      setState({ loading: false, price: null, change24h: null, error: 'Kein Preis verfügbar', source: '', currency: 'USD' });
+      if (info.type === 'crypto') result = await getCrypto(info.base);
+      else if (info.type === 'gold') result = await getGold(info.from, info.to);
+      else if (info.type === 'forex') result = await getForex(info.from, info.to);
+      else result = await getStock(info.symbol);
+
+      setState({ loading: false, price: result.price, change: result.change, currency: result.currency, source: result.source, error: null, type: info.type, from: info.from || null });
+    } catch (e) {
+      setState(s => ({ ...s, loading: false, price: null, error: 'Kein Preis verfügbar', type: info.type }));
     }
   };
 
-  const { loading, price, change24h, error, source, currency } = state;
-  const info = instrument ? detectType(instrument.trim()) : null;
-  const priceStr = price ? formatPrice(price, info?.type, instrument) : null;
-  const isPos = change24h !== null && change24h >= 0;
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => load(instrument), 700);
+    return () => clearTimeout(debounceRef.current);
+  }, [instrument]);
+
+  const { loading, price, change, currency, source, error, type, from } = state;
 
   if (!instrument || instrument.trim().length < 2) return null;
 
+  const isPos = change !== null && change >= 0;
+  const priceStr = price !== null ? fmt(price, type, from) : null;
+
   return (
-    <div className={`flex items-center gap-1.5 mt-1.5 min-h-[22px]`}>
+    <div className="flex items-center gap-2 mt-1.5 min-h-[20px] flex-wrap">
       {loading && (
         <Loader2 className={`w-3 h-3 animate-spin ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`} />
       )}
+
       {!loading && priceStr && (
         <>
-          <span className={`text-xs font-mono font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
-            {priceStr} <span className={`text-[9px] font-sans font-normal ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>{currency}</span>
+          <span className={`text-xs font-mono font-bold tabular-nums ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
+            {priceStr}
           </span>
-          {change24h !== null && (
-            <span className={`flex items-center gap-0.5 text-[10px] font-bold ${isPos ? 'text-emerald-500' : 'text-rose-500'}`}>
-              {isPos ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-              {isPos ? '+' : ''}{change24h.toFixed(2)}%
+          {currency && (
+            <span className={`text-[9px] font-sans ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+              {currency}
             </span>
           )}
-          <span className={`text-[9px] font-sans ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>{source}</span>
+          {change !== null && (
+            <span className={`flex items-center gap-0.5 text-[10px] font-bold font-sans ${isPos ? 'text-emerald-500' : 'text-rose-500'}`}>
+              {isPos ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
+              {isPos ? '+' : ''}{change.toFixed(2)}%
+            </span>
+          )}
+          <button
+            onClick={() => load(instrument)}
+            className={`p-0.5 rounded transition-colors ${darkMode ? 'text-zinc-600 hover:text-zinc-400' : 'text-zinc-300 hover:text-zinc-500'}`}
+            title="Preis aktualisieren"
+          >
+            <RefreshCw className="w-2.5 h-2.5" />
+          </button>
+          <span className={`text-[9px] font-sans ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
+            {source}
+          </span>
         </>
       )}
+
       {!loading && error && (
-        <span className={`text-[10px] font-sans ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>{error}</span>
+        <span className={`text-[10px] font-sans italic ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
+          {error}
+        </span>
       )}
     </div>
   );
