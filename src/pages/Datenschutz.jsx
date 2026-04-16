@@ -58,7 +58,7 @@ export default function DatenschutzPage() {
             <p className="mb-3">
               Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und sonstiger datenschutzrechtlicher Vorschriften ist:
             </p>
-            <p className={`${theme.text} font-semibold`}>Zainspective Group</p>
+            <p className={`${theme.text} font-semibold`}>ZNPCV Ltd.</p>
             <p>Vertreten durch: Armin Zainali</p>
             <p>E-Mail: <a href="mailto:support@znpcv.com" className="text-emerald-600 hover:underline">support@znpcv.com</a></p>
           </section>
@@ -184,7 +184,7 @@ export default function DatenschutzPage() {
               ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
               : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
             } alt="ZNPCV" className="h-12 w-auto opacity-40" />
-            <p className={`${theme.textSecondary} text-xs tracking-widest`}>© {new Date().getFullYear()} ZNPCV — Zainspective Group</p>
+            <p className={`${theme.textSecondary} text-xs tracking-widest`}>© {new Date().getFullYear()} ZNPCV — ZNPCV Ltd.</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>Impressum</button>

@@ -48,7 +48,7 @@ export default function AGBPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-16">
         <div className={`${theme.bgHero} rounded-2xl p-6 sm:p-8 md:p-10 mb-8 border-2 ${theme.border}`}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 text-center">ALLGEMEINE GESCHÄFTSBEDINGUNGEN</h1>
-          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>Zainspective Group — ZNPCV Trading Plattform — Stand: Januar 2025</p>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>ZNPCV Ltd. — ZNPCV Trading Plattform — Stand: Januar 2025</p>
         </div>
 
         <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
@@ -56,7 +56,7 @@ export default function AGBPage() {
           <section className={`${theme.bgCard} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-4`}>§ 1 Geltungsbereich und Vertragsparteien</h2>
             <p className="mb-3">
-              (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB") der Zainspective Group, vertreten durch Armin Zainali (nachfolgend „Anbieter"), gelten für alle Verträge, die zwischen dem Anbieter und natürlichen oder juristischen Personen (nachfolgend „Nutzer") über die Nutzung der webbasierten Trading-Analyse-Plattform ZNPCV (nachfolgend „Plattform") geschlossen werden.
+              (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB") der ZNPCV Ltd., vertreten durch Armin Zainali (nachfolgend „Anbieter"), gelten für alle Verträge, die zwischen dem Anbieter und natürlichen oder juristischen Personen (nachfolgend „Nutzer") über die Nutzung der webbasierten Trading-Analyse-Plattform ZNPCV (nachfolgend „Plattform") geschlossen werden.
             </p>
             <p className="mb-3">
               (2) Abweichende, entgegenstehende oder ergänzende Allgemeine Geschäftsbedingungen des Nutzers werden selbst bei Kenntnis nicht Vertragsbestandteil, es sei denn, ihrer Geltung wird ausdrücklich schriftlich zugestimmt.
@@ -212,7 +212,7 @@ export default function AGBPage() {
               (3) <strong className={theme.text}>Salvatorische Klausel:</strong> Sollten einzelne Bestimmungen dieser AGB ganz oder teilweise unwirksam oder undurchführbar sein oder werden, so wird dadurch die Wirksamkeit der übrigen Bestimmungen nicht berührt. Anstelle der unwirksamen Bestimmung gilt diejenige rechtlich wirksame Regelung als vereinbart, die dem wirtschaftlichen Zweck der unwirksamen Bestimmung am nächsten kommt.
             </p>
             <p>
-              (4) <strong className={theme.text}>Kontakt:</strong> Zainspective Group — <a href="mailto:support@znpcv.com" className="text-emerald-600 hover:underline">support@znpcv.com</a>
+              (4) <strong className={theme.text}>Kontakt:</strong> ZNPCV Ltd. — <a href="mailto:support@znpcv.com" className="text-emerald-600 hover:underline">support@znpcv.com</a>
             </p>
           </section>
 
@@ -226,7 +226,7 @@ export default function AGBPage() {
               ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
               : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
             } alt="ZNPCV" className="h-12 w-auto opacity-40" />
-            <p className={`${theme.textSecondary} text-xs tracking-widest`}>© {new Date().getFullYear()} ZNPCV — Zainspective Group</p>
+            <p className={`${theme.textSecondary} text-xs tracking-widest`}>© {new Date().getFullYear()} ZNPCV — ZNPCV Ltd.</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>Impressum</button>

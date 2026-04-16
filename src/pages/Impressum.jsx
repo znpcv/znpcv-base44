@@ -55,7 +55,7 @@ export default function ImpressumPage() {
 
           <section className={`${theme.bgCard} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-4`}>Diensteanbieter</h2>
-            <p className={`${theme.text} font-semibold mb-1`}>Zainspective Group</p>
+            <p className={`${theme.text} font-semibold mb-1`}>ZNPCV Ltd.</p>
             <p>Betreiber der Plattform ZNPCV</p>
             <p>Vertreten durch: Armin Zainali</p>
           </section>
@@ -74,7 +74,7 @@ export default function ImpressumPage() {
           <section className={`${theme.bgCard} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-4`}>Verantwortlich für den Inhalt gemäß § 55 Abs. 2 RStV</h2>
             <p className={`${theme.text} font-semibold`}>Armin Zainali</p>
-            <p>Zainspective Group</p>
+            <p>ZNPCV Ltd.</p>
           </section>
 
           <section className={`${theme.bgCard} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
@@ -123,7 +123,7 @@ export default function ImpressumPage() {
               ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
               : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
             } alt="ZNPCV" className="h-12 w-auto opacity-40" />
-            <p className={`${theme.textSecondary} text-xs tracking-widest`}>© {new Date().getFullYear()} ZNPCV — Zainspective Group</p>
+            <p className={`${theme.textSecondary} text-xs tracking-widest`}>© {new Date().getFullYear()} ZNPCV — ZNPCV Ltd.</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
             <button onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors`}>Impressum</button>
