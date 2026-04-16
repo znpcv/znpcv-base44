@@ -11,6 +11,7 @@ import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/Langua
 import AccountButton from '@/components/AccountButton';
 import DailyQuoteWidget from '@/components/DailyQuoteWidget';
 import NotificationPrompt from '@/components/NotificationPrompt';
+import LivePricesTicker from '@/components/LivePricesTicker';
 
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
@@ -153,6 +154,9 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Live Prices Ticker */}
+      <LivePricesTicker darkMode={darkMode} />
 
       {/* Hero Section - Compact for Mobile */}
       <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
