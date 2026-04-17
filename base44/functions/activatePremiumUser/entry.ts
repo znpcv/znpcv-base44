@@ -4,7 +4,7 @@
  *
  * Body: { email: string, product: "checklist" | "strategy" | "both" }
  */
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25'; // ZNPCV Platform
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);

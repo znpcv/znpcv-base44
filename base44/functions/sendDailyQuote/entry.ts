@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const TRADING_QUOTES = [
   { quote: "Die Börse ist ein Ort, an dem Erfahrung wichtiger ist als Intelligenz.", author: "Peter Lynch" },
@@ -55,7 +55,8 @@ Deno.serve(async (req) => {
         try {
           await base44.asServiceRole.integrations.Core.SendEmail({
             to: user.email,
-            subject: `🎯 Dein täglicher Trading-Spruch`,
+            from_name: 'ZNPCV',
+          subject: `🎯 ZNPCV – Dein täglicher Trading-Impuls`,
             body: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 12px;">
                 <div style="text-align: center; margin-bottom: 30px;">
@@ -74,7 +75,10 @@ Deno.serve(async (req) => {
                 
                 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
                   <p style="font-size: 12px; color: #64748b; margin: 0;">
-                    Diese Erinnerung kannst du in deinen Account-Einstellungen anpassen
+                    Diese Erinnerung kannst du in deinen Einstellungen anpassen.
+                  </p>
+                  <p style="font-size: 11px; color: #475569; margin-top: 8px;">
+                    — ZNPCV · znpcv.de
                   </p>
                 </div>
               </div>

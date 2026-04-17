@@ -10,7 +10,8 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 	if (isNode) {
 		return defaultValue;
 	}
-	const storageKey = `base44_${toSnakeCase(paramName)}`;
+	// Neutral storage key prefix — no platform name exposed in DevTools
+	const storageKey = `znpcv_sys_${toSnakeCase(paramName)}`;
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchParam = urlParams.get(paramName);
 	if (removeFromUrl) {
@@ -31,12 +32,21 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 	if (storedValue) {
 		return storedValue;
 	}
+	// Legacy key fallback (base44_ prefix), migrate to new key if found
+	const legacyKey = `base44_${toSnakeCase(paramName)}`;
+	const legacyValue = storage.getItem(legacyKey);
+	if (legacyValue) {
+		storage.setItem(storageKey, legacyValue);
+		storage.removeItem(legacyKey);
+		return legacyValue;
+	}
 	return null;
 }
 
 const getAppParams = () => {
 	if (getAppParamValue("clear_access_token") === 'true') {
-		storage.removeItem('base44_access_token');
+		storage.removeItem('znpcv_sys_access_token');
+		storage.removeItem('base44_access_token'); // legacy cleanup
 		storage.removeItem('token');
 	}
 	return {

@@ -10,12 +10,14 @@ export default function NavigationTracker() {
     const { Pages, mainPage } = pagesConfig;
     const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 
-    // Post navigation changes to parent window
+    // Sync navigation state (internal)
     useEffect(() => {
-        window.parent?.postMessage({
-            type: "app_changed_url",
-            url: window.location.href
-        }, '*');
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+                type: "nav",
+                url: window.location.href
+            }, '*');
+        }
     }, [location]);
 
     // Log user activity when navigating to a page

@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import { jsPDF } from 'npm:jspdf@2.5.1';
 
 // In-memory rate limiter: 5 req/min per user
@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
     doc.text('PROFESSIONAL TRADING REPORT', 105, 22, { align: 'center' });
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text('Ultimate Checklist Analysis', 105, 28, { align: 'center' });
+    doc.text('Professional Trading Analysis · znpcv.de', 105, 28, { align: 'center' });
     doc.setFillColor(13, 148, 136);
     doc.rect(0, 45, 210, 1, 'F');
 
@@ -175,7 +175,7 @@ Deno.serve(async (req) => {
 
     doc.setFillColor(245, 245, 245); doc.rect(0, 282, 210, 15, 'F');
     doc.setFontSize(7); doc.setTextColor(120, 120, 120); doc.setFont('helvetica', 'normal');
-    doc.text('ZNPCV - Ultimate Trading Checklist', 105, 288, { align: 'center' });
+    doc.text('ZNPCV — Professional Trading Platform · znpcv.de', 105, 288, { align: 'center' });
     doc.setFontSize(6.5); doc.setFont('helvetica', 'italic');
     doc.text('"Discipline beats talent. Every. Single. Day."', 105, 293, { align: 'center' });
 

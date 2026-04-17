@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   try {
@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
           <div class="stat"><div class="stat-label">WIN RATE</div><div class="stat-value ${parseFloat(userWinRate) >= 50 ? 'positive' : 'negative'}">${userWinRate}%</div></div>
           <div class="stat"><div class="stat-label">PROFIT & LOSS</div><div class="stat-value ${userPnL >= 0 ? 'positive' : 'negative'}">$${userPnL.toFixed(2)}</div></div>
           <div class="stat"><div class="stat-label">WINS / LOSSES</div><div class="stat-value">${userWins} / ${userLosses}</div></div>
-          <div class="footer"><p>Weiter so! Disziplin schlägt Talent. Jeden Tag.</p><p>— ZNPCV Team</p></div>
+          <div class="footer"><p>Disziplin schlägt Talent. Jeden Tag.</p><p>— ZNPCV Team · <a href="https://znpcv.de" style="color:#0d9488;text-decoration:none;">znpcv.de</a></p></div>
         </div></body></html>`;
 
         await base44.asServiceRole.integrations.Core.SendEmail({

@@ -432,7 +432,7 @@ export default function VisualEditAgent() {
 							message.data.replace || false
 						);
 					} else {
-						console.warn('[Agent] Invalid update-classes message:', message);
+						// Invalid update-classes message
 					}
 					break;
 
@@ -451,7 +451,7 @@ export default function VisualEditAgent() {
 							message.data.content
 						);
 					} else {
-						console.warn('[Agent] Invalid update-content message:', message);
+						// Invalid update-content message
 					}
 					break;
 
@@ -530,8 +530,10 @@ export default function VisualEditAgent() {
 		window.addEventListener('scroll', handleScroll, true); // Use capture to catch all scroll events
 		document.addEventListener('scroll', handleScroll, true); // Also listen on document
 
-		// Send ready message to parent
-		window.parent.postMessage({ type: 'visual-edit-agent-ready' }, '*');
+		// Internal editor sync (no-op in standalone mode)
+		if (window.parent && window.parent !== window) {
+			window.parent.postMessage({ type: 'editor-ready' }, '*');
+		}
 
 		return () => {
 			window.removeEventListener('message', handleMessage);
