@@ -9,19 +9,14 @@ import PushOptInModal from './components/pwa/PushOptInModal';
 import { base44 } from './api/base44Client';
 
 const PUSH_PROMPT_DELAY_MS = 90000; // 90s after login, value-first
-const LS_KEY_PUSH_DISMISSED = 'znpcv_push_pre_dismissed_at';
-const PUSH_COOLDOWN_DAYS = 14;
+const LS_KEY_PUSH_SHOWN = 'znpcv_push_modal_shown';
 
 function PushOptInTrigger({ darkMode }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Don't show if already dismissed recently
-    const dismissedAt = localStorage.getItem(LS_KEY_PUSH_DISMISSED);
-    if (dismissedAt) {
-      const daysSince = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
-      if (daysSince < PUSH_COOLDOWN_DAYS) return;
-    }
+    // Only show ONCE ever — permanent after first display
+    if (localStorage.getItem(LS_KEY_PUSH_SHOWN)) return;
 
     // Only show if permission not yet decided
     if (!('Notification' in window)) return;
@@ -33,6 +28,7 @@ function PushOptInTrigger({ darkMode }) {
         if (!isAuth) return;
         const user = await base44.auth.me();
         if (!user.push_opted_in_at && !user.browser_notifications_enabled) {
+          localStorage.setItem(LS_KEY_PUSH_SHOWN, '1');
           setShow(true);
         }
       } catch {}

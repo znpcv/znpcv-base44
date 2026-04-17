@@ -3,191 +3,78 @@ import { Bell, X, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 
-const TRADING_QUOTES = [
-  { quote: "Die Börse ist ein Ort, an dem Erfahrung wichtiger ist als Intelligenz.", author: "Peter Lynch" },
-  { quote: "Risikomanagement ist wichtiger als Gewinnmaximierung.", author: "Warren Buffett" },
-  { quote: "Der Markt kann länger irrational bleiben, als du liquide bleiben kannst.", author: "John Maynard Keynes" },
-  { quote: "Erfolgreiche Trader haben einen Plan. Verlierer haben Hoffnung.", author: "Larry Williams" },
-  { quote: "Das Ziel des Trading ist nicht, perfekt zu sein, sondern profitabel.", author: "Alexander Elder" },
-  { quote: "Verluste sind Teil des Spiels. Akzeptiere sie und ziehe weiter.", author: "Jesse Livermore" },
-  { quote: "Die größten Gewinne kommen, wenn man die Trends reitet.", author: "Paul Tudor Jones" },
-  { quote: "Trading ist zu 90% Psychologie und zu 10% Technik.", author: "Mark Douglas" },
-  { quote: "Planung und Disziplin schlagen Emotionen im Trading.", author: "Van K. Tharp" },
-  { quote: "Der Trend ist dein Freund - bis er endet.", author: "Börsenweisheit" },
-  { quote: "Erfolgreiche Trader schneiden Verluste kurz und lassen Gewinne laufen.", author: "William J. O'Neil" },
-  { quote: "Im Trading gewinnt derjenige, der am längsten im Spiel bleibt.", author: "Jim Rogers" },
-  { quote: "Niemals aufgrund von Hoffnung oder Angst handeln, sondern auf Basis der Analyse.", author: "Benjamin Graham" },
-  { quote: "Das Geheimnis erfolgreichen Tradings liegt in der Konsistenz.", author: "Steve Nison" },
-  { quote: "Märkte belohnen Geduld und bestrafen Gier.", author: "Ray Dalio" }
-];
+// This prompt shows at most ONCE per device (permanent dismiss after shown)
+const LS_KEY_SHOWN = 'znpcv_notif_prompt_shown';
 
 export default function NotificationPrompt({ darkMode }) {
   const [show, setShow] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   useEffect(() => {
+    // Never show again if already shown or dismissed once
+    if (localStorage.getItem(LS_KEY_SHOWN)) return;
     checkNotificationStatus();
   }, []);
 
   const checkNotificationStatus = async () => {
     if (!('Notification' in window)) return;
-    
+
     const permission = Notification.permission;
-    setNotificationsEnabled(permission === 'granted');
-    
-    // Only show if already granted (no cold-call prompting)
-    if (permission === 'granted') {
-      try {
-        const isAuth = await base44.auth.isAuthenticated();
-        if (isAuth) {
-          const user = await base44.auth.me();
-          // Only show if not already subscribed via the new flow
-          if (!user.push_opted_in_at) {
-            setShow(true);
-          }
-        }
-      } catch (err) {
-        // ignore
-      }
+
+    // Already decided — no need to prompt
+    if (permission !== 'default') return;
+
+    try {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (!isAuth) return;
+      const user = await base44.auth.me();
+      // Don't show if already opted in
+      if (user.push_opted_in_at || user.browser_notifications_enabled) return;
+      setShow(true);
+    } catch {
+      // ignore
     }
+  };
+
+  const handleDismiss = () => {
+    localStorage.setItem(LS_KEY_SHOWN, '1');
+    setShow(false);
   };
 
   const requestNotificationPermission = async () => {
-    if (!('Notification' in window)) {
-      alert('Browser unterstützt keine Benachrichtigungen');
-      return;
-    }
+    if (!('Notification' in window)) return;
+
+    localStorage.setItem(LS_KEY_SHOWN, '1');
+    setShow(false);
 
     try {
       const permission = await Notification.requestPermission();
-      setNotificationsEnabled(permission === 'granted');
-      
       if (permission === 'granted') {
-        setShow(false);
-        
-        // Subscribe to push notifications
-        try {
-          await subscribeToPush();
-          await base44.auth.updateMe({ browser_notifications_enabled: true });
-        } catch (err) {
-          console.error('Failed to subscribe to push:', err);
+        await base44.auth.updateMe({ browser_notifications_enabled: true });
+        // Subscribe to push if supported
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+          try {
+            const { data } = await base44.functions.invoke('getVapidPublicKey');
+            if (data?.publicKey) {
+              const reg = await navigator.serviceWorker.ready;
+              let sub = await reg.pushManager.getSubscription();
+              if (!sub) {
+                const padding = '='.repeat((4 - data.publicKey.length % 4) % 4);
+                const base64 = (data.publicKey + padding).replace(/-/g, '+').replace(/_/g, '/');
+                const raw = window.atob(base64);
+                const key = new Uint8Array(raw.length);
+                for (let i = 0; i < raw.length; i++) key[i] = raw.charCodeAt(i);
+                sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+              }
+              await base44.functions.invoke('subscribePush', {
+                subscription: sub.toJSON(),
+                deviceInfo: navigator.platform,
+              });
+              await base44.auth.updateMe({ push_opted_in_at: new Date().toISOString() });
+            }
+          } catch { /* push optional */ }
         }
-        
-        // Send welcome notification
-        sendNotification();
-        // Schedule daily notifications
-        scheduleDailyNotifications();
       }
-    } catch (err) {
-      console.error('Failed to request notification permission:', err);
-    }
-  };
-
-  const subscribeToPush = async () => {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      console.log('Push notifications not supported');
-      return;
-    }
-
-    try {
-      // Get VAPID public key from backend
-      const response = await base44.functions.invoke('getVapidPublicKey');
-      const vapidPublicKey = response.data?.publicKey;
-      
-      if (!vapidPublicKey) {
-        console.error('VAPID Public Key nicht verfügbar');
-        return;
-      }
-
-      const registration = await navigator.serviceWorker.ready;
-      
-      // Check if already subscribed
-      let subscription = await registration.pushManager.getSubscription();
-      
-      if (!subscription) {
-        // Convert VAPID key
-        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-        
-        // Subscribe
-        subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: convertedVapidKey
-        });
-      }
-
-      // Get device info
-      const deviceInfo = `${navigator.platform} - ${navigator.userAgent.split(' ').pop()}`;
-
-      // Send subscription to backend
-      const subscribeResponse = await base44.functions.invoke('subscribePush', {
-        subscription: subscription.toJSON(),
-        deviceInfo
-      });
-
-      if (!subscribeResponse.data?.success) {
-        console.error('Subscription fehlgeschlagen');
-        return;
-      }
-
-      console.log('Push subscription successful');
-    } catch (err) {
-      console.error('Push subscription failed:', err);
-    }
-  };
-
-  const urlBase64ToUint8Array = (base64String) => {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
-      .replace(/_/g, '/');
-    
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-    
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  };
-
-  const sendNotification = () => {
-    const randomQuote = TRADING_QUOTES[Math.floor(Math.random() * TRADING_QUOTES.length)];
-    
-    if ('Notification' in window && Notification.permission === 'granted') {
-      try {
-        new Notification('ZNPCV Trading Tipp', {
-          body: `${randomQuote.quote}\n\n— ${randomQuote.author}`,
-          icon: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
-          badge: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
-          tag: 'daily-quote',
-          requireInteraction: false
-        });
-      } catch (err) {
-        console.error('Failed to show notification:', err);
-      }
-    }
-  };
-
-  const scheduleDailyNotifications = async () => {
-    try {
-      const userData = await base44.auth.me();
-      const frequency = parseInt(userData.notification_frequency || '1');
-      
-      if (!userData.browser_notifications_enabled) return;
-      
-      // Calculate interval based on frequency
-      const hoursInterval = 24 / frequency;
-      const msInterval = hoursInterval * 60 * 60 * 1000;
-      
-      // Send first notification after 1 minute
-      setTimeout(() => {
-        sendNotification();
-        // Then repeat at specified interval
-        setInterval(sendNotification, msInterval);
-      }, 60000);
-    } catch (err) {
-      console.error('Failed to schedule notifications');
-    }
+    } catch { /* ignore */ }
   };
 
   const theme = {
