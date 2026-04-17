@@ -46,41 +46,37 @@ export const AuthProvider = ({ children }) => {
         }
         setIsLoadingPublicSettings(false);
       } catch (appError) {
-        console.error('App state check failed:', appError);
-        
-        // Handle app-level errors
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
             setAuthError({
               type: 'auth_required',
-              message: 'Authentication required'
+              message: 'Anmeldung erforderlich'
             });
           } else if (reason === 'user_not_registered') {
             setAuthError({
               type: 'user_not_registered',
-              message: 'User not registered for this app'
+              message: 'Kein Zugang für diesen Account'
             });
           } else {
             setAuthError({
               type: reason,
-              message: appError.message
+              message: 'Zugriff nicht möglich'
             });
           }
         } else {
           setAuthError({
             type: 'unknown',
-            message: appError.message || 'Failed to load app'
+            message: 'Plattform konnte nicht geladen werden'
           });
         }
         setIsLoadingPublicSettings(false);
         setIsLoadingAuth(false);
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
       setAuthError({
         type: 'unknown',
-        message: error.message || 'An unexpected error occurred'
+        message: 'Ein unerwarteter Fehler ist aufgetreten'
       });
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
@@ -96,15 +92,12 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setIsLoadingAuth(false);
     } catch (error) {
-      console.error('User auth check failed:', error);
       setIsLoadingAuth(false);
       setIsAuthenticated(false);
-      
-      // If user auth fails, it might be an expired token
       if (error.status === 401 || error.status === 403) {
         setAuthError({
           type: 'auth_required',
-          message: 'Authentication required'
+          message: 'Anmeldung erforderlich'
         });
       }
     }

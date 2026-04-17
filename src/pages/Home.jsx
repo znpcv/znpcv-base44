@@ -203,15 +203,10 @@ export default function HomePage() {
           {/* New Analysis - Compact */}
           <button
             onClick={() => {
-              // strategy_access → ZNPCV Strategie (/Checklist)
-              // checklist_lifetime_access only → freie Checkliste (/FreeChecklist)
-              // no access → /Checklist (zeigt Paywall mit checklist-Kauf)
               if (userAccess.strategy) {
                 navigate(createPageUrl('Checklist'));
-              } else if (userAccess.checklist) {
-                navigate(createPageUrl('FreeChecklist'));
               } else {
-                navigate(createPageUrl('FreeChecklist')); // Paywall zeigt Checklisten-Kauf
+                navigate(createPageUrl('FreeChecklist'));
               }
             }}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",

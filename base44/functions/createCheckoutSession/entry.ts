@@ -37,7 +37,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    const appUrl = req.headers.get('origin') || 'https://znpcv.base44.app';
+    const appUrl = req.headers.get('origin') || 'https://znpcv.de';
     const successPath = product === 'strategy' ? '/Checklist?payment=success' : '/FreeChecklist?payment=success';
     const cancelPath = product === 'strategy' ? '/Checklist' : '/FreeChecklist';
 

@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
   try {
     event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
   } catch (err) {
-    return Response.json({ error: `Webhook verification failed: ${err.message}` }, { status: 400 });
+    return Response.json({ error: 'Signaturprüfung fehlgeschlagen.' }, { status: 400 });
   }
 
   if (event.type === 'checkout.session.completed') {
