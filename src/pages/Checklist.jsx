@@ -505,27 +505,27 @@ export default function ChecklistPage() {
           </div>
           
           {/* Score Details */}
-          <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs flex-wrap">
-            <span className={theme.textMuted}>W: <span className={weeklyScore > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{weeklyScore}/60</span></span>
-            <span className={theme.textMuted}>D: <span className={dailyScore > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{dailyScore}/60</span></span>
-            <span className={theme.textMuted}>4H: <span className={h4Score > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{h4Score}/35</span></span>
-            <span className={theme.textMuted}>E: <span className={entryScore > 0 ? `${theme.text} font-bold` : theme.textDimmed}>{entryScore}/25</span></span>
+          <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
+            <span className={theme.textMuted}>W:<span className={weeklyScore > 0 ? `${theme.text} font-bold ml-0.5` : `${theme.textDimmed} ml-0.5`}>{weeklyScore}/60</span></span>
+            <span className={theme.textMuted}>D:<span className={dailyScore > 0 ? `${theme.text} font-bold ml-0.5` : `${theme.textDimmed} ml-0.5`}>{dailyScore}/60</span></span>
+            <span className={theme.textMuted}>4H:<span className={h4Score > 0 ? `${theme.text} font-bold ml-0.5` : `${theme.textDimmed} ml-0.5`}>{h4Score}/35</span></span>
+            <span className={theme.textMuted}>E:<span className={entryScore > 0 ? `${theme.text} font-bold ml-0.5` : `${theme.textDimmed} ml-0.5`}>{entryScore}/25</span></span>
           </div>
         </div>
       </div>
 
-      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8">
+      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-3 sm:py-5 md:py-8">
         <AnimatePresence mode="wait">
           
           {/* STEP 0: Asset & Direction */}
           {currentStep === 0 &&
-          <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3 sm:space-y-4">
+          <motion.div key="pair" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
               <StepHeader number="01" title={t('assetDirection')} subtitle={t('selectPairDirection')} />
 
               <AssetSelector selectedPair={formData.pair} onSelect={(pair) => update('pair', pair)} />
 
               {formData.pair &&
-            <div className="grid gap-2 sm:gap-3">
+            <div className="grid gap-2">
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
                     <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
                   </motion.div>
@@ -536,52 +536,49 @@ export default function ChecklistPage() {
             }
               
               {formData.pair &&
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
-                  
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="space-y-3">
                   {/* Trade Date Input */}
-                  <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${theme.bgSecondary}`}>
-                    <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest block mb-2`}>HANDELSDATUM</label>
+                  <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                    <label className={`${theme.textMuted} text-[10px] tracking-widest block mb-2`}>HANDELSDATUM</label>
                     <Input
                       type="date"
                       value={formData.trade_date}
                       onChange={(e) => update('trade_date', e.target.value)}
                       max={format(new Date(), 'yyyy-MM-dd')}
-                      className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black'} rounded-lg text-sm font-mono`}
+                      className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-black'} rounded-lg text-sm font-mono h-11`}
                     />
                   </div>
                   
                   {/* Direction Selection */}
-                  <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest block`}>{t('selectDirection')}</label>
-                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <label className={`${theme.textMuted} text-[10px] tracking-widest block`}>{t('selectDirection')}</label>
+                  <div className="grid grid-cols-2 gap-3">
                     <motion.button
                   type="button"
                   onClick={() => update('direction', 'long')}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.1 }}
-                  className={cn("p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
-                  formData.direction === 'long' ? "bg-emerald-700 text-white border-emerald-700" : `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
+                  className={cn("py-4 px-3 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-sm",
+                  formData.direction === 'long' ? "bg-emerald-700 text-white border-emerald-700" : `${theme.borderCard} ${theme.text}`)}>
                       {formData.direction === 'long' &&
                   <div className="absolute inset-0 bg-white/10 animate-pulse" />
                   }
-                      <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-1" />
+                      <TrendingUp className="w-6 h-6 mx-auto mb-1.5" />
                       LONG / BUY
-                      <div className="text-[9px] sm:text-[10px] font-normal mt-0.5 opacity-80">{t('buyInAoi')}</div>
+                      <div className="text-[10px] font-normal mt-1 opacity-80">{t('buyInAoi')}</div>
                     </motion.button>
                     <motion.button
                   type="button"
                   onClick={() => update('direction', 'short')}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.1 }}
-                  className={cn("p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-xs sm:text-sm",
-                  formData.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.border} ${theme.text} hover:border-rose-600/50`)}>
+                  className={cn("py-4 px-3 rounded-xl border-2 transition-all font-bold tracking-wider relative overflow-hidden text-sm",
+                  formData.direction === 'short' ? "bg-rose-600 text-white border-rose-600" : `${theme.borderCard} ${theme.text}`)}>
                       {formData.direction === 'short' &&
                   <div className="absolute inset-0 bg-white/10 animate-pulse" />
                   }
-                      <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mx-auto mb-1" />
+                      <TrendingDown className="w-6 h-6 mx-auto mb-1.5" />
                       SHORT / SELL
-                      <div className="text-[9px] sm:text-[10px] font-normal mt-0.5 opacity-80">{t('sellInAoi')}</div>
+                      <div className="text-[10px] font-normal mt-1 opacity-80">{t('sellInAoi')}</div>
                     </motion.button>
                   </div>
                 </motion.div>
@@ -591,32 +588,29 @@ export default function ChecklistPage() {
 
           {/* STEP 1: Weekly */}
           {currentStep === 1 &&
-          <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="weekly" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
               <StepHeader number="02" title={t('weeklyAnalysis')} subtitle={t('weeklyConfirm')} />
               
-              {/* Progress Bar */}
               <SectionProgressBar current={weeklyScore} max={60} label={t('weeklyScore')} darkMode={darkMode} />
 
-              {/* Trend Selection - Compact */}
-              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 block`}>{t('weeklyTrend')}</label>
+              <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] tracking-widest mb-2 block`}>{t('weeklyTrend')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['bullish', 'bearish'].map((trend) =>
                 <motion.button
                   key={trend}
                   type="button"
                   onClick={() => update('w_trend', trend)}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.1 }}
-                  className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
+                  className={cn("py-3.5 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
                   formData.w_trend === trend ?
                   trend === 'bullish' ? "bg-emerald-700 text-white border-emerald-700" : "bg-rose-600 text-white border-rose-600" :
-                  `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
+                  `${theme.borderCard} ${theme.text}`)}>
                       {formData.w_trend === trend &&
                   <div className="absolute inset-0 bg-white/10" />
                   }
-                      {trend === 'bullish' ? <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5" /> : <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5" />}
+                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 mx-auto mb-1" />}
                       {trend.toUpperCase()}
                     </motion.button>
                 )}
@@ -701,46 +695,42 @@ export default function ChecklistPage() {
 
           {/* STEP 2: Daily */}
           {currentStep === 2 &&
-          <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="daily" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
               <StepHeader number="03" title={t('dailyAnalysis')} subtitle={t('dailyConfirm')} />
               
-              {/* Progress Bar */}
               <SectionProgressBar current={dailyScore} max={60} label={t('dailyScore')} darkMode={darkMode} />
 
-              {/* Confluence Alert */}
               {formData.w_trend && formData.d_trend && formData.h4_trend && formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend &&
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-            className={`p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-emerald-700/10 border-emerald-700/30' : 'bg-teal-500/10 border-emerald-600/30'}`}>
+            className={`p-3 rounded-xl border-2 ${darkMode ? 'bg-emerald-700/10 border-emerald-700/30' : 'bg-teal-500/10 border-emerald-600/30'}`}>
                   <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+                    <Layers className="w-5 h-5 text-emerald-600" />
                     <div>
-                      <div className="text-emerald-600 font-bold text-[10px] sm:text-xs tracking-wider">CONFLUENCE CONFIRMED</div>
-                      <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[9px] sm:text-[10px] font-sans`}>W•D•4H aligned!</div>
+                      <div className="text-emerald-600 font-bold text-xs tracking-wider">CONFLUENCE CONFIRMED</div>
+                      <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[10px] font-sans`}>W•D•4H aligned!</div>
                     </div>
                   </div>
                 </motion.div>
             }
 
-              {/* Trend Selection - Compact */}
-              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 block`}>{t('dailyTrend')}</label>
+              <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] tracking-widest mb-2 block`}>{t('dailyTrend')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['bullish', 'bearish'].map((trend) =>
                 <motion.button
                   key={trend}
                   type="button"
                   onClick={() => update('d_trend', trend)}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.1 }}
-                  className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
+                  className={cn("py-3.5 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
                   formData.d_trend === trend ?
                   trend === 'bullish' ? "bg-emerald-700 text-white border-emerald-700" : "bg-rose-600 text-white border-rose-600" :
-                  `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
+                  `${theme.borderCard} ${theme.text}`)}>
                       {formData.d_trend === trend &&
                   <div className="absolute inset-0 bg-white/10" />
                   }
-                      {trend === 'bullish' ? <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5" /> : <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5" />}
+                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 mx-auto mb-1" />}
                       {trend.toUpperCase()}
                     </motion.button>
                 )}
@@ -825,32 +815,29 @@ export default function ChecklistPage() {
 
           {/* STEP 3: 4H */}
           {currentStep === 3 &&
-          <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="h4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
               <StepHeader number="04" title={t('h4Analysis')} subtitle={t('h4Confirm')} />
               
-              {/* Progress Bar */}
               <SectionProgressBar current={h4Score} max={35} label={t('h4Score')} darkMode={darkMode} />
 
-              {/* Trend Selection - Compact */}
-              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 block`}>{t('h4Trend')}</label>
+              <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] tracking-widest mb-2 block`}>{t('h4Trend')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['bullish', 'bearish'].map((trend) =>
                 <motion.button
                   key={trend}
                   type="button"
                   onClick={() => update('h4_trend', trend)}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.1 }}
-                  className={cn("py-2 sm:py-2.5 md:py-3 rounded-lg border-2 transition-all font-bold text-xs sm:text-sm relative overflow-hidden",
+                  className={cn("py-3.5 rounded-xl border-2 transition-all font-bold text-sm relative overflow-hidden",
                   formData.h4_trend === trend ?
                   trend === 'bullish' ? "bg-emerald-700 text-white border-emerald-700" : "bg-rose-600 text-white border-rose-600" :
-                  `${theme.border} ${theme.text} hover:border-emerald-700/50`)}>
+                  `${theme.borderCard} ${theme.text}`)}>
                       {formData.h4_trend === trend &&
                   <div className="absolute inset-0 bg-white/10" />
                   }
-                      {trend === 'bullish' ? <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5" /> : <TrendingDown className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-0.5" />}
+                      {trend === 'bullish' ? <TrendingUp className="w-5 h-5 mx-auto mb-1" /> : <TrendingDown className="w-5 h-5 mx-auto mb-1" />}
                       {trend.toUpperCase()}
                     </motion.button>
                 )}
@@ -913,21 +900,19 @@ export default function ChecklistPage() {
 
           {/* STEP 4: Entry */}
           {currentStep === 4 &&
-          <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="entry" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
               <StepHeader number="05" title={t('entryChecklist')} subtitle={t('entryConfirm')} />
               
-              {/* Entry Timeframe Info - Compact */}
-              <div className={`p-2 sm:p-2.5 rounded-lg border ${darkMode ? 'bg-blue-600/10 border-blue-600/30' : 'bg-blue-500/10 border-blue-500/30'}`}>
-                <div className="flex items-start gap-2">
-                  <Target className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+              <div className={`p-3 rounded-xl border ${darkMode ? 'bg-blue-600/10 border-blue-600/30' : 'bg-blue-500/10 border-blue-500/30'}`}>
+                <div className="flex items-center gap-2">
+                  <Target className="w-4 h-4 text-blue-400 flex-shrink-0" />
                   <div>
-                    <div className="text-blue-400 font-bold tracking-wider text-[10px] sm:text-xs">{t('entryTimeframe')}</div>
-                    <div className={`text-[9px] sm:text-[10px] ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} font-sans leading-tight mt-0.5`}>30min oder 1H TF</div>
+                    <div className="text-blue-400 font-bold tracking-wider text-xs">{t('entryTimeframe')}</div>
+                    <div className={`text-[10px] ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} font-sans mt-0.5`}>30min oder 1H TF</div>
                   </div>
                 </div>
               </div>
 
-              {/* Progress Bar */}
               <SectionProgressBar current={entryScore} max={25} label={t('entryScoreLabel')} darkMode={darkMode} />
               
               <ChecklistItemWithTooltip
@@ -959,27 +944,26 @@ export default function ChecklistPage() {
               description={t('patternIfAnyDesc')} />
 
               
-              {/* Entry Type - Compact */}
-              <div className={`border ${theme.borderCard} rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${theme.bgSecondary}`}>
-                <label className={`${theme.textMuted} text-[10px] sm:text-xs tracking-widest mb-2 block`}>{t('entryTrigger')}</label>
+              <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                <label className={`${theme.textMuted} text-[10px] tracking-widest mb-2 block`}>{t('entryTrigger')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button type="button" onClick={() => update('entry_type', 'pinbar')}
-                className={cn("p-2.5 sm:p-3 md:p-4 border-2 rounded-lg text-center transition-all",
+                className={cn("py-4 px-3 border-2 rounded-xl text-center transition-all",
                 formData.entry_type === 'pinbar' ?
                 darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white" :
-                darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-lg sm:text-xl md:text-2xl mb-1">📍</div>
-                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">PINBAR</div>
-                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5 font-sans", formData.entry_type === 'pinbar' ? 'opacity-70' : 'opacity-50')}>Rejection</div>
+                darkMode ? "border-zinc-800 bg-zinc-900 text-white" : "border-zinc-300 bg-zinc-50 text-black")}>
+                    <div className="text-2xl mb-1.5">📍</div>
+                    <div className="font-bold tracking-wider text-xs">PINBAR</div>
+                    <div className={cn("text-[9px] mt-0.5 font-sans", formData.entry_type === 'pinbar' ? 'opacity-70' : 'opacity-50')}>Rejection</div>
                   </button>
                   <button type="button" onClick={() => update('entry_type', 'engulfing')}
-                className={cn("p-2.5 sm:p-3 md:p-4 border-2 rounded-lg text-center transition-all",
+                className={cn("py-4 px-3 border-2 rounded-xl text-center transition-all",
                 formData.entry_type === 'engulfing' ?
                 darkMode ? "bg-white border-white text-black" : "bg-black border-black text-white" :
-                darkMode ? "border-zinc-800 hover:border-zinc-600 bg-zinc-900 text-white" : "border-zinc-300 hover:border-zinc-400 bg-zinc-50 text-black")}>
-                    <div className="text-lg sm:text-xl md:text-2xl mb-1">🕯️</div>
-                    <div className="font-bold tracking-wider text-[10px] sm:text-xs">ENGULFING</div>
-                    <div className={cn("text-[8px] sm:text-[9px] mt-0.5 font-sans", formData.entry_type === 'engulfing' ? 'opacity-70' : 'opacity-50')}>Reversal</div>
+                darkMode ? "border-zinc-800 bg-zinc-900 text-white" : "border-zinc-300 bg-zinc-50 text-black")}>
+                    <div className="text-2xl mb-1.5">🕯️</div>
+                    <div className="font-bold tracking-wider text-xs">ENGULFING</div>
+                    <div className={cn("text-[9px] mt-0.5 font-sans", formData.entry_type === 'engulfing' ? 'opacity-70' : 'opacity-50')}>Reversal</div>
                   </button>
                 </div>
               </div>
@@ -988,38 +972,35 @@ export default function ChecklistPage() {
 
           {/* STEP 5: Risk Management */}
           {currentStep === 5 &&
-          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="risk" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
           <StepHeader number="06" title={t('riskManagementTitle')} subtitle={t('riskManagementSubtitle')} />
 
-          {/* Selected Pair Display - Compact */}
           {formData.pair &&
-            <div className={`border-2 rounded-lg sm:rounded-xl p-2 sm:p-2.5 ${darkMode ? 'border-emerald-700 bg-emerald-700/10' : 'border-emerald-600 bg-teal-500/10'}`}>
+            <div className={`border-2 rounded-xl p-3 ${darkMode ? 'border-emerald-700 bg-emerald-700/10' : 'border-emerald-600 bg-teal-500/10'}`}>
               <div className="flex items-center gap-2">
                 <Target className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                 <div>
-                  <div className="text-[9px] sm:text-[10px] text-emerald-600 tracking-wider">PAIR</div>
-                  <div className={`text-base sm:text-lg md:text-xl font-bold tracking-wider ${theme.text}`}>{formData.pair}</div>
+                  <div className="text-[10px] text-emerald-600 tracking-wider">PAIR</div>
+                  <div className={`text-xl font-bold tracking-wider ${theme.text}`}>{formData.pair}</div>
                 </div>
               </div>
             </div>
             }
 
-          {/* Live Market Data - Compact */}
           {formData.pair &&
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
               <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
             </motion.div>
             }
 
-          {/* R:R Warning */}
           {riskCalc && parseFloat(riskCalc.rr) < 2.5 && formData.entry_price && formData.stop_loss && formData.take_profit &&
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
-            className={`p-2.5 sm:p-3 rounded-lg sm:rounded-xl border-2 ${darkMode ? 'bg-amber-600/10 border-amber-600/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+            className={`p-3 rounded-xl border-2 ${darkMode ? 'bg-amber-600/10 border-amber-600/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
                 <div>
-                  <div className="text-amber-500 font-bold text-[10px] sm:text-xs tracking-wider">LOW R:R</div>
-                  <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[9px] sm:text-[10px] font-sans`}>Min. 1:2.5 empfohlen</div>
+                  <div className="text-amber-500 font-bold text-xs tracking-wider">LOW R:R</div>
+                  <div className={`${darkMode ? 'text-zinc-400' : 'text-zinc-600'} text-[10px] font-sans`}>Min. 1:2.5 empfohlen</div>
                 </div>
               </div>
             </motion.div>
@@ -1051,7 +1032,7 @@ export default function ChecklistPage() {
 
           {/* STEP 6: Final */}
           {currentStep === 6 &&
-          <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-2 sm:space-y-3">
+          <motion.div key="final" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.1 }} className="space-y-3">
               <StepHeader number="07" title={t('finalCheckTitle')} subtitle={t('finalCheckSubtitle')} />
 
               {/* 1. NO-TRADE ANALYSIS - Erste Priorität */}
@@ -1110,28 +1091,28 @@ export default function ChecklistPage() {
                 </div>
               </motion.div>
 
-              {/* 4. GOLDEN RULE CONFIRMATION - Kritischer Check */}
-              <div className={`border-2 rounded-lg p-2 sm:p-2.5 ${darkMode ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-300 bg-zinc-50'}`}>
-                <div className="flex items-center gap-1.5 mb-2">
+              {/* 4. GOLDEN RULE CONFIRMATION */}
+              <div className={`border-2 rounded-xl p-3 ${darkMode ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-300 bg-zinc-50'}`}>
+                <div className="flex items-center gap-2 mb-3">
                   <Shield className={`w-4 h-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`} />
-                  <div className={`${theme.text} font-bold tracking-widest text-[10px] sm:text-xs`}>{t('confirmRule')}</div>
+                  <div className={`${theme.text} font-bold tracking-widest text-xs`}>{t('confirmRule')}</div>
                 </div>
 
                 {formData.direction === 'long' &&
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-2 sm:p-2.5 border-2 rounded-lg flex items-center gap-2 transition-all text-left",
+                    className={cn("w-full p-3 border-2 rounded-xl flex items-center gap-3 transition-all text-left",
                       formData.confirms_rule ?
                       "bg-emerald-700 border-emerald-700 text-white" :
-                      darkMode ? "border-zinc-800 hover:border-emerald-700/50 bg-zinc-950" : "border-zinc-300 hover:border-emerald-700/50 bg-white")}>
-                    <div className={cn("w-6 h-6 border-2 flex items-center justify-center rounded flex-shrink-0",
+                      darkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-300 bg-white")}>
+                    <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg flex-shrink-0",
                       formData.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-700" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-3.5 h-3.5 text-emerald-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-4 h-4 text-emerald-600" strokeWidth={3} />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className={cn("font-bold tracking-wider text-[10px] sm:text-xs", formData.confirms_rule ? "text-white" : theme.text)}>
+                      <div className={cn("font-bold tracking-wider text-xs", formData.confirms_rule ? "text-white" : theme.text)}>
                         {t('buyInAboveAoi')}
                       </div>
-                      <div className={cn("text-[8px] sm:text-[9px] font-sans", formData.confirms_rule ? "text-emerald-100" : theme.textMuted)}>
+                      <div className={cn("text-[10px] font-sans mt-0.5", formData.confirms_rule ? "text-emerald-100" : theme.textMuted)}>
                         ✓ {t('notBuyResistance')}
                       </div>
                     </div>
@@ -1140,19 +1121,19 @@ export default function ChecklistPage() {
 
                 {formData.direction === 'short' &&
                   <button type="button" onClick={() => update('confirms_rule', !formData.confirms_rule)}
-                    className={cn("w-full p-2 sm:p-2.5 border-2 rounded-lg flex items-center gap-2 transition-all text-left",
+                    className={cn("w-full p-3 border-2 rounded-xl flex items-center gap-3 transition-all text-left",
                       formData.confirms_rule ?
                       "bg-rose-600 border-rose-600 text-white" :
-                      darkMode ? "border-zinc-800 hover:border-rose-600/50 bg-zinc-950" : "border-zinc-300 hover:border-rose-600/50 bg-white")}>
-                    <div className={cn("w-6 h-6 border-2 flex items-center justify-center rounded flex-shrink-0",
+                      darkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-300 bg-white")}>
+                    <div className={cn("w-7 h-7 border-2 flex items-center justify-center rounded-lg flex-shrink-0",
                       formData.confirms_rule ? "border-white bg-white" : darkMode ? "border-zinc-700" : "border-zinc-400")}>
-                      {formData.confirms_rule && <Check className="w-3.5 h-3.5 text-rose-600" strokeWidth={3} />}
+                      {formData.confirms_rule && <Check className="w-4 h-4 text-rose-600" strokeWidth={3} />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className={cn("font-bold tracking-wider text-[10px] sm:text-xs", formData.confirms_rule ? "text-white" : theme.text)}>
+                      <div className={cn("font-bold tracking-wider text-xs", formData.confirms_rule ? "text-white" : theme.text)}>
                         {t('sellInBelowAoi')}
                       </div>
-                      <div className={cn("text-[8px] sm:text-[9px] font-sans", formData.confirms_rule ? "text-rose-100" : theme.textMuted)}>
+                      <div className={cn("text-[10px] font-sans mt-0.5", formData.confirms_rule ? "text-rose-100" : theme.textMuted)}>
                         ✓ {t('notSellSupport')}
                       </div>
                     </div>
@@ -1167,10 +1148,10 @@ export default function ChecklistPage() {
                 }
               </div>
 
-              {/* 5. TRADE SUMMARY - Kompakt */}
-              <div className={`border ${theme.borderCard} rounded-lg p-2 sm:p-2.5 ${theme.bgSecondary}`}>
-                <h3 className={`${theme.text} font-bold tracking-widest text-[10px] sm:text-xs mb-1.5`}>{t('tradeSummary')}</h3>
-                <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[9px] sm:text-[10px]">
+              {/* 5. TRADE SUMMARY */}
+              <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                <h3 className={`${theme.text} font-bold tracking-widest text-xs mb-2`}>{t('tradeSummary')}</h3>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
                   <SummaryRow label="PAIR" value={formData.pair || '-'} />
                   <SummaryRow label="DIR" value={formData.direction === 'long' ? '↑ LONG' : formData.direction === 'short' ? '↓ SHORT' : '-'} 
                     color={formData.direction === 'long' ? 'teal' : formData.direction === 'short' ? 'rose' : null} />
@@ -1187,8 +1168,8 @@ export default function ChecklistPage() {
                 </div>
               </div>
 
-              {/* 6. SCREENSHOTS - Dokumentation */}
-              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+              {/* 6. SCREENSHOTS */}
+              <div className="grid grid-cols-2 gap-2">
                 <ScreenshotUpload label="SETUP" description="Before Entry" screenshots={formData.screenshots_before || []}
                   onUpload={async (files) => {
                     const results = await Promise.all(files.map(file => base44.integrations.Core.UploadFile({ file })));
@@ -1205,9 +1186,9 @@ export default function ChecklistPage() {
                   darkMode={darkMode} variant="after" />
               </div>
 
-              {/* 7. NOTES - Optional */}
-              <div className={`border ${theme.borderCard} rounded-lg p-2 sm:p-2.5 ${theme.bgSecondary}`}>
-                <label className={`block ${theme.textMuted} tracking-widest text-[10px] sm:text-xs mb-1.5`}>{t('notesOptional')}</label>
+              {/* 7. NOTES */}
+              <div className={`border ${theme.borderCard} rounded-xl p-3 ${theme.bgSecondary}`}>
+                <label className={`block ${theme.textMuted} tracking-widest text-[10px] mb-2`}>{t('notesOptional')}</label>
                 <Textarea
                   value={formData.notes}
                   onChange={(e) => {
@@ -1216,7 +1197,7 @@ export default function ChecklistPage() {
                   }}
                   placeholder={t('notesPlaceholderLong')}
                   maxLength={LIMITS.NOTES}
-                  className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400'} min-h-[100px] rounded-lg font-sans text-xs`}
+                  className={`${darkMode ? 'bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-700' : 'bg-white border-zinc-300 text-black placeholder:text-zinc-400'} min-h-[100px] rounded-xl font-sans text-sm`}
                 />
                 <div className={`text-right text-[10px] font-sans mt-1 ${(formData.notes?.length || 0) >= LIMITS.NOTES * 0.9 ? 'text-amber-500' : darkMode ? 'text-zinc-700' : 'text-zinc-400'}`}>
                   {formData.notes?.length || 0}/{LIMITS.NOTES}
@@ -1235,51 +1216,43 @@ export default function ChecklistPage() {
           }
         </AnimatePresence>
 
-        {/* Navigation Buttons - Compact */}
-        <div className="mt-4 sm:mt-6 md:mt-8 flex gap-1.5 sm:gap-2 md:gap-3">
+        {/* Navigation Buttons */}
+        <div className="mt-5 flex gap-2 pb-4">
           {currentStep > 0 &&
-          <Button onClick={() => setCurrentStep((prev) => prev - 1)} variant="outline" className="bg-background text-slate-950 px-3 py-2 text-xs font-medium tracking-widest rounded-lg inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm hover:text-accent-foreground sm:rounded-xl sm:px-4 md:px-5 h-10 sm:h-11 md:h-12 border-2 sm:text-sm md:text-base border-zinc-800 hover:bg-zinc-900 hover:border-zinc-700">
+          <button onClick={() => setCurrentStep((prev) => prev - 1)} className={cn("flex items-center justify-center gap-1 px-5 h-12 rounded-xl border-2 font-bold text-sm tracking-widest transition-all", darkMode ? "border-zinc-700 text-zinc-300 bg-zinc-900" : "border-zinc-300 text-zinc-600 bg-zinc-50")}>
 
 
 
 
 
-              <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" /> <span className="hidden sm:inline">{t('back')}</span>
-            </Button>
+            <ChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">{t('back')}</span>
+          </button>
           }
           
           {currentStep < STEPS.length - 1 ?
-          <Button
+          <button
             onClick={() => setCurrentStep((prev) => prev + 1)}
             disabled={currentStep === 0 && !formData.pair}
-            className={`flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-            darkMode ?
-            'bg-white hover:bg-zinc-200 text-black border-white' :
-            'bg-black hover:bg-zinc-800 text-white border-black'}`
-            }>
-              {t('next')} <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
-            </Button> :
+            className={cn("flex-1 flex items-center justify-center gap-1 h-12 rounded-xl font-bold text-sm tracking-widest border-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed",
+            darkMode ? 'bg-white text-black border-white' : 'bg-black text-white border-black')}>
+              {t('next')} <ChevronRight className="w-4 h-4" />
+            </button> :
 
-          <div className="flex-1 flex gap-1.5 sm:gap-2">
+          <div className="flex-1 flex gap-2">
               {checklistId &&
-            <Button onClick={() => setShowDeleteModal(true)} variant="outline"
-            className={`rounded-lg sm:rounded-xl px-2.5 sm:px-3 md:px-4 h-10 sm:h-11 md:h-12 border-2 ${
-            darkMode ?
-            'border-rose-600 text-rose-400 hover:bg-rose-600/10' :
-            'border-red-600 text-red-600 hover:bg-red-50'}`
-            }>
-                  <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                </Button>
+            <button onClick={() => setShowDeleteModal(true)}
+            className={cn("flex items-center justify-center px-4 h-12 rounded-xl border-2 transition-all",
+            darkMode ? 'border-rose-600 text-rose-400' : 'border-red-600 text-red-600')}>
+                  <Trash2 className="w-4 h-4" />
+                </button>
             }
-              <Button onClick={() => handleSave(false)} disabled={saving || !formData.pair}
-            className={cn("flex-1 rounded-lg sm:rounded-xl tracking-widest text-xs sm:text-sm md:text-base h-10 sm:h-11 md:h-12 font-bold border-2",
+              <button onClick={() => handleSave(false)} disabled={saving || !formData.pair}
+            className={cn("flex-1 flex items-center justify-center gap-2 h-12 rounded-xl font-bold text-sm tracking-widest border-2 transition-all disabled:opacity-40",
             isReady ?
-            "bg-emerald-700 hover:bg-emerald-800 text-white border-emerald-700" :
-            darkMode ?
-            "bg-white hover:bg-zinc-200 text-black border-white" :
-            "bg-black hover:bg-zinc-800 text-white border-black")}>
-                <Save className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> {saving ? t('saving') : t('saveTrade')}
-              </Button>
+            "bg-emerald-700 text-white border-emerald-700" :
+            darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black")}>
+                <Save className="w-4 h-4" /> {saving ? t('saving') : t('saveTrade')}
+              </button>
             </div>
           }
         </div>
@@ -1343,10 +1316,10 @@ export default function ChecklistPage() {
 function StepHeader({ number, title, subtitle }) {
   const { darkMode } = useLanguage();
   return (
-    <div className="text-center mb-2 sm:mb-3 md:mb-4">
-      <div className={`text-xl sm:text-2xl md:text-3xl font-light mb-0.5 ${darkMode ? 'text-zinc-800' : 'text-zinc-300'}`}>{number}</div>
-      <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest mb-0.5 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
-      <p className={`text-[9px] sm:text-[10px] md:text-xs tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'} px-2`}>{subtitle}</p>
+    <div className="text-center mb-3">
+      <div className={`text-2xl font-light mb-0.5 ${darkMode ? 'text-zinc-800' : 'text-zinc-300'}`}>{number}</div>
+      <h2 className={`text-base sm:text-lg tracking-widest mb-0.5 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
+      <p className={`text-[10px] tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'} px-2`}>{subtitle}</p>
     </div>);
 
 }
@@ -1408,39 +1381,35 @@ function PatternSelector({ value, onChange, score, label, description }) {
   };
 
   return (
-    <div className={`border rounded-lg sm:rounded-xl p-2 sm:p-2.5 md:p-3 ${darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100'}`}>
+    <div className={`border rounded-xl p-3 ${darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100'}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="min-w-0 flex-1">
-          <label className={`text-[10px] sm:text-xs tracking-widest block ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>{label}</label>
-          {description && <span className={`text-[9px] sm:text-[10px] hidden sm:block ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{description}</span>}
+          <label className={`text-[10px] tracking-widest block ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>{label}</label>
         </div>
         {value && value !== 'none' &&
-        <div className="px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-700 text-white flex-shrink-0">+{score}%</div>
+        <div className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-700 text-white flex-shrink-0">+{score}%</div>
         }
       </div>
-      <div className="grid grid-cols-5 gap-1 sm:gap-1.5">
+      <div className="grid grid-cols-5 gap-1.5">
         {patterns.map((pattern) =>
         <button key={pattern.key} type="button" onClick={() => onChange(pattern.key)}
-        className={cn("p-1.5 sm:p-2 border-2 rounded-lg text-center transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1 group relative",
+        className={cn("py-2.5 px-1 border-2 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-1 group relative",
         value === pattern.key ?
         pattern.key === 'none' ?
         darkMode ? "bg-zinc-700 border-zinc-600 text-white" : "bg-zinc-400 border-zinc-400 text-white" :
-        "bg-emerald-700 border-emerald-600 text-white shadow-lg shadow-teal-600/20" :
+        "bg-emerald-700 border-emerald-600 text-white" :
         darkMode ?
-        "border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-zinc-900 hover:text-white" :
-        "border-zinc-300 text-zinc-600 hover:border-zinc-400 bg-zinc-50 hover:text-black")}>
+        "border-zinc-800 text-zinc-500 bg-zinc-900" :
+        "border-zinc-300 text-zinc-600 bg-zinc-50")}>
             {value === pattern.key && pattern.key !== 'none' &&
-          <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-white rounded-full flex items-center justify-center">
-                <Check className="w-1.5 h-1.5 text-emerald-600" strokeWidth={4} />
+          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-white rounded-full flex items-center justify-center">
+                <Check className="w-2 h-2 text-emerald-600" strokeWidth={4} />
               </div>
           }
-            <div className="w-5 h-3.5 sm:w-6 sm:h-4 md:w-7 md:h-5">
+            <div className="w-6 h-4">
               <PatternIcon type={pattern.icon} />
             </div>
-            <div className="text-[7px] sm:text-[8px] md:text-[9px] tracking-wider font-bold leading-tight">{pattern.label}</div>
-            <div className={cn("text-[6px] sm:text-[7px] opacity-70 font-sans leading-tight", value === pattern.key && pattern.key !== 'none' ? 'text-white' : theme.textMuted)}>
-              {pattern.desc}
-            </div>
+            <div className="text-[8px] tracking-wider font-bold leading-tight">{pattern.label}</div>
           </button>
         )}
       </div>
@@ -1458,9 +1427,9 @@ function SummaryRow({ label, value, color }) {
   };
 
   return (
-    <div className="flex justify-between items-center py-1 sm:py-1.5 md:py-2">
-      <span className={`text-[10px] sm:text-xs tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{label}</span>
-      <span className={cn("font-bold text-xs sm:text-sm", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
+    <div className="flex justify-between items-center py-1.5">
+      <span className={`text-[10px] tracking-wider ${darkMode ? 'text-zinc-600' : 'text-zinc-500'}`}>{label}</span>
+      <span className={cn("font-bold text-xs", color ? colorClasses[color] : darkMode ? "text-white" : "text-black")}>{value}</span>
     </div>);
 
 }
@@ -1493,11 +1462,11 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
   };
 
   return (
-    <div className={cn("border rounded-lg p-2 sm:p-2.5",
+    <div className={cn("border rounded-xl p-2.5",
     variant ? variantColors[variant] : darkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-300 bg-zinc-100')}>
       
-      <div className="flex items-center justify-between mb-1.5">
-        <div className="text-[10px] sm:text-xs font-bold tracking-wider">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-[10px] font-bold tracking-wider">
           {label}
           {description && <span className={`${theme.textSecondary} text-[9px] font-sans ml-1`}>• {description}</span>}
         </div>
@@ -1511,32 +1480,31 @@ function ScreenshotUpload({ label, description, screenshots, onUpload, onDelete,
       </div>
       
       {screenshots && screenshots.length > 0 &&
-      <div className="grid grid-cols-3 gap-1 sm:gap-1.5 mb-1.5">
+      <div className="grid grid-cols-3 gap-1.5 mb-2">
           {screenshots.map((url, index) =>
         <div key={index} className="relative group aspect-square">
-              <img src={url} alt={`${index + 1}`} className={`w-full h-full object-cover rounded border ${theme.border}`} />
+              <img src={url} alt={`${index + 1}`} className={`w-full h-full object-cover rounded-lg border ${theme.border}`} />
               <button
             onClick={() => onDelete(url)}
-            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <XIcon className="w-3.5 h-3.5 text-white" />
+            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+                <XIcon className="w-4 h-4 text-white" />
               </button>
             </div>
         )}
         </div>
       }
 
-      <label className={cn("flex items-center justify-center gap-1.5 p-1.5 sm:p-2 border border-dashed rounded cursor-pointer transition-all",
-      uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-700 hover:border-zinc-600 bg-zinc-900/50" : "border-zinc-400 hover:border-zinc-500 bg-white/50")}>
+      <label className={cn("flex items-center justify-center gap-2 p-2.5 border border-dashed rounded-xl cursor-pointer transition-all",
+      uploadingLocal ? "opacity-50 cursor-not-allowed" : darkMode ? "border-zinc-700 bg-zinc-900/50" : "border-zinc-400 bg-white/50")}>
         <input type="file" multiple accept="image/*" onChange={handleFileChange} className="hidden" disabled={uploadingLocal} />
         {uploadingLocal ?
         <>
-            <div className={`animate-spin w-3 h-3 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full`} />
-            <span className={`text-[9px] ${theme.textSecondary} font-sans`}>Uploading...</span>
+            <div className={`animate-spin w-3.5 h-3.5 border-2 ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full`} />
+            <span className={`text-[10px] ${theme.textSecondary} font-sans`}>Uploading...</span>
           </> :
-
         <>
-            <Upload className={`w-3 h-3 ${theme.textSecondary}`} />
-            <span className={`text-[9px] sm:text-[10px] tracking-wider ${theme.text}`}>UPLOAD</span>
+            <Upload className={`w-3.5 h-3.5 ${theme.textSecondary}`} />
+            <span className={`text-[10px] tracking-wider ${theme.text}`}>UPLOAD</span>
           </>
         }
       </label>
