@@ -39,6 +39,7 @@ export default function ChecklistPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [saveError, setSaveError] = useState(null);
   const [hasAccess, setHasAccess] = useState(false);
+  const [hasStrategyAccess, setHasStrategyAccess] = useState(false);
 
   const [uploading, setUploading] = useState(false);
 
@@ -103,11 +104,13 @@ export default function ChecklistPage() {
     const init = async () => {
       try {
         const user = await base44.auth.me();
-        // strategy_access → ZNPCV Strategie ($2,499)
-        // Admins have full access
-        if (user.strategy_access || user.role === 'admin') {
-          setHasAccess(true);
-        }
+        // checklist_lifetime_access ODER legacy stripe_subscription_active → Zugriff auf Checkliste
+        // strategy_access → zusätzlich Zugriff auf echte ZNPCV Strategie
+        // Admins haben vollen Zugriff
+        const checklistOk = !!user.checklist_lifetime_access || !!user.stripe_subscription_active || user.role === 'admin';
+        const strategyOk = !!user.strategy_access || user.role === 'admin';
+        if (checklistOk) setHasAccess(true);
+        setHasStrategyAccess(strategyOk);
       } catch {}
       if (checklistId) {
         await loadChecklist();
@@ -422,9 +425,10 @@ export default function ChecklistPage() {
       </div>);
   }
 
-  // Guard — nur strategy_access darf die ZNPCV Strategie sehen
+  // Guard — Zugang zur Checkliste benötigt checklist_lifetime_access (oder Legacy stripe_subscription_active)
+  // strategy_access ist NICHT erforderlich für den Checklisten-Einstieg
   if (!hasAccess) {
-    return <ProductPaywall darkMode={darkMode} mode="strategy" />;
+    return <ProductPaywall darkMode={darkMode} mode="checklist" />;
   }
 
   return (
