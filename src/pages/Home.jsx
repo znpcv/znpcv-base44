@@ -31,6 +31,8 @@ export default function HomePage() {
   const [serverStatus, setServerStatus] = useState('operational');
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showDailyQuote, setShowDailyQuote] = useState(false);
+  // Access state for smart routing
+  const [userAccess, setUserAccess] = useState({ strategy: false, checklist: false, loaded: false });
 
   useEffect(() => {
     const updateTimes = () => {
@@ -54,16 +56,23 @@ export default function HomePage() {
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
 
-    // Check if user wants to show daily quote
+    // Load user settings + access flags
     const checkUserSettings = async () => {
       try {
         const isAuth = await base44.auth.isAuthenticated();
         if (isAuth) {
           const userData = await base44.auth.me();
           setShowDailyQuote(userData.show_daily_quote_in_app || false);
+          setUserAccess({
+            strategy: !!userData.strategy_access || userData.role === 'admin',
+            checklist: !!userData.checklist_lifetime_access || !!userData.stripe_subscription_active || userData.role === 'admin',
+            loaded: true,
+          });
+        } else {
+          setUserAccess({ strategy: false, checklist: false, loaded: true });
         }
       } catch (err) {
-        console.error('Failed to load user settings');
+        setUserAccess({ strategy: false, checklist: false, loaded: true });
       }
     };
     checkUserSettings();
@@ -193,7 +202,18 @@ export default function HomePage() {
         >
           {/* New Analysis - Compact */}
           <button
-            onClick={() => navigate(createPageUrl('Checklist'))}
+            onClick={() => {
+              // strategy_access → ZNPCV Strategie (/Checklist)
+              // checklist_lifetime_access only → freie Checkliste (/FreeChecklist)
+              // no access → /Checklist (zeigt Paywall mit checklist-Kauf)
+              if (userAccess.strategy) {
+                navigate(createPageUrl('Checklist'));
+              } else if (userAccess.checklist) {
+                navigate(createPageUrl('FreeChecklist'));
+              } else {
+                navigate(createPageUrl('FreeChecklist')); // Paywall zeigt Checklisten-Kauf
+              }
+            }}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
               darkMode ? "bg-white text-black" : "bg-black text-white")}
           >
@@ -405,7 +425,10 @@ export default function HomePage() {
                 NAVIGATION
               </h4>
               <div className="space-y-2">
-                <button onClick={() => navigate(createPageUrl('Checklist'))} 
+                <button onClick={() => {
+                    if (userAccess.strategy) navigate(createPageUrl('Checklist'));
+                    else navigate(createPageUrl('FreeChecklist'));
+                  }} 
                   className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
                   <ClipboardCheck className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
                   <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('newAnalysis')}</span>
