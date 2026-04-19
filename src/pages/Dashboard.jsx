@@ -224,7 +224,7 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 md:py-10">
         {showDailyQuote && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
             <DailyQuoteWidget darkMode={darkMode} />
@@ -794,23 +794,22 @@ export default function DashboardPage() {
               {/* Session Filter - Touch Optimiert */}
               <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
                 {[
-                  { id: 'all', label: 'ALL', emoji: '🌍' },
-                  { id: 'london', label: 'LON', emoji: '🇬🇧' },
-                  { id: 'newyork', label: 'NY', emoji: '🇺🇸' },
-                  { id: 'tokyo', label: 'TYO', emoji: '🇯🇵' }
+                  { id: 'all', label: 'ALL' },
+                  { id: 'london', label: 'LON' },
+                  { id: 'newyork', label: 'NY' },
+                  { id: 'tokyo', label: 'TYO' }
                 ].map((session) => (
                   <button
                     key={session.id}
                     onClick={() => setSessionFilter(session.id)}
                     className={cn(
-                      "flex items-center gap-1 px-2 py-1 text-[9px] sm:text-[10px] tracking-wider rounded-md transition-all font-bold border flex-shrink-0 touch-manipulation",
+                      "px-2.5 py-1.5 text-[10px] tracking-wider rounded-md transition-all font-bold border flex-shrink-0 touch-manipulation min-h-[32px]",
                       sessionFilter === session.id
                         ? darkMode ? "bg-white text-black border-white" : "bg-zinc-900 text-white border-zinc-900"
                         : darkMode ? "bg-zinc-900/50 text-zinc-400 border-zinc-800/50" : "bg-white text-zinc-600 border-zinc-300"
                     )}
                   >
-                    <span className="text-xs">{session.emoji}</span>
-                    <span className="hidden sm:inline">{session.label}</span>
+                    {session.label}
                   </button>
                 ))}
               </div>

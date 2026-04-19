@@ -412,7 +412,7 @@ export default function TradeHistoryPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 lg:px-8 py-2 sm:py-4 md:py-6 lg:py-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-5 md:py-6 lg:py-10">
         {/* Title */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-5 md:mb-6">
           <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
@@ -460,7 +460,7 @@ export default function TradeHistoryPage() {
         </motion.div>
 
         {/* Stats Grid - Erweiterte Metriken */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.2 }} className="grid grid-cols-2 lg:grid-cols-5 gap-1.5 sm:gap-3 md:gap-4 mb-3 sm:mb-5 md:mb-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-5 md:mb-6">
           <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white shadow-lg shadow-emerald-700/20" : "bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-600/20")}>
             <TrendingUp className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 opacity-90" />
             <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1">${stats.totalPnL.toFixed(2)}</div>

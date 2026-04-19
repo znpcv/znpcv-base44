@@ -25,14 +25,14 @@ export default function BottomNav({ darkMode }) {
       "fixed bottom-0 left-0 right-0 z-50 md:hidden border-t-2",
       darkMode ? "bg-black border-zinc-800" : "bg-white border-zinc-200"
     )}>
-      <div className="flex items-center justify-around px-2 py-2 safe-area-inset-bottom">
+      <div className="flex items-center justify-around px-1 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         {navItems.map((item) => {
           const active = isActive(item.page);
           return (
             <button
               key={item.page}
               onClick={() => navigate(createPageUrl(item.page))}
-              className="relative flex flex-col items-center justify-center gap-1 px-3 py-2 flex-1 touch-manipulation"
+              className="relative flex flex-col items-center justify-center gap-1 px-1 py-2 flex-1 touch-manipulation min-h-[48px]"
             >
               {active && (
                 <motion.div
