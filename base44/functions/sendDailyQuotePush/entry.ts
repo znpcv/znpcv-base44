@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
       });
 
       const payload = JSON.stringify({
-        title: 'ZNPCV Trading Tipp 📈',
+        title: 'ZNPCV Trading Tipp',
         body: `${randomQuote.quote}\n\n— ${randomQuote.author}`,
         icon: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',
         badge: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png',

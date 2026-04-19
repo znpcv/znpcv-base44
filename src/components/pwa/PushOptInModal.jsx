@@ -8,9 +8,9 @@ const LS_KEY_PUSH_DISMISSED = 'znpcv_push_pre_dismissed_at';
 const PUSH_COOLDOWN_DAYS = 14;
 
 const TOPICS = [
-  { key: 'setup_alerts', label: 'Setup Alerts', desc: 'Neue Trade-Setup Signale', icon: '📊' },
-  { key: 'reminders', label: 'Checkliste Reminder', desc: 'Tägliche Erinnerung zur Analyse', icon: '⏰' },
-  { key: 'product_updates', label: 'Produkt Updates', desc: 'Neue Features & Verbesserungen', icon: '🚀' },
+  { key: 'setup_alerts', label: 'Setup Alerts', desc: 'Neue Trade-Setup Signale' },
+  { key: 'reminders', label: 'Checkliste Reminder', desc: 'Tägliche Erinnerung zur Analyse' },
+  { key: 'product_updates', label: 'Produkt Updates', desc: 'Neue Features & Verbesserungen' },
 ];
 
 function urlBase64ToUint8Array(base64String) {
@@ -153,7 +153,7 @@ export default function PushOptInModal({ darkMode, onClose }) {
 
             {/* Topics */}
             <div className="space-y-2 mb-4">
-              {TOPICS.map(({ key, label, desc, icon }) => (
+              {TOPICS.map(({ key, label, desc }) => (
                 <button
                   key={key}
                   onClick={() => toggleTopic(key)}
@@ -164,7 +164,6 @@ export default function PushOptInModal({ darkMode, onClose }) {
                       : cn(theme.border, theme.bgCard)
                   )}
                 >
-                  <span className="text-lg">{icon}</span>
                   <div className="flex-1 min-w-0">
                     <div className={`text-xs font-bold ${theme.text}`}>{label}</div>
                     <div className={`text-[10px] font-sans ${theme.textMuted}`}>{desc}</div>

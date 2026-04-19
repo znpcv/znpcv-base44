@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
           await base44.asServiceRole.integrations.Core.SendEmail({
             to: user.email,
             from_name: 'ZNPCV',
-          subject: `🎯 ZNPCV – Dein täglicher Trading-Impuls`,
+          subject: `ZNPCV – Dein täglicher Trading-Impuls`,
             body: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; border-radius: 12px;">
                 <div style="text-align: center; margin-bottom: 30px;">
