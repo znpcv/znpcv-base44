@@ -40,6 +40,9 @@ export default function ChecklistPage() {
   const [saveError, setSaveError] = useState(null);
   const [hasAccess, setHasAccess] = useState(false);
   const [hasStrategyAccess, setHasStrategyAccess] = useState(false);
+  const [draftRestored, setDraftRestored] = useState(false);
+
+  const DRAFT_KEY = 'znpcv_checklist_draft';
 
   const [uploading, setUploading] = useState(false);
 
@@ -104,9 +107,6 @@ export default function ChecklistPage() {
     const init = async () => {
       try {
         const user = await base44.auth.me();
-        // checklist_lifetime_access ODER legacy stripe_subscription_active → Zugriff auf Checkliste
-        // strategy_access → zusätzlich Zugriff auf echte ZNPCV Strategie
-        // Admins haben vollen Zugriff
         const checklistOk = !!user.checklist_lifetime_access || !!user.stripe_subscription_active || user.role === 'admin';
         const strategyOk = !!user.strategy_access || user.role === 'admin';
         if (checklistOk) setHasAccess(true);
@@ -115,6 +115,18 @@ export default function ChecklistPage() {
       if (checklistId) {
         await loadChecklist();
       } else {
+        // Try to restore draft for new checklists
+        try {
+          const saved = localStorage.getItem(DRAFT_KEY);
+          if (saved) {
+            const draft = JSON.parse(saved);
+            if (draft && draft.pair) {
+              setFormData((prev) => ({ ...prev, ...draft }));
+              setDraftRestored(true);
+              setTimeout(() => setDraftRestored(false), 4000);
+            }
+          }
+        } catch {}
         await loadDefaults();
         setIsLoading(false);
       }
@@ -181,33 +193,40 @@ export default function ChecklistPage() {
   const hasConfluence = formData.w_trend && formData.d_trend && formData.h4_trend &&
   formData.w_trend === formData.d_trend && formData.d_trend === formData.h4_trend;
 
-  // Auto-Save Feature - saves every 2 seconds after changes
+  // Auto-Save: persists to backend for existing checklists, to localStorage for new ones
   useEffect(() => {
-    if (!formData.pair || !checklistId) return;
+    if (!formData.pair) return;
 
     const timer = setTimeout(async () => {
-      try {
-        const sanitized = sanitizeFormData(formData);
-        const data = {
-          ...sanitized,
-          trade_date: sanitized.trade_date || format(new Date(), 'yyyy-MM-dd'),
-          completion_percentage: progress,
-          status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
-        };
-        await base44.entities.TradeChecklist.update(checklistId, data);
-        setSaveError(null);
-        if (window.queryClient) {
-          window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+      if (checklistId) {
+        // Existing trade → save to backend
+        try {
+          const sanitized = sanitizeFormData(formData);
+          const data = {
+            ...sanitized,
+            trade_date: sanitized.trade_date || format(new Date(), 'yyyy-MM-dd'),
+            completion_percentage: progress,
+            status: progress >= 85 ? 'ready_to_trade' : 'in_progress'
+          };
+          await base44.entities.TradeChecklist.update(checklistId, data);
+          setSaveError(null);
+          if (window.queryClient) {
+            window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
+          }
+        } catch (error) {
+          if (error?.status === 403 || error?.status === 401) {
+            setSaveError('Keine Berechtigung. Diese Analyse gehört nicht deinem Account.');
+          } else {
+            setSaveError('Automatisches Speichern fehlgeschlagen. Bitte manuell speichern.');
+          }
         }
-      } catch (error) {
-        // RLS block or ownership error — stop silently, show clear message
-        if (error?.status === 403 || error?.status === 401) {
-          setSaveError('Keine Berechtigung. Diese Analyse gehört nicht deinem Account.');
-        } else {
-          setSaveError('Automatisches Speichern fehlgeschlagen. Bitte manuell speichern.');
-        }
+      } else {
+        // New trade → save draft to localStorage
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(formData));
+        } catch {}
       }
-    }, 2000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [formData, progress, checklistId]);
@@ -340,6 +359,9 @@ export default function ChecklistPage() {
       if (checklistId) await base44.entities.TradeChecklist.update(checklistId, data);
       else await base44.entities.TradeChecklist.create(data);
 
+      // Clear draft after successful save
+      try { localStorage.removeItem(DRAFT_KEY); } catch {}
+
       if (window.queryClient) {
         window.queryClient.invalidateQueries({ queryKey: ['checklists'] });
       }
@@ -455,6 +477,21 @@ export default function ChecklistPage() {
           </div>
         </div>
         
+        {/* Draft Restored Banner */}
+        {draftRestored && (
+          <div className="bg-emerald-700 text-white text-xs font-bold tracking-wider text-center py-2 px-4 font-sans flex items-center justify-center gap-2">
+            <span>Entwurf wiederhergestellt</span>
+            <button
+              onClick={() => {
+                try { localStorage.removeItem(DRAFT_KEY); } catch {}
+                setFormData((prev) => ({ ...prev, pair: '', direction: '', w_trend: '', d_trend: '', h4_trend: '' }));
+                setDraftRestored(false);
+              }}
+              className="underline opacity-80 hover:opacity-100"
+            >Verwerfen</button>
+          </div>
+        )}
+
         {/* Save Error Banner */}
         {saveError && (
           <div className="bg-rose-600 text-white text-xs font-bold tracking-wider text-center py-2 px-4 font-sans">
