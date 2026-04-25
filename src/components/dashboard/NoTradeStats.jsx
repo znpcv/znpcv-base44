@@ -110,11 +110,11 @@ export default function NoTradeStats({ darkMode }) {
         {/* Top Reasons - Ultra Compact */}
         <div className="space-y-0.5">
           {Object.entries(reasonCounts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([reason, count]) => {
-            const Icon = reasonIcons[reason];
+            const Icon = reasonIcons[reason] || Shield;
             
             return (
               <div key={reason} className="flex items-center gap-1.5">
-                <Icon className={cn("w-3 h-3 flex-shrink-0", reasonColors[reason])} />
+                <Icon className={cn("w-3 h-3 flex-shrink-0", reasonColors[reason] || theme.textMuted)} />
                 <div className={cn("text-[9px] font-bold flex-1 truncate", reasonColors[reason])}>
                   {reasonLabels[reason]}
                 </div>
