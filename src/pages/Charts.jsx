@@ -7,38 +7,16 @@ import { cn } from '@/lib/utils';
 import TradingViewWidget from '@/components/chart/TradingViewWidget';
 
 const PRESET_SYMBOLS = [
-  // Crypto
-  { label: 'BTC/USDT', value: 'BINANCE:BTCUSDT', group: 'CRYPTO' },
-  { label: 'ETH/USDT', value: 'BINANCE:ETHUSDT', group: 'CRYPTO' },
-  { label: 'SOL/USDT', value: 'BINANCE:SOLUSDT', group: 'CRYPTO' },
-  { label: 'BNB/USDT', value: 'BINANCE:BNBUSDT', group: 'CRYPTO' },
-  { label: 'XRP/USDT', value: 'BINANCE:XRPUSDT', group: 'CRYPTO' },
-  // Forex
-  { label: 'EUR/USD',  value: 'FX:EURUSD',  group: 'FOREX' },
-  { label: 'GBP/USD',  value: 'FX:GBPUSD',  group: 'FOREX' },
-  { label: 'USD/JPY',  value: 'FX:USDJPY',  group: 'FOREX' },
-  { label: 'EUR/JPY',  value: 'FX:EURJPY',  group: 'FOREX' },
-  { label: 'GBP/JPY',  value: 'FX:GBPJPY',  group: 'FOREX' },
-  { label: 'USD/CHF',  value: 'FX:USDCHF',  group: 'FOREX' },
-  { label: 'AUD/USD',  value: 'FX:AUDUSD',  group: 'FOREX' },
-  // Commodities
-  { label: 'Gold',     value: 'OANDA:XAUUSD',  group: 'COMMODITIES' },
-  { label: 'Silber',   value: 'OANDA:XAGUSD',  group: 'COMMODITIES' },
-  { label: 'Öl (WTI)', value: 'NYMEX:CL1!',    group: 'COMMODITIES' },
-  { label: 'Öl (Brent)',value: 'ICEEUR:B1!',   group: 'COMMODITIES' },
-  { label: 'Nat. Gas', value: 'NYMEX:NG1!',    group: 'COMMODITIES' },
-  // Indizes
-  { label: 'S&P 500',  value: 'SP:SPX',         group: 'INDICES' },
-  { label: 'NASDAQ',   value: 'NASDAQ:NDX',      group: 'INDICES' },
-  { label: 'DAX',      value: 'XETR:DAX',        group: 'INDICES' },
-  { label: 'DOW',      value: 'DJ:DJI',          group: 'INDICES' },
-  { label: 'FTSE 100', value: 'SPREADEX:FTSE',   group: 'INDICES' },
-  // Aktien
-  { label: 'Apple',    value: 'NASDAQ:AAPL',     group: 'STOCKS' },
-  { label: 'Tesla',    value: 'NASDAQ:TSLA',     group: 'STOCKS' },
-  { label: 'NVIDIA',   value: 'NASDAQ:NVDA',     group: 'STOCKS' },
-  { label: 'Amazon',   value: 'NASDAQ:AMZN',     group: 'STOCKS' },
-  { label: 'Microsoft',value: 'NASDAQ:MSFT',     group: 'STOCKS' },
+  { label: 'BTC/USDT', value: 'BINANCE:BTCUSDT' },
+  { label: 'ETH/USDT', value: 'BINANCE:ETHUSDT' },
+  { label: 'EUR/USD',  value: 'FX:EURUSD' },
+  { label: 'GBP/USD',  value: 'FX:GBPUSD' },
+  { label: 'USD/JPY',  value: 'FX:USDJPY' },
+  { label: 'EUR/JPY',  value: 'FX:EURJPY' },
+  { label: 'GBP/JPY',  value: 'FX:GBPJPY' },
+  { label: 'XAU/USD',  value: 'OANDA:XAUUSD' },
+  { label: 'AAPL',     value: 'NASDAQ:AAPL' },
+  { label: 'SP500',    value: 'SP:SPX' },
 ];
 
 const TIMEFRAMES = [
@@ -134,38 +112,25 @@ export default function ChartsPage() {
             </button>
 
             {showSymbolMenu && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowSymbolMenu(false)} />
-                <div className={cn(
-                  'absolute top-full left-0 mt-1 z-50 rounded-xl border shadow-2xl overflow-y-auto',
-                  darkMode ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-zinc-200'
-                )} style={{ minWidth: '160px', maxHeight: '70vh' }}>
-                  {['CRYPTO','FOREX','COMMODITIES','INDICES','STOCKS'].map(group => {
-                    const items = PRESET_SYMBOLS.filter(s => s.group === group);
-                    return (
-                      <div key={group}>
-                        <div className={cn('px-3 py-1 text-[9px] tracking-widest font-bold border-b', darkMode ? 'text-zinc-500 border-zinc-800 bg-zinc-950' : 'text-zinc-400 border-zinc-100 bg-zinc-50')}>
-                          {group}
-                        </div>
-                        {items.map(s => (
-                          <button
-                            key={s.value}
-                            onClick={() => handlePresetSelect(s.value)}
-                            className={cn(
-                              'w-full text-left px-3 py-2 text-xs font-bold tracking-wider transition-colors',
-                              activeSymbol === s.value
-                                ? darkMode ? 'bg-white text-black' : 'bg-black text-white'
-                                : darkMode ? 'text-zinc-300 hover:bg-zinc-800' : 'text-zinc-700 hover:bg-zinc-100'
-                            )}
-                          >
-                            {s.label}
-                          </button>
-                        ))}
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
+              <div className={cn(
+                'absolute top-full left-0 mt-1 z-50 rounded-xl border shadow-2xl overflow-hidden',
+                darkMode ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-zinc-200'
+              )} style={{ minWidth: '140px' }}>
+                {PRESET_SYMBOLS.map(s => (
+                  <button
+                    key={s.value}
+                    onClick={() => handlePresetSelect(s.value)}
+                    className={cn(
+                      'w-full text-left px-3 py-2 text-xs font-bold tracking-wider transition-colors',
+                      activeSymbol === s.value
+                        ? darkMode ? 'bg-white text-black' : 'bg-black text-white'
+                        : darkMode ? 'text-zinc-300 hover:bg-zinc-800' : 'text-zinc-700 hover:bg-zinc-100'
+                    )}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
 
