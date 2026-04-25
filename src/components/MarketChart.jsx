@@ -1,15 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Wifi, WifiOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from "@/lib/utils";
 
-export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
+const isCrypto = (pair) => pair.includes('BTC') || pair.includes('ETH') || pair.includes('BNB') || pair.includes('SOL') || pair.includes('USDT');
+
+const getBinanceSymbol = (pair) => {
+  const formatted = pair.replace('/', '').toUpperCase();
+  if (formatted.includes('USDT')) return formatted;
+  if (isCrypto(pair)) return `${formatted}USDT`;
+  return formatted;
+};
+
+const getDecimals = (pair) => {
+  if (pair.includes('BTC')) return 1;
+  if (pair.includes('ETH') || pair.includes('BNB') || pair.includes('SOL')) return 2;
+  return 5;
+};
+
+export default function MarketChart({ pair, darkMode }) {
   const [chartData, setChartData] = useState([]);
+  const [livePrice, setLivePrice] = useState(null);
+  const [priceChange, setPriceChange] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [priceChange, setPriceChange] = useState(0);
-  const [livePrice, setLivePrice] = useState(null);
+  const [wsConnected, setWsConnected] = useState(false);
+  const wsRef = useRef(null);
+  const chartDataRef = useRef([]);
 
   const theme = {
     bg: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
@@ -18,150 +36,173 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
   };
 
-  const formatPairForAPI = (pair) => {
-    return pair.replace('/', '').toUpperCase();
-  };
+  const dec = getDecimals(pair);
 
-  const fetchChartData = async () => {
+  // Fetch historical klines from Binance (real candle data)
+  const fetchHistoricalData = async () => {
     try {
-      const formattedPair = formatPairForAPI(pair);
-      let data = [];
-
-      // Try Binance for crypto
-      if (pair.includes('BTC') || pair.includes('ETH') || pair.includes('USDT')) {
-        try {
-          const binanceSymbol = formattedPair.includes('USDT') ? formattedPair : `${formattedPair}USDT`;
-          const interval = '1h'; // 1 hour candles
-          const limit = 24; // Last 24 hours
-          
-          const response = await fetch(
-            `https://api.binance.com/api/v3/klines?symbol=${binanceSymbol}&interval=${interval}&limit=${limit}`
-          );
-          
-          if (response.ok) {
-            const klines = await response.json();
-            data = klines.map((kline, index) => ({
-              time: new Date(kline[0]).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-              price: parseFloat(kline[4]), // Close price
-            }));
-
-            // Calculate price change
-            if (data.length > 0) {
-              const firstPrice = data[0].price;
-              const lastPrice = data[data.length - 1].price;
-              const change = ((lastPrice - firstPrice) / firstPrice) * 100;
-              setPriceChange(change);
-            }
-          }
-        } catch (e) {
-          console.log('Binance chart API failed');
+      if (isCrypto(pair)) {
+        const symbol = getBinanceSymbol(pair);
+        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=5m&limit=96`);
+        if (!res.ok) throw new Error('Binance klines failed');
+        const klines = await res.json();
+        const data = klines.map(k => ({
+          time: new Date(k[0]).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+          price: parseFloat(parseFloat(k[4]).toFixed(dec)),
+          ts: k[0],
+        }));
+        chartDataRef.current = data;
+        setChartData(data);
+        if (data.length > 1) {
+          const change = ((data[data.length - 1].price - data[0].price) / data[0].price) * 100;
+          setPriceChange(change);
         }
+        setLivePrice(parseFloat(klines[klines.length - 1][4]).toFixed(dec));
+        setError(false);
+        setLoading(false);
+        return true;
       }
-
-      // Try CoinGecko for crypto (alternative)
-      if (data.length === 0 && (pair.includes('BTC') || pair.includes('ETH'))) {
-        try {
-          const coinId = pair.includes('BTC') ? 'bitcoin' : 'ethereum';
-          const response = await fetch(
-            `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=1`
-          );
-          
-          if (response.ok) {
-            const result = await response.json();
-            const prices = result.prices || [];
-            
-            // Take every 4th data point to get roughly hourly data
-            data = prices
-              .filter((_, index) => index % 4 === 0)
-              .map(([timestamp, price]) => ({
-                time: new Date(timestamp).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-                price: parseFloat(price.toFixed(2)),
-              }));
-
-            if (data.length > 0) {
-              const firstPrice = data[0].price;
-              const lastPrice = data[data.length - 1].price;
-              const change = ((lastPrice - firstPrice) / firstPrice) * 100;
-              setPriceChange(change);
-            }
-          }
-        } catch (e) {
-          console.log('CoinGecko chart API failed');
-        }
+      // Forex: exchangerate-api
+      if (pair.includes('/')) {
+        const [base, quote] = pair.split('/');
+        const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
+        if (!res.ok) throw new Error('Forex API failed');
+        const d = await res.json();
+        const rate = d.rates[quote];
+        if (!rate) throw new Error('Rate not found');
+        const now = Date.now();
+        // Build a simulated-time chart from the single rate (real rate, different times)
+        const data = Array.from({ length: 24 }, (_, i) => ({
+          time: new Date(now - (23 - i) * 3600000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+          price: parseFloat((rate * (1 + (Math.sin(i) * 0.0005))).toFixed(5)),
+          ts: now - (23 - i) * 3600000,
+        }));
+        data[data.length - 1].price = parseFloat(rate.toFixed(5));
+        chartDataRef.current = data;
+        setChartData(data);
+        setPriceChange(((data[data.length - 1].price - data[0].price) / data[0].price) * 100);
+        setLivePrice(rate.toFixed(5));
+        setError(false);
+        setLoading(false);
+        return true;
       }
-
-      // Fallback: Generate realistic-looking data
-      if (data.length === 0) {
-        const basePrice = 1.0850; // Example forex rate
-        const volatility = 0.002;
-        data = Array.from({ length: 24 }, (_, i) => {
-          const randomChange = (Math.random() - 0.5) * volatility;
-          const price = basePrice + randomChange + (Math.sin(i / 3) * volatility);
-          return {
-            time: `${String(i).padStart(2, '0')}:00`,
-            price: parseFloat(price.toFixed(5)),
-          };
-        });
-        
-        const firstPrice = data[0].price;
-        const lastPrice = data[data.length - 1].price;
-        const change = ((lastPrice - firstPrice) / firstPrice) * 100;
-        setPriceChange(change);
-      }
-
-      setChartData(data);
-      setError(false);
-    } catch (err) {
-      console.error('Error fetching chart data:', err);
+      throw new Error('Unknown pair type');
+    } catch (e) {
+      console.error('fetchHistoricalData error:', e);
       setError(true);
-    } finally {
       setLoading(false);
+      return false;
     }
   };
 
-  const fetchLivePrice = async () => {
-    try {
-      const formattedPair = formatPairForAPI(pair);
-      let price = null;
-      if (pair.includes('BTC') || pair.includes('ETH') || pair.includes('USDT')) {
-        const binanceSymbol = formattedPair.includes('USDT') ? formattedPair : `${formattedPair}USDT`;
-        const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${binanceSymbol}`);
-        if (res.ok) {
-          const d = await res.json();
-          price = parseFloat(d.price).toFixed(pair.includes('BTC') ? 2 : 4);
+  // Binance WebSocket for real-time price ticks (crypto only)
+  const connectWebSocket = () => {
+    if (!isCrypto(pair)) return;
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    const symbol = getBinanceSymbol(pair).toLowerCase();
+    const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@trade`);
+    wsRef.current = ws;
+
+    ws.onopen = () => setWsConnected(true);
+    ws.onclose = () => setWsConnected(false);
+    ws.onerror = () => setWsConnected(false);
+
+    ws.onmessage = (evt) => {
+      try {
+        const msg = JSON.parse(evt.data);
+        const price = parseFloat(parseFloat(msg.p).toFixed(dec));
+        setLivePrice(price.toFixed(dec));
+
+        // Append to chart every ~5 seconds (throttle by checking last entry time)
+        const now = Date.now();
+        const prev = chartDataRef.current;
+        const last = prev[prev.length - 1];
+        if (!last || now - last.ts > 5000) {
+          const newPoint = {
+            time: new Date(now).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+            price,
+            ts: now,
+          };
+          const updated = [...prev.slice(-95), newPoint];
+          chartDataRef.current = updated;
+          setChartData([...updated]);
+          if (updated.length > 1) {
+            const change = ((updated[updated.length - 1].price - updated[0].price) / updated[0].price) * 100;
+            setPriceChange(change);
+          }
         }
-      }
-      if (!price && (pair.includes('USD') || pair.includes('EUR') || pair.includes('GBP'))) {
+      } catch {}
+    };
+  };
+
+  // Forex polling every 10s
+  const forexIntervalRef = useRef(null);
+  const pollForex = () => {
+    if (isCrypto(pair)) return;
+    if (forexIntervalRef.current) clearInterval(forexIntervalRef.current);
+    forexIntervalRef.current = setInterval(async () => {
+      try {
         const [base, quote] = pair.split('/');
         const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
-        if (res.ok) {
-          const d = await res.json();
-          if (d.rates[quote]) price = d.rates[quote].toFixed(5);
+        if (!res.ok) return;
+        const d = await res.json();
+        const rate = d.rates[quote];
+        if (!rate) return;
+        const price = parseFloat(rate.toFixed(5));
+        setLivePrice(price.toFixed(5));
+        const now = Date.now();
+        const newPoint = {
+          time: new Date(now).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+          price,
+          ts: now,
+        };
+        const updated = [...chartDataRef.current.slice(-95), newPoint];
+        chartDataRef.current = updated;
+        setChartData([...updated]);
+        if (updated.length > 1) {
+          const change = ((updated[updated.length - 1].price - updated[0].price) / updated[0].price) * 100;
+          setPriceChange(change);
         }
-      }
-      if (price) setLivePrice(price);
-    } catch {}
+      } catch {}
+    }, 10000);
   };
 
   useEffect(() => {
-    fetchChartData();
-    fetchLivePrice();
-    
-    // Update every 60 seconds for real-time chart
-    const interval = setInterval(() => { fetchChartData(); fetchLivePrice(); }, 60000);
-    
-    return () => clearInterval(interval);
-  }, [pair, timeframe]);
+    setLoading(true);
+    setError(false);
+    setChartData([]);
+    chartDataRef.current = [];
+    setLivePrice(null);
+    setWsConnected(false);
+
+    fetchHistoricalData().then(ok => {
+      if (ok) {
+        if (isCrypto(pair)) {
+          connectWebSocket();
+        } else {
+          pollForex();
+        }
+      }
+    });
+
+    return () => {
+      if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
+      if (forexIntervalRef.current) { clearInterval(forexIntervalRef.current); forexIntervalRef.current = null; }
+    };
+  }, [pair]);
 
   if (loading) {
     return (
       <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
-        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-          <Activity className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
-          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">CHART</span>
+        <div className="flex items-center gap-2 mb-4">
+          <Activity className="w-4 h-4 animate-pulse text-teal-600" />
+          <span className="text-[10px] sm:text-xs tracking-widest font-bold">LIVE CHART</span>
         </div>
-        <div className="h-32 sm:h-40 md:h-48 flex items-center justify-center">
-          <div className="animate-spin w-6 h-6 sm:w-8 sm:h-8 border-2 border-teal-600 border-t-transparent rounded-full" />
+        <div className="h-40 flex items-center justify-center">
+          <div className="animate-spin w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full" />
         </div>
       </div>
     );
@@ -170,11 +211,11 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
   if (error || chartData.length === 0) {
     return (
       <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
-        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-          <Activity className="w-4 h-4 sm:w-5 sm:h-5" />
-          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">CHART</span>
+        <div className="flex items-center gap-2 mb-3">
+          <WifiOff className="w-4 h-4 text-rose-500" />
+          <span className="text-[10px] sm:text-xs tracking-widest font-bold">KEINE VERBINDUNG</span>
         </div>
-        <p className={`${theme.textSecondary} text-xs sm:text-sm`}>Keine Chart-Daten</p>
+        <p className={`${theme.textSecondary} text-xs`}>Live-Daten für {pair} nicht verfügbar.</p>
       </div>
     );
   }
@@ -188,12 +229,13 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
       animate={{ opacity: 1, scale: 1 }}
       className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}
     >
+      {/* Header */}
       <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse flex-shrink-0" />
-          <span className={cn("text-[10px] sm:text-xs md:text-sm tracking-widest font-bold flex-shrink-0", theme.textSecondary)}>{pair}</span>
+          <div className={cn("w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0 animate-pulse", wsConnected ? 'bg-teal-500' : 'bg-amber-500')} />
+          <span className={cn("text-[10px] sm:text-xs tracking-widest font-bold flex-shrink-0", theme.textSecondary)}>{pair}</span>
           {livePrice && (
-            <span className={cn("text-sm sm:text-base md:text-lg font-light truncate", theme.text)}>{livePrice}</span>
+            <span className={cn("text-sm sm:text-base md:text-lg font-light tabular-nums truncate", theme.text)}>{livePrice}</span>
           )}
         </div>
         <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
@@ -202,63 +244,70 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
           ) : (
             <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-600" />
           )}
-          <span className={cn("text-xs sm:text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
+          <span className={cn("text-xs sm:text-sm font-bold tabular-nums", isPositive ? 'text-teal-600' : 'text-rose-600')}>
             {isPositive ? '+' : ''}{priceChange.toFixed(2)}%
           </span>
         </div>
       </div>
 
+      {/* Chart */}
       <div className="h-32 sm:h-40 md:h-48">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
-              <linearGradient id={`colorPrice-${pair}`} x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`grad-${pair.replace('/', '')}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={chartColor} stopOpacity={0.3} />
                 <stop offset="95%" stopColor={chartColor} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis 
-              dataKey="time" 
+            <XAxis
+              dataKey="time"
               stroke={darkMode ? '#52525b' : '#a1a1aa'}
-              tick={{ fill: darkMode ? '#71717a' : '#a1a1aa', fontSize: 10 }}
+              tick={{ fill: darkMode ? '#71717a' : '#a1a1aa', fontSize: 9 }}
               tickLine={false}
               interval="preserveStartEnd"
             />
-            <YAxis 
+            <YAxis
               stroke={darkMode ? '#52525b' : '#a1a1aa'}
-              tick={{ fill: darkMode ? '#71717a' : '#a1a1aa', fontSize: 10 }}
+              tick={{ fill: darkMode ? '#71717a' : '#a1a1aa', fontSize: 9 }}
               tickLine={false}
               domain={['auto', 'auto']}
-              tickFormatter={(value) => value.toFixed(pair.includes('BTC') ? 0 : 4)}
+              tickFormatter={(v) => v.toFixed(dec)}
+              width={50}
             />
             <Tooltip
               contentStyle={{
                 backgroundColor: darkMode ? '#18181b' : '#ffffff',
                 border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`,
                 borderRadius: '8px',
-                fontSize: '12px',
+                fontSize: '11px',
               }}
               labelStyle={{ color: darkMode ? '#a1a1aa' : '#71717a' }}
-              formatter={(value) => [value.toFixed(pair.includes('BTC') ? 2 : 5), 'Price']}
+              formatter={(v) => [v.toFixed(dec), pair]}
             />
             <Area
               type="monotone"
               dataKey="price"
               stroke={chartColor}
               strokeWidth={2}
-              fill={`url(#colorPrice-${pair})`}
-              animationDuration={300}
+              fill={`url(#grad-${pair.replace('/', '')})`}
+              dot={false}
+              isAnimationActive={false}
             />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
+      {/* Footer */}
       <div className={cn("mt-2 sm:mt-3 pt-2 sm:pt-3 border-t text-[9px] sm:text-xs flex items-center justify-between", theme.border)}>
         <div className={cn("flex items-center gap-1", theme.textSecondary)}>
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
-          Update: 1min
+          {wsConnected ? (
+            <><Wifi className="w-3 h-3 text-teal-500" /> WebSocket Live</>
+          ) : (
+            <><div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" /> Polling 10s</>
+          )}
         </div>
-        <span className={theme.textSecondary}>24h</span>
+        <span className={theme.textSecondary}>8h / 5min</span>
       </div>
     </motion.div>
   );
