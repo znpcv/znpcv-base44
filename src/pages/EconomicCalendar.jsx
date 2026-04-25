@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage, LanguageToggle, DarkModeToggle } from '@/components/LanguageContext';
 import { createPageUrl } from '@/utils';
-import ForexCalendar from '@/components/ForexCalendar.jsx';
+import ForexCalendar from '@/components/ForexCalendar';
 import AccountButton from '@/components/AccountButton';
 
 export default function EconomicCalendarPage() {

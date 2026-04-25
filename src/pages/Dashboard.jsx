@@ -22,7 +22,7 @@ const BestTradingTimes = lazy(() => import('@/components/advanced/BestTradingTim
 const SwipeNavigation = lazy(() => import('@/components/mobile/SwipeNavigation'));
 const BottomNav = lazy(() => import('@/components/mobile/BottomNav'));
 const NoTradeStats = lazy(() => import('@/components/dashboard/NoTradeStats'));
-const ForexCalendar = lazy(() => import('@/components/ForexCalendar.jsx'));
+const ForexCalendar = lazy(() => import('@/components/ForexCalendar'));
 
 
 export default function DashboardPage() {
