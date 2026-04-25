@@ -48,7 +48,7 @@ export default function AGBPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-16">
         <div className={`${theme.bgHero} rounded-2xl p-6 sm:p-8 md:p-10 mb-8 border-2 ${theme.border}`}>
           <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-widest mb-2 text-center">ALLGEMEINE GESCHÄFTSBEDINGUNGEN</h1>
-          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>ZNPCV Ltd. — ZNPCV Trading Plattform — Stand: Januar 2025</p>
+          <p className={`text-center text-xs sm:text-sm ${theme.textSecondary}`}>ZNPCV Ltd. — Stand: Januar 2025</p>
         </div>
 
         <div className={`space-y-4 sm:space-y-6 ${theme.textSecondary} font-sans leading-relaxed text-sm sm:text-base`}>
@@ -56,7 +56,7 @@ export default function AGBPage() {
           <section className={`${theme.bgCard} rounded-xl p-5 sm:p-6 md:p-8 border ${theme.border}`}>
             <h2 className={`text-base sm:text-lg md:text-xl tracking-wider ${theme.text} mb-4`}>§ 1 Geltungsbereich und Vertragsparteien</h2>
             <p className="mb-3">
-              (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB") der ZNPCV Ltd., vertreten durch Armin Zainali (nachfolgend „Anbieter"), gelten für alle Verträge, die zwischen dem Anbieter und natürlichen oder juristischen Personen (nachfolgend „Nutzer") über die Nutzung der webbasierten Trading-Analyse-Plattform ZNPCV (nachfolgend „Plattform") geschlossen werden.
+              (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB") der ZNPCV Ltd. (nachfolgend „Anbieter") gelten für alle Verträge, die zwischen dem Anbieter und natürlichen oder juristischen Personen (nachfolgend „Nutzer") über die Nutzung der webbasierten Trading-Analyse-Plattform ZNPCV (nachfolgend „Plattform") geschlossen werden.
             </p>
             <p className="mb-3">
               (2) Abweichende, entgegenstehende oder ergänzende Allgemeine Geschäftsbedingungen des Nutzers werden selbst bei Kenntnis nicht Vertragsbestandteil, es sei denn, ihrer Geltung wird ausdrücklich schriftlich zugestimmt.

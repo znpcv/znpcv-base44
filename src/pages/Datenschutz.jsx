@@ -59,7 +59,6 @@ export default function DatenschutzPage() {
               Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und sonstiger datenschutzrechtlicher Vorschriften ist:
             </p>
             <p className={`${theme.text} font-semibold`}>ZNPCV Ltd.</p>
-            <p>Vertreten durch: Armin Zainali</p>
             <p>E-Mail: <a href="mailto:support@znpcv.com" className="text-emerald-600 hover:underline">support@znpcv.com</a></p>
           </section>
 
