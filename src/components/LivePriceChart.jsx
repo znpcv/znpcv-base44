@@ -323,178 +323,151 @@ export default function LivePriceChart({ pair, darkMode }) {
   const isPositive = change24h >= 0;
   const chartColor = isPositive ? '#14b8a6' : '#f43f5e';
 
+  const gradientId = `cpg-${pair?.replace(/[^a-zA-Z0-9]/g, '') || 'chart'}`;
+
   return (
     <div className={cn("rounded-xl sm:rounded-2xl border-2 overflow-hidden", theme.border, theme.bg)}>
 
-      {/* ── LIVE PRICE ─────────────────────────────────────────────── */}
-      <div className="p-3 sm:p-4 md:p-5">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-2 sm:mb-3">
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-500 rounded-full animate-pulse" />
-            <span className="text-[10px] sm:text-xs tracking-widest font-bold">LIVE</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className={cn("text-[10px] sm:text-xs font-mono", theme.textSecondary)}>{pair}</span>
-            {priceData?.source && (
-              <span className={cn("text-[9px] px-1.5 py-0.5 rounded border", theme.textSecondary, theme.border)}>
-                {priceData.source}
-              </span>
-            )}
-            <button onClick={loadPrice} className={cn("p-1 rounded transition-colors", darkMode ? 'text-zinc-600 hover:text-zinc-300' : 'text-zinc-300 hover:text-zinc-600')}>
-              <RefreshCw className="w-3 h-3" />
-            </button>
-          </div>
+      {/* ── HEADER ─────────────────────────────────────────────────── */}
+      <div className={cn("flex items-center justify-between px-3 sm:px-4 py-2 border-b", theme.border)}>
+        <div className="flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse" />
+          <span className="text-[10px] tracking-widest font-bold">LIVE MARKET</span>
         </div>
-
-        {/* Price */}
-        {loadingPrice ? (
-          <div className="animate-pulse space-y-2">
-            <div className={cn("h-8 rounded w-2/3", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
-            <div className={cn("h-3 rounded w-1/3", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
-          </div>
-        ) : priceError || !priceData ? (
-          <div className="flex items-center gap-2 text-rose-500">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span className="text-xs">Kein Echtzeit-Preis verfügbar</span>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-end gap-2 mb-1">
-              <div className={cn("text-2xl sm:text-3xl font-light tabular-nums", theme.text)}>
-                {formatPrice(priceData.price, assetInfo)}
-              </div>
-              {priceData.currency && (
-                <div className={cn("text-xs mb-1", theme.textSecondary)}>{priceData.currency}</div>
-              )}
-            </div>
-            {priceData.change24h !== null && priceData.change24h !== undefined && (
-              <div className="flex items-center gap-1.5">
-                {isPositive
-                  ? <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-500 flex-shrink-0" />
-                  : <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-500 flex-shrink-0" />
-                }
-                <span className={cn("text-xs sm:text-sm font-bold", isPositive ? 'text-teal-500' : 'text-rose-500')}>
-                  {isPositive ? '+' : ''}{priceData.change24h.toFixed(2)}%
-                </span>
-                <span className={cn("text-[10px]", theme.textSecondary)}>24H</span>
-              </div>
-            )}
-            {(priceData.high || priceData.low) && (
-              <div className={cn("grid grid-cols-2 gap-2 mt-2 pt-2 border-t", theme.border)}>
-                {priceData.high && (
-                  <div>
-                    <div className={cn("text-[10px]", theme.textSecondary)}>HIGH</div>
-                    <div className={cn("font-mono text-xs sm:text-sm", theme.text)}>{formatPrice(priceData.high, assetInfo)}</div>
-                  </div>
-                )}
-                {priceData.low && (
-                  <div>
-                    <div className={cn("text-[10px]", theme.textSecondary)}>LOW</div>
-                    <div className={cn("font-mono text-xs sm:text-sm", theme.text)}>{formatPrice(priceData.low, assetInfo)}</div>
-                  </div>
-                )}
-              </div>
-            )}
-          </>
-        )}
-
-        <div className={cn("mt-2 pt-2 border-t text-[9px] sm:text-xs flex items-center gap-1", theme.border, theme.textSecondary)}>
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-500 rounded-full animate-pulse" />
-          UPDATE: 10S
+        <div className="flex items-center gap-2">
+          <span className={cn("text-[10px] font-mono font-bold", theme.text)}>{pair}</span>
+          {priceData?.source && (
+            <span className={cn("text-[9px] px-1.5 py-0.5 rounded border", theme.textSecondary, theme.border)}>
+              {priceData.source}
+            </span>
+          )}
+          <button onClick={loadPrice} className={cn("p-1 rounded transition-colors", darkMode ? 'text-zinc-600 hover:text-zinc-300' : 'text-zinc-300 hover:text-zinc-600')}>
+            <RefreshCw className="w-3 h-3" />
+          </button>
         </div>
       </div>
 
-      {/* ── DIVIDER ────────────────────────────────────────────────── */}
-      <div className={cn("border-t", theme.border)} />
+      {/* ── BODY: Preis links | Chart rechts ───────────────────────── */}
+      <div className="flex flex-row min-h-[130px] sm:min-h-[160px]">
 
-      {/* ── CHART ──────────────────────────────────────────────────── */}
-      <div className="p-3 sm:p-4 md:p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-500 rounded-full animate-pulse" />
-            <span className="text-[10px] sm:text-xs tracking-widest font-bold">CHART 24H</span>
+        {/* LEFT — Preisinfos */}
+        <div className={cn("flex flex-col justify-between p-3 sm:p-4 w-[42%] shrink-0 border-r", theme.border)}>
+          {loadingPrice ? (
+            <div className="animate-pulse space-y-2 flex-1">
+              <div className={cn("h-7 rounded w-3/4", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
+              <div className={cn("h-3 rounded w-1/2", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
+            </div>
+          ) : priceError || !priceData ? (
+            <div className="flex items-start gap-1.5 text-rose-500 flex-1">
+              <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              <span className="text-[10px] font-sans leading-tight">Kein Preis verfügbar</span>
+            </div>
+          ) : (
+            <div className="flex-1">
+              <div className={cn("text-xl sm:text-2xl font-light tabular-nums leading-none mb-1", theme.text)}>
+                {formatPrice(priceData.price, assetInfo)}
+              </div>
+              {priceData.currency && (
+                <div className={cn("text-[9px] mb-1.5", theme.textSecondary)}>{priceData.currency}</div>
+              )}
+              {priceData.change24h !== null && priceData.change24h !== undefined && (
+                <div className="flex items-center gap-1 mb-2">
+                  {isPositive
+                    ? <TrendingUp className="w-3 h-3 text-teal-500 shrink-0" />
+                    : <TrendingDown className="w-3 h-3 text-rose-500 shrink-0" />
+                  }
+                  <span className={cn("text-xs font-bold", isPositive ? 'text-teal-500' : 'text-rose-500')}>
+                    {isPositive ? '+' : ''}{priceData.change24h.toFixed(2)}%
+                  </span>
+                </div>
+              )}
+              {(priceData.high || priceData.low) && (
+                <div className={cn("pt-2 border-t space-y-1", theme.border)}>
+                  {priceData.high && (
+                    <div>
+                      <div className={cn("text-[8px]", theme.textSecondary)}>HIGH</div>
+                      <div className={cn("font-mono text-[10px] sm:text-xs", theme.text)}>{formatPrice(priceData.high, assetInfo)}</div>
+                    </div>
+                  )}
+                  {priceData.low && (
+                    <div>
+                      <div className={cn("text-[8px]", theme.textSecondary)}>LOW</div>
+                      <div className={cn("font-mono text-[10px] sm:text-xs", theme.text)}>{formatPrice(priceData.low, assetInfo)}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          <div className={cn("flex items-center gap-1 text-[8px] sm:text-[9px] mt-2", theme.textSecondary)}>
+            <div className="w-1 h-1 bg-teal-500 rounded-full animate-pulse" />
+            10S
           </div>
-          <div className="flex items-center gap-1">
-            {isPositive
-              ? <TrendingUp className="w-3 h-3 text-teal-500" />
-              : <TrendingDown className="w-3 h-3 text-rose-500" />
-            }
-            <span className={cn("text-xs font-bold", isPositive ? 'text-teal-500' : 'text-rose-500')}>
+        </div>
+
+        {/* RIGHT — Chart */}
+        <div className="flex-1 flex flex-col p-2 sm:p-3 min-w-0">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className={cn("text-[9px] tracking-widest", theme.textSecondary)}>24H CHART</span>
+            <span className={cn("text-[10px] font-bold", isPositive ? 'text-teal-500' : 'text-rose-500')}>
               {isPositive ? '+' : ''}{(priceData?.change24h ?? priceChange).toFixed(2)}%
             </span>
           </div>
-        </div>
 
-        {loadingChart ? (
-          <div className="h-32 sm:h-40 md:h-48 flex items-center justify-center">
-            <div className="animate-spin w-6 h-6 border-2 border-teal-500 border-t-transparent rounded-full" />
-          </div>
-        ) : chartData.length === 0 ? (
-          <div className="h-20 flex items-center justify-center">
-            <div className="flex items-center gap-2 text-zinc-500">
-              <AlertCircle className="w-4 h-4" />
-              <span className="text-xs">Keine Chart-Daten verfügbar</span>
+          {loadingChart ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="animate-spin w-5 h-5 border-2 border-teal-500 border-t-transparent rounded-full" />
             </div>
+          ) : chartData.length === 0 ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="flex items-center gap-1 text-zinc-500">
+                <AlertCircle className="w-3 h-3" />
+                <span className="text-[9px]">Keine Daten</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1" style={{ minHeight: 80 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 2, right: 2, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={chartColor} stopOpacity={0.3} />
+                      <stop offset="95%" stopColor={chartColor} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="time" hide />
+                  <YAxis hide domain={['auto', 'auto']} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: darkMode ? '#18181b' : '#ffffff',
+                      border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`,
+                      borderRadius: '6px',
+                      fontSize: '10px',
+                      padding: '4px 8px',
+                    }}
+                    labelStyle={{ color: darkMode ? '#a1a1aa' : '#71717a', fontSize: 9 }}
+                    formatter={(v) => [formatPrice(v, assetInfo), 'Preis']}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="price"
+                    stroke={chartColor}
+                    strokeWidth={1.5}
+                    fill={`url(#${gradientId})`}
+                    animationDuration={300}
+                    connectNulls
+                    dot={false}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+          <div className={cn("flex items-center justify-end gap-1 mt-1 text-[8px] sm:text-[9px]", theme.textSecondary)}>
+            <div className="w-1 h-1 bg-teal-500 rounded-full animate-pulse" />
+            1MIN
           </div>
-        ) : (
-          <div className="h-32 sm:h-40 md:h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData}>
-                <defs>
-                  <linearGradient id={`cpg-${pair?.replace(/[^a-zA-Z0-9]/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={chartColor} stopOpacity={0.3} />
-                    <stop offset="95%" stopColor={chartColor} stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="time"
-                  stroke={darkMode ? '#52525b' : '#a1a1aa'}
-                  tick={{ fill: darkMode ? '#71717a' : '#a1a1aa', fontSize: 9 }}
-                  tickLine={false}
-                  axisLine={false}
-                  interval="preserveStartEnd"
-                />
-                <YAxis
-                  stroke={darkMode ? '#52525b' : '#a1a1aa'}
-                  tick={{ fill: darkMode ? '#71717a' : '#a1a1aa', fontSize: 9 }}
-                  tickLine={false}
-                  axisLine={false}
-                  domain={['auto', 'auto']}
-                  tickFormatter={(v) => formatChartTick(v, assetInfo)}
-                  width={60}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: darkMode ? '#18181b' : '#ffffff',
-                    border: `1px solid ${darkMode ? '#27272a' : '#e4e4e7'}`,
-                    borderRadius: '8px',
-                    fontSize: '11px',
-                  }}
-                  labelStyle={{ color: darkMode ? '#a1a1aa' : '#71717a' }}
-                  formatter={(v) => [formatPrice(v, assetInfo), 'Preis']}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="price"
-                  stroke={chartColor}
-                  strokeWidth={2}
-                  fill={`url(#cpg-${pair?.replace(/[^a-zA-Z0-9]/g, '')})`}
-                  animationDuration={300}
-                  connectNulls
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-
-        <div className={cn("mt-2 pt-2 border-t text-[9px] sm:text-xs flex items-center justify-between", theme.border)}>
-          <div className={cn("flex items-center gap-1", theme.textSecondary)}>
-            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-500 rounded-full animate-pulse" />
-            UPDATE: 1MIN
-          </div>
-          <span className={theme.textSecondary}>24H</span>
         </div>
+
       </div>
     </div>
   );

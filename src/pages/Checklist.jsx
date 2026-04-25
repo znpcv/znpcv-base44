@@ -18,8 +18,7 @@ import AdvancedLotCalculator from '@/components/advanced/AdvancedLotCalculator';
 import ChecklistItem from '@/components/checklist/ChecklistItem';
 import ChecklistItemWithTooltip from '@/components/checklist/ChecklistItemWithTooltip';
 import SectionProgressBar from '@/components/checklist/SectionProgressBar';
-import LivePriceDisplay from '@/components/LivePriceDisplay';
-import MarketChart from '@/components/MarketChart';
+import LivePriceChart from '@/components/LivePriceChart';
 import NoTradeSkills from '@/components/checklist/NoTradeSkills';
 import ProductPaywall from '@/components/ProductPaywall';
 
@@ -562,14 +561,9 @@ export default function ChecklistPage() {
               <AssetSelector selectedPair={formData.pair} onSelect={(pair) => update('pair', pair)} />
 
               {formData.pair &&
-            <div className="grid gap-2">
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
-                    <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
-                    <MarketChart pair={formData.pair} darkMode={darkMode} />
-                  </motion.div>
-                </div>
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
+                  <LivePriceChart pair={formData.pair} darkMode={darkMode} />
+                </motion.div>
             }
               
               {formData.pair &&
@@ -1026,7 +1020,7 @@ export default function ChecklistPage() {
 
           {formData.pair &&
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
-              <LivePriceDisplay pair={formData.pair} darkMode={darkMode} />
+              <LivePriceChart pair={formData.pair} darkMode={darkMode} />
             </motion.div>
             }
 
