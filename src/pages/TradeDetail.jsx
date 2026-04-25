@@ -12,8 +12,7 @@ import { format } from 'date-fns';
 import { cn } from "@/lib/utils";
 import { useLanguage, DarkModeToggle } from '@/components/LanguageContext';
 import TradeSnapshot from '@/components/advanced/TradeSnapshot';
-import LivePriceDisplay from '@/components/LivePriceDisplay';
-import MarketChart from '@/components/MarketChart';
+import LivePriceChart from '@/components/LivePriceChart';
 
 export default function TradeDetailPage() {
   const navigate = useNavigate();
@@ -241,9 +240,8 @@ export default function TradeDetailPage() {
         </motion.div>
 
         {/* Live Market Data */}
-        <div className="grid gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <LivePriceDisplay pair={trade.pair} darkMode={darkMode} />
-          <MarketChart pair={trade.pair} darkMode={darkMode} />
+        <div className="mb-4 sm:mb-6">
+          <LivePriceChart pair={trade.pair} darkMode={darkMode} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
