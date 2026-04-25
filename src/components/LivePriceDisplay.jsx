@@ -11,7 +11,7 @@ export default function LivePriceDisplay({ pair, darkMode }) {
     bg: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
     text: darkMode ? 'text-white' : 'text-zinc-900',
     textSecondary: darkMode ? 'text-zinc-400' : 'text-zinc-600',
-    border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
+    border: darkMode ? 'border-zinc-800' : 'border-zinc-200'
   };
 
   // Convert pair format (e.g., EUR/USD to EURUSD or BTC/USDT to BTCUSDT)
@@ -22,10 +22,10 @@ export default function LivePriceDisplay({ pair, darkMode }) {
   const fetchLivePrice = async () => {
     try {
       const formattedPair = formatPairForAPI(pair);
-      
+
       // Try multiple APIs for real-time data
       let data = null;
-      
+
       // Try Binance API first (best for crypto)
       if (pair.includes('BTC') || pair.includes('ETH') || pair.includes('USDT')) {
         try {
@@ -38,14 +38,14 @@ export default function LivePriceDisplay({ pair, darkMode }) {
               change24h: parseFloat(binanceData.priceChangePercent).toFixed(2),
               high24h: parseFloat(binanceData.highPrice).toFixed(pair.includes('BTC') ? 2 : 4),
               low24h: parseFloat(binanceData.lowPrice).toFixed(pair.includes('BTC') ? 2 : 4),
-              volume: parseFloat(binanceData.volume).toFixed(0),
+              volume: parseFloat(binanceData.volume).toFixed(0)
             };
           }
         } catch (e) {
           console.log('Binance API failed, trying alternatives...');
         }
       }
-      
+
       // Try CoinGecko API for crypto (fallback)
       if (!data && (pair.includes('BTC') || pair.includes('ETH'))) {
         try {
@@ -57,14 +57,14 @@ export default function LivePriceDisplay({ pair, darkMode }) {
             data = {
               price: info.usd.toFixed(2),
               change24h: info.usd_24h_change?.toFixed(2) || '0.00',
-              volume: info.usd_24h_vol?.toFixed(0) || '0',
+              volume: info.usd_24h_vol?.toFixed(0) || '0'
             };
           }
         } catch (e) {
           console.log('CoinGecko API failed');
         }
       }
-      
+
       // Try Exchange Rate API for Forex
       if (!data && pair.includes('USD') || pair.includes('EUR') || pair.includes('GBP')) {
         try {
@@ -78,7 +78,7 @@ export default function LivePriceDisplay({ pair, darkMode }) {
               const fakeChange = (Math.random() - 0.5) * 2;
               data = {
                 price: rate.toFixed(5),
-                change24h: fakeChange.toFixed(2),
+                change24h: fakeChange.toFixed(2)
               };
             }
           }
@@ -103,10 +103,10 @@ export default function LivePriceDisplay({ pair, darkMode }) {
 
   useEffect(() => {
     fetchLivePrice();
-    
+
     // Update every 10 seconds for real-time data
     const interval = setInterval(fetchLivePrice, 10000);
-    
+
     return () => clearInterval(interval);
   }, [pair]);
 
@@ -121,8 +121,8 @@ export default function LivePriceDisplay({ pair, darkMode }) {
           <div className={cn("h-6 sm:h-8 rounded", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
           <div className={cn("h-3 sm:h-4 rounded w-1/2", darkMode ? 'bg-zinc-800' : 'bg-zinc-200')} />
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   if (error || !priceData) {
@@ -133,14 +133,14 @@ export default function LivePriceDisplay({ pair, darkMode }) {
           <span className="text-xs sm:text-sm tracking-widest font-bold">LIVE</span>
         </div>
         <p className={`${theme.textSecondary} text-xs sm:text-sm`}>Keine Daten</p>
-      </div>
-    );
+      </div>);
+
   }
 
   const isPositive = parseFloat(priceData.change24h) >= 0;
 
   return (
-    <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
+    <div className="rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6 border-zinc-800 bg-zinc-950 hidden">
       <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse" />
@@ -156,11 +156,11 @@ export default function LivePriceDisplay({ pair, darkMode }) {
               {priceData.price}
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 mt-1">
-              {isPositive ? (
-                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600 flex-shrink-0" />
-              ) : (
-                <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-600 flex-shrink-0" />
-              )}
+              {isPositive ?
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600 flex-shrink-0" /> :
+
+              <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-600 flex-shrink-0" />
+              }
               <span className={cn("text-xs sm:text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
                 {isPositive ? '+' : ''}{priceData.change24h}%
               </span>
@@ -169,8 +169,8 @@ export default function LivePriceDisplay({ pair, darkMode }) {
           </div>
         </div>
 
-        {priceData.high24h && priceData.low24h && (
-          <div className={cn("pt-2 sm:pt-3 border-t", theme.border)}>
+        {priceData.high24h && priceData.low24h &&
+        <div className={cn("pt-2 sm:pt-3 border-t", theme.border)}>
             <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs">
               <div>
                 <div className={`${theme.textSecondary} text-[10px] sm:text-xs`}>HIGH</div>
@@ -182,19 +182,19 @@ export default function LivePriceDisplay({ pair, darkMode }) {
               </div>
             </div>
           </div>
-        )}
+        }
 
-        {priceData.volume && (
-          <div className={cn("pt-1.5 sm:pt-2 text-[10px] sm:text-xs", theme.textSecondary)}>
+        {priceData.volume &&
+        <div className={cn("pt-1.5 sm:pt-2 text-[10px] sm:text-xs", theme.textSecondary)}>
             Vol: {parseFloat(priceData.volume).toLocaleString()}
           </div>
-        )}
+        }
       </div>
 
       <div className={cn("mt-2 sm:mt-3 pt-2 sm:pt-3 border-t text-[9px] sm:text-xs flex items-center gap-1", theme.border, theme.textSecondary)}>
         <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
         Update: 10s
       </div>
-    </div>
-  );
+    </div>);
+
 }
