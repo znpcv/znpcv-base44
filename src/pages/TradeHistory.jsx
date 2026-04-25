@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useOffline } from '@/components/offline/OfflineManager';
 import { offlineClient } from '@/components/offline/OfflineBase44Client';
-import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare, Archive, Search, ArrowUpDown } from 'lucide-react';
+import { Home, ArrowUpRight, ArrowDownRight, TrendingUp, Award, Target, Calendar, Trash2, Edit, Plus, ArrowLeft, Download, FileText, GitCompare, CheckSquare, Archive, Search, ArrowUpDown, BookOpen } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format } from 'date-fns';
@@ -42,6 +42,8 @@ export default function TradeHistoryPage() {
     minRR: 'all'
   });
   const [exporting, setExporting] = useState(false);
+  const [exportingMonthly, setExportingMonthly] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(() => new Date().toISOString().slice(0, 7));
   const queryClient = useQueryClient();
 
   const { data: checklists = [], isLoading } = useQuery({
@@ -170,6 +172,24 @@ export default function TradeHistoryPage() {
       console.error('Export failed:', error);
     } finally {
       setExporting(false);
+    }
+  };
+
+  const handleExportMonthly = async () => {
+    try {
+      setExportingMonthly(true);
+      const response = await base44.functions.invoke('exportMonthlyReport', { month: selectedMonth });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ZNPCV_Monatsbericht_${selectedMonth}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Monthly export failed:', error);
+    } finally {
+      setExportingMonthly(false);
     }
   };
 
@@ -448,6 +468,25 @@ export default function TradeHistoryPage() {
                 <FileText className="w-3.5 h-3.5 sm:mr-1.5" />
                 <span className="hidden sm:inline">CSV</span>
               </Button>
+              {/* Monthly Report */}
+              <div className={cn("hidden sm:flex items-center gap-1 border-2 rounded-xl overflow-hidden", darkMode ? 'border-zinc-800' : 'border-zinc-300')}>
+                <input
+                  type="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className={cn("h-8 sm:h-9 px-2 text-xs font-mono border-0 outline-none", darkMode ? 'bg-zinc-900 text-zinc-300' : 'bg-zinc-100 text-zinc-700')}
+                />
+                <Button
+                  onClick={handleExportMonthly}
+                  disabled={exportingMonthly}
+                  title="Monatsbericht PDF"
+                  className={cn("h-8 sm:h-9 px-3 text-xs border-0 font-bold rounded-none transition-all flex items-center gap-1.5",
+                    darkMode ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white' : 'bg-zinc-200 text-zinc-700 hover:bg-zinc-300')}
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>{exportingMonthly ? '...' : 'BERICHT'}</span>
+                </Button>
+              </div>
             </div>
           </div>
           
