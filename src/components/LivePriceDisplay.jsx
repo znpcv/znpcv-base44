@@ -139,62 +139,62 @@ export default function LivePriceDisplay({ pair, darkMode }) {
 
   const isPositive = parseFloat(priceData.change24h) >= 0;
 
-  return (
-    <div className="rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6 border-zinc-800 bg-zinc-950 hidden">
-      <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse" />
-          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">LIVE</span>
-        </div>
-        <span className={cn("text-[10px] sm:text-xs font-mono", theme.textSecondary)}>{pair}</span>
-      </div>
+  return null;
 
-      <div className="space-y-2 sm:space-y-3">
-        <div className="flex items-end justify-between gap-2">
-          <div className="min-w-0 flex-1">
-            <div className={cn("text-2xl sm:text-3xl md:text-3xl font-light truncate", theme.text)}>
-              {priceData.price}
-            </div>
-            <div className="flex items-center gap-1.5 sm:gap-2 mt-1">
-              {isPositive ?
-              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600 flex-shrink-0" /> :
 
-              <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 text-rose-600 flex-shrink-0" />
-              }
-              <span className={cn("text-xs sm:text-sm font-bold", isPositive ? 'text-teal-600' : 'text-rose-600')}>
-                {isPositive ? '+' : ''}{priceData.change24h}%
-              </span>
-              <span className={cn("text-[10px] sm:text-xs", theme.textSecondary)}>24h</span>
-            </div>
-          </div>
-        </div>
 
-        {priceData.high24h && priceData.low24h &&
-        <div className={cn("pt-2 sm:pt-3 border-t", theme.border)}>
-            <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs">
-              <div>
-                <div className={`${theme.textSecondary} text-[10px] sm:text-xs`}>HIGH</div>
-                <div className={`${theme.text} text-xs sm:text-sm font-mono`}>{priceData.high24h}</div>
-              </div>
-              <div>
-                <div className={`${theme.textSecondary} text-[10px] sm:text-xs`}>LOW</div>
-                <div className={`${theme.text} text-xs sm:text-sm font-mono`}>{priceData.low24h}</div>
-              </div>
-            </div>
-          </div>
-        }
 
-        {priceData.volume &&
-        <div className={cn("pt-1.5 sm:pt-2 text-[10px] sm:text-xs", theme.textSecondary)}>
-            Vol: {parseFloat(priceData.volume).toLocaleString()}
-          </div>
-        }
-      </div>
 
-      <div className={cn("mt-2 sm:mt-3 pt-2 sm:pt-3 border-t text-[9px] sm:text-xs flex items-center gap-1", theme.border, theme.textSecondary)}>
-        <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-teal-600 rounded-full animate-pulse" />
-        Update: 10s
-      </div>
-    </div>);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
