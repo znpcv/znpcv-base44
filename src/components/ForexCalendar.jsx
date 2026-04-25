@@ -64,7 +64,7 @@ export default function ForexCalendar({ darkMode = true }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await base44.functions.invoke('forexCalendar', { date: 'week' });
+      const response = await base44.functions.invoke('forexCalendar', {});
       const data = response.data?.data || [];
       setAllEvents(data);
       setLastUpdate(new Date());

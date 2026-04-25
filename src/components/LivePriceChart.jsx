@@ -179,50 +179,134 @@ async function fetchPrice(raw) {
   throw new Error('Unknown asset');
 }
 
+// ── CORS Proxies (fallback chain) ────────────────────────────────────────────
+const CORS_PROXIES = [
+  (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+  (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+];
+
+async function fetchViaProxy(url, timeoutMs = 9000) {
+  for (const makeProxy of CORS_PROXIES) {
+    try {
+      const proxyUrl = makeProxy(url);
+      const r = await fetch(proxyUrl, { signal: AbortSignal.timeout(timeoutMs) });
+      if (!r.ok) continue;
+      const text = await r.text();
+      // allorigins wraps in { contents: "..." }, others return raw
+      try {
+        const wrapper = JSON.parse(text);
+        if (wrapper.contents) return JSON.parse(wrapper.contents);
+        return wrapper;
+      } catch {
+        return JSON.parse(text);
+      }
+    } catch { /* try next proxy */ }
+  }
+  return null;
+}
+
+// ── Synthetic fallback chart (wenn alle APIs versagen) ───────────────────────
+function buildSyntheticChart(basePrice) {
+  if (!basePrice) return [];
+  const now = Date.now();
+  const points = [];
+  let price = basePrice;
+  for (let i = 23; i >= 0; i--) {
+    const ts = now - i * 3600000;
+    // kleine zufällige Walk-Variation (±0.3%)
+    price = price * (1 + (Math.random() - 0.5) * 0.006);
+    points.push({
+      time: new Date(ts).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+      price: Math.round(price * 100000) / 100000,
+      synthetic: true,
+    });
+  }
+  return points;
+}
+
 // ── Chart-Daten ──────────────────────────────────────────────────────────────
-async function fetchChartData(raw) {
+async function fetchChartData(raw, fallbackPrice = null) {
   const asset = detectAsset(raw);
-  // Crypto → Binance klines
+
+  // Crypto → Binance klines (direkt, kein Proxy nötig)
   if (asset.type === 'crypto') {
-    const pairs = [`${asset.base}USDT`, `${asset.base}BUSD`];
+    const pairs = [`${asset.base}USDT`, `${asset.base}BUSD`, `${asset.base}EUR`];
     for (const sym of pairs) {
       try {
-        const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${sym}&interval=1h&limit=24`, { signal: AbortSignal.timeout(6000) });
+        const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${sym}&interval=1h&limit=24`, { signal: AbortSignal.timeout(7000) });
         if (!r.ok) continue;
         const klines = await r.json();
-        if (!Array.isArray(klines) || klines.length === 0) continue;
+        if (!Array.isArray(klines) || klines.length < 2) continue;
         return klines.map(k => ({
           time: new Date(k[0]).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
           price: parseFloat(k[4]),
         }));
       } catch { /* try next */ }
     }
-  }
-  // Yahoo → 1-Tages Klines (1h Intervall)
-  const ticker = asset.type === 'yahoo' ? asset.ticker
-    : asset.type === 'forex' ? `${asset.from}${asset.to}=X`
-    : null;
-  if (ticker) {
-    try {
-      const yUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1h&range=1d`;
-      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(yUrl)}`;
-      const r = await fetch(proxy, { signal: AbortSignal.timeout(10000) });
-      if (r.ok) {
-        const wrapper = await r.json();
-        const data = JSON.parse(wrapper.contents);
-        const result = data?.chart?.result?.[0];
-        const timestamps = result?.timestamp;
-        const closes = result?.indicators?.quote?.[0]?.close;
-        if (timestamps && closes && timestamps.length > 0) {
-          return timestamps.map((ts, i) => ({
-            time: new Date(ts * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-            price: closes[i] ?? null,
-          })).filter(d => d.price !== null);
+    // CoinGecko market chart fallback
+    const idMap = { BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', BNB: 'binancecoin', XRP: 'ripple', ADA: 'cardano', DOGE: 'dogecoin', AVAX: 'avalanche-2', LINK: 'chainlink', DOT: 'polkadot', LTC: 'litecoin', BCH: 'bitcoin-cash' };
+    const cgId = idMap[asset.base];
+    if (cgId) {
+      try {
+        const r = await fetch(`https://api.coingecko.com/api/v3/coins/${cgId}/market_chart?vs_currency=usd&days=1&interval=hourly`, { signal: AbortSignal.timeout(8000) });
+        if (r.ok) {
+          const d = await r.json();
+          if (d.prices?.length > 1) {
+            return d.prices.map(([ts, price]) => ({
+              time: new Date(ts).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+              price,
+            }));
+          }
         }
-      }
-    } catch { /* no chart */ }
+      } catch { /* fall through */ }
+    }
   }
-  return [];
+
+  // Forex → mehrere Quellen versuchen
+  if (asset.type === 'forex') {
+    const ticker = `${asset.from}${asset.to}=X`;
+    const yUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1h&range=1d`;
+    const data = await fetchViaProxy(yUrl);
+    const result = data?.chart?.result?.[0];
+    const timestamps = result?.timestamp;
+    const closes = result?.indicators?.quote?.[0]?.close;
+    if (timestamps && closes && timestamps.length > 1) {
+      const pts = timestamps.map((ts, i) => ({
+        time: new Date(ts * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+        price: closes[i] ?? null,
+      })).filter(d => d.price !== null);
+      if (pts.length > 1) return pts;
+    }
+    // Synthetic fallback für Forex
+    return buildSyntheticChart(fallbackPrice);
+  }
+
+  // Yahoo (Aktien, Indizes, Rohstoffe, Gold, Öl) → Proxy chain
+  const ticker = asset.type === 'yahoo' ? asset.ticker : null;
+  if (ticker) {
+    // Mehrere Yahoo-Endpunkte versuchen
+    const urls = [
+      `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1h&range=1d`,
+      `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1h&range=1d`,
+    ];
+    for (const yUrl of urls) {
+      const data = await fetchViaProxy(yUrl, 10000);
+      const result = data?.chart?.result?.[0];
+      const timestamps = result?.timestamp;
+      const closes = result?.indicators?.quote?.[0]?.close;
+      if (timestamps && closes && timestamps.length > 1) {
+        const pts = timestamps.map((ts, i) => ({
+          time: new Date(ts * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+          price: closes[i] ?? null,
+        })).filter(d => d.price !== null);
+        if (pts.length > 1) return pts;
+      }
+    }
+  }
+
+  // Letzter Ausweg: synthetischer Chart mit bekanntem Preis
+  return buildSyntheticChart(fallbackPrice);
 }
 
 // ── Formatierung ─────────────────────────────────────────────────────────────
@@ -259,8 +343,10 @@ export default function LivePriceChart({ pair, darkMode }) {
   const [loadingChart, setLoadingChart] = useState(true);
   const [priceError, setPriceError] = useState(false);
   const [assetInfo, setAssetInfo] = useState(null);
+  const [isSynthetic, setIsSynthetic] = useState(false);
   const priceInterval = useRef(null);
   const chartInterval = useRef(null);
+  const currentPriceRef = useRef(null);
 
   const theme = {
     bg: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
@@ -276,6 +362,7 @@ export default function LivePriceChart({ pair, darkMode }) {
       setPriceData(result);
       setAssetInfo(result.asset);
       setPriceError(false);
+      currentPriceRef.current = result.price;
     } catch {
       setPriceError(true);
     } finally {
@@ -286,13 +373,14 @@ export default function LivePriceChart({ pair, darkMode }) {
   const loadChart = async () => {
     if (!pair) return;
     try {
-      const data = await fetchChartData(pair);
+      const data = await fetchChartData(pair, currentPriceRef.current);
       if (data.length > 1) {
         const first = data[0].price;
         const last = data[data.length - 1].price;
         setPriceChange(((last - first) / first) * 100);
+        setIsSynthetic(!!data[0].synthetic);
       }
-      setChartData(data);
+      if (data.length > 0) setChartData(data);
     } catch { /* silent */ }
     finally { setLoadingChart(false); }
   };
@@ -304,9 +392,11 @@ export default function LivePriceChart({ pair, darkMode }) {
     setPriceData(null);
     setPriceError(false);
     setChartData([]);
+    setIsSynthetic(false);
+    currentPriceRef.current = null;
 
-    loadPrice();
-    loadChart();
+    // Load price first so fallback price is available for chart
+    loadPrice().then(() => loadChart());
 
     if (priceInterval.current) clearInterval(priceInterval.current);
     if (chartInterval.current) clearInterval(chartInterval.current);
@@ -509,8 +599,8 @@ export default function LivePriceChart({ pair, darkMode }) {
 
         <div className={cn("flex items-center justify-between pt-2 mt-1 border-t text-[9px]", theme.border, theme.textSecondary)}>
           <div className="flex items-center gap-1">
-            <div className="w-1 h-1 bg-teal-500 rounded-full animate-pulse" />
-            UPDATE: 1MIN
+            <div className={cn("w-1 h-1 rounded-full animate-pulse", isSynthetic ? 'bg-amber-500' : 'bg-teal-500')} />
+            {isSynthetic ? 'SIMULATED (API UNAVAIL.)' : 'UPDATE: 1MIN'}
           </div>
           <span>24H</span>
         </div>
