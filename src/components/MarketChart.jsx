@@ -4,19 +4,62 @@ import { TrendingUp, TrendingDown, Activity, Wifi, WifiOff } from 'lucide-react'
 import { motion } from 'framer-motion';
 import { cn } from "@/lib/utils";
 
-const isCrypto = (pair) => pair.includes('BTC') || pair.includes('ETH') || pair.includes('BNB') || pair.includes('SOL') || pair.includes('USDT');
+// Detect asset class from pair string
+const getAssetType = (pair) => {
+  const p = pair.toUpperCase();
+  if (p.includes('BTC') || p.includes('ETH') || p.includes('BNB') || p.includes('SOL') || p.includes('XRP') || p.includes('USDT')) return 'crypto';
+  if (p === 'XAU/USD' || p === 'XAUUSD' || p === 'GOLD') return 'gold';
+  if (p === 'XAG/USD' || p === 'XAGUSD') return 'silver';
+  if (p.includes('OIL') || p.includes('WTI') || p.includes('BRENT') || p.includes('CL')) return 'oil';
+  if (p.includes('SPX') || p.includes('NDX') || p.includes('DAX') || p.includes('DJI') || p.includes('INDEX')) return 'index';
+  if (p.includes('/') && (p.includes('USD') || p.includes('EUR') || p.includes('GBP') || p.includes('JPY') || p.includes('CHF') || p.includes('AUD'))) return 'forex';
+  // Default: try as stock ticker
+  return 'stock';
+};
 
 const getBinanceSymbol = (pair) => {
   const formatted = pair.replace('/', '').toUpperCase();
-  if (formatted.includes('USDT')) return formatted;
-  if (isCrypto(pair)) return `${formatted}USDT`;
-  return formatted;
+  return formatted.includes('USDT') ? formatted : `${formatted}USDT`;
 };
 
-const getDecimals = (pair) => {
-  if (pair.includes('BTC')) return 1;
-  if (pair.includes('ETH') || pair.includes('BNB') || pair.includes('SOL')) return 2;
-  return 5;
+const getDecimals = (pair, assetType) => {
+  const p = pair.toUpperCase();
+  if (assetType === 'gold') return 2;
+  if (assetType === 'oil') return 2;
+  if (assetType === 'silver') return 3;
+  if (assetType === 'index') return 2;
+  if (assetType === 'stock') return 2;
+  if (p.includes('BTC')) return 1;
+  if (p.includes('ETH') || p.includes('BNB') || p.includes('SOL')) return 2;
+  if (assetType === 'forex') return 5;
+  return 4;
+};
+
+// Yahoo Finance proxy via allorigins
+const fetchYahoo = async (ticker) => {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d`;
+  const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  const res = await fetch(proxy);
+  if (!res.ok) throw new Error('Yahoo failed');
+  return res.json();
+};
+
+// Map our pair labels to Yahoo tickers
+const getYahooTicker = (pair, assetType) => {
+  const p = pair.toUpperCase().replace('/', '');
+  if (assetType === 'gold') return 'GC=F';
+  if (assetType === 'silver') return 'SI=F';
+  if (assetType === 'oil') return 'CL=F';
+  if (assetType === 'forex') {
+    const [base, quote] = pair.includes('/') ? pair.split('/') : [pair.slice(0,3), pair.slice(3)];
+    return `${base}${quote}=X`;
+  }
+  // index / stock: use pair directly as ticker
+  const indexMap = { 'SPX': '^GSPC', 'NDX': '^NDX', 'DAX': '^GDAXI', 'DJI': '^DJI', 'FTSE': '^FTSE' };
+  for (const [k, v] of Object.entries(indexMap)) {
+    if (p.includes(k)) return v;
+  }
+  return pair.replace('/', ''); // stock ticker
 };
 
 export default function MarketChart({ pair, darkMode }) {
@@ -28,6 +71,10 @@ export default function MarketChart({ pair, darkMode }) {
   const [wsConnected, setWsConnected] = useState(false);
   const wsRef = useRef(null);
   const chartDataRef = useRef([]);
+  const intervalRef = useRef(null);
+
+  const assetType = getAssetType(pair);
+  const dec = getDecimals(pair, assetType);
 
   const theme = {
     bg: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
@@ -36,114 +83,120 @@ export default function MarketChart({ pair, darkMode }) {
     border: darkMode ? 'border-zinc-800' : 'border-zinc-200',
   };
 
-  const dec = getDecimals(pair);
-
-  // Fetch historical klines from Binance (real candle data)
-  const fetchHistoricalData = async () => {
-    try {
-      if (isCrypto(pair)) {
-        const symbol = getBinanceSymbol(pair);
-        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=5m&limit=96`);
-        if (!res.ok) throw new Error('Binance klines failed');
-        const klines = await res.json();
-        const data = klines.map(k => ({
-          time: new Date(k[0]).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-          price: parseFloat(parseFloat(k[4]).toFixed(dec)),
-          ts: k[0],
-        }));
-        chartDataRef.current = data;
-        setChartData(data);
-        if (data.length > 1) {
-          const change = ((data[data.length - 1].price - data[0].price) / data[0].price) * 100;
-          setPriceChange(change);
-        }
-        setLivePrice(parseFloat(klines[klines.length - 1][4]).toFixed(dec));
-        setError(false);
-        setLoading(false);
-        return true;
-      }
-      // Forex: exchangerate-api
-      if (pair.includes('/')) {
-        const [base, quote] = pair.split('/');
-        const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
-        if (!res.ok) throw new Error('Forex API failed');
-        const d = await res.json();
-        const rate = d.rates[quote];
-        if (!rate) throw new Error('Rate not found');
-        const now = Date.now();
-        // Build a simulated-time chart from the single rate (real rate, different times)
-        const data = Array.from({ length: 24 }, (_, i) => ({
-          time: new Date(now - (23 - i) * 3600000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-          price: parseFloat((rate * (1 + (Math.sin(i) * 0.0005))).toFixed(5)),
-          ts: now - (23 - i) * 3600000,
-        }));
-        data[data.length - 1].price = parseFloat(rate.toFixed(5));
-        chartDataRef.current = data;
-        setChartData(data);
-        setPriceChange(((data[data.length - 1].price - data[0].price) / data[0].price) * 100);
-        setLivePrice(rate.toFixed(5));
-        setError(false);
-        setLoading(false);
-        return true;
-      }
-      throw new Error('Unknown pair type');
-    } catch (e) {
-      console.error('fetchHistoricalData error:', e);
-      setError(true);
-      setLoading(false);
-      return false;
-    }
+  const calcChange = (data) => {
+    if (data.length < 2) return 0;
+    return ((data[data.length - 1].price - data[0].price) / data[0].price) * 100;
   };
 
-  // Binance WebSocket for real-time price ticks (crypto only)
-  const connectWebSocket = () => {
-    if (!isCrypto(pair)) return;
-    if (wsRef.current) {
-      wsRef.current.close();
-      wsRef.current = null;
-    }
+  // ── CRYPTO: Binance klines + WebSocket ────────────────────────────────────
+  const fetchBinanceHistory = async () => {
+    const symbol = getBinanceSymbol(pair);
+    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=5m&limit=96`);
+    if (!res.ok) throw new Error('Binance klines failed');
+    const klines = await res.json();
+    const data = klines.map(k => ({
+      time: new Date(k[0]).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+      price: parseFloat(parseFloat(k[4]).toFixed(dec)),
+      ts: k[0],
+    }));
+    return data;
+  };
+
+  const connectBinanceWS = () => {
+    if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
     const symbol = getBinanceSymbol(pair).toLowerCase();
     const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@trade`);
     wsRef.current = ws;
-
     ws.onopen = () => setWsConnected(true);
     ws.onclose = () => setWsConnected(false);
     ws.onerror = () => setWsConnected(false);
-
     ws.onmessage = (evt) => {
       try {
         const msg = JSON.parse(evt.data);
         const price = parseFloat(parseFloat(msg.p).toFixed(dec));
         setLivePrice(price.toFixed(dec));
-
-        // Append to chart every ~5 seconds (throttle by checking last entry time)
         const now = Date.now();
         const prev = chartDataRef.current;
         const last = prev[prev.length - 1];
         if (!last || now - last.ts > 5000) {
-          const newPoint = {
+          const updated = [...prev.slice(-95), {
             time: new Date(now).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-            price,
-            ts: now,
-          };
-          const updated = [...prev.slice(-95), newPoint];
+            price, ts: now,
+          }];
           chartDataRef.current = updated;
           setChartData([...updated]);
-          if (updated.length > 1) {
-            const change = ((updated[updated.length - 1].price - updated[0].price) / updated[0].price) * 100;
-            setPriceChange(change);
-          }
+          setPriceChange(calcChange(updated));
         }
       } catch {}
     };
   };
 
-  // Forex polling every 10s
-  const forexIntervalRef = useRef(null);
-  const pollForex = () => {
-    if (isCrypto(pair)) return;
-    if (forexIntervalRef.current) clearInterval(forexIntervalRef.current);
-    forexIntervalRef.current = setInterval(async () => {
+  // ── YAHOO: history + polling ───────────────────────────────────────────────
+  const fetchYahooHistory = async () => {
+    const ticker = getYahooTicker(pair, assetType);
+    const d = await fetchYahoo(ticker);
+    const result = d?.chart?.result?.[0];
+    if (!result) throw new Error('No Yahoo data');
+    const timestamps = result.timestamp || [];
+    const closes = result.indicators?.quote?.[0]?.close || [];
+    const data = timestamps
+      .map((ts, i) => ({
+        time: new Date(ts * 1000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+        price: closes[i] ? parseFloat(closes[i].toFixed(dec)) : null,
+        ts: ts * 1000,
+      }))
+      .filter(d => d.price !== null);
+    return data;
+  };
+
+  const startYahooPolling = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(async () => {
+      try {
+        const ticker = getYahooTicker(pair, assetType);
+        const d = await fetchYahoo(ticker);
+        const result = d?.chart?.result?.[0];
+        if (!result) return;
+        const closes = result.indicators?.quote?.[0]?.close || [];
+        const timestamps = result.timestamp || [];
+        const lastClose = closes.filter(Boolean).pop();
+        const lastTs = timestamps[timestamps.length - 1];
+        if (!lastClose) return;
+        const price = parseFloat(lastClose.toFixed(dec));
+        setLivePrice(price.toFixed(dec));
+        const now = lastTs ? lastTs * 1000 : Date.now();
+        const updated = [...chartDataRef.current.slice(-95), {
+          time: new Date(now).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+          price, ts: now,
+        }];
+        chartDataRef.current = updated;
+        setChartData([...updated]);
+        setPriceChange(calcChange(updated));
+      } catch {}
+    }, 15000);
+  };
+
+  // ── FOREX: exchangerate-api + polling ────────────────────────────────────
+  const fetchForexHistory = async () => {
+    const [base, quote] = pair.split('/');
+    const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
+    if (!res.ok) throw new Error('Forex API failed');
+    const d = await res.json();
+    const rate = d.rates[quote];
+    if (!rate) throw new Error('Rate not found');
+    const now = Date.now();
+    const data = Array.from({ length: 48 }, (_, i) => ({
+      time: new Date(now - (47 - i) * 1800000).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+      price: parseFloat((rate * (1 + Math.sin(i * 0.3) * 0.0003)).toFixed(dec)),
+      ts: now - (47 - i) * 1800000,
+    }));
+    data[data.length - 1].price = parseFloat(rate.toFixed(dec));
+    return data;
+  };
+
+  const startForexPolling = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(async () => {
       try {
         const [base, quote] = pair.split('/');
         const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
@@ -151,25 +204,21 @@ export default function MarketChart({ pair, darkMode }) {
         const d = await res.json();
         const rate = d.rates[quote];
         if (!rate) return;
-        const price = parseFloat(rate.toFixed(5));
-        setLivePrice(price.toFixed(5));
+        const price = parseFloat(rate.toFixed(dec));
+        setLivePrice(price.toFixed(dec));
         const now = Date.now();
-        const newPoint = {
+        const updated = [...chartDataRef.current.slice(-95), {
           time: new Date(now).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
-          price,
-          ts: now,
-        };
-        const updated = [...chartDataRef.current.slice(-95), newPoint];
+          price, ts: now,
+        }];
         chartDataRef.current = updated;
         setChartData([...updated]);
-        if (updated.length > 1) {
-          const change = ((updated[updated.length - 1].price - updated[0].price) / updated[0].price) * 100;
-          setPriceChange(change);
-        }
+        setPriceChange(calcChange(updated));
       } catch {}
     }, 10000);
   };
 
+  // ── Main init ─────────────────────────────────────────────────────────────
   useEffect(() => {
     setLoading(true);
     setError(false);
@@ -177,23 +226,51 @@ export default function MarketChart({ pair, darkMode }) {
     chartDataRef.current = [];
     setLivePrice(null);
     setWsConnected(false);
+    if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
+    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
 
-    fetchHistoricalData().then(ok => {
-      if (ok) {
-        if (isCrypto(pair)) {
-          connectWebSocket();
+    const init = async () => {
+      try {
+        let data = [];
+        if (assetType === 'crypto') {
+          data = await fetchBinanceHistory();
+        } else if (assetType === 'forex') {
+          data = await fetchForexHistory();
         } else {
-          pollForex();
+          // gold, silver, oil, index, stock → Yahoo
+          data = await fetchYahooHistory();
         }
+
+        chartDataRef.current = data;
+        setChartData(data);
+        setPriceChange(calcChange(data));
+        if (data.length > 0) setLivePrice(data[data.length - 1].price.toFixed(dec));
+        setLoading(false);
+
+        // Start live updates
+        if (assetType === 'crypto') {
+          connectBinanceWS();
+        } else if (assetType === 'forex') {
+          startForexPolling();
+        } else {
+          startYahooPolling();
+        }
+      } catch (e) {
+        console.error('MarketChart init error:', e);
+        setError(true);
+        setLoading(false);
       }
-    });
+    };
+
+    init();
 
     return () => {
       if (wsRef.current) { wsRef.current.close(); wsRef.current = null; }
-      if (forexIntervalRef.current) { clearInterval(forexIntervalRef.current); forexIntervalRef.current = null; }
+      if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
     };
   }, [pair]);
 
+  // ── Render ────────────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}>
@@ -222,6 +299,7 @@ export default function MarketChart({ pair, darkMode }) {
 
   const isPositive = priceChange >= 0;
   const chartColor = isPositive ? '#14b8a6' : '#f43f5e';
+  const updateLabel = assetType === 'crypto' ? (wsConnected ? 'WebSocket Live' : 'Polling') : assetType === 'forex' ? 'Polling 10s' : 'Polling 15s';
 
   return (
     <motion.div
@@ -255,7 +333,7 @@ export default function MarketChart({ pair, darkMode }) {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
-              <linearGradient id={`grad-${pair.replace('/', '')}`} x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`grad-${pair.replace(/[^a-z0-9]/gi, '')}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={chartColor} stopOpacity={0.3} />
                 <stop offset="95%" stopColor={chartColor} stopOpacity={0} />
               </linearGradient>
@@ -273,7 +351,7 @@ export default function MarketChart({ pair, darkMode }) {
               tickLine={false}
               domain={['auto', 'auto']}
               tickFormatter={(v) => v.toFixed(dec)}
-              width={50}
+              width={55}
             />
             <Tooltip
               contentStyle={{
@@ -290,7 +368,7 @@ export default function MarketChart({ pair, darkMode }) {
               dataKey="price"
               stroke={chartColor}
               strokeWidth={2}
-              fill={`url(#grad-${pair.replace('/', '')})`}
+              fill={`url(#grad-${pair.replace(/[^a-z0-9]/gi, '')})`}
               dot={false}
               isAnimationActive={false}
             />
@@ -301,13 +379,12 @@ export default function MarketChart({ pair, darkMode }) {
       {/* Footer */}
       <div className={cn("mt-2 sm:mt-3 pt-2 sm:pt-3 border-t text-[9px] sm:text-xs flex items-center justify-between", theme.border)}>
         <div className={cn("flex items-center gap-1", theme.textSecondary)}>
-          {wsConnected ? (
-            <><Wifi className="w-3 h-3 text-teal-500" /> WebSocket Live</>
-          ) : (
-            <><div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" /> Polling 10s</>
-          )}
+          {wsConnected
+            ? <><Wifi className="w-3 h-3 text-teal-500" /> {updateLabel}</>
+            : <><div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" /> {updateLabel}</>
+          }
         </div>
-        <span className={theme.textSecondary}>8h / 5min</span>
+        <span className={theme.textSecondary}>{assetType.toUpperCase()}</span>
       </div>
     </motion.div>
   );
