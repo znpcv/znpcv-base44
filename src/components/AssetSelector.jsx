@@ -200,27 +200,43 @@ export default function AssetSelector({ selectedPair, onSelect, darkMode = true 
 
       {/* Selected Display */}
       {selectedPair && selectedData && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={cn("flex items-center gap-3 sm:gap-4 md:gap-5 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl",
-            darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
+          className={cn("rounded-xl sm:rounded-2xl border-2 overflow-hidden",
+            darkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-200 bg-zinc-50"
           )}
         >
-          {selectedData.flags ? (
-            <div className="text-2xl sm:text-3xl md:text-4xl">{selectedData.flags}</div>
-          ) : (
-            <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl flex items-center justify-center",
-              darkMode ? "bg-black/10" : "bg-white/10"
-            )}>
-              {React.createElement(ASSET_CATEGORIES[selectedData.category].icon, { 
-                className: cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7", darkMode ? "text-black" : "text-white")
-              })}
+          {/* Header */}
+          <div className={cn("flex items-center justify-between px-4 sm:px-5 py-2.5 border-b",
+            darkMode ? "border-zinc-800" : "border-zinc-200"
+          )}>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse" />
+              <span className="text-[10px] tracking-widest font-bold">SELECTED PAIR</span>
             </div>
-          )}
-          <div>
-            <div className={cn("text-[10px] sm:text-xs tracking-widest mb-0.5 sm:mb-1", darkMode ? "text-zinc-500" : "text-zinc-400")}>SELECTED</div>
-            <div className="text-lg sm:text-xl md:text-2xl tracking-wider font-bold">{selectedPair}</div>
+            <div className={cn("text-[10px] tracking-widest",
+              darkMode ? "text-zinc-500" : "text-zinc-400"
+            )}>{ASSET_CATEGORIES[selectedData.category]?.label || selectedData.category}</div>
+          </div>
+
+          {/* Content */}
+          <div className="flex items-center gap-4 px-4 sm:px-5 py-4">
+            {selectedData.flags ? (
+              <div className="text-3xl sm:text-4xl">{selectedData.flags}</div>
+            ) : (
+              <div className={cn("w-11 h-11 sm:w-13 sm:h-13 rounded-xl flex items-center justify-center flex-shrink-0",
+                darkMode ? "bg-zinc-800" : "bg-zinc-200"
+              )}>
+                {React.createElement(ASSET_CATEGORIES[selectedData.category].icon, {
+                  className: cn("w-5 h-5 sm:w-6 sm:h-6", darkMode ? "text-white" : "text-zinc-900")
+                })}
+              </div>
+            )}
+            <div>
+              <div className={cn("text-[10px] tracking-widest mb-1", darkMode ? "text-zinc-500" : "text-zinc-400")}>INSTRUMENT</div>
+              <div className={cn("text-2xl sm:text-3xl tracking-wider font-bold", darkMode ? "text-white" : "text-zinc-900")}>{selectedPair}</div>
+            </div>
           </div>
         </motion.div>
       )}
