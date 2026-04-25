@@ -198,32 +198,7 @@ export default function AssetSelector({ selectedPair, onSelect, darkMode = true 
         })}
       </motion.div>
 
-      {/* Selected Display */}
-      {selectedPair && selectedData && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={cn("flex items-center gap-3 sm:gap-4 md:gap-5 p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl",
-            darkMode ? "bg-white text-black" : "bg-zinc-900 text-white"
-          )}
-        >
-          {selectedData.flags ? (
-            <div className="text-2xl sm:text-3xl md:text-4xl">{selectedData.flags}</div>
-          ) : (
-            <div className={cn("w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl flex items-center justify-center",
-              darkMode ? "bg-black/10" : "bg-white/10"
-            )}>
-              {React.createElement(ASSET_CATEGORIES[selectedData.category].icon, { 
-                className: cn("w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7", darkMode ? "text-black" : "text-white")
-              })}
-            </div>
-          )}
-          <div>
-            <div className={cn("text-[10px] sm:text-xs tracking-widest mb-0.5 sm:mb-1", darkMode ? "text-zinc-500" : "text-zinc-400")}>SELECTED</div>
-            <div className="text-lg sm:text-xl md:text-2xl tracking-wider font-bold">{selectedPair}</div>
-          </div>
-        </motion.div>
-      )}
+
     </div>
   );
 }

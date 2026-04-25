@@ -325,24 +325,51 @@ export default function LivePriceChart({ pair, darkMode }) {
 
   const gradientId = `cpg-${pair?.replace(/[^a-zA-Z0-9]/g, '') || 'chart'}`;
 
+  // Find flags for the pair (forex)
+  const pairFlags = (() => {
+    const forexMap = {
+      'EUR/USD': '🇪🇺🇺🇸', 'GBP/USD': '🇬🇧🇺🇸', 'USD/JPY': '🇺🇸🇯🇵', 'USD/CHF': '🇺🇸🇨🇭',
+      'AUD/USD': '🇦🇺🇺🇸', 'USD/CAD': '🇺🇸🇨🇦', 'NZD/USD': '🇳🇿🇺🇸', 'EUR/GBP': '🇪🇺🇬🇧',
+      'EUR/JPY': '🇪🇺🇯🇵', 'EUR/CHF': '🇪🇺🇨🇭', 'EUR/AUD': '🇪🇺🇦🇺', 'EUR/CAD': '🇪🇺🇨🇦',
+      'EUR/NZD': '🇪🇺🇳🇿', 'GBP/JPY': '🇬🇧🇯🇵', 'GBP/CHF': '🇬🇧🇨🇭', 'GBP/AUD': '🇬🇧🇦🇺',
+      'GBP/CAD': '🇬🇧🇨🇦', 'GBP/NZD': '🇬🇧🇳🇿', 'AUD/JPY': '🇦🇺🇯🇵', 'AUD/CAD': '🇦🇺🇨🇦',
+      'AUD/NZD': '🇦🇺🇳🇿', 'NZD/JPY': '🇳🇿🇯🇵', 'CAD/JPY': '🇨🇦🇯🇵', 'CHF/JPY': '🇨🇭🇯🇵',
+    };
+    return forexMap[pair] || null;
+  })();
+
   return (
     <div className={cn("rounded-xl sm:rounded-2xl border-2 overflow-hidden", theme.border, theme.bg)}>
 
-      {/* ── HEADER ─────────────────────────────────────────────────── */}
-      <div className={cn("flex items-center justify-between px-3 sm:px-4 py-2 border-b", theme.border)}>
-        <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse" />
-          <span className="text-[10px] tracking-widest font-bold">LIVE MARKET</span>
+      {/* ── HEADER: Ausgewähltes Paar ────────────────────────────── */}
+      <div className={cn("flex items-center justify-between px-4 sm:px-5 py-3 border-b", theme.border,
+        darkMode ? 'bg-zinc-900' : 'bg-zinc-100')}>
+        <div className="flex items-center gap-3">
+          {pairFlags ? (
+            <span className="text-2xl sm:text-3xl">{pairFlags}</span>
+          ) : (
+            <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold",
+              darkMode ? 'bg-zinc-800 text-zinc-300' : 'bg-zinc-200 text-zinc-600')}>
+              {pair?.slice(0, 2)}
+            </div>
+          )}
+          <div>
+            <div className={cn("text-lg sm:text-xl font-bold tracking-wider", theme.text)}>{pair}</div>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <div className="w-1.5 h-1.5 bg-teal-500 rounded-full animate-pulse" />
+              <span className={cn("text-[9px] tracking-widest font-bold text-teal-500")}>LIVE MARKET DATA</span>
+            </div>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className={cn("text-[10px] font-mono font-bold", theme.text)}>{pair}</span>
           {priceData?.source && (
-            <span className={cn("text-[9px] px-1.5 py-0.5 rounded border", theme.textSecondary, theme.border)}>
+            <span className={cn("text-[9px] px-2 py-1 rounded-lg border font-bold tracking-wider", theme.textSecondary, theme.border)}>
               {priceData.source}
             </span>
           )}
-          <button onClick={loadPrice} className={cn("p-1 rounded transition-colors", darkMode ? 'text-zinc-600 hover:text-zinc-300' : 'text-zinc-300 hover:text-zinc-600')}>
-            <RefreshCw className="w-3 h-3" />
+          <button onClick={loadPrice} className={cn("p-1.5 rounded-lg border transition-colors", theme.border,
+            darkMode ? 'text-zinc-500 hover:text-white hover:bg-zinc-800' : 'text-zinc-400 hover:text-black hover:bg-zinc-200')}>
+            <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
