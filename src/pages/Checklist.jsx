@@ -21,7 +21,6 @@ import SectionProgressBar from '@/components/checklist/SectionProgressBar';
 import LivePriceChart from '@/components/LivePriceChart';
 import NoTradeSkills from '@/components/checklist/NoTradeSkills';
 import ProductPaywall from '@/components/ProductPaywall';
-import SetupTemplates from '@/components/checklist/SetupTemplates';
 
 const STEPS = ['pair', 'weekly', 'daily', 'h4', 'entry', 'risk', 'final'];
 
@@ -560,14 +559,6 @@ export default function ChecklistPage() {
               <StepHeader number="01" title={t('assetDirection')} subtitle={t('selectPairDirection')} />
 
               <AssetSelector selectedPair={formData.pair} onSelect={(pair) => update('pair', pair)} />
-
-              {/* Setup Templates — only for new checklists */}
-              {!checklistId && (
-                <SetupTemplates
-                  darkMode={darkMode}
-                  onApply={(criteria) => setFormData(prev => ({ ...prev, ...criteria }))}
-                />
-              )}
 
               {formData.pair &&
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
