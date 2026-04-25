@@ -118,33 +118,6 @@ export default function NoTradeSkills({
         </span>
       </div>
 
-      {/* Conditions — plain list, no color explosion */}
-      <div className="px-3 py-2 space-y-1">
-        {conditions.map((condition) => {
-          const Icon = condition.icon;
-          return (
-            <div key={condition.id} className="flex items-center gap-2">
-              <div className={cn(
-                "w-1 h-1 rounded-full flex-shrink-0",
-                condition.severity === 'critical' ? "bg-rose-500" : "bg-amber-500"
-              )} />
-              <Icon className={cn(
-                "w-3 h-3 flex-shrink-0",
-                condition.severity === 'critical' 
-                  ? darkMode ? "text-zinc-400" : "text-zinc-500"
-                  : darkMode ? "text-zinc-500" : "text-zinc-400"
-              )} />
-              <span className={cn(
-                "text-[10px] font-sans",
-                darkMode ? "text-zinc-300" : "text-zinc-600"
-              )}>
-                {condition.title}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
       {/* Action — subtle, not screaming */}
       <div className={cn("px-3 py-2 border-t", darkMode ? "border-zinc-800" : "border-zinc-200")}>
         <button
