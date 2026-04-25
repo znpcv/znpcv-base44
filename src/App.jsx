@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import FreeChecklist from './pages/FreeChecklist';
 import Landing from './pages/Landing';
+import EconomicCalendarPage from './pages/EconomicCalendar';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -83,6 +84,11 @@ const AppRoutes = () => {
           }
         />
       ))}
+      <Route path="/EconomicCalendar" element={
+        <LayoutWrapper currentPageName="EconomicCalendar">
+          <EconomicCalendarPage />
+        </LayoutWrapper>
+      } />
       <Route path="/FreeChecklist" element={
         <LayoutWrapper currentPageName="FreeChecklist">
           <FreeChecklist />

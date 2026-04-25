@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useOffline } from '@/components/offline/OfflineManager';
 import { offlineClient } from '@/components/offline/OfflineBase44Client';
-import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp, ArrowLeft, Download, FileText, History } from 'lucide-react';
+import { Plus, Calendar, ChevronRight, Target, CheckCircle, Clock, BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Minus, Globe, Home, Activity, Trash2, Edit, TrendingUp, ArrowLeft, Download, FileText, History, Newspaper } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, subMonths, addMonths } from 'date-fns';
@@ -22,6 +22,7 @@ const BestTradingTimes = lazy(() => import('@/components/advanced/BestTradingTim
 const SwipeNavigation = lazy(() => import('@/components/mobile/SwipeNavigation'));
 const BottomNav = lazy(() => import('@/components/mobile/BottomNav'));
 const NoTradeStats = lazy(() => import('@/components/dashboard/NoTradeStats'));
+const ForexCalendar = lazy(() => import('@/components/ForexCalendar.jsx'));
 
 
 export default function DashboardPage() {
@@ -200,6 +201,12 @@ export default function DashboardPage() {
                 <DarkModeToggle />
                 <button onClick={() => navigate(createPageUrl('Home'))} className={`p-2 rounded-xl transition-all ${darkMode ? 'hover:bg-zinc-900 text-zinc-400 hover:text-white' : 'hover:bg-zinc-200 text-zinc-600 hover:text-black'}`}>
                   <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+                <button
+                  onClick={() => navigate(createPageUrl('EconomicCalendar'))}
+                  className={cn("p-2 rounded-xl border-2 transition-all",
+                    darkMode ? "bg-zinc-900 border-zinc-800 hover:border-amber-500/50 text-zinc-400 hover:text-amber-400" : "bg-zinc-100 border-zinc-300 hover:border-amber-500 text-zinc-600 hover:text-amber-600")}>
+                  <Newspaper className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button 
                   onClick={() => navigate(createPageUrl('Trash'))}
@@ -934,6 +941,11 @@ export default function DashboardPage() {
             </motion.div>
 
 
+
+            {/* Forex Economic Calendar */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
+              <ForexCalendar darkMode={darkMode} />
+            </motion.div>
 
             {/* Best Trading Times */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}>
