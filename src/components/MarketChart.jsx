@@ -9,6 +9,7 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [priceChange, setPriceChange] = useState(0);
+  const [livePrice, setLivePrice] = useState(null);
 
   const theme = {
     bg: darkMode ? 'bg-zinc-950' : 'bg-zinc-50',
@@ -118,11 +119,36 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
     }
   };
 
+  const fetchLivePrice = async () => {
+    try {
+      const formattedPair = formatPairForAPI(pair);
+      let price = null;
+      if (pair.includes('BTC') || pair.includes('ETH') || pair.includes('USDT')) {
+        const binanceSymbol = formattedPair.includes('USDT') ? formattedPair : `${formattedPair}USDT`;
+        const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${binanceSymbol}`);
+        if (res.ok) {
+          const d = await res.json();
+          price = parseFloat(d.price).toFixed(pair.includes('BTC') ? 2 : 4);
+        }
+      }
+      if (!price && (pair.includes('USD') || pair.includes('EUR') || pair.includes('GBP'))) {
+        const [base, quote] = pair.split('/');
+        const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
+        if (res.ok) {
+          const d = await res.json();
+          if (d.rates[quote]) price = d.rates[quote].toFixed(5);
+        }
+      }
+      if (price) setLivePrice(price);
+    } catch {}
+  };
+
   useEffect(() => {
     fetchChartData();
+    fetchLivePrice();
     
     // Update every 60 seconds for real-time chart
-    const interval = setInterval(fetchChartData, 60000);
+    const interval = setInterval(() => { fetchChartData(); fetchLivePrice(); }, 60000);
     
     return () => clearInterval(interval);
   }, [pair, timeframe]);
@@ -163,11 +189,14 @@ export default function MarketChart({ pair, darkMode, timeframe = '24h' }) {
       className={cn("rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 md:p-6", theme.border, theme.bg)}
     >
       <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse" />
-          <span className="text-[10px] sm:text-xs md:text-sm tracking-widest font-bold">CHART</span>
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-teal-600 rounded-full animate-pulse flex-shrink-0" />
+          <span className={cn("text-[10px] sm:text-xs md:text-sm tracking-widest font-bold flex-shrink-0", theme.textSecondary)}>{pair}</span>
+          {livePrice && (
+            <span className={cn("text-sm sm:text-base md:text-lg font-light truncate", theme.text)}>{livePrice}</span>
+          )}
         </div>
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           {isPositive ? (
             <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-teal-600" />
           ) : (
