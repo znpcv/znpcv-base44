@@ -7,14 +7,178 @@ import {
   Timer, TrendingUp, TrendingDown, Bell, BellOff, BarChart2, List, LayoutList
 } from 'lucide-react';
 import { format, addDays } from 'date-fns';
-import { de } from 'date-fns/locale';
+import { de, enUS, fr, es, zhCN, ar, ja, pt, hi } from 'date-fns/locale';
+import { useLanguage } from '@/components/LanguageContext';
+
+// ── Calendar i18n translations ───────────────────────────────────
+const CAL_T = {
+  de: {
+    loading: 'LADE DATEN…', error: 'Daten konnten nicht geladen werden.',
+    retry: 'Erneut versuchen', noEvents: 'Keine Events an diesem Tag',
+    noEventsHint: 'Anderen Tag wählen oder Filter ändern',
+    timeCol: 'ZEIT', eventCol: 'EVENT', valCol: 'IST / PRO / VOR',
+    high: 'Hoch', medium: 'Mittel', low: 'Gering',
+    highFilter: '🔴 Hoch', medFilter: '🟡 Mittel', allFilter: 'Alle',
+    pairBtn: '⚡ PAAR', heatmap: 'WÄHRUNGS-HEATMAP', hideHeatmap: '✕',
+    showHeatmap: 'Heatmap anzeigen', nextHigh: 'NEXT HIGH',
+    thisWeek: 'DIESE WOCHE', nextWeek: 'NÄCHSTE WOCHE',
+    weekOverviewTitle: 'HIGH EVENTS — NÄCHSTE 7 TAGE', today: '● HEUTE',
+    forecastLbl: 'PROGNOSE', previousLbl: 'VORHERIG', actualLbl: 'AKTUELL',
+    forecast: 'P', previous: 'V', footerPV: 'P = Prognose · V = Vorherig',
+    events: 'Event', eventsPlural: 'Events',
+  },
+  en: {
+    loading: 'LOADING DATA…', error: 'Could not load data.',
+    retry: 'Try again', noEvents: 'No events on this day',
+    noEventsHint: 'Choose another day or change filter',
+    timeCol: 'TIME', eventCol: 'EVENT', valCol: 'ACT / FCT / PRV',
+    high: 'High', medium: 'Medium', low: 'Low',
+    highFilter: '🔴 High', medFilter: '🟡 Medium', allFilter: 'All',
+    pairBtn: '⚡ PAIR', heatmap: 'CURRENCY HEATMAP', hideHeatmap: '✕',
+    showHeatmap: 'Show Heatmap', nextHigh: 'NEXT HIGH',
+    thisWeek: 'THIS WEEK', nextWeek: 'NEXT WEEK',
+    weekOverviewTitle: 'HIGH EVENTS — NEXT 7 DAYS', today: '● TODAY',
+    forecastLbl: 'FORECAST', previousLbl: 'PREVIOUS', actualLbl: 'ACTUAL',
+    forecast: 'F', previous: 'P', footerPV: 'F = Forecast · P = Previous',
+    events: 'Event', eventsPlural: 'Events',
+  },
+  es: {
+    loading: 'CARGANDO DATOS…', error: 'No se pudieron cargar los datos.',
+    retry: 'Reintentar', noEvents: 'Sin eventos este día',
+    noEventsHint: 'Elige otro día o cambia el filtro',
+    timeCol: 'HORA', eventCol: 'EVENTO', valCol: 'ACT / PRO / ANT',
+    high: 'Alto', medium: 'Medio', low: 'Bajo',
+    highFilter: '🔴 Alto', medFilter: '🟡 Medio', allFilter: 'Todos',
+    pairBtn: '⚡ PAR', heatmap: 'MAPA DE CALOR DIVISA', hideHeatmap: '✕',
+    showHeatmap: 'Mostrar mapa de calor', nextHigh: 'PRÓXIMO ALTO',
+    thisWeek: 'ESTA SEMANA', nextWeek: 'PRÓXIMA SEMANA',
+    weekOverviewTitle: 'EVENTOS ALTOS — PRÓXIMOS 7 DÍAS', today: '● HOY',
+    forecastLbl: 'PRONÓSTICO', previousLbl: 'ANTERIOR', actualLbl: 'ACTUAL',
+    forecast: 'P', previous: 'A', footerPV: 'P = Pronóstico · A = Anterior',
+    events: 'Evento', eventsPlural: 'Eventos',
+  },
+  fr: {
+    loading: 'CHARGEMENT…', error: 'Impossible de charger les données.',
+    retry: 'Réessayer', noEvents: 'Aucun événement ce jour',
+    noEventsHint: 'Choisir un autre jour ou changer le filtre',
+    timeCol: 'HEURE', eventCol: 'ÉVÉNEMENT', valCol: 'ACT / PRÉ / PRÉ',
+    high: 'Élevé', medium: 'Moyen', low: 'Faible',
+    highFilter: '🔴 Élevé', medFilter: '🟡 Moyen', allFilter: 'Tous',
+    pairBtn: '⚡ PAIRE', heatmap: 'CARTE THERMIQUE DEVISE', hideHeatmap: '✕',
+    showHeatmap: 'Afficher la carte thermique', nextHigh: 'PROCHAIN ÉLEVÉ',
+    thisWeek: 'CETTE SEMAINE', nextWeek: 'SEMAINE PROCHAINE',
+    weekOverviewTitle: 'ÉVÉNEMENTS ÉLEVÉS — 7 PROCHAINS JOURS', today: '● AUJOURD\'HUI',
+    forecastLbl: 'PRÉVISION', previousLbl: 'PRÉCÉDENT', actualLbl: 'ACTUEL',
+    forecast: 'P', previous: 'A', footerPV: 'P = Prévision · A = Antérieur',
+    events: 'Événement', eventsPlural: 'Événements',
+  },
+  zh: {
+    loading: '加载数据中…', error: '无法加载数据。',
+    retry: '重试', noEvents: '当天无事件',
+    noEventsHint: '选择其他日期或更改筛选条件',
+    timeCol: '时间', eventCol: '事件', valCol: '实际 / 预测 / 前值',
+    high: '高', medium: '中', low: '低',
+    highFilter: '🔴 高', medFilter: '🟡 中', allFilter: '全部',
+    pairBtn: '⚡ 货币对', heatmap: '货币热力图', hideHeatmap: '✕',
+    showHeatmap: '显示热力图', nextHigh: '下一个高影响',
+    thisWeek: '本周', nextWeek: '下周',
+    weekOverviewTitle: '高影响事件 — 未来7天', today: '● 今天',
+    forecastLbl: '预测', previousLbl: '前值', actualLbl: '实际',
+    forecast: '预', previous: '前', footerPV: '预 = 预测 · 前 = 前值',
+    events: '事件', eventsPlural: '事件',
+  },
+  ar: {
+    loading: 'جارٍ التحميل…', error: 'تعذّر تحميل البيانات.',
+    retry: 'إعادة المحاولة', noEvents: 'لا توجد أحداث في هذا اليوم',
+    noEventsHint: 'اختر يومًا آخر أو غيّر الفلتر',
+    timeCol: 'الوقت', eventCol: 'الحدث', valCol: 'فعلي / توقع / سابق',
+    high: 'مرتفع', medium: 'متوسط', low: 'منخفض',
+    highFilter: '🔴 مرتفع', medFilter: '🟡 متوسط', allFilter: 'الكل',
+    pairBtn: '⚡ الزوج', heatmap: 'خريطة حرارة العملات', hideHeatmap: '✕',
+    showHeatmap: 'إظهار الخريطة الحرارية', nextHigh: 'التالي عالي التأثير',
+    thisWeek: 'هذا الأسبوع', nextWeek: 'الأسبوع القادم',
+    weekOverviewTitle: 'أحداث عالية التأثير — 7 أيام القادمة', today: '● اليوم',
+    forecastLbl: 'التوقع', previousLbl: 'السابق', actualLbl: 'الفعلي',
+    forecast: 'ت', previous: 'س', footerPV: 'ت = التوقع · س = السابق',
+    events: 'حدث', eventsPlural: 'أحداث',
+  },
+  ja: {
+    loading: 'データ読み込み中…', error: 'データを読み込めませんでした。',
+    retry: '再試行', noEvents: 'この日のイベントなし',
+    noEventsHint: '別の日を選ぶかフィルターを変更',
+    timeCol: '時刻', eventCol: 'イベント', valCol: '実績 / 予測 / 前回',
+    high: '高', medium: '中', low: '低',
+    highFilter: '🔴 高', medFilter: '🟡 中', allFilter: '全て',
+    pairBtn: '⚡ ペア', heatmap: '通貨ヒートマップ', hideHeatmap: '✕',
+    showHeatmap: 'ヒートマップ表示', nextHigh: '次の高影響イベント',
+    thisWeek: '今週', nextWeek: '来週',
+    weekOverviewTitle: '高影響イベント — 今後7日間', today: '● 今日',
+    forecastLbl: '予測', previousLbl: '前回', actualLbl: '実績',
+    forecast: '予', previous: '前', footerPV: '予 = 予測 · 前 = 前回',
+    events: 'イベント', eventsPlural: 'イベント',
+  },
+  pt: {
+    loading: 'CARREGANDO DADOS…', error: 'Não foi possível carregar os dados.',
+    retry: 'Tentar novamente', noEvents: 'Nenhum evento neste dia',
+    noEventsHint: 'Escolha outro dia ou mude o filtro',
+    timeCol: 'HORA', eventCol: 'EVENTO', valCol: 'REAL / PREV / ANT',
+    high: 'Alto', medium: 'Médio', low: 'Baixo',
+    highFilter: '🔴 Alto', medFilter: '🟡 Médio', allFilter: 'Todos',
+    pairBtn: '⚡ PAR', heatmap: 'MAPA DE CALOR MOEDA', hideHeatmap: '✕',
+    showHeatmap: 'Mostrar mapa de calor', nextHigh: 'PRÓXIMO ALTO',
+    thisWeek: 'ESTA SEMANA', nextWeek: 'PRÓXIMA SEMANA',
+    weekOverviewTitle: 'EVENTOS ALTOS — PRÓXIMOS 7 DIAS', today: '● HOJE',
+    forecastLbl: 'PREVISÃO', previousLbl: 'ANTERIOR', actualLbl: 'REAL',
+    forecast: 'P', previous: 'A', footerPV: 'P = Previsão · A = Anterior',
+    events: 'Evento', eventsPlural: 'Eventos',
+  },
+  hi: {
+    loading: 'डेटा लोड हो रहा है…', error: 'डेटा लोड नहीं हो सका।',
+    retry: 'पुनः प्रयास', noEvents: 'इस दिन कोई इवेंट नहीं',
+    noEventsHint: 'दूसरा दिन चुनें या फ़िल्टर बदलें',
+    timeCol: 'समय', eventCol: 'इवेंट', valCol: 'वास्तविक / अनुमान / पूर्व',
+    high: 'उच्च', medium: 'मध्यम', low: 'कम',
+    highFilter: '🔴 उच्च', medFilter: '🟡 मध्यम', allFilter: 'सभी',
+    pairBtn: '⚡ जोड़ी', heatmap: 'मुद्रा हीटमैप', hideHeatmap: '✕',
+    showHeatmap: 'हीटमैप दिखाएं', nextHigh: 'अगला उच्च प्रभाव',
+    thisWeek: 'इस सप्ताह', nextWeek: 'अगले सप्ताह',
+    weekOverviewTitle: 'उच्च प्रभाव इवेंट — अगले 7 दिन', today: '● आज',
+    forecastLbl: 'अनुमान', previousLbl: 'पूर्व', actualLbl: 'वास्तविक',
+    forecast: 'अ', previous: 'पू', footerPV: 'अ = अनुमान · पू = पूर्व',
+    events: 'इवेंट', eventsPlural: 'इवेंट',
+  },
+  fa: {
+    loading: 'در حال بارگذاری…', error: 'بارگذاری داده‌ها امکان‌پذیر نبود.',
+    retry: 'تلاش مجدد', noEvents: 'رویدادی در این روز وجود ندارد',
+    noEventsHint: 'روز دیگری انتخاب کنید یا فیلتر را تغییر دهید',
+    timeCol: 'زمان', eventCol: 'رویداد', valCol: 'واقعی / پیش‌بینی / قبلی',
+    high: 'بالا', medium: 'متوسط', low: 'پایین',
+    highFilter: '🔴 بالا', medFilter: '🟡 متوسط', allFilter: 'همه',
+    pairBtn: '⚡ جفت', heatmap: 'نقشه حرارتی ارز', hideHeatmap: '✕',
+    showHeatmap: 'نمایش نقشه حرارتی', nextHigh: 'رویداد بالا بعدی',
+    thisWeek: 'این هفته', nextWeek: 'هفته آینده',
+    weekOverviewTitle: 'رویدادهای با تأثیر بالا — ۷ روز آینده', today: '● امروز',
+    forecastLbl: 'پیش‌بینی', previousLbl: 'قبلی', actualLbl: 'واقعی',
+    forecast: 'پ', previous: 'ق', footerPV: 'پ = پیش‌بینی · ق = قبلی',
+    events: 'رویداد', eventsPlural: 'رویداد',
+  },
+};
+
+// date-fns locale map
+const DATE_LOCALES = { de, en: enUS, es, fr, zh: zhCN, ar, ja, pt, hi, fa: enUS };
+
+function getCalT(lang) {
+  return CAL_T[lang] || CAL_T.en;
+}
 
 // ── Constants ────────────────────────────────────────────────────
-const IMPACT = {
-  high:   { label: 'HOCH',   bg: 'bg-rose-500',   pill: 'bg-rose-500/15 text-rose-400 border border-rose-500/30' },
-  medium: { label: 'MITTEL', bg: 'bg-amber-400',  pill: 'bg-amber-400/15 text-amber-400 border border-amber-400/30' },
-  low:    { label: 'GERING', bg: 'bg-zinc-600',   pill: 'bg-zinc-800 text-zinc-500 border border-zinc-700' },
-};
+function getImpact(ct) {
+  return {
+    high:   { label: ct.high.toUpperCase(),   bg: 'bg-rose-500',   pill: 'bg-rose-500/15 text-rose-400 border border-rose-500/30' },
+    medium: { label: ct.medium.toUpperCase(), bg: 'bg-amber-400',  pill: 'bg-amber-400/15 text-amber-400 border border-amber-400/30' },
+    low:    { label: ct.low.toUpperCase(),    bg: 'bg-zinc-600',   pill: 'bg-zinc-800 text-zinc-500 border border-zinc-700' },
+  };
+}
 
 const CURRENCY_COLORS = {
   USD: 'text-blue-400',   EUR: 'text-yellow-400', GBP: 'text-purple-400',
@@ -90,9 +254,9 @@ function getMinutesUntil(timeStr, dateStr) {
   return evtMin - nowMin;
 }
 
-function formatCountdown(minutes) {
+function formatCountdown(minutes, nowLabel = 'NOW') {
   if (minutes === null || minutes < 0) return null;
-  if (minutes === 0) return 'JETZT';
+  if (minutes === 0) return nowLabel;
   if (minutes < 60) return `in ${minutes}min`;
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
@@ -125,7 +289,7 @@ function saveAlerted(set) {
 }
 
 // ── Sub-components ───────────────────────────────────────────────
-function CountdownBadge({ timeStr, dateStr }) {
+function CountdownBadge({ timeStr, dateStr, nowLabel = 'NOW' }) {
   const [mins, setMins] = useState(() => getMinutesUntil(timeStr, dateStr));
   useEffect(() => {
     const iv = setInterval(() => setMins(getMinutesUntil(timeStr, dateStr)), 30000);
@@ -138,7 +302,7 @@ function CountdownBadge({ timeStr, dateStr }) {
       'inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider',
       urgent ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 'bg-teal-500/15 text-teal-400'
     )}>
-      <Timer className="w-2.5 h-2.5" />{formatCountdown(mins)}
+      <Timer className="w-2.5 h-2.5" />{formatCountdown(mins, nowLabel)}
     </span>
   );
 }
@@ -172,14 +336,14 @@ function AvgPipsBadge({ eventName, darkMode }) {
 }
 
 // ── Week Overview Panel ──────────────────────────────────────────
-function WeekOverview({ allEvents, todayStr, onSelectDate, darkMode }) {
+function WeekOverview({ allEvents, todayStr, onSelectDate, darkMode, ct, dateLocale }) {
   // Get next 7 days of HIGH events
   const upcoming = [];
   for (let i = 0; i <= 7; i++) {
     const d = addDays(new Date(), i);
     const ds = d.toISOString().split('T')[0];
     const evts = allEvents.filter(e => e.date === ds && e.impact === 'high');
-    if (evts.length > 0) upcoming.push({ ds, day: format(d, 'EEE d.M.', { locale: de }), evts });
+    if (evts.length > 0) upcoming.push({ ds, day: format(d, 'EEE d.M.', { locale: dateLocale }), evts });
   }
 
   const th = {
@@ -198,14 +362,14 @@ function WeekOverview({ allEvents, todayStr, onSelectDate, darkMode }) {
     <div className={cn('border rounded-xl overflow-hidden', th.border, th.bg)}>
       <div className={cn('px-3 py-2 border-b flex items-center gap-2', th.border, darkMode ? 'bg-zinc-900/60' : 'bg-zinc-50')}>
         <LayoutList className={cn('w-3.5 h-3.5', th.muted)} />
-        <span className={cn('text-[10px] font-black tracking-widest', th.sub)}>HIGH EVENTS — NÄCHSTE 7 TAGE</span>
+        <span className={cn('text-[10px] font-black tracking-widest', th.sub)}>{ct.weekOverviewTitle}</span>
       </div>
       <div className="divide-y" style={{ borderColor: darkMode ? '#27272a' : '#e4e4e7' }}>
         {upcoming.map(({ ds, day, evts }) => (
           <div key={ds}>
             <div className={cn('px-3 py-1.5', darkMode ? 'bg-zinc-900/30' : 'bg-zinc-50/80')}>
               <span className={cn('text-[9px] font-black tracking-widest', ds === todayStr ? 'text-teal-400' : th.muted)}>
-                {ds === todayStr ? '● HEUTE' : day.toUpperCase()}
+                {ds === todayStr ? ct.today : day.toUpperCase()}
               </span>
             </div>
             {evts.map(e => (
@@ -268,6 +432,11 @@ function CurrencyHeatmap({ events, darkMode }) {
 
 // ── Main Component ───────────────────────────────────────────────
 export default function ForexCalendar({ darkMode = true }) {
+  const { language } = useLanguage();
+  const ct = getCalT(language);
+  const dateLocale = DATE_LOCALES[language] || enUS;
+  const IMPACT = getImpact(ct);
+
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
 
@@ -440,7 +609,7 @@ export default function ForexCalendar({ darkMode = true }) {
               className={cn('border-b', th.border, 'bg-rose-500/10')}>
               <div className="flex items-center gap-3 px-4 py-2">
                 <Timer className="w-4 h-4 text-rose-400 flex-shrink-0" />
-                <span className="text-rose-400 text-xs font-black tracking-widest hidden sm:inline">NEXT HIGH</span>
+                <span className="text-rose-400 text-xs font-black tracking-widest hidden sm:inline">{ct.nextHigh}</span>
                 <span className={cn('text-xs font-semibold truncate flex-1', th.sub)}>
                   <span className={cn('font-black', CURRENCY_COLORS[nextHighEvent.currency] || th.sub)}>{nextHighEvent.currency}</span>
                   {' '}{nextHighEvent.event}
@@ -459,9 +628,9 @@ export default function ForexCalendar({ darkMode = true }) {
             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }}
               className={cn('overflow-hidden border-b', th.border, darkMode ? 'bg-zinc-900/40' : 'bg-zinc-50')}>
               <div className="flex items-center justify-between px-4 pt-2 pb-0">
-                <span className={cn('text-xs font-black tracking-widest', th.muted)}>WÄHRUNGS-HEATMAP</span>
+                <span className={cn('text-xs font-black tracking-widest', th.muted)}>{ct.heatmap}</span>
                 <button onClick={() => setShowHeatmap(false)}
-                  className={cn('text-xs', th.muted, 'hover:underline')}>✕</button>
+                  className={cn('text-xs', th.muted, 'hover:underline')}>{ct.hideHeatmap}</button>
               </div>
               <CurrencyHeatmap events={eventsForDay} darkMode={darkMode} />
             </motion.div>
@@ -477,7 +646,7 @@ export default function ForexCalendar({ darkMode = true }) {
             </button>
             <button onClick={() => { setWeekOffset(0); setSelectedDate(todayStr); }}
               className={cn('text-sm font-black tracking-widest transition-colors px-3 py-1 rounded-lg', th.sub, th.hover)}>
-              {weekOffset === 0 ? 'DIESE WOCHE' : weekOffset === 1 ? 'NÄCHSTE WOCHE' : weekOffset > 0 ? `+${weekOffset}W` : `${weekOffset}W`}
+              {weekOffset === 0 ? ct.thisWeek : weekOffset === 1 ? ct.nextWeek : weekOffset > 0 ? `+${weekOffset}W` : `${weekOffset}W`}
             </button>
             <button onClick={() => setWeekOffset(w => w + 1)}
               className={cn('p-1.5 rounded-lg transition-colors', th.muted, th.hover)}>
@@ -490,7 +659,7 @@ export default function ForexCalendar({ darkMode = true }) {
               const { ds, total, high, med } = getDay(day);
               const isTd  = ds === todayStr;
               const isSel = ds === selectedDate;
-              const dow   = format(day, 'EEE', { locale: de }).toUpperCase().slice(0, 2);
+              const dow   = format(day, 'EEE', { locale: dateLocale }).toUpperCase().slice(0, 2);
               const dom   = format(day, 'd');
               return (
                 <button key={ds} onClick={() => setSelectedDate(ds)}
@@ -523,9 +692,9 @@ export default function ForexCalendar({ darkMode = true }) {
         {/* ── FILTER BAR ───────────────────────────────────────── */}
         <div className={cn('flex items-center gap-2 px-4 py-2.5 border-b flex-wrap', th.border)}>
           {[
-            { key: 'high',   label: '🔴 Hoch' },
-            { key: 'medium', label: '🟡 Mittel' },
-            { key: 'all',    label: 'Alle' },
+            { key: 'high',   label: ct.highFilter },
+            { key: 'medium', label: ct.medFilter },
+            { key: 'all',    label: ct.allFilter },
           ].map(({ key, label }) => (
             <button key={key} onClick={() => setImpactFilter(key)}
               className={cn(
@@ -550,7 +719,7 @@ export default function ForexCalendar({ darkMode = true }) {
                   ? 'bg-blue-500/20 text-blue-400 border-blue-500/40'
                   : cn(th.muted, th.hover, th.border)
               )}>
-              {selectedPair === 'Alle' ? '⚡ PAAR' : `⚡ ${selectedPair}`}
+              {selectedPair === 'Alle' ? ct.pairBtn : `⚡ ${selectedPair}`}
             </button>
             <AnimatePresence>
               {pairPickerOpen && (
@@ -587,7 +756,7 @@ export default function ForexCalendar({ darkMode = true }) {
           </div>
 
           <span className={cn('ml-auto text-sm font-bold', th.muted)}>
-            {visibleEvents.length} Event{visibleEvents.length !== 1 ? 's' : ''}
+            {visibleEvents.length} {visibleEvents.length !== 1 ? ct.eventsPlural : ct.events}
           </span>
         </div>
 
@@ -601,26 +770,26 @@ export default function ForexCalendar({ darkMode = true }) {
                     animate={{ y: [0,-8,0] }} transition={{ duration: 0.6, delay: i*0.15, repeat: Infinity }} />
                 ))}
               </div>
-              <span className={cn('text-[10px] tracking-widest font-bold', th.muted)}>LADE DATEN…</span>
+              <span className={cn('text-[10px] tracking-widest font-bold', th.muted)}>{ct.loading}</span>
             </div>
           ) : error ? (
             <div className="flex flex-col items-center gap-3 py-12 px-6 text-center">
               <AlertTriangle className={cn('w-7 h-7', th.muted)} />
-              <p className={cn('text-sm', th.muted)}>Daten konnten nicht geladen werden.</p>
-              <button onClick={() => fetchEvents(false)} className="text-teal-500 text-xs font-bold hover:underline">Erneut versuchen</button>
+              <p className={cn('text-sm', th.muted)}>{ct.error}</p>
+              <button onClick={() => fetchEvents(false)} className="text-teal-500 text-xs font-bold hover:underline">{ct.retry}</button>
             </div>
           ) : visibleEvents.length === 0 ? (
             <div className="flex flex-col items-center gap-2 py-14">
               <span className="text-3xl">📅</span>
-              <p className={cn('text-sm font-bold', th.sub)}>Keine Events an diesem Tag</p>
-              <p className={cn('text-[11px]', th.muted)}>Anderen Tag wählen oder Filter ändern</p>
+              <p className={cn('text-sm font-bold', th.sub)}>{ct.noEvents}</p>
+              <p className={cn('text-[11px]', th.muted)}>{ct.noEventsHint}</p>
             </div>
           ) : (
             <>
               <div className={cn('grid grid-cols-[80px_1fr_120px] border-b px-5 py-2', th.border, darkMode ? 'bg-zinc-900/40' : 'bg-zinc-50')}>
-                <span className={cn('text-xs font-black tracking-widest', th.muted)}>ZEIT</span>
-                <span className={cn('text-xs font-black tracking-widest', th.muted)}>EVENT</span>
-                <span className={cn('text-xs font-black tracking-widest text-right', th.muted)}>IST / PRO / VOR</span>
+                <span className={cn('text-xs font-black tracking-widest', th.muted)}>{ct.timeCol}</span>
+                <span className={cn('text-xs font-black tracking-widest', th.muted)}>{ct.eventCol}</span>
+                <span className={cn('text-xs font-black tracking-widest text-right', th.muted)}>{ct.valCol}</span>
               </div>
 
               {visibleEvents.map((evt, idx) => {
@@ -665,7 +834,7 @@ export default function ForexCalendar({ darkMode = true }) {
                         </div>
                         {live
                           ? <span className="text-[9px] font-black text-teal-400 animate-pulse">● LIVE</span>
-                          : <CountdownBadge timeStr={evt.time} dateStr={evt.date} />
+                          : <CountdownBadge timeStr={evt.time} dateStr={evt.date} nowLabel={language === 'de' ? 'JETZT' : language === 'es' ? 'AHORA' : language === 'fr' ? 'MAINTENANT' : language === 'zh' ? '现在' : language === 'ar' ? 'الآن' : language === 'ja' ? '今' : language === 'pt' ? 'AGORA' : language === 'hi' ? 'अभी' : language === 'fa' ? 'اکنون' : 'NOW'} />
                         }
                       </div>
 
@@ -691,12 +860,12 @@ export default function ForexCalendar({ darkMode = true }) {
                         )}
                         {evt.forecast && (
                           <span className={cn('text-xs tabular-nums block', th.muted)}>
-                            P {evt.forecast}
+                            {ct.forecast} {evt.forecast}
                           </span>
                         )}
                         {evt.previous && (
                           <span className={cn('text-xs tabular-nums block opacity-60', th.muted)}>
-                            V {evt.previous}
+                            {ct.previous} {evt.previous}
                           </span>
                         )}
                       </div>
@@ -712,9 +881,9 @@ export default function ForexCalendar({ darkMode = true }) {
                           <div className={cn('mx-4 mb-2 rounded-xl border grid grid-cols-3 divide-x', th.border,
                             darkMode ? 'bg-zinc-900 divide-zinc-800' : 'bg-zinc-100 divide-zinc-200')}>
                             {[
-                              { label: 'AKTUELL', val: evt.actual, color: beat ? 'text-teal-400' : miss ? 'text-rose-400' : th.text },
-                              { label: 'PROGNOSE', val: evt.forecast, color: th.sub },
-                              { label: 'VORHERIG', val: evt.previous, color: th.muted },
+                              { label: ct.actualLbl, val: evt.actual, color: beat ? 'text-teal-400' : miss ? 'text-rose-400' : th.text },
+                              { label: ct.forecastLbl, val: evt.forecast, color: th.sub },
+                              { label: ct.previousLbl, val: evt.previous, color: th.muted },
                             ].map(({ label, val, color }) => (
                               <div key={label} className="flex flex-col items-center py-3 gap-1">
                                 <span className={cn('text-[9px] font-black tracking-widest', th.muted)}>{label}</span>
@@ -741,18 +910,18 @@ export default function ForexCalendar({ darkMode = true }) {
         <div className={cn('flex items-center justify-between px-4 py-2.5 border-t', th.border, darkMode ? 'bg-black/50' : 'bg-zinc-50')}>
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-rose-500" />
-            <span className={cn('text-xs font-bold', th.muted)}>Hoch</span>
+            <span className={cn('text-xs font-bold', th.muted)}>{ct.high}</span>
             <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span className={cn('text-xs font-bold', th.muted)}>Mittel</span>
+            <span className={cn('text-xs font-bold', th.muted)}>{ct.medium}</span>
             <span className="w-2 h-2 rounded-full bg-zinc-600" />
-            <span className={cn('text-xs font-bold', th.muted)}>Gering</span>
+            <span className={cn('text-xs font-bold', th.muted)}>{ct.low}</span>
           </div>
           <div className="flex items-center gap-3">
             {!showHeatmap && (
               <button onClick={() => setShowHeatmap(true)}
-                className={cn('text-xs font-bold', th.muted, 'hover:underline')}>Heatmap anzeigen</button>
+                className={cn('text-xs font-bold', th.muted, 'hover:underline')}>{ct.showHeatmap}</button>
             )}
-            <span className={cn('text-xs', th.muted)}>P = Prognose · V = Vorherig</span>
+            <span className={cn('text-xs', th.muted)}>{ct.footerPV}</span>
           </div>
         </div>
       </div>
@@ -768,6 +937,8 @@ export default function ForexCalendar({ darkMode = true }) {
               todayStr={todayStr}
               onSelectDate={(ds) => { setSelectedDate(ds); setShowWeekOverview(false); setWeekOffset(0); }}
               darkMode={darkMode}
+              ct={ct}
+              dateLocale={dateLocale}
             />
           </motion.div>
         )}
