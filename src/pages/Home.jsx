@@ -112,51 +112,51 @@ export default function HomePage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Header - Ultra Compact */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
-          <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-4">
-            <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <DarkModeToggle />
-              <div className={`flex items-center gap-0.5 sm:gap-1 md:gap-2 px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 rounded-md sm:rounded-lg md:rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
-                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-emerald-700 rounded-full animate-pulse" />
-                <span className={`text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
+              <div className={`flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+                <div className="w-1.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                <span className={`text-[10px] sm:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
                   {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                 </span>
               </div>
-              </div>
+            </div>
 
-              <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
+            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
               <img 
                 src={darkMode 
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
                 alt="ZNPCV" 
-                className="h-7 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
-              </button>
+            </button>
 
-              <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <LanguageToggle />
               <AccountButton />
-              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Market Sessions Bar - Compact */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-3 sm:py-4 md:py-5">
-          <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 overflow-x-auto scrollbar-hide">
-            <Globe className={`w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4 md:h-4 flex-shrink-0 ${theme.textMuted}`} />
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-3 sm:py-4">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide">
+            <Globe className={`w-4 h-4 flex-shrink-0 ${theme.textMuted}`} />
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
-                  <span className="text-sm sm:text-base md:text-base">{session.emoji}</span>
-                  <div className={`text-xs sm:text-sm md:text-sm lg:text-sm font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
+                <div key={session.name} className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                  <span className="text-base sm:text-lg">{session.emoji}</span>
+                  <div className={`text-xs sm:text-sm font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
-                  <div className={`w-1.5 h-1.5 sm:w-1.5 sm:h-1.5 rounded-full ${isOpen ? 'bg-emerald-700 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-700 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
@@ -165,7 +165,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section - Compact for Mobile */}
-      <main className="max-w-6xl mx-auto px-2 sm:px-3 md:px-6 py-6 sm:py-8 md:py-12 lg:py-16">
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-6 sm:py-10 md:py-14 lg:py-16">
         {showDailyQuote && (
           <div className="mb-6 sm:mb-8 md:mb-10">
             <DailyQuoteWidget darkMode={darkMode} />
@@ -175,23 +175,23 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8 sm:mb-10 md:mb-14 lg:mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 bg-emerald-700/10 border border-emerald-600/30 rounded-full text-emerald-600 text-[10px] sm:text-xs mb-2 sm:mb-3 md:mb-5">
-            <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-emerald-700/10 border border-emerald-600/30 rounded-full text-emerald-600 text-xs sm:text-sm mb-4 sm:mb-5">
+            <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
             <span className="tracking-widest">{t('tradingTools')}</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wider mb-1.5 sm:mb-2 md:mb-3 font-light">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wider mb-2 sm:mb-3 font-light">
             ZNPCV
           </h1>
-          <h2 className={`text-sm sm:text-base md:text-lg lg:text-xl tracking-widest ${theme.textSecondary} mb-2 sm:mb-3 md:mb-5`}>
+          <h2 className={`text-base sm:text-lg md:text-xl tracking-widest ${theme.textSecondary} mb-3 sm:mb-4 md:mb-5`}>
             {t('ultimateChecklist')}
           </h2>
-          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3`}>
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-4`}>
             "{t('disciplineQuote')}"
           </p>
-          <p className={`${theme.textDimmed} text-[10px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 tracking-widest`}>— {t('philosophy')}</p>
+          <p className={`${theme.textDimmed} text-xs sm:text-sm mt-2 tracking-widest`}>— {t('philosophy')}</p>
         </motion.div>
 
         {/* Main Actions - Compact for Mobile */}
@@ -199,7 +199,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6 mb-6 sm:mb-8 md:mb-12 lg:mb-16"
+          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-8 sm:mb-12 md:mb-16"
         >
           {/* New Analysis - Compact */}
           <button

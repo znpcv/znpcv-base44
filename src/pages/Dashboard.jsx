@@ -195,7 +195,7 @@ export default function DashboardPage() {
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'} pb-20 md:pb-0`} style={{ transition: 'none' }}>
       {/* Header */}
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 py-2 sm:py-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3 md:py-4">
           <div className="flex items-center justify-between gap-2 sm:gap-4 relative">
             <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
                 <DarkModeToggle />
@@ -231,7 +231,7 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 md:py-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-5 sm:py-8 md:py-12">
         {showDailyQuote && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
             <DailyQuoteWidget darkMode={darkMode} />
@@ -239,10 +239,10 @@ export default function DashboardPage() {
         )}
 
         {/* Title - Compact */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6 md:mb-8 lg:mb-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-5 sm:mb-8 md:mb-10">
           <div className="flex items-center justify-between gap-3 mb-2">
             <div>
-              <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 md:mb-3 ${theme.text}`}>DASHBOARD</h1>
+              <h1 className={`text-2xl sm:text-4xl md:text-5xl tracking-widest mb-1 sm:mb-2 ${theme.text}`}>DASHBOARD</h1>
               <p className={`${theme.textMuted} tracking-wider text-xs sm:text-sm md:text-base`}>{t('overviewStats')}</p>
             </div>
             <div className="hidden sm:flex gap-2">
@@ -338,7 +338,7 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Stats - Kompakt */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-5 mb-4 sm:mb-6 md:mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="grid grid-cols-3 gap-3 sm:gap-5 md:gap-6 mb-5 sm:mb-8">
           {[
             { label: t('totalAnalyses'), value: stats.total, icon: Target, shortLabel: 'TOTAL' },
             { label: t('readyToTradeShort'), value: stats.ready, icon: CheckCircle, shortLabel: 'READY' },
@@ -348,7 +348,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
               transition={{ duration: 0.1 }}
-              className={cn("border-2 rounded-xl p-3 sm:p-4 md:p-5",
+              className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6",
                 stat.highlight 
                   ? darkMode ? "bg-emerald-700/20 border-emerald-700" : "bg-teal-100 border-emerald-700"
                   : `${theme.border} ${theme.bgSecondary}`)}>
@@ -364,9 +364,9 @@ export default function DashboardPage() {
           ))}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 mt-4 sm:mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mt-5 sm:mt-8">
           {/* Left */}
-          <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-5">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Trade History - Mobile Kompakt */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }}
               className={`border-2 ${theme.border} rounded-xl sm:rounded-2xl ${theme.bgSecondary} overflow-hidden`}>
@@ -498,7 +498,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Right */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-5">
+          <div className="space-y-4 sm:space-y-6">
             {/* Performance Chart - Mobile Optimiert */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
               className={cn("relative rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 overflow-hidden border-2",

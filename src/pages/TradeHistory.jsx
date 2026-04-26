@@ -398,17 +398,17 @@ export default function TradeHistoryPage() {
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
       <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-6 py-1.5 sm:py-2 md:py-3">
-          <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4 relative">
-            <div className="flex items-center gap-0.5 sm:gap-1.5 md:gap-2">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3 md:py-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 relative">
+            <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
               <DarkModeToggle />
-              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1 sm:p-1.5 md:p-2`}>
-                <Home className="w-3.5 h-3.5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              <button onClick={() => navigate(createPageUrl('Dashboard'))} className={`${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
+                <Home className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </button>
               <button
                 onClick={() => navigate(createPageUrl('Trash'))}
-                className={`relative ${theme.textSecondary} hover:${theme.text} transition-colors p-1 sm:p-1.5 md:p-2`}>
-                <Archive className="w-3.5 h-3.5 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                className={`relative ${theme.textSecondary} hover:${theme.text} transition-colors p-1.5 sm:p-2`}>
+                <Archive className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 {deletedTrades.length > 0 &&
                 <span className="absolute -top-0.5 -right-0.5 bg-rose-600 text-white text-[8px] sm:text-[10px] rounded-full w-3.5 h-3.5 sm:w-5 sm:h-5 flex items-center justify-center font-bold">
                     {deletedTrades.length}
@@ -421,10 +421,10 @@ export default function TradeHistoryPage() {
               <img src={darkMode ?
               "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png" :
               "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-              } alt="ZNPCV" className="h-6 sm:h-8 md:h-10 lg:h-12 xl:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
+              } alt="ZNPCV" className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
             </button>
 
-            <div className="flex items-center gap-0.5 sm:gap-1 md:gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <LanguageToggle />
               <AccountButton />
             </div>
@@ -432,20 +432,20 @@ export default function TradeHistoryPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-5 md:py-6 lg:py-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-5 sm:py-8 md:py-12">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-3 sm:mb-5 md:mb-6">
-          <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4">
-            <div className="flex items-center gap-1.5 sm:gap-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-5 sm:mb-8">
+          <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+            <div className="flex items-center gap-2 sm:gap-4">
               <button
                 onClick={() => navigate(createPageUrl('Dashboard'))}
-                className={cn("border-2 rounded-lg sm:rounded-xl p-1.5 sm:p-2.5 transition-all group",
+                className={cn("border-2 rounded-xl p-2 sm:p-2.5 transition-all group",
                   darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-zinc-100 border-zinc-300 hover:border-zinc-400')}>
-                <ArrowLeft className={`w-3.5 h-3.5 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
+                <ArrowLeft className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.text} group-hover:-translate-x-1 transition-transform`} />
               </button>
               <div>
-                <h1 className={`text-xl sm:text-3xl md:text-4xl tracking-widest ${theme.text}`}>{t('tradeHistory')}</h1>
-                <p className={`${theme.textMuted} text-[10px] sm:text-sm tracking-wider`}>{t('performanceAnalytics')}</p>
+                <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest ${theme.text}`}>{t('tradeHistory')}</h1>
+                <p className={`${theme.textMuted} text-xs sm:text-sm tracking-wider mt-1`}>{t('performanceAnalytics')}</p>
               </div>
             </div>
 
@@ -499,35 +499,35 @@ export default function TradeHistoryPage() {
         </motion.div>
 
         {/* Stats Grid - Erweiterte Metriken */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-5 md:mb-6">
-          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white shadow-lg shadow-emerald-700/20" : "bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-600/20")}>
-            <TrendingUp className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 opacity-90" />
-            <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1">${stats.totalPnL.toFixed(2)}</div>
-            <div className="text-[8px] sm:text-xs tracking-widest opacity-80">GESAMT P&L</div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5 mb-5 sm:mb-8">
+          <div className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all hover:scale-105", stats.totalPnL >= 0 ? "bg-emerald-700 border-emerald-700 text-white shadow-lg shadow-emerald-700/20" : "bg-rose-600 border-rose-600 text-white shadow-lg shadow-rose-600/20")}>
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3 opacity-90" />
+            <div className="text-base sm:text-xl md:text-2xl font-bold mb-1">${stats.totalPnL.toFixed(2)}</div>
+            <div className="text-[9px] sm:text-xs tracking-widest opacity-80">GESAMT P&L</div>
           </div>
-          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <ArrowUpRight className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 text-emerald-700" />
-            <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 text-emerald-700">${stats.totalWins.toFixed(2)}</div>
-            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>GEWINNE</div>
+          <div className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3 text-emerald-700" />
+            <div className="text-base sm:text-xl md:text-2xl font-bold mb-1 text-emerald-700">${stats.totalWins.toFixed(2)}</div>
+            <div className={`text-[9px] sm:text-xs tracking-widest ${theme.textMuted}`}>GEWINNE</div>
           </div>
-          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <ArrowDownRight className="w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 text-rose-600" />
-            <div className="text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 text-rose-600">${stats.totalLosses.toFixed(2)}</div>
-            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>VERLUSTE</div>
+          <div className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3 text-rose-600" />
+            <div className="text-base sm:text-xl md:text-2xl font-bold mb-1 text-rose-600">${stats.totalLosses.toFixed(2)}</div>
+            <div className={`text-[9px] sm:text-xs tracking-widest ${theme.textMuted}`}>VERLUSTE</div>
           </div>
-          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <Award className={`w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 ${theme.text}`} />
-            <div className={`text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 ${theme.text}`}>{stats.winRate}%</div>
-            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>WINRATE</div>
+          <div className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <Award className={`w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3 ${theme.text}`} />
+            <div className={`text-base sm:text-xl md:text-2xl font-bold mb-1 ${theme.text}`}>{stats.winRate}%</div>
+            <div className={`text-[9px] sm:text-xs tracking-widest ${theme.textMuted}`}>WINRATE</div>
           </div>
-          <div className={cn("border-2 rounded-lg sm:rounded-xl p-2 sm:p-4 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
-            <Target className={`w-3 h-3 sm:w-5 sm:h-5 mb-1 sm:mb-2 ${theme.text}`} />
-            <div className={`text-sm sm:text-xl md:text-2xl font-bold mb-0.5 sm:mb-1 ${theme.text}`}>{stats.profitFactor}</div>
-            <div className={`text-[8px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FAKTOR</div>
+          <div className={cn("border-2 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all hover:scale-105", theme.border, theme.bgSecondary)}>
+            <Target className={`w-4 h-4 sm:w-5 sm:h-5 mb-2 sm:mb-3 ${theme.text}`} />
+            <div className={`text-base sm:text-xl md:text-2xl font-bold mb-1 ${theme.text}`}>{stats.profitFactor}</div>
+            <div className={`text-[9px] sm:text-xs tracking-widest ${theme.textMuted}`}>PROFIT FAKTOR</div>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Trades List */}
           <div className="lg:col-span-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, delay: 0.3 }}
