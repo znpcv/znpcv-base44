@@ -550,7 +550,7 @@ export default function ChecklistPage() {
         </div>
       </div>
 
-      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-3 sm:py-5 md:py-8">
+      <main className="max-w-3xl mx-auto px-3 sm:px-5 py-3 sm:py-5 md:py-8">
         <AnimatePresence mode="wait">
           
           {/* STEP 0: Asset & Direction */}
@@ -1248,9 +1248,9 @@ export default function ChecklistPage() {
         </AnimatePresence>
 
         {/* Navigation Buttons */}
-        <div className="mt-5 flex gap-2 pb-4">
+        <div className="mt-5 flex gap-2 pb-6 sm:pb-4">
           {currentStep > 0 &&
-          <button onClick={() => setCurrentStep((prev) => prev - 1)} className={cn("flex items-center justify-center gap-1 px-5 h-12 rounded-xl border-2 font-bold text-sm tracking-widest transition-all", darkMode ? "border-zinc-700 text-zinc-300 bg-zinc-900" : "border-zinc-300 text-zinc-600 bg-zinc-50")}>
+          <button onClick={() => setCurrentStep((prev) => prev - 1)} className={cn("flex items-center justify-center gap-1 px-5 h-12 sm:h-13 rounded-xl border-2 font-bold text-sm tracking-widest transition-all touch-manipulation", darkMode ? "border-zinc-700 text-zinc-300 bg-zinc-900" : "border-zinc-300 text-zinc-600 bg-zinc-50")}>
 
 
 
@@ -1264,7 +1264,7 @@ export default function ChecklistPage() {
           <button
             onClick={() => setCurrentStep((prev) => prev + 1)}
             disabled={currentStep === 0 && !formData.pair}
-            className={cn("flex-1 flex items-center justify-center gap-1 h-12 rounded-xl font-bold text-sm tracking-widest border-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed",
+            className={cn("flex-1 flex items-center justify-center gap-1 h-12 sm:h-13 rounded-xl font-bold text-sm tracking-widest border-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed touch-manipulation",
             darkMode ? 'bg-white text-black border-white' : 'bg-black text-white border-black')}>
               {t('next')} <ChevronRight className="w-4 h-4" />
             </button> :
@@ -1278,7 +1278,7 @@ export default function ChecklistPage() {
                 </button>
             }
               <button onClick={() => handleSave(false)} disabled={saving || !formData.pair}
-            className={cn("flex-1 flex items-center justify-center gap-2 h-12 rounded-xl font-bold text-sm tracking-widest border-2 transition-all disabled:opacity-40",
+            className={cn("flex-1 flex items-center justify-center gap-2 h-12 sm:h-13 rounded-xl font-bold text-sm tracking-widest border-2 transition-all disabled:opacity-40 touch-manipulation",
             isReady ?
             "bg-emerald-700 text-white border-emerald-700" :
             darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black")}>

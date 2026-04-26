@@ -224,12 +224,12 @@ export default function TradeDetailPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
+      <main className="max-w-5xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 md:py-10">
         {/* Trade Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1 }} className="mb-4 sm:mb-6 md:mb-8">
           <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-4">
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-1 sm:mb-2 truncate">{trade.pair}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-widest mb-1 sm:mb-2 truncate">{trade.pair}</h1>
               <p className={`${theme.textSecondary} text-xs sm:text-sm`}>{format(new Date(trade.created_date), 'dd.MM.yyyy HH:mm')}</p>
             </div>
             <div className={cn("px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 rounded-lg sm:rounded-xl text-sm sm:text-xl md:text-2xl font-bold whitespace-nowrap flex-shrink-0",
@@ -244,7 +244,7 @@ export default function TradeDetailPage() {
           <LivePriceChart pair={trade.pair} darkMode={darkMode} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
           {/* Left Column - Screenshots */}
           <div className="lg:col-span-2 space-y-3 sm:space-y-4 md:space-y-6">
             {/* Screenshots Section */}

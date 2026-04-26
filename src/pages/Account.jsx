@@ -156,17 +156,17 @@ export default function AccountPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 sm:space-y-4">
+      <main className="max-w-5xl mx-auto px-3 sm:px-5 md:px-8 py-5 sm:py-7 md:py-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 sm:space-y-5">
           
-          {/* Profile Card - Ultra Compact */}
-          <div className={`relative overflow-hidden border-2 ${theme.border} rounded-xl`}>
+          {/* Profile Card */}
+          <div className={`relative overflow-hidden border-2 ${theme.border} rounded-2xl`}>
             <div className={`absolute inset-0 bg-gradient-to-br ${darkMode ? 'from-zinc-900 via-black to-black' : 'from-zinc-100 via-white to-white'}`} />
-            <div className="relative z-10 p-4 sm:p-5">
-              <div className="flex items-center gap-4">
-                {/* Profile Image - Compact */}
+            <div className="relative z-10 p-4 sm:p-6">
+              <div className="flex items-center gap-4 sm:gap-5">
+                {/* Profile Image */}
                 <div className="relative group flex-shrink-0">
-                  <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl sm:rounded-2xl border-2 flex items-center justify-center overflow-hidden ${darkMode ? 'bg-white border-zinc-700' : 'bg-zinc-900 border-zinc-300'}`}>
                     {user.profile_image ?
                     <img src={user.profile_image} alt="Profile" className="w-full h-full object-cover" /> :
                     <User className={`w-8 h-8 sm:w-10 sm:h-10 ${darkMode ? 'text-black' : 'text-white'}`} />
@@ -187,16 +187,16 @@ export default function AccountPage() {
                   <Input
                     value={formData.full_name}
                     onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                    className={`font-bold text-base sm:text-lg ${theme.border} mb-2 h-9 sm:h-10 rounded-lg`}
+                    className={`font-bold text-base sm:text-lg ${theme.border} mb-2 h-10 sm:h-11 rounded-xl`}
                     placeholder={t('yourName')} /> :
-                  <h1 className={`text-lg sm:text-xl font-bold ${theme.text} mb-1 truncate`}>{user.full_name || '-'}</h1>
+                  <h1 className={`text-lg sm:text-xl md:text-2xl font-bold ${theme.text} mb-1.5 truncate`}>{user.full_name || '-'}</h1>
                   }
                   <div className="flex items-center gap-2 flex-wrap">
                     <div className={`flex items-center gap-1 text-xs ${theme.textSecondary} font-mono`}>
                       <Mail className="w-3 h-3" />
-                      <span className="truncate max-w-[200px]">{user.email}</span>
+                      <span className="truncate max-w-[160px] sm:max-w-[240px]">{user.email}</span>
                     </div>
-                    <div className={`px-2 py-0.5 rounded text-[9px] font-bold ${darkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'}`}>
+                    <div className={`px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold ${darkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-600'}`}>
                       {user.role?.toUpperCase()}
                     </div>
                   </div>
@@ -206,9 +206,9 @@ export default function AccountPage() {
           </div>
 
           {/* Info Grid */}
-          <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-5">
             {/* Contact & Address Info */}
-            <div className={`border-2 ${theme.border} rounded-2xl p-5 md:p-6`}>
+            <div className={`border-2 ${theme.border} rounded-2xl p-4 sm:p-5 md:p-6`}>
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className={`w-5 h-5 ${theme.textSecondary}`} />
                 <span className={`text-xs tracking-wider ${theme.textSecondary} font-bold`}>KONTAKT & ADRESSE</span>
@@ -354,7 +354,7 @@ export default function AccountPage() {
           </div>
 
           {/* Action Bar */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {editing ? (
               <>
                 <Button 
@@ -365,7 +365,7 @@ export default function AccountPage() {
                     }
                   }} 
                   disabled={saving} 
-                  className={`h-12 text-sm font-bold border-2 rounded-xl ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
+                  className={`h-12 sm:h-13 text-sm font-bold border-2 rounded-xl ${darkMode ? 'bg-white text-black border-white hover:bg-zinc-100' : 'bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800'}`}>
                   <Save className="w-4 h-4 mr-2" />
                   {saving ? '...' : t('save')}
                 </Button>

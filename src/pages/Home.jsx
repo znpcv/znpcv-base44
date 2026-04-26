@@ -143,20 +143,20 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Market Sessions Bar - Compact */}
+      {/* Market Sessions Bar */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-3 sm:py-4">
-          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide">
+        <div className="max-w-7xl mx-auto px-2 sm:px-5 md:px-8 py-2.5 sm:py-4">
+          <div className="flex items-center justify-center gap-3 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide">
             <Globe className={`w-4 h-4 flex-shrink-0 ${theme.textMuted}`} />
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                  <span className="text-base sm:text-lg">{session.emoji}</span>
-                  <div className={`text-xs sm:text-sm font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
+                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                  <span className="text-sm sm:text-base">{session.emoji}</span>
+                  <div className={`text-[10px] sm:text-xs font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
-                  <div className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-700 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-700 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
@@ -164,8 +164,8 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero Section - Compact for Mobile */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-6 sm:py-10 md:py-14 lg:py-16">
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-5 sm:py-10 md:py-14 lg:py-16">
         {showDailyQuote && (
           <div className="mb-6 sm:mb-8 md:mb-10">
             <DailyQuoteWidget darkMode={darkMode} />
@@ -185,10 +185,10 @@ export default function HomePage() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-wider mb-2 sm:mb-3 font-light">
             ZNPCV
           </h1>
-          <h2 className={`text-base sm:text-lg md:text-xl tracking-widest ${theme.textSecondary} mb-3 sm:mb-4 md:mb-5`}>
+          <h2 className={`text-sm sm:text-lg md:text-xl tracking-widest ${theme.textSecondary} mb-2 sm:mb-4 md:mb-5`}>
             {t('ultimateChecklist')}
           </h2>
-          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-4`}>
+          <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3 sm:px-4`}>
             "{t('disciplineQuote')}"
           </p>
           <p className={`${theme.textDimmed} text-xs sm:text-sm mt-2 tracking-widest`}>— {t('philosophy')}</p>
