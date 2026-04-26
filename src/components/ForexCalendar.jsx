@@ -44,39 +44,60 @@ export default function ForexCalendar({ darkMode = true }) {
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
 
-  const [allEvents, setAllEvents]       = useState([]);
-  const [loading, setLoading]           = useState(true);
+  const CACHE_KEY = 'znpcv_forex_calendar';
+  const CACHE_TTL = 5 * 60 * 1000;
+
+  // Load from localStorage immediately for instant display
+  const getCached = () => {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      const { ts, data } = JSON.parse(raw);
+      if (Date.now() - ts < CACHE_TTL) return data;
+    } catch { /* ignore */ }
+    return null;
+  };
+
+  const cached = getCached();
+  const [allEvents, setAllEvents]       = useState(cached || []);
+  const [loading, setLoading]           = useState(!cached);   // only show loader if no cache
+  const [refreshing, setRefreshing]     = useState(false);      // subtle background refresh
   const [error, setError]               = useState(null);
-  const [lastUpdate, setLastUpdate]     = useState(null);
+  const [lastUpdate, setLastUpdate]     = useState(cached ? new Date() : null);
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [impactFilter, setImpactFilter] = useState('all');
   const [currencyFilter, setCurrencyFilter] = useState('all');
-  const [weekOffset, setWeekOffset]     = useState(0); // 0 = this week, 1 = next week
+  const [weekOffset, setWeekOffset]     = useState(0);
   const [expandedId, setExpandedId]     = useState(null);
 
   const anchor = addDays(today, weekOffset * 7);
   const days   = buildWeekDays(anchor);
 
-  const fetchEvents = useCallback(async () => {
-    setLoading(true);
+  const fetchEvents = useCallback(async (background = false) => {
+    if (background) setRefreshing(true);
+    else setLoading(true);
     setError(null);
     try {
       const res = await base44.functions.invoke('forexCalendar', {});
       const data = res.data?.data || [];
       setAllEvents(data);
       setLastUpdate(new Date());
+      // Cache in localStorage
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch { /* ignore */ }
     } catch {
-      setError(true);
+      if (!background) setError(true);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchEvents();
-    const iv = setInterval(fetchEvents, 5 * 60 * 1000);
+    // If we have cached data, do a silent background refresh; otherwise full load
+    fetchEvents(!!cached);
+    const iv = setInterval(() => fetchEvents(true), 5 * 60 * 1000);
     return () => clearInterval(iv);
-  }, [fetchEvents]);
+  }, []);
 
   const visibleEvents = allEvents
     .filter(e => e.date === selectedDate)
@@ -124,14 +145,23 @@ export default function ForexCalendar({ darkMode = true }) {
               {lastUpdate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
             </span>
           )}
-          <button onClick={fetchEvents} disabled={loading}
+          <button onClick={() => fetchEvents(false)} disabled={loading}
             className={cn('p-1.5 rounded-lg border transition-colors', border,
               darkMode ? 'text-zinc-600 hover:text-white hover:bg-zinc-800' : 'text-zinc-400 hover:text-black hover:bg-zinc-200',
               loading && 'opacity-40 cursor-wait')}>
-            <RefreshCw className={cn('w-3.5 h-3.5', loading && 'animate-spin')} />
+            <RefreshCw className={cn('w-3.5 h-3.5', (loading || refreshing) && 'animate-spin')} />
           </button>
         </div>
       </div>
+
+      {/* ── BACKGROUND REFRESH INDICATOR ────────────────────────────────── */}
+      <AnimatePresence>
+        {refreshing && (
+          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} exit={{ opacity: 0 }}
+            style={{ transformOrigin: 'left' }}
+            className="h-0.5 bg-teal-500/70 w-full" />
+        )}
+      </AnimatePresence>
 
       {/* ── TODAY HIGH-IMPACT BANNER ─────────────────────────────────────── */}
       <AnimatePresence>

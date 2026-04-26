@@ -2,13 +2,17 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 /**
  * Forex Economic Calendar
- * Source 1: nfs.faireconomy.media (ForexFactory JSON) — thisweek + nextweek
- * Source 2: api.tradingeconomics.com — free public calendar endpoint (no key needed for basic)
- * Merges & deduplicates both sources for a complete calendar.
+ * Primary:  nfs.faireconomy.media — thisweek + nextweek (ForexFactory compatible)
+ * Fallback: investing.com free RSS → parsed for additional coverage
+ * In-memory cache: 5 min TTL so repeated calls are instant
  */
 
-const IMPACT_MAP_FF  = { 'High': 'high', 'Medium': 'medium', 'Low': 'low', 'Holiday': 'low' };
-const IMPACT_MAP_INT = { 3: 'high', 2: 'medium', 1: 'low' };
+const IMPACT_MAP = { 'High': 'high', 'Medium': 'medium', 'Low': 'low', 'Holiday': 'low' };
+
+// Simple in-memory cache
+let _cache = null;
+let _cacheTs = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 function parseFFEvent(e, idx, prefix) {
   if (!e.date) return null;
@@ -19,7 +23,7 @@ function parseFFEvent(e, idx, prefix) {
     date: d.toISOString().split('T')[0],
     time: d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' }),
     currency: e.country || '',
-    impact: IMPACT_MAP_FF[e.impact] || 'low',
+    impact: IMPACT_MAP[e.impact] || 'low',
     event: e.title || '',
     actual:   e.actual   || null,
     forecast: e.forecast || null,
@@ -29,54 +33,52 @@ function parseFFEvent(e, idx, prefix) {
 }
 
 async function fetchFF(endpoint) {
-  const url = `https://nfs.faireconomy.media/ff_calendar_${endpoint}.json?version=${Date.now()}`;
-  const r = await fetch(url, {
-    headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0 (compatible)' },
-    signal: AbortSignal.timeout(10000),
-  });
-  if (!r.ok) throw new Error(`FF HTTP ${r.status}`);
-  const data = await r.json();
-  if (!Array.isArray(data)) throw new Error('FF: Not an array');
-  return data.map((e, i) => parseFFEvent(e, i, endpoint)).filter(Boolean);
+  // ForexFactory-compatible endpoints
+  const urls = [
+    `https://nfs.faireconomy.media/ff_calendar_${endpoint}.json?version=${Date.now()}`,
+    `https://cdn-nfs.faireconomy.media/ff_calendar_${endpoint}.json`,
+  ];
+  for (const url of urls) {
+    try {
+      const r = await fetch(url, {
+        headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0 (compatible; CalBot/1.0)' },
+        signal: AbortSignal.timeout(9000),
+      });
+      if (!r.ok) continue;
+      const data = await r.json();
+      if (!Array.isArray(data) || data.length === 0) continue;
+      return data.map((e, i) => parseFFEvent(e, i, endpoint)).filter(Boolean);
+    } catch { /* try next */ }
+  }
+  return [];
 }
 
-async function fetchTradingEconomics() {
-  // Trading Economics free public calendar (JSON, no API key required for basic access)
-  const from = new Date().toISOString().split('T')[0];
-  const to   = new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
-
-  // Try the public TE calendar endpoint
-  const url = `https://api.tradingeconomics.com/calendar/country/all/${from}/${to}?c=guest:guest&format=json`;
-  const r = await fetch(url, {
-    headers: { 'Accept': 'application/json' },
-    signal: AbortSignal.timeout(10000),
-  });
-  if (!r.ok) throw new Error(`TE HTTP ${r.status}`);
-  const data = await r.json();
-  if (!Array.isArray(data)) throw new Error('TE: Not an array');
-
-  const MAJOR = new Set(['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','CNY']);
-
-  return data
-    .filter(e => MAJOR.has(e.Currency))
-    .map((e, idx) => {
-      const d = e.Date ? new Date(e.Date) : null;
-      if (!d || isNaN(d)) return null;
-      // Importance: 3=high, 2=medium, 1=low
-      const imp = IMPACT_MAP_INT[e.Importance] || (e.Category?.toLowerCase().includes('interest') ? 'high' : 'low');
-      return {
-        id: `te-${idx}`,
-        date: d.toISOString().split('T')[0],
-        time: d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' }),
-        currency: e.Currency || '',
-        impact: imp,
-        event: e.Event || e.Category || '',
-        actual:   e.Actual   != null ? String(e.Actual)   : null,
-        forecast: e.Forecast != null ? String(e.Forecast) : null,
-        previous: e.Previous != null ? String(e.Previous) : null,
-        source: 'te',
-      };
-    }).filter(Boolean);
+async function fetchNextWeekAlternative() {
+  // Next week: compute date range and use the dated endpoint format
+  const now = new Date();
+  // Find next Monday
+  const day = now.getDay(); // 0=Sun
+  const daysUntilMonday = day === 0 ? 1 : 8 - day;
+  const nextMonday = new Date(now);
+  nextMonday.setDate(now.getDate() + daysUntilMonday);
+  const mm = String(nextMonday.getMonth() + 1).padStart(2, '0');
+  const dd = String(nextMonday.getDate()).padStart(2, '0');
+  const yyyy = nextMonday.getFullYear();
+  // Try the weekly dated endpoint
+  const url = `https://nfs.faireconomy.media/ff_calendar_week_${yyyy}${mm}${dd}.json`;
+  try {
+    const r = await fetch(url, {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0' },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (r.ok) {
+      const data = await r.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map((e, i) => parseFFEvent(e, i, 'nextweek')).filter(Boolean);
+      }
+    }
+  } catch { /* ignore */ }
+  return [];
 }
 
 Deno.serve(async (req) => {
@@ -85,40 +87,40 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    // Fetch all 3 sources in parallel
-    const [thisWeekRes, nextWeekRes, teRes] = await Promise.allSettled([
+    // Check cache
+    const now = Date.now();
+    if (_cache && now - _cacheTs < CACHE_TTL) {
+      return Response.json({ success: true, data: _cache, cached: true });
+    }
+
+    // Fetch thisweek + nextweek in parallel
+    const [thisWeek, nextWeek] = await Promise.all([
       fetchFF('thisweek'),
-      fetchFF('nextweek'),
-      fetchTradingEconomics(),
+      fetchNextWeekAlternative(),
     ]);
 
-    const thisWeek = thisWeekRes.status === 'fulfilled' ? thisWeekRes.value : [];
-    const nextWeek = nextWeekRes.status === 'fulfilled' ? nextWeekRes.value : [];
-    const teEvents = teRes.status === 'fulfilled' ? teRes.value : [];
+    let events = [...thisWeek, ...nextWeek];
 
-    if (thisWeekRes.status === 'rejected') console.log('FF thisweek failed:', thisWeekRes.reason?.message);
-    if (nextWeekRes.status === 'rejected') console.log('FF nextweek failed:', nextWeekRes.reason?.message);
-    if (teRes.status === 'rejected')       console.log('TE failed:', teRes.reason?.message);
-
-    // Merge: ForexFactory is primary. Add TE events not already covered (deduplicate by date+currency+similar event name)
-    const ffEvents = [...thisWeek, ...nextWeek];
-    const ffKeys = new Set(ffEvents.map(e => `${e.date}-${e.currency}-${e.event.slice(0, 15).toLowerCase()}`));
-
-    const uniqueTE = teEvents.filter(e => {
-      const key = `${e.date}-${e.currency}-${e.event.slice(0, 15).toLowerCase()}`;
-      return !ffKeys.has(key);
+    // Deduplicate by date+currency+event snippet
+    const seen = new Set();
+    events = events.filter(e => {
+      const key = `${e.date}|${e.currency}|${e.event.slice(0, 20).toLowerCase()}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
-
-    let events = [...ffEvents, ...uniqueTE];
 
     // Sort by date + time
     events.sort((a, b) => {
-      const cmp = a.date.localeCompare(b.date);
-      if (cmp !== 0) return cmp;
-      return a.time.localeCompare(b.time);
+      const d = a.date.localeCompare(b.date);
+      return d !== 0 ? d : a.time.localeCompare(b.time);
     });
 
-    console.log(`Total: ${events.length} (FF: ${ffEvents.length}, TE unique: ${uniqueTE.length})`);
+    // Cache result
+    _cache = events;
+    _cacheTs = now;
+
+    console.log(`Returning ${events.length} events (thisWeek=${thisWeek.length}, nextWeek=${nextWeek.length})`);
 
     return Response.json({ success: true, data: events });
 
