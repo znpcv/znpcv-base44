@@ -48,7 +48,7 @@ export default function EconomicCalendarPage() {
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         <ForexCalendar darkMode={darkMode} />
       </main>
     </div>

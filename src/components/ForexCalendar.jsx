@@ -393,33 +393,33 @@ export default function ForexCalendar({ darkMode = true }) {
       <div className={cn('rounded-2xl overflow-hidden border', th.border, th.bg)}>
 
         {/* ── HEADER ─────────────────────────────────────────────── */}
-        <div className={cn('flex items-center justify-between px-3 py-2 border-b', th.border, darkMode ? 'bg-black' : 'bg-zinc-100')}>
-          <div className="flex items-center gap-1.5">
-            <Calendar className={cn('w-3.5 h-3.5', th.sub)} />
-            <span className={cn('text-[10px] font-black tracking-[0.12em]', th.text)}>ECON CALENDAR</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+        <div className={cn('flex items-center justify-between px-4 py-3 border-b', th.border, darkMode ? 'bg-black' : 'bg-zinc-100')}>
+          <div className="flex items-center gap-2">
+            <Calendar className={cn('w-4 h-4', th.sub)} />
+            <span className={cn('text-sm font-black tracking-[0.12em]', th.text)}>ECON CALENDAR</span>
+            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <button onClick={() => setShowWeekOverview(v => !v)}
-              className={cn('p-1.5 rounded-lg border transition-all', th.border,
+              className={cn('p-2 rounded-lg border transition-all', th.border,
                 showWeekOverview ? (darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white') : cn(th.muted, th.hover))}>
-              <List className="w-3 h-3" />
+              <List className="w-4 h-4" />
             </button>
             {'Notification' in window && (
               <button onClick={toggleNotifications}
-                className={cn('p-1.5 rounded-lg border transition-all', th.border,
+                className={cn('p-2 rounded-lg border transition-all', th.border,
                   notifEnabled ? 'bg-amber-500/20 border-amber-500/40 text-amber-400' : cn(th.muted, th.hover))}>
-                {notifEnabled ? <Bell className="w-3 h-3" /> : <BellOff className="w-3 h-3" />}
+                {notifEnabled ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
               </button>
             )}
             {lastUpdate && (
-              <span className={cn('text-[9px] tabular-nums hidden sm:inline', th.muted)}>
+              <span className={cn('text-xs tabular-nums hidden sm:inline', th.muted)}>
                 {lastUpdate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
               </span>
             )}
             <button onClick={() => fetchEvents(false)} disabled={loading}
-              className={cn('p-1.5 rounded-lg border transition-all', th.border, th.muted, th.hover, loading && 'opacity-40')}>
-              <RefreshCw className={cn('w-3 h-3', (loading || refreshing) && 'animate-spin')} />
+              className={cn('p-2 rounded-lg border transition-all', th.border, th.muted, th.hover, loading && 'opacity-40')}>
+              <RefreshCw className={cn('w-4 h-4', (loading || refreshing) && 'animate-spin')} />
             </button>
           </div>
         </div>
@@ -438,14 +438,14 @@ export default function ForexCalendar({ darkMode = true }) {
             <motion.div
               initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
               className={cn('border-b', th.border, 'bg-rose-500/10')}>
-              <div className="flex items-center gap-1.5 px-3 py-1.5">
-                <Timer className="w-3 h-3 text-rose-400 flex-shrink-0" />
-                <span className="text-rose-400 text-[9px] font-black tracking-widest hidden sm:inline">NEXT HIGH</span>
-                <span className={cn('text-[9px] font-semibold truncate flex-1', th.sub)}>
+              <div className="flex items-center gap-3 px-4 py-2">
+                <Timer className="w-4 h-4 text-rose-400 flex-shrink-0" />
+                <span className="text-rose-400 text-xs font-black tracking-widest hidden sm:inline">NEXT HIGH</span>
+                <span className={cn('text-xs font-semibold truncate flex-1', th.sub)}>
                   <span className={cn('font-black', CURRENCY_COLORS[nextHighEvent.currency] || th.sub)}>{nextHighEvent.currency}</span>
                   {' '}{nextHighEvent.event}
                 </span>
-                <span className="text-rose-400 text-[9px] font-black tabular-nums flex-shrink-0 animate-pulse">
+                <span className="text-rose-400 text-sm font-black tabular-nums flex-shrink-0 animate-pulse">
                   {formatCountdown(nextHighEvent.mins)}
                 </span>
               </div>
@@ -458,10 +458,10 @@ export default function ForexCalendar({ darkMode = true }) {
           {showHeatmap && eventsForDay.length > 0 && (
             <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }}
               className={cn('overflow-hidden border-b', th.border, darkMode ? 'bg-zinc-900/40' : 'bg-zinc-50')}>
-              <div className="flex items-center justify-between px-3 pt-1.5 pb-0">
-                <span className={cn('text-[8px] font-black tracking-widest', th.muted)}>HEATMAP</span>
+              <div className="flex items-center justify-between px-4 pt-2 pb-0">
+                <span className={cn('text-xs font-black tracking-widest', th.muted)}>WÄHRUNGS-HEATMAP</span>
                 <button onClick={() => setShowHeatmap(false)}
-                  className={cn('text-[8px]', th.muted, 'hover:underline')}>✕</button>
+                  className={cn('text-xs', th.muted, 'hover:underline')}>✕</button>
               </div>
               <CurrencyHeatmap events={eventsForDay} darkMode={darkMode} />
             </motion.div>
@@ -470,22 +470,22 @@ export default function ForexCalendar({ darkMode = true }) {
 
         {/* ── WEEK NAV ─────────────────────────────────────────── */}
         <div className={cn('border-b', th.border)}>
-          <div className={cn('flex items-center justify-between px-3 py-1', darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50')}>
+          <div className={cn('flex items-center justify-between px-4 py-2', darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50')}>
             <button onClick={() => setWeekOffset(w => w - 1)}
-              className={cn('p-1 rounded transition-colors', th.muted, th.hover)}>
-              <ChevronLeft className="w-3.5 h-3.5" />
+              className={cn('p-1.5 rounded-lg transition-colors', th.muted, th.hover)}>
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button onClick={() => { setWeekOffset(0); setSelectedDate(todayStr); }}
-              className={cn('text-[9px] font-black tracking-widest transition-colors px-2 py-0.5 rounded', th.sub, th.hover)}>
+              className={cn('text-sm font-black tracking-widest transition-colors px-3 py-1 rounded-lg', th.sub, th.hover)}>
               {weekOffset === 0 ? 'DIESE WOCHE' : weekOffset === 1 ? 'NÄCHSTE WOCHE' : weekOffset > 0 ? `+${weekOffset}W` : `${weekOffset}W`}
             </button>
             <button onClick={() => setWeekOffset(w => w + 1)}
-              className={cn('p-1 rounded transition-colors', th.muted, th.hover)}>
-              <ChevronRight className="w-3.5 h-3.5" />
+              className={cn('p-1.5 rounded-lg transition-colors', th.muted, th.hover)}>
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="flex gap-1 overflow-x-auto scrollbar-hide px-2 pb-2 pt-1">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide px-4 pb-3 pt-2">
             {days.map(day => {
               const { ds, total, high, med } = getDay(day);
               const isTd  = ds === todayStr;
@@ -495,24 +495,24 @@ export default function ForexCalendar({ darkMode = true }) {
               return (
                 <button key={ds} onClick={() => setSelectedDate(ds)}
                   className={cn(
-                    'flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg border min-w-[38px] flex-shrink-0 transition-all',
+                    'flex flex-col items-center gap-1 px-3 py-2 rounded-xl border min-w-[52px] flex-shrink-0 transition-all',
                     isSel
                       ? darkMode ? 'bg-white border-white' : 'bg-zinc-900 border-zinc-900'
                       : isTd ? 'border-teal-500/60 bg-teal-500/10'
                       : cn(th.border, th.bgAlt, th.hover)
                   )}>
-                  <span className={cn('text-[8px] font-bold tracking-wider leading-none',
+                  <span className={cn('text-[10px] font-bold tracking-wider leading-none',
                     isSel ? (darkMode ? 'text-black' : 'text-white') : isTd ? 'text-teal-400' : th.muted)}>
                     {dow}
                   </span>
-                  <span className={cn('text-sm font-black leading-none',
+                  <span className={cn('text-base font-black leading-none',
                     isSel ? (darkMode ? 'text-black' : 'text-white') : isTd ? 'text-teal-400' : th.text)}>
                     {dom}
                   </span>
                   <div className="flex gap-0.5">
-                    {high > 0 && <span className="w-1 h-1 rounded-full bg-rose-500" />}
-                    {med  > 0 && <span className="w-1 h-1 rounded-full bg-amber-400" />}
-                    {total === 0 && <span className={cn('text-[6px]', th.muted)}>·</span>}
+                    {high > 0 && <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />}
+                    {med  > 0 && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                    {total === 0 && <span className={cn('text-[8px]', th.muted)}>·</span>}
                   </div>
                 </button>
               );
@@ -521,15 +521,15 @@ export default function ForexCalendar({ darkMode = true }) {
         </div>
 
         {/* ── FILTER BAR ───────────────────────────────────────── */}
-        <div className={cn('flex items-center gap-1 px-3 py-1.5 border-b flex-wrap', th.border)}>
+        <div className={cn('flex items-center gap-2 px-4 py-2.5 border-b flex-wrap', th.border)}>
           {[
-            { key: 'high',   label: '🔴' },
-            { key: 'medium', label: '🟡' },
+            { key: 'high',   label: '🔴 Hoch' },
+            { key: 'medium', label: '🟡 Mittel' },
             { key: 'all',    label: 'Alle' },
           ].map(({ key, label }) => (
             <button key={key} onClick={() => setImpactFilter(key)}
               className={cn(
-                'px-2 py-0.5 rounded text-[9px] font-black tracking-wider transition-all',
+                'px-3 py-1 rounded-lg text-xs font-black tracking-wider transition-all',
                 impactFilter === key
                   ? darkMode ? 'bg-white text-black' : 'bg-zinc-900 text-white'
                   : cn(th.muted, th.hover, 'border', th.border)
@@ -538,14 +538,14 @@ export default function ForexCalendar({ darkMode = true }) {
             </button>
           ))}
 
-          <span className={cn('w-px h-3 self-center', darkMode ? 'bg-zinc-700' : 'bg-zinc-300')} />
+          <span className={cn('w-px h-4 self-center', darkMode ? 'bg-zinc-700' : 'bg-zinc-300')} />
 
           {/* Pair filter */}
           <div className="relative">
             <button
               onClick={() => setPairPickerOpen(p => !p)}
               className={cn(
-                'px-2 py-0.5 rounded text-[9px] font-black tracking-wider transition-all border',
+                'px-3 py-1 rounded-lg text-xs font-black tracking-wider transition-all border',
                 selectedPair !== 'Alle'
                   ? 'bg-blue-500/20 text-blue-400 border-blue-500/40'
                   : cn(th.muted, th.hover, th.border)
@@ -586,13 +586,13 @@ export default function ForexCalendar({ darkMode = true }) {
             </AnimatePresence>
           </div>
 
-          <span className={cn('ml-auto text-[10px] font-bold', th.muted)}>
+          <span className={cn('ml-auto text-sm font-bold', th.muted)}>
             {visibleEvents.length} Event{visibleEvents.length !== 1 ? 's' : ''}
           </span>
         </div>
 
         {/* ── EVENT TABLE ──────────────────────────────────────── */}
-        <div className="overflow-y-auto" style={{ maxHeight: 480 }}>
+        <div className="overflow-y-auto" style={{ maxHeight: 600 }}>
           {loading ? (
             <div className="flex flex-col items-center gap-3 py-14">
               <div className="flex gap-1">
@@ -617,10 +617,10 @@ export default function ForexCalendar({ darkMode = true }) {
             </div>
           ) : (
             <>
-              <div className={cn('grid grid-cols-[52px_1fr_88px] border-b px-3 py-1', th.border, darkMode ? 'bg-zinc-900/40' : 'bg-zinc-50')}>
-                <span className={cn('text-[8px] font-black tracking-widest', th.muted)}>ZEIT</span>
-                <span className={cn('text-[8px] font-black tracking-widest', th.muted)}>EVENT</span>
-                <span className={cn('text-[8px] font-black tracking-widest text-right', th.muted)}>IST/PRO/VOR</span>
+              <div className={cn('grid grid-cols-[80px_1fr_120px] border-b px-5 py-2', th.border, darkMode ? 'bg-zinc-900/40' : 'bg-zinc-50')}>
+                <span className={cn('text-xs font-black tracking-widest', th.muted)}>ZEIT</span>
+                <span className={cn('text-xs font-black tracking-widest', th.muted)}>EVENT</span>
+                <span className={cn('text-xs font-black tracking-widest text-right', th.muted)}>IST / PRO / VOR</span>
               </div>
 
               {visibleEvents.map((evt, idx) => {
@@ -652,50 +652,50 @@ export default function ForexCalendar({ darkMode = true }) {
                           : (isOpen ? th.bgAlt : th.hover)
                     )}>
 
-                    <div className="grid grid-cols-[52px_1fr_88px] px-3 py-2 items-start">
+                    <div className="grid grid-cols-[80px_1fr_120px] px-5 py-3 items-start">
 
                       {/* TIME + IMPACT + COUNTDOWN */}
-                      <div className="flex flex-col items-start gap-0.5">
-                        <span className={cn('text-[11px] font-black tabular-nums leading-none', live ? 'text-teal-400' : th.sub)}>
+                      <div className="flex flex-col items-start gap-1">
+                        <span className={cn('text-sm font-black tabular-nums leading-none', live ? 'text-teal-400' : th.sub)}>
                           {evt.time || '–'}
                         </span>
-                        <div className={cn('flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-black', imp.pill)}>
-                          <span className={cn('w-1 h-1 rounded-full inline-block flex-shrink-0', imp.bg)} />
+                        <div className={cn('flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black', imp.pill)}>
+                          <span className={cn('w-1.5 h-1.5 rounded-full inline-block flex-shrink-0', imp.bg)} />
                           {imp.label}
                         </div>
                         {live
-                          ? <span className="text-[7px] font-black text-teal-400 animate-pulse">●LIVE</span>
+                          ? <span className="text-[9px] font-black text-teal-400 animate-pulse">● LIVE</span>
                           : <CountdownBadge timeStr={evt.time} dateStr={evt.date} />
                         }
                       </div>
 
                       {/* CURRENCY + EVENT + BADGES */}
-                      <div className="min-w-0 pr-1.5">
-                        <div className="flex items-center gap-1 mb-0.5 flex-wrap">
-                          <span className={cn('text-[10px] font-black', curClr)}>{evt.currency}</span>
+                      <div className="min-w-0 pr-4">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <span className={cn('text-sm font-black', curClr)}>{evt.currency}</span>
                           {hasRes && <SurpriseBadge actual={evt.actual} forecast={evt.forecast} />}
                           {!hasRes && evt.impact === 'high' && <AvgPipsBadge eventName={evt.event} darkMode={darkMode} />}
                         </div>
-                        <p className={cn('text-[11px] font-semibold leading-snug line-clamp-2', th.text)}>{evt.event}</p>
+                        <p className={cn('text-sm font-semibold leading-snug', th.text)}>{evt.event}</p>
                       </div>
 
                       {/* VALUES */}
                       <div className="text-right">
                         {hasRes ? (
-                          <span className={cn('text-[11px] font-black tabular-nums block',
+                          <span className={cn('text-base font-black tabular-nums block',
                             beat ? 'text-teal-400' : miss ? 'text-rose-400' : th.text)}>
                             {evt.actual}{beat ? '▲' : miss ? '▼' : ''}
                           </span>
                         ) : (
-                          <span className={cn('text-[11px] font-black', th.muted)}>–</span>
+                          <span className={cn('text-base font-black', th.muted)}>–</span>
                         )}
                         {evt.forecast && (
-                          <span className={cn('text-[9px] tabular-nums block', th.muted)}>
+                          <span className={cn('text-xs tabular-nums block', th.muted)}>
                             P {evt.forecast}
                           </span>
                         )}
                         {evt.previous && (
-                          <span className={cn('text-[8px] tabular-nums block opacity-60', th.muted)}>
+                          <span className={cn('text-xs tabular-nums block opacity-60', th.muted)}>
                             V {evt.previous}
                           </span>
                         )}
@@ -738,21 +738,21 @@ export default function ForexCalendar({ darkMode = true }) {
         </div>
 
         {/* ── FOOTER ───────────────────────────────────────────── */}
-        <div className={cn('flex items-center justify-between px-3 py-1.5 border-t', th.border, darkMode ? 'bg-black/50' : 'bg-zinc-50')}>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-            <span className={cn('text-[8px] font-bold', th.muted)}>Hoch</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-            <span className={cn('text-[8px] font-bold', th.muted)}>Mittel</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-            <span className={cn('text-[8px] font-bold', th.muted)}>Gering</span>
+        <div className={cn('flex items-center justify-between px-4 py-2.5 border-t', th.border, darkMode ? 'bg-black/50' : 'bg-zinc-50')}>
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-rose-500" />
+            <span className={cn('text-xs font-bold', th.muted)}>Hoch</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400" />
+            <span className={cn('text-xs font-bold', th.muted)}>Mittel</span>
+            <span className="w-2 h-2 rounded-full bg-zinc-600" />
+            <span className={cn('text-xs font-bold', th.muted)}>Gering</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {!showHeatmap && (
               <button onClick={() => setShowHeatmap(true)}
-                className={cn('text-[8px] font-bold', th.muted, 'hover:underline')}>Heatmap</button>
+                className={cn('text-xs font-bold', th.muted, 'hover:underline')}>Heatmap anzeigen</button>
             )}
-            <span className={cn('text-[8px]', th.muted)}>P=Pro · V=Vor</span>
+            <span className={cn('text-xs', th.muted)}>P = Prognose · V = Vorherig</span>
           </div>
         </div>
       </div>
