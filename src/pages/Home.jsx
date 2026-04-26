@@ -408,148 +408,139 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className={`${theme.bgSecondary} border-t ${theme.border}`}>
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10">
+      <footer className={`${theme.bgSecondary} border-t ${theme.border} mt-8`}>
+        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-12 md:py-16">
 
-          {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-10">
+          {/* Main Footer Grid — 3 equal columns on desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 lg:gap-16 mb-12 md:mb-14">
 
-            {/* Brand & Description */}
-            <div className="md:col-span-4 text-center md:text-left">
-              <img 
-                src={darkMode 
+            {/* Col 1 — Brand */}
+            <div className="flex flex-col items-center md:items-start">
+              <img
+                src={darkMode
                   ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                   : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                 }
-                alt="ZNPCV" 
-                className="h-14 sm:h-16 md:h-20 w-auto mb-3 sm:mb-4 mx-auto md:mx-0"
+                alt="ZNPCV"
+                className="h-16 md:h-20 w-auto mb-5"
               />
-              <p className={`${theme.textMuted} text-xs sm:text-sm font-sans leading-relaxed mb-4 sm:mb-5`}>
+              <p className={`${theme.textMuted} text-sm font-sans leading-relaxed mb-6 text-center md:text-left`}>
                 {t('footerDesc')}
               </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2 mb-5">
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
-                  <div className="w-1.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+              <div className="flex items-center gap-2">
+                <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-300'}`}>
+                  <div className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-pulse" />
                   <Lock className="w-3 h-3 text-emerald-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SSL</span>
+                  <span className={`text-[10px] ${theme.text} font-bold tracking-wider`}>SSL</span>
                 </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-300'}`}>
                   <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>SECURE</span>
+                  <span className={`text-[10px] ${theme.text} font-bold tracking-wider`}>SECURE</span>
                 </div>
-                <div className={`flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200 border border-zinc-300'}`}>
+                <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ${darkMode ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-300'}`}>
                   <Globe className="w-3 h-3 text-emerald-600" />
-                  <span className={`text-[9px] sm:text-[10px] ${theme.text} font-bold`}>24/7</span>
+                  <span className={`text-[10px] ${theme.text} font-bold tracking-wider`}>24/7</span>
                 </div>
               </div>
+            </div>
 
-              </div>
-
-            {/* Navigation */}
-            <div className="md:col-span-3">
-              <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
-                <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+            {/* Col 2 — Navigation */}
+            <div>
+              <h4 className={`${theme.text} text-xs tracking-widest mb-5 flex items-center gap-2`}>
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
                 NAVIGATION
               </h4>
               <div className="space-y-2">
-                <button onClick={() => {
-                    if (userAccess.strategy) navigate(createPageUrl('Checklist'));
-                    else navigate(createPageUrl('FreeChecklist'));
-                  }} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <ClipboardCheck className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('newAnalysis')}</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
-                <button onClick={() => navigate(createPageUrl('Dashboard'))} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <BarChart3 className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>{t('dashboard')}</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
-                <button onClick={() => navigate(createPageUrl('TradeHistory'))} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <History className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Trade History</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
-                <button onClick={() => navigate(createPageUrl('Charts'))} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <LineChart className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>Live Charts</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
-                <button onClick={() => navigate(createPageUrl('FAQ'))} 
-                  className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all group ${darkMode ? 'bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:bg-zinc-900' : 'bg-zinc-200/50 border border-zinc-300/50 hover:border-zinc-400 hover:bg-zinc-200'}`}>
-                  <HelpCircle className={`w-4 h-4 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
-                  <span className={`${theme.textSecondary} group-hover:${theme.text} text-sm transition-colors`}>FAQ & Help</span>
-                  <ChevronRight className={`w-3 h-3 ${theme.textDimmed} ml-auto group-hover:translate-x-1 transition-transform`} />
-                </button>
+                {[
+                  { icon: ClipboardCheck, label: t('newAnalysis'), action: () => userAccess.strategy ? navigate(createPageUrl('Checklist')) : navigate(createPageUrl('FreeChecklist')) },
+                  { icon: BarChart3,      label: t('dashboard'),   action: () => navigate(createPageUrl('Dashboard')) },
+                  { icon: History,        label: t('tradeHistory'),action: () => navigate(createPageUrl('TradeHistory')) },
+                  { icon: LineChart,      label: 'Live Charts',    action: () => navigate(createPageUrl('Charts')) },
+                  { icon: HelpCircle,     label: 'FAQ & Help',     action: () => navigate(createPageUrl('FAQ')) },
+                ].map(({ icon: Icon, label, action }) => (
+                  <button key={label} onClick={action}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group ${darkMode ? 'bg-zinc-900/60 border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800' : 'bg-white border border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50'}`}>
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${theme.textMuted} group-hover:text-emerald-600 transition-colors`} />
+                    <span className={`${theme.textSecondary} text-sm transition-colors group-hover:${theme.text} flex-1 text-left`}>{label}</span>
+                    <ChevronRight className={`w-3.5 h-3.5 flex-shrink-0 ${theme.textDimmed} group-hover:translate-x-1 transition-transform`} />
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Contact */}
-            <div className="md:col-span-5">
-              <h4 className={`${theme.text} text-xs tracking-widest mb-3 sm:mb-4 flex items-center gap-2 justify-center md:justify-start`}>
-                <div className={`w-1 h-3 sm:h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
-                {t('contact')}
+            {/* Col 3 — Contact */}
+            <div>
+              <h4 className={`${theme.text} text-xs tracking-widest mb-5 flex items-center gap-2`}>
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-white' : 'bg-zinc-900'}`} />
+                {t('contact').toUpperCase()}
               </h4>
-              <div className="space-y-2">
-                <a href="mailto:support@znpcv.com" className={`flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-700/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-emerald-600 text-xs sm:text-sm">@</span>
+              <div className="space-y-3">
+                <a href="mailto:support@znpcv.com"
+                  className={`flex items-center gap-3 p-4 rounded-xl border transition-all group ${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-emerald-600/50 hover:bg-zinc-800' : 'bg-white border-zinc-200 hover:border-emerald-500/50 hover:bg-zinc-50'}`}>
+                  <div className="w-10 h-10 bg-emerald-600/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <span className="text-emerald-600 text-base font-bold">@</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>EMAIL</div>
-                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-emerald-600 transition-colors truncate`}>support@znpcv.com</div>
+                    <div className={`text-[10px] ${theme.textDimmed} tracking-widest mb-0.5`}>EMAIL</div>
+                    <div className={`${theme.text} text-sm font-semibold group-hover:text-emerald-600 transition-colors truncate`}>support@znpcv.com</div>
                   </div>
+                  <ChevronRight className={`w-4 h-4 flex-shrink-0 ${theme.textDimmed} group-hover:translate-x-1 group-hover:text-emerald-600 transition-all`} />
                 </a>
-                <button onClick={() => navigate(createPageUrl('FAQ'))} className={`w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl transition-colors group ${darkMode ? 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700' : 'bg-zinc-200 border border-zinc-300 hover:border-zinc-400'}`}>
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+
+                <button onClick={() => navigate(createPageUrl('FAQ'))}
+                  className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all group ${darkMode ? 'bg-zinc-900 border-zinc-800 hover:border-blue-500/50 hover:bg-zinc-800' : 'bg-white border-zinc-200 hover:border-blue-400/50 hover:bg-zinc-50'}`}>
+                  <div className="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <HelpCircle className="w-5 h-5 text-blue-500" />
                   </div>
                   <div className="flex-1 text-left min-w-0">
-                    <div className={`text-[9px] sm:text-[10px] ${theme.textDimmed} tracking-wider`}>SUPPORT</div>
-                    <div className={`${theme.text} text-xs sm:text-sm group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
+                    <div className={`text-[10px] ${theme.textDimmed} tracking-widest mb-0.5`}>SUPPORT</div>
+                    <div className={`${theme.text} text-sm font-semibold group-hover:text-blue-500 transition-colors`}>{t('faqHelp')}</div>
                   </div>
+                  <ChevronRight className={`w-4 h-4 flex-shrink-0 ${theme.textDimmed} group-hover:translate-x-1 group-hover:text-blue-500 transition-all`} />
                 </button>
+
+                <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+                  <div className={`text-[10px] ${theme.textDimmed} tracking-widest mb-1`}>RISIKO-HINWEIS</div>
+                  <p className={`${theme.textMuted} text-xs font-sans leading-relaxed`}>{t('riskWarning')}</p>
                 </div>
+              </div>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className={`pt-6 sm:pt-8 border-t ${theme.border}`}>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-                <img 
-                  src={darkMode 
+          {/* Divider */}
+          <div className={`border-t ${theme.border} pt-8`}>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              {/* Left: logo + copyright */}
+              <div className="flex items-center gap-4">
+                <img
+                  src={darkMode
                     ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
                     : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
                   }
-                  alt="ZNPCV" 
-                  className="h-8 sm:h-10 w-auto opacity-50"
+                  alt="ZNPCV"
+                  className="h-8 w-auto opacity-40"
                 />
-                <div className={`h-4 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV</p>
-                <div className={`h-4 w-px hidden sm:block ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-                <p className={`${theme.textDimmed} text-xs hidden sm:block`}>{t('allRights')}</p>
+                <div className={`h-4 w-px ${darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                <p className={`${theme.textMuted} text-xs`}>© {new Date().getFullYear()} ZNPCV — {t('allRights')}</p>
               </div>
-              <p className={`${theme.textDimmed} text-[10px] font-sans text-center md:text-right max-w-md leading-relaxed`}>
-                {t('riskWarning')}
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs">
-              <button type="button" onClick={() => navigate(createPageUrl('Impressum'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
-                Impressum
-              </button>
-              <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-              <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
-                Datenschutz
-              </button>
-              <div className={`h-3 w-px ${darkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
-              <button type="button" onClick={() => navigate(createPageUrl('AGB'))} className={`${theme.textMuted} hover:${theme.text} transition-colors`}>
-                AGB
-              </button>
+
+              {/* Right: legal links */}
+              <div className="flex items-center gap-1">
+                <button type="button" onClick={() => navigate(createPageUrl('Impressum'))}
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${darkMode ? `${theme.textMuted} hover:text-white hover:bg-zinc-800` : `${theme.textMuted} hover:text-zinc-900 hover:bg-zinc-200`}`}>
+                  Impressum
+                </button>
+                <div className={`h-3 w-px ${darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                <button type="button" onClick={() => navigate(createPageUrl('Datenschutz'))}
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${darkMode ? `${theme.textMuted} hover:text-white hover:bg-zinc-800` : `${theme.textMuted} hover:text-zinc-900 hover:bg-zinc-200`}`}>
+                  Datenschutz
+                </button>
+                <div className={`h-3 w-px ${darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                <button type="button" onClick={() => navigate(createPageUrl('AGB'))}
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${darkMode ? `${theme.textMuted} hover:text-white hover:bg-zinc-800` : `${theme.textMuted} hover:text-zinc-900 hover:bg-zinc-200`}`}>
+                  AGB
+                </button>
+              </div>
             </div>
           </div>
         </div>
