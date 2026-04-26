@@ -26,6 +26,9 @@ const CAL_T = {
     forecastLbl: 'PROGNOSE', previousLbl: 'VORHERIG', actualLbl: 'AKTUELL',
     forecast: 'P', previous: 'V', footerPV: 'P = Prognose · V = Vorherig',
     events: 'Event', eventsPlural: 'Events',
+    live: 'LIVE', allPairs: 'Alle',
+    notifBody: (diff, time) => `Startet in ${diff} Minuten (${time} Uhr)`,
+    nowLabel: 'JETZT',
   },
   en: {
     loading: 'LOADING DATA…', error: 'Could not load data.',
@@ -41,6 +44,9 @@ const CAL_T = {
     forecastLbl: 'FORECAST', previousLbl: 'PREVIOUS', actualLbl: 'ACTUAL',
     forecast: 'F', previous: 'P', footerPV: 'F = Forecast · P = Previous',
     events: 'Event', eventsPlural: 'Events',
+    live: 'LIVE', allPairs: 'All',
+    notifBody: (diff, time) => `Starts in ${diff} minutes (${time})`,
+    nowLabel: 'NOW',
   },
   es: {
     loading: 'CARGANDO DATOS…', error: 'No se pudieron cargar los datos.',
@@ -56,6 +62,9 @@ const CAL_T = {
     forecastLbl: 'PRONÓSTICO', previousLbl: 'ANTERIOR', actualLbl: 'ACTUAL',
     forecast: 'P', previous: 'A', footerPV: 'P = Pronóstico · A = Anterior',
     events: 'Evento', eventsPlural: 'Eventos',
+    live: 'VIVO', allPairs: 'Todos',
+    notifBody: (diff, time) => `Empieza en ${diff} minutos (${time})`,
+    nowLabel: 'AHORA',
   },
   fr: {
     loading: 'CHARGEMENT…', error: 'Impossible de charger les données.',
@@ -71,6 +80,9 @@ const CAL_T = {
     forecastLbl: 'PRÉVISION', previousLbl: 'PRÉCÉDENT', actualLbl: 'ACTUEL',
     forecast: 'P', previous: 'A', footerPV: 'P = Prévision · A = Antérieur',
     events: 'Événement', eventsPlural: 'Événements',
+    live: 'EN DIRECT', allPairs: 'Tous',
+    notifBody: (diff, time) => `Commence dans ${diff} minutes (${time})`,
+    nowLabel: 'MAINTENANT',
   },
   zh: {
     loading: '加载数据中…', error: '无法加载数据。',
@@ -86,6 +98,9 @@ const CAL_T = {
     forecastLbl: '预测', previousLbl: '前值', actualLbl: '实际',
     forecast: '预', previous: '前', footerPV: '预 = 预测 · 前 = 前值',
     events: '事件', eventsPlural: '事件',
+    live: '直播', allPairs: '全部',
+    notifBody: (diff, time) => `${diff}分钟后开始 (${time})`,
+    nowLabel: '现在',
   },
   ar: {
     loading: 'جارٍ التحميل…', error: 'تعذّر تحميل البيانات.',
@@ -101,6 +116,9 @@ const CAL_T = {
     forecastLbl: 'التوقع', previousLbl: 'السابق', actualLbl: 'الفعلي',
     forecast: 'ت', previous: 'س', footerPV: 'ت = التوقع · س = السابق',
     events: 'حدث', eventsPlural: 'أحداث',
+    live: 'مباشر', allPairs: 'الكل',
+    notifBody: (diff, time) => `يبدأ خلال ${diff} دقيقة (${time})`,
+    nowLabel: 'الآن',
   },
   ja: {
     loading: 'データ読み込み中…', error: 'データを読み込めませんでした。',
@@ -116,6 +134,9 @@ const CAL_T = {
     forecastLbl: '予測', previousLbl: '前回', actualLbl: '実績',
     forecast: '予', previous: '前', footerPV: '予 = 予測 · 前 = 前回',
     events: 'イベント', eventsPlural: 'イベント',
+    live: 'ライブ', allPairs: '全て',
+    notifBody: (diff, time) => `${diff}分後に開始 (${time})`,
+    nowLabel: '今',
   },
   pt: {
     loading: 'CARREGANDO DADOS…', error: 'Não foi possível carregar os dados.',
@@ -131,6 +152,9 @@ const CAL_T = {
     forecastLbl: 'PREVISÃO', previousLbl: 'ANTERIOR', actualLbl: 'REAL',
     forecast: 'P', previous: 'A', footerPV: 'P = Previsão · A = Anterior',
     events: 'Evento', eventsPlural: 'Eventos',
+    live: 'AO VIVO', allPairs: 'Todos',
+    notifBody: (diff, time) => `Começa em ${diff} minutos (${time})`,
+    nowLabel: 'AGORA',
   },
   hi: {
     loading: 'डेटा लोड हो रहा है…', error: 'डेटा लोड नहीं हो सका।',
@@ -146,6 +170,9 @@ const CAL_T = {
     forecastLbl: 'अनुमान', previousLbl: 'पूर्व', actualLbl: 'वास्तविक',
     forecast: 'अ', previous: 'पू', footerPV: 'अ = अनुमान · पू = पूर्व',
     events: 'इवेंट', eventsPlural: 'इवेंट',
+    live: 'लाइव', allPairs: 'सभी',
+    notifBody: (diff, time) => `${diff} मिनट में शुरू (${time})`,
+    nowLabel: 'अभी',
   },
   fa: {
     loading: 'در حال بارگذاری…', error: 'بارگذاری داده‌ها امکان‌پذیر نبود.',
@@ -161,6 +188,9 @@ const CAL_T = {
     forecastLbl: 'پیش‌بینی', previousLbl: 'قبلی', actualLbl: 'واقعی',
     forecast: 'پ', previous: 'ق', footerPV: 'پ = پیش‌بینی · ق = قبلی',
     events: 'رویداد', eventsPlural: 'رویداد',
+    live: 'زنده', allPairs: 'همه',
+    notifBody: (diff, time) => `در ${diff} دقیقه شروع می‌شود (${time})`,
+    nowLabel: 'اکنون',
   },
 };
 
@@ -502,9 +532,9 @@ export default function ForexCalendar({ darkMode = true }) {
               alertedRef.current.add(key);
               saveAlerted(alertedRef.current);
               new Notification(`⚡ ${e.currency} — ${e.event}`, {
-                body: `Startet in ${diff} Minuten (${e.time} Uhr)`,
-                icon: '/favicon.ico',
-              });
+                        body: ct.notifBody(diff, e.time),
+                        icon: '/favicon.ico',
+                      });
             }
           }
         });
@@ -833,8 +863,8 @@ export default function ForexCalendar({ darkMode = true }) {
                           {imp.label}
                         </div>
                         {live
-                          ? <span className="text-[9px] font-black text-teal-400 animate-pulse">● LIVE</span>
-                          : <CountdownBadge timeStr={evt.time} dateStr={evt.date} nowLabel={language === 'de' ? 'JETZT' : language === 'es' ? 'AHORA' : language === 'fr' ? 'MAINTENANT' : language === 'zh' ? '现在' : language === 'ar' ? 'الآن' : language === 'ja' ? '今' : language === 'pt' ? 'AGORA' : language === 'hi' ? 'अभी' : language === 'fa' ? 'اکنون' : 'NOW'} />
+                          ? <span className="text-[9px] font-black text-teal-400 animate-pulse">● {ct.live}</span>
+                          : <CountdownBadge timeStr={evt.time} dateStr={evt.date} nowLabel={ct.nowLabel} />
                         }
                       </div>
 
