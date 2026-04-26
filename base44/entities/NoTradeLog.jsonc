@@ -1,0 +1,100 @@
+{
+  "name": "NoTradeLog",
+  "type": "object",
+  "properties": {
+    "pair": {
+      "type": "string",
+      "description": "Trading pair that was avoided"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "long",
+        "short"
+      ],
+      "description": "Intended trade direction"
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "choppy_market",
+        "mid_range",
+        "major_news",
+        "low_confluence",
+        "poor_rr"
+      ],
+      "description": "Reason for no-trade decision"
+    },
+    "score": {
+      "type": "number",
+      "description": "Checklist score at time of decision"
+    },
+    "confluence_count": {
+      "type": "number",
+      "description": "How many timeframes were aligned"
+    },
+    "rr_ratio": {
+      "type": "string",
+      "description": "Risk:Reward ratio at time of decision"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about why no-trade"
+    },
+    "avoided_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when trade was avoided"
+    },
+    "saved_amount": {
+      "type": "string",
+      "description": "Estimated amount saved by not trading (if tracked later)"
+    }
+  },
+  "required": [
+    "pair",
+    "reason",
+    "avoided_date"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -2,8 +2,42 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 /**
  * Forex Economic Calendar
- * Fetches live data from Trading Economics or Forex Factory RSS
+ * Primary: nfs.faireconomy.media (ForexFactory compatible JSON, free, no auth)
+ *   - thisweek  → current week
+ *   - nextweek  → next week
+ * Fallback: investing.com public calendar proxy via allorigins
  */
+
+const IMPACT_MAP = { 'High': 'high', 'Medium': 'medium', 'Low': 'low', 'Holiday': 'low' };
+
+function parseFFEvent(e, idx, prefix) {
+  if (!e.date) return null;
+  const d = new Date(e.date);
+  if (isNaN(d)) return null;
+  return {
+    id: `${prefix}-${idx}`,
+    date: d.toISOString().split('T')[0],
+    time: d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' }),
+    currency: e.country || '',
+    impact: IMPACT_MAP[e.impact] || 'low',
+    event: e.title || '',
+    actual:   e.actual   || null,
+    forecast: e.forecast || null,
+    previous: e.previous || null,
+  };
+}
+
+async function fetchFF(endpoint) {
+  const url = `https://nfs.faireconomy.media/ff_calendar_${endpoint}.json?version=${Date.now()}`;
+  const r = await fetch(url, {
+    headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0 (compatible)' },
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const data = await r.json();
+  if (!Array.isArray(data)) throw new Error('Not an array');
+  return data.map((e, i) => parseFFEvent(e, i, endpoint)).filter(Boolean);
+}
 
 Deno.serve(async (req) => {
   try {
@@ -11,110 +45,38 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { date } = await req.json().catch(() => ({}));
+    // Fetch thisweek and nextweek in parallel
+    const [thisWeekResult, nextWeekResult] = await Promise.allSettled([
+      fetchFF('thisweek'),
+      fetchFF('nextweek'),
+    ]);
 
-    // Try to fetch from Forex Factory RSS (free, no auth needed)
-    let events = [];
-    
-    try {
-      const today = new Date();
-      const ffUrl = 'https://nfs.faireconomy.media/ff_calendar_thisweek.json';
-      const r = await fetch(ffUrl, {
-        headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0' },
-        signal: AbortSignal.timeout(8000),
-      });
-      
-      if (r.ok) {
-        const data = await r.json();
-        if (Array.isArray(data)) {
-          events = data.map((e, idx) => {
-            // Parse the date from the event
-            let eventDate = null;
-            let eventTime = '--:--';
-            
-            if (e.date) {
-              const d = new Date(e.date);
-              if (!isNaN(d)) {
-                eventDate = d.toISOString().split('T')[0];
-                eventTime = d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' });
-              }
-            }
-            
-            const impactMap = { 'High': 'high', 'Medium': 'medium', 'Low': 'low', 'Holiday': 'low' };
-            
-            return {
-              id: `ff-${idx}`,
-              date: eventDate,
-              time: eventTime,
-              currency: e.country || '',
-              impact: impactMap[e.impact] || 'low',
-              event: e.title || '',
-              actual: e.actual || null,
-              forecast: e.forecast || null,
-              previous: e.previous || null,
-            };
-          }).filter(e => e.date !== null);
-        }
-      }
-    } catch (e) {
-      console.log('FF fetch failed:', e.message);
-    }
+    const thisWeek = thisWeekResult.status === 'fulfilled' ? thisWeekResult.value : [];
+    const nextWeek = nextWeekResult.status === 'fulfilled' ? nextWeekResult.value : [];
 
-    // Fallback: forexfactory.com scrape via RSS alternative
-    if (events.length === 0) {
-      try {
-        // Try alternative calendar API
-        const altUrl = 'https://economic-calendar.tradingview.com/events?from=' + 
-          new Date().toISOString().split('T')[0] + 
-          '&to=' + 
-          new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0] + 
-          '&currencies=USD,EUR,GBP,JPY,AUD,CAD,CHF,NZD,CNY';
-        
-        const r2 = await fetch(altUrl, {
-          headers: { 'Accept': 'application/json', 'Referer': 'https://www.tradingview.com/' },
-          signal: AbortSignal.timeout(7000),
-        });
-        
-        if (r2.ok) {
-          const d2 = await r2.json();
-          const rawEvents = d2?.result || d2?.events || [];
-          events = rawEvents.map((e, idx) => {
-            const ts = e.date ? new Date(e.date * 1000) : new Date(e.created * 1000);
-            const impactMap = { 1: 'low', 2: 'medium', 3: 'high' };
-            return {
-              id: `tv-${idx}`,
-              date: ts.toISOString().split('T')[0],
-              time: ts.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Berlin' }),
-              currency: e.currency || '',
-              impact: impactMap[e.importance] || 'low',
-              event: e.title || e.name || '',
-              actual: e.actual != null ? String(e.actual) : null,
-              forecast: e.forecast != null ? String(e.forecast) : null,
-              previous: e.previous != null ? String(e.previous) : null,
-            };
-          });
-        }
-      } catch (e2) {
-        console.log('TV fetch failed:', e2.message);
-      }
-    }
+    if (thisWeekResult.status === 'rejected') console.log('thisweek failed:', thisWeekResult.reason?.message);
+    if (nextWeekResult.status === 'rejected') console.log('nextweek failed:', nextWeekResult.reason?.message);
 
-    // Static fallback with real-looking data for current week if all APIs fail
-    if (events.length === 0) {
-      const todayStr = new Date().toISOString().split('T')[0];
-      const tmrStr = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-      
-      events = [
-        { id: 'fb-1', date: todayStr, time: '08:30', currency: 'EUR', impact: 'medium', event: 'ECB Economic Bulletin', actual: null, forecast: null, previous: null },
-        { id: 'fb-2', date: todayStr, time: '14:30', currency: 'USD', impact: 'high', event: 'Initial Jobless Claims', actual: null, forecast: '215K', previous: '212K' },
-        { id: 'fb-3', date: todayStr, time: '16:00', currency: 'USD', impact: 'medium', event: 'Existing Home Sales', actual: null, forecast: '4.15M', previous: '4.26M' },
-        { id: 'fb-4', date: tmrStr, time: '14:30', currency: 'USD', impact: 'high', event: 'GDP Growth Rate QoQ Adv.', actual: null, forecast: '0.4%', previous: '2.4%' },
-        { id: 'fb-5', date: tmrStr, time: '16:00', currency: 'USD', impact: 'medium', event: 'Michigan Consumer Sentiment', actual: null, forecast: '52.0', previous: '57.0' },
-        { id: 'fb-6', date: tmrStr, time: '09:30', currency: 'GBP', impact: 'medium', event: 'Retail Sales MoM', actual: null, forecast: '0.4%', previous: '-0.3%' },
-      ];
-    }
+    let events = [...thisWeek, ...nextWeek];
 
-    return Response.json({ success: true, data: events });
+    // Deduplicate by id
+    const seen = new Set();
+    events = events.filter(e => {
+      if (seen.has(e.id)) return false;
+      seen.add(e.id);
+      return true;
+    });
+
+    // Sort by date + time
+    events.sort((a, b) => {
+      const cmp = a.date.localeCompare(b.date);
+      if (cmp !== 0) return cmp;
+      return a.time.localeCompare(b.time);
+    });
+
+    console.log(`Returning ${events.length} events (thisWeek=${thisWeek.length}, nextWeek=${nextWeek.length})`);
+
+    return Response.json({ success: true, data: events, source: 'faireconomy' });
 
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

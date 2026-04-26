@@ -1,0 +1,49 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email des Nutzers"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "daily_quote",
+        "trade_alert",
+        "performance_summary",
+        "system"
+      ],
+      "description": "Typ der Benachrichtigung"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titel der Benachrichtigung"
+    },
+    "body": {
+      "type": "string",
+      "description": "Inhalt der Benachrichtigung"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Wurde gelesen"
+    },
+    "clicked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Wurde angeklickt"
+    },
+    "snoozed_until": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Gesnoozed bis zu diesem Zeitpunkt"
+    }
+  },
+  "required": [
+    "user_email",
+    "type",
+    "title",
+    "body"
+  ]
+}
