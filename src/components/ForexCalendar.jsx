@@ -59,7 +59,7 @@ export default function ForexCalendar({ darkMode = true }) {
   const [error, setError]               = useState(null);
   const [lastUpdate, setLastUpdate]     = useState(cached ? new Date() : null);
   const [selectedDate, setSelectedDate] = useState(todayStr);
-  const [impactFilter, setImpactFilter] = useState('high'); // default: only HIGH
+  const [impactFilter, setImpactFilter] = useState('all');
   const [weekOffset, setWeekOffset]     = useState(0);
   const [expandedId, setExpandedId]     = useState(null);
 
@@ -88,9 +88,10 @@ export default function ForexCalendar({ darkMode = true }) {
     return () => clearInterval(iv);
   }, []);
 
-  const visibleEvents = allEvents
-    .filter(e => e.date === selectedDate)
-    .filter(e => impactFilter === 'all' || e.impact === impactFilter);
+  // Auto-fallback: if selected filter yields nothing, show all
+  const eventsForDay = allEvents.filter(e => e.date === selectedDate);
+  const filtered = eventsForDay.filter(e => impactFilter === 'all' || e.impact === impactFilter);
+  const visibleEvents = filtered.length > 0 ? filtered : eventsForDay;
 
   const getDay = (d) => {
     const ds = d.toISOString().split('T')[0];
