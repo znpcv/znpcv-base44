@@ -18,17 +18,18 @@ export default function AccountButton() {
         if (isAuth) {
           const userData = await base44.auth.me();
           setUser(userData);
+        } else {
+          setUser(null);
         }
       } catch (err) {
         setUser(null);
       }
     };
     loadUser();
-  }, []);
+  }, [window.location.pathname]);
 
-  const handleLogout = async () => {
-    await base44.auth.logout();
-    navigate(createPageUrl('Home'));
+  const handleLogout = () => {
+    base44.auth.logout('/');
   };
 
   if (!user) {
