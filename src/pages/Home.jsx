@@ -147,7 +147,7 @@ export default function HomePage() {
 
       {/* Market Sessions Bar */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-2 sm:px-5 md:px-8 py-2 sm:py-4">
+        <div className="max-w-7xl mx-auto px-2 sm:px-5 md:px-8 py-2.5 sm:py-4">
           <div className="flex items-center justify-between sm:justify-center sm:gap-8 md:gap-12">
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
@@ -166,7 +166,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-6 sm:py-12 md:py-16 lg:py-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-8 sm:py-12 md:py-16 lg:py-20">
         {showDailyQuote &&
         <div className="mb-4 sm:mb-8 md:mb-10">
             <DailyQuoteWidget darkMode={darkMode} />
@@ -200,7 +200,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-6 sm:mb-12 md:mb-16">
+          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-8 sm:mb-12 md:mb-16">
           
           {/* New Analysis */}
           <button
@@ -211,7 +211,7 @@ export default function HomePage() {
                 navigate(createPageUrl('FreeChecklist'));
               }
             }}
-            className={cn("group relative p-3 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden",
+            className={cn("group relative p-4 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden",
             darkMode ? "bg-white text-black" : "bg-black text-white")}>
             
             <div className="absolute top-0 right-0 w-32 h-32 bg-black/5 rounded-full -translate-y-16 translate-x-16" />
@@ -246,7 +246,7 @@ export default function HomePage() {
           {/* Dashboard */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className={cn("group relative p-3 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden border",
+            className={cn("group relative p-4 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden border",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
             
             <div className="absolute inset-0 opacity-5">
@@ -283,7 +283,7 @@ export default function HomePage() {
           {/* Economic Calendar */}
           <button
             onClick={() => navigate(createPageUrl('EconomicCalendar'))}
-            className={cn("group relative p-3 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden border",
+            className={cn("group relative p-4 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden border",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
             
             <div className="relative z-10">
@@ -314,7 +314,7 @@ export default function HomePage() {
           {/* Trade History */}
           <button
             onClick={() => navigate(createPageUrl('TradeHistory'))}
-            className={cn("group relative p-3 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden border",
+            className={cn("group relative p-4 sm:p-6 md:p-8 rounded-2xl hover:shadow-2xl transition-all text-left overflow-hidden border",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
 
             <div className="absolute inset-0 opacity-5">
