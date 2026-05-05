@@ -146,19 +146,19 @@ export default function HomePage() {
       </header>
 
       {/* Market Sessions Bar */}
-      <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3">
-          <div className="flex items-center justify-between sm:justify-center sm:gap-10 md:gap-14">
+      <div className={`${darkMode ? 'bg-zinc-900' : 'bg-zinc-100'} border-b ${theme.border}`}>
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <div className="flex items-center justify-between">
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               const shortName = session.name.slice(0, 3).toUpperCase();
               return (
                 <div key={session.name} className="flex items-center gap-1.5 flex-shrink-0">
-                  <span className={`text-[10px] sm:text-xs font-bold tracking-widest ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>{shortName}</span>
-                  <span className={`text-[11px] sm:text-sm font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
+                  <span className={`text-[10px] font-bold tracking-widest font-mono ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>{shortName}</span>
+                  <span className={`text-[11px] font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-400' : darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </span>
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-400' : darkMode ? 'bg-zinc-600' : 'bg-zinc-300'}`} />
                 </div>
               );
             })}
