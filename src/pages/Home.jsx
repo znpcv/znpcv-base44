@@ -147,17 +147,20 @@ export default function HomePage() {
 
       {/* Market Sessions Bar */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3">
-          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-3 sm:py-4">
+          <div className="flex items-center justify-center gap-5 sm:gap-8 md:gap-12 overflow-x-auto scrollbar-hide">
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-1.5 flex-shrink-0">
-                  <span className="text-base leading-none">{session.emoji}</span>
-                  <span className={`text-xs font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
-                    {times[session.name]?.slice(0, 5) || '--:--'}
-                  </span>
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                <div key={session.name} className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-lg leading-none">{session.emoji}</span>
+                  <div className="flex flex-col leading-none">
+                    <span className={`text-[10px] font-bold tracking-widest ${isOpen ? 'text-emerald-500' : theme.textMuted} hidden sm:block`}>{session.name}</span>
+                    <span className={`text-sm font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
+                      {times[session.name]?.slice(0, 5) || '--:--'}
+                    </span>
+                  </div>
+                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
@@ -166,7 +169,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-10 md:py-14 lg:py-16">
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-6 sm:py-12 md:py-16 lg:py-20">
         {showDailyQuote &&
         <div className="mb-4 sm:mb-8 md:mb-10">
             <DailyQuoteWidget darkMode={darkMode} />
