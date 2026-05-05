@@ -18,11 +18,17 @@ import { cn } from "@/lib/utils";
 import { useHomeT } from '@/lib/homeTranslations';
 
 const SESSIONS = [
-{ name: 'SYDNEY', timezone: 'Australia/Sydney', emoji: '🇦🇺', openHour: 7, closeHour: 16 },
-{ name: 'TOKYO', timezone: 'Asia/Tokyo', emoji: '🇯🇵', openHour: 9, closeHour: 18 },
-{ name: 'LONDON', timezone: 'Europe/London', emoji: '🇬🇧', openHour: 8, closeHour: 17 },
-{ name: 'NEW YORK', timezone: 'America/New_York', emoji: '🇺🇸', openHour: 9, closeHour: 17 }];
+{ name: 'SYDNEY', timezone: 'Australia/Sydney', openHour: 7, closeHour: 16 },
+{ name: 'TOKYO', timezone: 'Asia/Tokyo', openHour: 9, closeHour: 18 },
+{ name: 'LONDON', timezone: 'Europe/London', openHour: 8, closeHour: 17 },
+{ name: 'NEW YORK', timezone: 'America/New_York', openHour: 9, closeHour: 17 }];
 
+const SESSION_LABELS = {
+  'SYDNEY': 'SYD',
+  'TOKYO': 'TOK',
+  'LONDON': 'LON',
+  'NEW YORK': 'NY',
+};
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -34,7 +40,6 @@ export default function HomePage() {
   const [serverStatus, setServerStatus] = useState('operational');
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showDailyQuote, setShowDailyQuote] = useState(false);
-  // Access state for smart routing
   const [userAccess, setUserAccess] = useState({ strategy: false, checklist: false, loaded: false });
 
   useEffect(() => {
@@ -59,7 +64,6 @@ export default function HomePage() {
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
 
-    // Load user settings + access flags
     const checkUserSettings = async () => {
       try {
         const isAuth = await base44.auth.isAuthenticated();
@@ -97,7 +101,6 @@ export default function HomePage() {
     return hour >= session.openHour && hour < session.closeHour;
   };
 
-  // Theme classes
   const theme = {
     bg: darkMode ? 'bg-black' : 'bg-white',
     bgSecondary: darkMode ? 'bg-zinc-950' : 'bg-zinc-100',
@@ -112,59 +115,70 @@ export default function HomePage() {
 
   return (
     <div className={`min-h-screen ${theme.bg} ${theme.text} ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Header - Ultra Compact */}
-      <header className={`${theme.bg} border-b ${theme.border} sticky top-0 z-50`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3">
-          <div className="flex items-center justify-between gap-2 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <DarkModeToggle />
-              
 
+      {/* ── HEADER + WORLD CLOCK (only this section changed) ── */}
+      <header className={`sticky top-0 z-50 ${darkMode ? 'bg-zinc-950' : 'bg-white'}`}>
 
+        {/* Row 1 — Logo bar */}
+        <div className={`border-b ${darkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-3 sm:py-4">
+            <div className="flex items-center justify-between">
 
+              {/* Left */}
+              <div className="flex items-center w-20 sm:w-28">
+                <DarkModeToggle />
+              </div>
 
-              
-            </div>
+              {/* Center — Logo */}
+              <button
+                onClick={() => navigate(createPageUrl('Home'))}
+                className="hover:opacity-70 transition-opacity"
+              >
+                <img
+                  src={darkMode
+                    ? "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png"
+                    : "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
+                  }
+                  alt="ZNPCV"
+                  className="h-10 sm:h-12 md:h-14 w-auto"
+                />
+              </button>
 
-            <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
-              <img
-                src={darkMode ?
-                "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e14bd7c71_ZNPCVSchwarzhintergrundlogochecklisteweb.png" :
-                "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692d8f74cb6d9152b3880015/e396a6edd_ZNPCVWebseiteWeisshihtergrundLogo.png"
-                }
-                alt="ZNPCV"
-                className="h-12 sm:h-12 md:h-14 lg:h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity" />
-              
-            </button>
+              {/* Right — Language + Account */}
+              <div className="flex items-center justify-end gap-2 w-20 sm:w-28">
+                <LanguageToggle />
+                <AccountButton />
+              </div>
 
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <LanguageToggle />
-              <AccountButton />
             </div>
           </div>
         </div>
+
+        {/* Row 2 — World Clock Bar */}
+        <div className={`border-b ${darkMode ? 'border-zinc-800 bg-black' : 'border-zinc-200 bg-zinc-50'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-2">
+            <div className="flex items-center justify-between sm:justify-center sm:gap-10 md:gap-16 lg:gap-24">
+              {SESSIONS.map((session) => {
+                const isOpen = isSessionOpen(session);
+                const label = SESSION_LABELS[session.name];
+                return (
+                  <div key={session.name} className="flex items-center gap-1.5 flex-shrink-0">
+                    <span className={`text-[9px] sm:text-[10px] font-mono font-semibold tracking-widest ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
+                      {label}
+                    </span>
+                    <span className={`text-[11px] sm:text-xs font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-400' : darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                      {times[session.name]?.slice(0, 5) || '--:--'}
+                    </span>
+                    <span className={`w-1 h-1 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-400' : darkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
       </header>
-
-      {/* Market Sessions Bar */}
-      <div className={`${darkMode ? 'bg-zinc-900' : 'bg-zinc-100'} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-4 py-2">
-          <div className="flex items-center justify-between">
-            {SESSIONS.map((session) => {
-              const isOpen = isSessionOpen(session);
-              const shortName = session.name.slice(0, 3).toUpperCase();
-              return (
-                <div key={session.name} className="flex items-center gap-1.5 flex-shrink-0">
-                  <span className={`text-[10px] font-bold tracking-widest font-mono ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>{shortName}</span>
-                  <span className={`text-[11px] font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-400' : darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                    {times[session.name]?.slice(0, 5) || '--:--'}
-                  </span>
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-400' : darkMode ? 'bg-zinc-600' : 'bg-zinc-300'}`} />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      {/* ── END HEADER + WORLD CLOCK ── */}
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-8 sm:py-12 md:py-16 lg:py-20">
@@ -178,17 +192,6 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-4 sm:mb-10 md:mb-16">
-          
-          
-
-
-          
-
-          
-
-          
-          
-
           
           <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3 sm:px-4`}>
             "{t('disciplineQuote')}"
@@ -569,8 +572,6 @@ export default function HomePage() {
           </motion.button>
         }
       </AnimatePresence>
-
-
 
       {/* Notification Prompt */}
       <NotificationPrompt darkMode={darkMode} />
