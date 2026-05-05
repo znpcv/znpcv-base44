@@ -223,7 +223,10 @@ export default function HomePage() {
                 darkMode ? "bg-black" : "bg-white")}>
                   <ClipboardCheck className={cn("w-4 h-4 sm:w-5 sm:h-5", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <span className={cn("text-[9px] sm:text-[10px] tracking-widest font-bold ml-auto", darkMode ? "text-black/40" : "text-white/40")}>ANALYSE</span>
+                <span className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
+                  <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                  <span className="text-[9px] sm:text-[10px] tracking-widest font-bold text-emerald-400">START</span>
+                </span>
               </div>
 
               <h2 className={cn("text-base sm:text-xl md:text-2xl tracking-wider mb-1.5 sm:mb-2 font-black leading-tight", darkMode ? "text-black" : "text-white")}>{ht.newAnalysisShortTitle}</h2>
@@ -253,7 +256,10 @@ export default function HomePage() {
                 darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
                   <BarChart3 className={cn("w-4 h-4 sm:w-5 sm:h-5", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <span className={`text-[9px] sm:text-[10px] tracking-widest font-bold ml-auto ${theme.textDimmed}`}>OVERVIEW</span>
+                <span className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-500/30">
+                  <span className="w-1 h-1 rounded-full bg-blue-400" />
+                  <span className="text-[9px] sm:text-[10px] tracking-widest font-bold text-blue-400">LIVE</span>
+                </span>
               </div>
 
               <h2 className={cn("text-base sm:text-xl md:text-2xl tracking-wider mb-1.5 sm:mb-2 font-black leading-tight", darkMode ? "text-white" : "text-black")}>DASHBOARD</h2>
@@ -283,7 +289,10 @@ export default function HomePage() {
                 darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
                   <Calendar className={cn("w-4 h-4 sm:w-5 sm:h-5", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <span className={`text-[9px] sm:text-[10px] tracking-widest font-bold ml-auto ${theme.textDimmed}`}>CALENDAR</span>
+                <span className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30">
+                  <span className="w-1 h-1 rounded-full bg-amber-400" />
+                  <span className="text-[9px] sm:text-[10px] tracking-widest font-bold text-amber-400">LIVE</span>
+                </span>
               </div>
               <h2 className={cn("text-base sm:text-xl md:text-2xl tracking-wider mb-1.5 sm:mb-2 font-black leading-tight", darkMode ? "text-white" : "text-black")}>ECONOMIC EVENTS</h2>
               <p className={cn("text-[11px] sm:text-xs leading-relaxed mb-4 sm:mb-6 font-sans", darkMode ? "text-zinc-500" : "text-zinc-500")}>
@@ -311,7 +320,10 @@ export default function HomePage() {
                 darkMode ? "bg-zinc-800" : "bg-zinc-200")}>
                   <History className={cn("w-4 h-4 sm:w-5 sm:h-5", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <span className={`text-[9px] sm:text-[10px] tracking-widest font-bold ml-auto ${theme.textDimmed}`}>JOURNAL</span>
+                <span className="ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/30">
+                  <span className="w-1 h-1 rounded-full bg-purple-400" />
+                  <span className="text-[9px] sm:text-[10px] tracking-widest font-bold text-purple-400">LOG</span>
+                </span>
               </div>
 
               <h2 className={cn("text-base sm:text-xl md:text-2xl tracking-wider mb-1.5 sm:mb-2 font-black leading-tight", darkMode ? "text-white" : "text-black")}>TRADE JOURNAL</h2>
