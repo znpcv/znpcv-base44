@@ -147,20 +147,17 @@ export default function HomePage() {
 
       {/* Market Sessions Bar */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2.5 sm:py-4">
-          <div className="grid grid-cols-4 gap-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-3 sm:py-4">
+          <div className="flex items-center justify-center gap-5 sm:gap-8 md:gap-12 overflow-x-auto scrollbar-hide">
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-2">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <span className="text-sm leading-none">{session.emoji}</span>
-                    <span className={`text-[11px] sm:text-sm font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
-                      {times[session.name]?.slice(0, 5) || '--:--'}
-                    </span>
-                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
-                  </div>
-                  <span className={`text-[9px] sm:hidden tracking-widest ${theme.textDimmed} truncate`}>{session.name.split(' ')[0]}</span>
+                <div key={session.name} className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-base leading-none">{session.emoji}</span>
+                  <span className={`text-sm font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
+                    {times[session.name]?.slice(0, 5) || '--:--'}
+                  </span>
+                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
