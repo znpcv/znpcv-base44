@@ -156,7 +156,7 @@ export default function HomePage() {
 
         {/* Row 2 — World Clock Bar */}
         <div className={`border-b ${darkMode ? 'border-zinc-800 bg-black' : 'border-zinc-200 bg-zinc-50'}`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-2">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-3 sm:py-4">
             <div className="flex items-center justify-between sm:justify-center sm:gap-10 md:gap-16 lg:gap-24">
               {SESSIONS.map((session) => {
                 const isOpen = isSessionOpen(session);
@@ -181,9 +181,9 @@ export default function HomePage() {
       {/* ── END HEADER + WORLD CLOCK ── */}
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-8 sm:py-12 md:py-16 lg:py-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-10 sm:py-16 md:py-20 lg:py-24">
         {showDailyQuote &&
-        <div className="mb-4 sm:mb-8 md:mb-10">
+        <div className="mb-6 sm:mb-10 md:mb-12">
             <DailyQuoteWidget darkMode={darkMode} />
           </div>
         }
@@ -191,7 +191,7 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-4 sm:mb-10 md:mb-16">
+          className="text-center mb-10 sm:mb-14 md:mb-20">
           
           <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3 sm:px-4`}>
             "{t('disciplineQuote')}"
@@ -204,7 +204,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-8 sm:mb-12 md:mb-16">
+          className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-10 sm:mb-16 md:mb-20">
           
           {/* New Analysis */}
           <button
