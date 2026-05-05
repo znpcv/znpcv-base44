@@ -471,8 +471,8 @@ export default function ForexCalendar({ darkMode = true }) {
           </div>
         </div>
 
-        {/* Filter buttons */}
-        <div className="flex items-center gap-1.5 px-4 pb-3">
+        {/* Filter buttons — mobile only (desktop shows them in column header) */}
+        <div className="flex md:hidden items-center gap-1.5 px-4 pb-3">
           {filterOpts.map(({ key, label, active }) => (
             <button key={key} onClick={() => setImpactFilter(key)}
               className={cn(
@@ -559,9 +559,29 @@ export default function ForexCalendar({ darkMode = true }) {
       {!loading && !error && visibleEvents.length > 0 && (
         <div className={cn('hidden md:grid px-5 py-2 border-b', colClass, t.border, t.bgColH)}>
           {[ct.colTime, ct.colCurrency, ct.colEvent, ct.colImpact, ct.colForecast, ct.colPrevious, ct.colActual].map((col, i) => (
-            <span key={i} className={cn('text-[10px] font-black tracking-widest', t.muted, i >= 4 ? 'text-right' : '')}>
-              {col}
-            </span>
+            <div key={i} className={cn('flex flex-col gap-1', i >= 4 ? 'items-end' : '')}>
+              <span className={cn('text-[10px] font-black tracking-widest', t.muted)}>
+                {col}
+              </span>
+              {/* Filter buttons inline above FORECAST / PREVIOUS / ACTUAL columns */}
+              {i === 4 && (
+                <div className="flex gap-1 justify-end">
+                  {filterOpts.map(({ key, label, active }) => (
+                    <button key={key} onClick={() => setImpactFilter(key)}
+                      className={cn(
+                        'px-2 py-0.5 rounded-full text-[9px] font-black tracking-wider border transition-all',
+                        impactFilter === key
+                          ? active
+                          : darkMode
+                            ? 'bg-transparent border-zinc-700 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300'
+                            : 'bg-transparent border-zinc-300 text-zinc-400 hover:border-zinc-400'
+                      )}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       )}
