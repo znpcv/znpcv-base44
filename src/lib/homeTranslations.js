@@ -4,7 +4,7 @@
  */
 export const HOME_T = {
   de: {
-    forexCalendarTitle: 'FOREX KALENDER',
+    forexCalendarTitle: 'ECONOMIC EVENTS',
     forexCalendarDesc: 'Live Events, News & Nachrichten in Echtzeit',
     openCard: 'ÖFFNEN',
     startCard: 'STARTEN',
@@ -14,7 +14,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'Performance & Analytics',
   },
   en: {
-    forexCalendarTitle: 'FOREX CALENDAR',
+    forexCalendarTitle: 'ECONOMIC EVENTS',
     forexCalendarDesc: 'Live Economic Events, News & Markets',
     openCard: 'OPEN',
     startCard: 'START',
@@ -24,7 +24,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'Performance & Analytics',
   },
   fr: {
-    forexCalendarTitle: 'CALENDRIER FOREX',
+    forexCalendarTitle: 'ECONOMIC EVENTS',
     forexCalendarDesc: 'Événements économiques, actualités en direct',
     openCard: 'OUVRIR',
     startCard: 'DÉMARRER',
@@ -34,7 +34,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'Performance & Analyses',
   },
   es: {
-    forexCalendarTitle: 'CALENDARIO FOREX',
+    forexCalendarTitle: 'ECONOMIC EVENTS',
     forexCalendarDesc: 'Eventos económicos y noticias en tiempo real',
     openCard: 'ABRIR',
     startCard: 'INICIAR',
@@ -44,7 +44,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'Rendimiento & Análisis',
   },
   zh: {
-    forexCalendarTitle: '外汇日历',
+    forexCalendarTitle: '经济事件',
     forexCalendarDesc: '实时经济事件、新闻与市场动态',
     openCard: '打开',
     startCard: '开始',
@@ -54,7 +54,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: '绩效与分析',
   },
   ar: {
-    forexCalendarTitle: 'تقويم الفوركس',
+    forexCalendarTitle: 'الأحداث الاقتصادية',
     forexCalendarDesc: 'أحداث اقتصادية وأخبار في الوقت الفعلي',
     openCard: 'فتح',
     startCard: 'ابدأ',
@@ -64,7 +64,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'الأداء والتحليلات',
   },
   ja: {
-    forexCalendarTitle: '外国為替カレンダー',
+    forexCalendarTitle: '経済イベント',
     forexCalendarDesc: 'リアルタイムの経済イベントとニュース',
     openCard: '開く',
     startCard: '開始',
@@ -74,7 +74,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'パフォーマンスと分析',
   },
   pt: {
-    forexCalendarTitle: 'CALENDÁRIO FOREX',
+    forexCalendarTitle: 'ECONOMIC EVENTS',
     forexCalendarDesc: 'Eventos econômicos e notícias em tempo real',
     openCard: 'ABRIR',
     startCard: 'INICIAR',
@@ -84,7 +84,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'Desempenho & Análise',
   },
   hi: {
-    forexCalendarTitle: 'फॉरेक्स कैलेंडर',
+    forexCalendarTitle: 'आर्थिक घटनाएं',
     forexCalendarDesc: 'रियल-टाइम आर्थिक घटनाएं और समाचार',
     openCard: 'खोलें',
     startCard: 'शुरू करें',
@@ -94,7 +94,7 @@ export const HOME_T = {
     tradeHistoryShortDesc: 'प्रदर्शन और विश्लेषण',
   },
   fa: {
-    forexCalendarTitle: 'تقویم فارکس',
+    forexCalendarTitle: 'رویدادهای اقتصادی',
     forexCalendarDesc: 'رویدادهای اقتصادی و اخبار در زمان واقعی',
     openCard: 'باز کردن',
     startCard: 'شروع',
