@@ -116,7 +116,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <DarkModeToggle />
-              <div className={`flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl border-2 ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-zinc-300'}`}>
+              <div className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl border-2 bg-zinc-900 border-zinc-800 hidden">
                 <div className="w-1.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
                 <span className={`text-[10px] sm:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
                   {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
