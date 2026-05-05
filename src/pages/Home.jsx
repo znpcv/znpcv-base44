@@ -228,13 +228,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-black" : "text-white")}>NEW ANALYSIS</h2>
-              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-600" : "text-zinc-300")}>
-                Start your professional multi-timeframe analysis
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-600" : "text-zinc-300")}>
+                {t('newAnalysisDesc')}
               </p>
 
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
-                <span className="text-[10px] sm:text-base md:text-lg">START NOW</span>
+                <span className="text-[11px] sm:text-base md:text-lg">{t('startNow')}</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-black text-white" : "bg-white text-black")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -266,13 +266,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>DASHBOARD</h2>
-              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
-                Overview of your analyses, performance tracking and detailed statistics
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('dashboardDesc')}
               </p>
 
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-[10px] sm:text-base md:text-lg">OPEN</span>
+                <span className="text-[11px] sm:text-base md:text-lg">{t('openDashboard')}</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -298,12 +298,12 @@ export default function HomePage() {
                   LIVE
                 </div>
               </div>
-              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>FOREX KALENDER</h2>
-              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>FOREX KALENDER</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 Live Economic Events, News & Nachrichten in Echtzeit
               </p>
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-[10px] sm:text-base md:text-lg">ÖFFNEN</span>
+                <span className="text-[11px] sm:text-base md:text-lg">Öffnen</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -334,13 +334,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>TRADE HISTORY</h2>
-              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
-                Performance & Analytics
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {t('performanceAnalytics')}
               </p>
 
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-[10px] sm:text-base md:text-lg">OPEN</span>
+                <span className="text-[11px] sm:text-base md:text-lg">OPEN</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
