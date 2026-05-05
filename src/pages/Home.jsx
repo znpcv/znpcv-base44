@@ -145,29 +145,28 @@ export default function HomePage() {
 
       {/* Market Sessions Bar */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-2 sm:px-5 md:px-8 py-2.5 sm:py-4">
-          <div className="flex items-center justify-center gap-3 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide">
-            <Globe className={`w-4 h-4 flex-shrink-0 ${theme.textMuted}`} />
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-2 sm:py-3">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide">
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-                  <span className="text-sm sm:text-base">{session.emoji}</span>
-                  <div className={`text-[10px] sm:text-xs font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
+                <div key={session.name} className="flex items-center gap-1.5 flex-shrink-0">
+                  <span className="text-base leading-none">{session.emoji}</span>
+                  <span className={`text-xs font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
-                  </div>
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-700 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
-                </div>);
-
+                  </span>
+                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                </div>
+              );
             })}
           </div>
         </div>
       </div>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-5 sm:py-10 md:py-14 lg:py-16">
+      <main className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-10 md:py-14 lg:py-16">
         {showDailyQuote &&
-        <div className="mb-6 sm:mb-8 md:mb-10">
+        <div className="mb-4 sm:mb-8 md:mb-10">
             <DailyQuoteWidget darkMode={darkMode} />
           </div>
         }
@@ -175,7 +174,7 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8 sm:mb-12 md:mb-16">
+          className="text-center mb-5 sm:mb-12 md:mb-16">
           
           
 
@@ -199,7 +198,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-8 sm:mb-12 md:mb-16">
+          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-6 sm:mb-12 md:mb-16">
           
           {/* New Analysis - Compact */}
           <button
@@ -218,27 +217,27 @@ export default function HomePage() {
             <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-black/5 rounded-full translate-y-10 sm:translate-y-12 md:translate-y-16 -translate-x-10 sm:-translate-x-12 md:-translate-x-16" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
-                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+              <div className="flex items-center gap-1.5 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0",
                 darkMode ? "bg-black" : "bg-white")}>
                   <ClipboardCheck className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-white" : "text-black")} />
                 </div>
-                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-emerald-700 text-white text-[10px] sm:text-xs rounded-full ml-auto">
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-emerald-700 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                   START
                 </div>
               </div>
 
-              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
-              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-600" : "text-zinc-300")}>
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-600" : "text-zinc-300")}>
                 {t('newAnalysisDesc')}
               </p>
 
-              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
-                <span className="text-sm sm:text-base md:text-lg">{t('startNow')}</span>
-                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+              <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
+                <span className="text-[11px] sm:text-base md:text-lg">{t('startNow')}</span>
+                <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-black text-white" : "bg-white text-black")}>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
@@ -256,65 +255,65 @@ export default function HomePage() {
             </div>
 
             <div className="relative z-10">
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
-                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+              <div className="flex items-center gap-1.5 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0",
                 darkMode ? "bg-white" : "bg-black")}>
                   <BarChart3 className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
-                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-zinc-800 text-zinc-300 text-[10px] sm:text-xs rounded-full ml-auto">
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-zinc-800 text-zinc-300 text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
                   LIVE
                 </div>
               </div>
 
-              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
-              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 {t('dashboardDesc')}
               </p>
 
-              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
-                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+              <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-[11px] sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
           </button>
 
           {/* Economic Calendar */}
-            <button
+          <button
             onClick={() => navigate(createPageUrl('EconomicCalendar'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
             
             <div className="relative z-10">
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
-                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+              <div className="flex items-center gap-1.5 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0",
                 darkMode ? "bg-white" : "bg-black")}>
                   <Calendar className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
-                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-amber-500 text-black text-[10px] sm:text-xs rounded-full ml-auto">
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-black rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-amber-500 text-black text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
                   LIVE
                 </div>
               </div>
-              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>FOREX KALENDER</h2>
-              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>FOREX KALENDER</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 Live Economic Events, News & Nachrichten in Echtzeit
               </p>
-              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-sm sm:text-base md:text-lg">Öffnen</span>
-                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+              <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-[11px] sm:text-base md:text-lg">Öffnen</span>
+                <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
           </button>
 
           {/* Trade History */}
-            <button
+          <button
             onClick={() => navigate(createPageUrl('TradeHistory'))}
             className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
@@ -324,27 +323,27 @@ export default function HomePage() {
             </div>
 
             <div className="relative z-10">
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 md:mb-6">
-                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center",
+              <div className="flex items-center gap-1.5 mb-3 sm:mb-4 md:mb-6">
+                <div className={cn("w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0",
                 darkMode ? "bg-white" : "bg-black")}>
                   <History className={cn("w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6", darkMode ? "text-black" : "text-white")} />
                 </div>
-                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 md:px-3 md:py-1 bg-purple-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
-                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse" />
+                <div className="flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-purple-600 text-white text-[10px] sm:text-xs rounded-full ml-auto">
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                   LOG
                 </div>
               </div>
 
-              <h2 className={cn("text-xl sm:text-2xl md:text-3xl tracking-wider mb-2 sm:mb-3 font-bold", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
-              <p className={cn("text-xs sm:text-sm leading-relaxed mb-4 sm:mb-5 md:mb-6 font-sans max-w-xs", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
+              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
                 {t('performanceAnalytics')}
               </p>
 
-              <div className={cn("flex items-center gap-2 sm:gap-3 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-sm sm:text-base md:text-lg">{t('openDashboard')}</span>
-                <div className={cn("w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform",
+              <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
+                <span className="text-[11px] sm:text-base md:text-lg">OPEN</span>
+                <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
               </div>
             </div>
