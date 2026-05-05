@@ -116,12 +116,12 @@ export default function HomePage() {
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <DarkModeToggle />
-              <div className="flex items-center gap-1 sm:gap-2 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl border-2 bg-zinc-900 border-zinc-800 hidden">
-                <div className="w-1.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
-                <span className={`text-[10px] sm:text-xs font-bold tracking-widest font-mono ${theme.text}`}>
-                  {localTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                </span>
-              </div>
+              
+
+
+
+
+              
             </div>
 
             <button onClick={() => navigate(createPageUrl('Home'))} className="absolute left-1/2 -translate-x-1/2">
@@ -177,17 +177,17 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8 sm:mb-12 md:mb-16">
           
-          <div className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-emerald-700/10 border border-emerald-600/30 rounded-full text-emerald-600 text-xs sm:text-sm mb-4 sm:mb-5 hidden">
-            <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="tracking-widest">{t('tradingTools')}</span>
-          </div>
+          
 
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl tracking-wider mb-2 sm:mb-3 font-light hidden">
-            ZNPCV
-          </h1>
-          <h2 className="text-sm sm:text-lg md:text-2xl tracking-widest text-zinc-400 mb-2 sm:mb-4 md:mb-5 hidden">
-            {t('ultimateChecklist')}
-          </h2>
+
+          
+
+          
+
+          
+          
+
+          
           <p className={`${darkMode ? 'text-zinc-300' : 'text-zinc-700'} text-xs sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-sans italic px-3 sm:px-4`}>
             "{t('disciplineQuote')}"
           </p>
