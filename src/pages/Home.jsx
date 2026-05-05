@@ -147,17 +147,17 @@ export default function HomePage() {
 
       {/* Market Sessions Bar */}
       <div className={`${theme.bgSecondary} border-b ${theme.border}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-5 md:px-8 py-3 sm:py-4">
-          <div className="flex items-center justify-center gap-5 sm:gap-8 md:gap-12 overflow-x-auto scrollbar-hide">
+        <div className="max-w-7xl mx-auto px-2 sm:px-5 md:px-8 py-2 sm:py-4">
+          <div className="flex items-center justify-between sm:justify-center sm:gap-8 md:gap-12">
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-2 flex-shrink-0">
-                  <span className="text-base leading-none">{session.emoji}</span>
-                  <span className={`text-sm font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
+                <div key={session.name} className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                  <span className="text-xs sm:text-base leading-none">{session.emoji}</span>
+                  <span className={`text-[11px] sm:text-sm font-mono font-bold tabular-nums ${isOpen ? 'text-emerald-500' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </span>
-                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
+                  <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0 ${isOpen ? 'bg-emerald-500 animate-pulse' : darkMode ? 'bg-zinc-700' : 'bg-zinc-400'}`} />
                 </div>
               );
             })}
