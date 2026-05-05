@@ -452,22 +452,7 @@ export default function ForexCalendar({ darkMode = true }) {
             </span>
           </div>
 
-          {/* Filter buttons — inline on same row as date */}
-          <div className="flex items-center gap-1.5 mx-auto hidden md:flex">
-            {filterOpts.map(({ key, label, active }) => (
-              <button key={key} onClick={() => setImpactFilter(key)}
-                className={cn(
-                  'px-3 py-1 rounded-full text-[11px] font-black tracking-wider border transition-all',
-                  impactFilter === key
-                    ? active
-                    : darkMode
-                      ? 'bg-transparent border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
-                      : 'bg-transparent border-zinc-300 text-zinc-500 hover:border-zinc-400'
-                )}>
-                {label}
-              </button>
-            ))}
-          </div>
+
           <div className="flex items-center gap-1 flex-shrink-0">
             {'Notification' in window && (
               <button onClick={toggleNotif}
@@ -543,6 +528,23 @@ export default function ForexCalendar({ darkMode = true }) {
             className={cn('flex items-center justify-center px-3 py-3 flex-shrink-0 transition-colors', t.muted, t.hover)}>
             <ChevronRight className="w-4 h-4" />
           </button>
+
+          {/* Filter buttons — desktop: right side of day tabs row */}
+          <div className="hidden md:flex items-center gap-1.5 ml-auto px-4 flex-shrink-0">
+            {filterOpts.map(({ key, label, active }) => (
+              <button key={key} onClick={() => setImpactFilter(key)}
+                className={cn(
+                  'px-3 py-1 rounded-full text-[11px] font-black tracking-wider border transition-all',
+                  impactFilter === key
+                    ? active
+                    : darkMode
+                      ? 'bg-transparent border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
+                      : 'bg-transparent border-zinc-300 text-zinc-500 hover:border-zinc-400'
+                )}>
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
