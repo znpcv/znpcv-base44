@@ -15,6 +15,7 @@ import NotificationPrompt from '@/components/NotificationPrompt';
 
 import { base44 } from '@/api/base44Client';
 import { cn } from "@/lib/utils";
+import { useHomeT } from '@/lib/homeTranslations';
 
 const SESSIONS = [
 { name: 'SYDNEY', timezone: 'Australia/Sydney', emoji: '🇦🇺', openHour: 7, closeHour: 16 },
@@ -25,7 +26,8 @@ const SESSIONS = [
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { t, isRTL, darkMode } = useLanguage();
+  const { t, isRTL, darkMode, language } = useLanguage();
+  const ht = useHomeT(language);
   const [times, setTimes] = useState({});
   const [currentTime, setCurrentTime] = useState(new Date());
   const [localTime, setLocalTime] = useState(new Date());
@@ -174,7 +176,7 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-5 sm:mb-12 md:mb-16">
+          className="text-center mb-4 sm:mb-10 md:mb-16">
           
           
 
@@ -198,7 +200,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 gap-3 sm:gap-5 md:gap-6 mb-6 sm:mb-12 md:mb-16">
+          className="grid grid-cols-2 gap-2.5 sm:gap-5 md:gap-6 mb-5 sm:mb-12 md:mb-16">
           
           {/* New Analysis - Compact */}
           <button
@@ -209,7 +211,7 @@ export default function HomePage() {
                 navigate(createPageUrl('FreeChecklist'));
               }
             }}
-            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
+            className={cn("group relative p-3.5 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden",
             darkMode ? "bg-white text-black" : "bg-black text-white")}>
             
             {/* Decorative elements */}
@@ -228,13 +230,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-black" : "text-white")}>{t('newAnalysis')}</h2>
-              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-600" : "text-zinc-300")}>
-                {t('newAnalysisDesc')}
+              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-black" : "text-white")}>{ht.newAnalysisShortTitle}</h2>
+              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans line-clamp-3", darkMode ? "text-zinc-600" : "text-zinc-300")}>
+                {ht.newAnalysisShortDesc}
               </p>
 
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-black" : "text-white")}>
-                <span className="text-[11px] sm:text-base md:text-lg">{t('startNow')}</span>
+                <span className="text-[10px] sm:text-base md:text-lg">{ht.startCard}</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-black text-white" : "bg-white text-black")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -246,7 +248,7 @@ export default function HomePage() {
           {/* Dashboard - Compact */}
           <button
             onClick={() => navigate(createPageUrl('Dashboard'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+            className={cn("group relative p-3.5 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
             darkMode ? "bg-black text-white border-zinc-800" : "bg-white text-black border-zinc-300")}>
             
             {/* Decorative grid */}
@@ -266,13 +268,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
-              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
-                {t('dashboardDesc')}
+              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('dashboard')}</h2>
+              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans line-clamp-3", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {ht.dashboardShortDesc}
               </p>
 
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-[11px] sm:text-base md:text-lg">{t('openDashboard')}</span>
+                <span className="text-[10px] sm:text-base md:text-lg">{ht.openCard}</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -284,7 +286,7 @@ export default function HomePage() {
           {/* Economic Calendar */}
           <button
             onClick={() => navigate(createPageUrl('EconomicCalendar'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+            className={cn("group relative p-3.5 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
             
             <div className="relative z-10">
@@ -298,12 +300,12 @@ export default function HomePage() {
                   LIVE
                 </div>
               </div>
-              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>FOREX KALENDER</h2>
-              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
-                Live Economic Events, News & Nachrichten in Echtzeit
+              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{ht.forexCalendarTitle}</h2>
+              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans line-clamp-3", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {ht.forexCalendarDesc}
               </p>
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-[11px] sm:text-base md:text-lg">Öffnen</span>
+                <span className="text-[10px] sm:text-base md:text-lg">{ht.openCard}</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -315,7 +317,7 @@ export default function HomePage() {
           {/* Trade History */}
           <button
             onClick={() => navigate(createPageUrl('TradeHistory'))}
-            className={cn("group relative p-4 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
+            className={cn("group relative p-3.5 sm:p-5 md:p-6 lg:p-8 rounded-2xl sm:rounded-3xl hover:shadow-2xl transition-all text-left overflow-hidden border-2",
             darkMode ? "bg-zinc-900 text-white border-zinc-800" : "bg-zinc-100 text-black border-zinc-300")}>
             
             <div className="absolute inset-0 opacity-5">
@@ -334,13 +336,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <h2 className={cn("text-base sm:text-2xl md:text-3xl tracking-wider mb-1.5 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
-              <p className={cn("text-[11px] sm:text-sm leading-relaxed mb-3 sm:mb-5 md:mb-6 font-sans", darkMode ? "text-zinc-400" : "text-zinc-600")}>
-                {t('performanceAnalytics')}
+              <h2 className={cn("text-sm sm:text-2xl md:text-3xl tracking-wider mb-1 sm:mb-3 font-bold leading-tight", darkMode ? "text-white" : "text-black")}>{t('tradeHistory')}</h2>
+              <p className={cn("text-[10px] sm:text-sm leading-snug mb-3 sm:mb-5 md:mb-6 font-sans line-clamp-3", darkMode ? "text-zinc-400" : "text-zinc-600")}>
+                {ht.tradeHistoryShortDesc}
               </p>
 
               <div className={cn("flex items-center gap-2 font-bold tracking-widest", darkMode ? "text-white" : "text-black")}>
-                <span className="text-[11px] sm:text-base md:text-lg">OPEN</span>
+                <span className="text-[10px] sm:text-base md:text-lg">{ht.openCard}</span>
                 <div className={cn("w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:translate-x-2 transition-transform ml-auto",
                 darkMode ? "bg-white text-black" : "bg-black text-white")}>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
