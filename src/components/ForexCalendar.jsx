@@ -424,7 +424,7 @@ export default function ForexCalendar({ darkMode = true }) {
     { key: 'all',    label: ct.all,    active: darkMode ? 'bg-zinc-700 text-white border-zinc-700' : 'bg-zinc-800 text-white border-zinc-800' },
   ];
 
-  const colClass = 'grid-cols-[72px_96px_1fr_100px_100px_90px_100px]';
+  const colClass = 'grid-cols-[90px_120px_1fr_120px_120px_110px_120px]';
 
   return (
     <div className={cn('rounded-xl overflow-hidden border', t.border, t.bg)}>
@@ -432,43 +432,42 @@ export default function ForexCalendar({ darkMode = true }) {
       {/* ── HEADER: Date + Filters + Actions ── */}
       <div className={cn('border-b', t.border, t.bgHead)}>
         {/* Top row */}
-        <div className="flex items-center justify-between px-4 pt-3 pb-2 gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className={cn('text-[11px] font-black tracking-widest truncate', t.muted)}>
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <span className={cn('text-sm font-black tracking-widest truncate', t.muted)}>
               {dateLabel}
             </span>
             {isSelToday && (
-              <span className="px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-400 text-[9px] font-black tracking-wider flex-shrink-0">
+              <span className="px-2 py-0.5 rounded bg-teal-500/20 text-teal-400 text-[11px] font-black tracking-wider flex-shrink-0">
                 {ct.today}
               </span>
             )}
             {isSelTomorrow && (
-              <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[9px] font-black tracking-wider flex-shrink-0">
+              <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[11px] font-black tracking-wider flex-shrink-0">
                 {ct.tomorrow}
               </span>
             )}
-            <span className={cn('text-[10px] font-bold flex-shrink-0', t.muted)}>
+            <span className={cn('text-xs font-bold flex-shrink-0', t.muted)}>
               · {ct.eventsCount(eventsForDay.length)}
             </span>
           </div>
 
-
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {'Notification' in window && (
               <button onClick={toggleNotif}
                 title={notifEnabled ? 'Benachrichtigungen aus' : 'Benachrichtigungen an'}
                 className={cn(
-                  'p-1.5 rounded-lg border transition-all text-[10px]',
+                  'p-2 rounded-lg border transition-all',
                   notifEnabled
                     ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
                     : cn('border-transparent', t.muted, t.hover)
                 )}>
-                {notifEnabled ? <Bell className="w-3.5 h-3.5" /> : <BellOff className="w-3.5 h-3.5" />}
+                {notifEnabled ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
               </button>
             )}
             <button onClick={() => fetchEvents(false)} disabled={loading}
-              className={cn('p-1.5 rounded-lg border border-transparent transition-all', t.muted, t.hover, loading && 'opacity-40')}>
-              <RefreshCw className={cn('w-3.5 h-3.5', (loading || refreshing) && 'animate-spin')} />
+              className={cn('p-2 rounded-lg border border-transparent transition-all', t.muted, t.hover, loading && 'opacity-40')}>
+              <RefreshCw className={cn('w-4 h-4', (loading || refreshing) && 'animate-spin')} />
             </button>
           </div>
         </div>
@@ -480,8 +479,8 @@ export default function ForexCalendar({ darkMode = true }) {
       <div className={cn('border-b overflow-x-auto scrollbar-hide', t.border, t.bgTabs)}>
         <div className="flex">
           <button onClick={() => setWeekOffset(w => w - 1)}
-            className={cn('flex items-center justify-center px-3 py-3 flex-shrink-0 transition-colors', t.muted, t.hover)}>
-            <ChevronLeft className="w-4 h-4" />
+            className={cn('flex items-center justify-center px-4 py-4 flex-shrink-0 transition-colors', t.muted, t.hover)}>
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           {days.map(day => {
@@ -496,45 +495,43 @@ export default function ForexCalendar({ darkMode = true }) {
             return (
               <button key={ds} onClick={() => setSelectedDate(ds)}
                 className={cn(
-                  'flex flex-col items-center gap-1 px-3 py-2.5 flex-shrink-0 min-w-[54px] transition-all relative',
+                  'flex flex-col items-center gap-1 px-4 py-3 flex-shrink-0 min-w-[64px] transition-all relative',
                   isSel
                     ? darkMode ? 'bg-zinc-800/80' : 'bg-zinc-200/80'
                     : cn(t.hover)
                 )}>
-                {/* selected indicator */}
-                {isSel && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-white" />}
-                <span className={cn('text-[9px] font-bold tracking-wider',
+                {isSel && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-white" />}
+                <span className={cn('text-[11px] font-bold tracking-wider',
                   isSel ? (darkMode ? 'text-zinc-400' : 'text-zinc-500')
                          : isTd ? 'text-teal-400' : t.muted)}>
                   {dow}
                 </span>
-                <span className={cn('text-sm font-black leading-none',
+                <span className={cn('text-base font-black leading-none',
                   isSel ? (darkMode ? 'text-white' : 'text-zinc-900')
                          : isTd ? (darkMode ? 'text-teal-400' : 'text-teal-600')
                          : t.sub)}>
                   {dom}
                 </span>
-                {/* dot indicators */}
-                <div className="flex gap-0.5 h-1.5 items-center">
-                  {high > 0 && <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />}
-                  {med  > 0 && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
-                  {total === 0 && <span className={cn('w-1 h-1 rounded-full', darkMode ? 'bg-zinc-700' : 'bg-zinc-300')} />}
+                <div className="flex gap-0.5 h-2 items-center">
+                  {high > 0 && <span className="w-2 h-2 rounded-full bg-rose-500" />}
+                  {med  > 0 && <span className="w-2 h-2 rounded-full bg-amber-400" />}
+                  {total === 0 && <span className={cn('w-1.5 h-1.5 rounded-full', darkMode ? 'bg-zinc-700' : 'bg-zinc-300')} />}
                 </div>
               </button>
             );
           })}
 
           <button onClick={() => setWeekOffset(w => w + 1)}
-            className={cn('flex items-center justify-center px-3 py-3 flex-shrink-0 transition-colors', t.muted, t.hover)}>
-            <ChevronRight className="w-4 h-4" />
+            className={cn('flex items-center justify-center px-4 py-4 flex-shrink-0 transition-colors', t.muted, t.hover)}>
+            <ChevronRight className="w-5 h-5" />
           </button>
 
           {/* Filter buttons — desktop: right side of day tabs row */}
-          <div className="hidden md:flex items-center gap-1.5 ml-auto px-4 flex-shrink-0">
+          <div className="hidden md:flex items-center gap-2 ml-auto px-5 flex-shrink-0">
             {filterOpts.map(({ key, label, active }) => (
               <button key={key} onClick={() => setImpactFilter(key)}
                 className={cn(
-                  'px-3 py-1 rounded-full text-[11px] font-black tracking-wider border transition-all',
+                  'px-4 py-1.5 rounded-full text-xs font-black tracking-wider border transition-all',
                   impactFilter === key
                     ? active
                     : darkMode
@@ -578,9 +575,9 @@ export default function ForexCalendar({ darkMode = true }) {
 
       {/* ── COLUMN HEADERS ── */}
       {!loading && !error && visibleEvents.length > 0 && (
-        <div className={cn('hidden md:grid px-5 py-2 border-b', colClass, t.border, t.bgColH)}>
+        <div className={cn('hidden md:grid px-6 py-3 border-b', colClass, t.border, t.bgColH)}>
           {[ct.colTime, ct.colCurrency, ct.colEvent, ct.colImpact, ct.colForecast, ct.colPrevious, ct.colActual].map((col, i) => (
-            <span key={i} className={cn('text-[10px] font-black tracking-widest', t.muted, i >= 4 ? 'text-right' : '')}>
+            <span key={i} className={cn('text-xs font-black tracking-widest', t.muted, i >= 4 ? 'text-right' : '')}>
               {col}
             </span>
           ))}
@@ -637,30 +634,30 @@ export default function ForexCalendar({ darkMode = true }) {
                   )}>
 
                   {/* Desktop row */}
-                  <div className={cn('hidden md:grid items-center px-5 py-3.5', colClass)}>
+                  <div className={cn('hidden md:grid items-center px-6 py-4', colClass)}>
 
                     {/* TIME */}
-                    <div className="flex flex-col gap-0.5">
-                      <span className={cn('text-[13px] font-bold tabular-nums', live ? 'text-teal-400' : t.text)}>
+                    <div className="flex flex-col gap-1">
+                      <span className={cn('text-base font-bold tabular-nums', live ? 'text-teal-400' : t.text)}>
                         {evt.time || '–'}
                       </span>
                       {live
-                        ? <span className="text-[9px] font-black text-teal-400 animate-pulse tracking-wider">● {ct.live}</span>
+                        ? <span className="text-[10px] font-black text-teal-400 animate-pulse tracking-wider">● {ct.live}</span>
                         : <CountdownBadge timeStr={evt.time} dateStr={evt.date} nowLabel={ct.nowLabel} />
                       }
                     </div>
 
                     {/* CURRENCY */}
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-lg leading-none">{flag}</span>
-                      <span className={cn('text-xs font-black tracking-widest', t.text)}>{evt.currency}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl leading-none">{flag}</span>
+                      <span className={cn('text-sm font-black tracking-widest', t.text)}>{evt.currency}</span>
                     </div>
 
                     {/* EVENT */}
                     <div className="pr-4">
                       <span className={cn('text-sm leading-snug', t.text)}>{evt.event}</span>
                       {hasRes && surp && (
-                        <div className="mt-0.5">
+                        <div className="mt-1">
                           <SurpriseBadge type={surp} beatLabel={ct.beat} missLabel={ct.miss} inlineLabel={ct.inline} />
                         </div>
                       )}
