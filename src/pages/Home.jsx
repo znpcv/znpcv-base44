@@ -151,11 +151,8 @@ export default function HomePage() {
             {SESSIONS.map((session) => {
               const isOpen = isSessionOpen(session);
               return (
-                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-shrink-0">
+                <div key={session.name} className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
                   <span className="text-sm sm:text-base md:text-lg">{session.emoji}</span>
-                  <span className={`text-[10px] sm:text-xs md:text-sm font-bold tracking-wider ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
-                    {session.name}
-                  </span>
                   <div className={`text-[10px] sm:text-xs md:text-sm font-mono font-bold ${isOpen ? 'text-emerald-600' : theme.textMuted}`}>
                     {times[session.name]?.slice(0, 5) || '--:--'}
                   </div>
